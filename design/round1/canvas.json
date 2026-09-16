@@ -11,15 +11,15 @@
     {
       "file": "SetTableUpload.dc.html",
       "x": 0,
-      "y": 1040,
+      "y": 1160,
       "w": 390,
-      "h": 1560,
+      "h": 1640,
       "title": "A. Set table: uploaded invite"
     },
     {
       "file": "SetTableTextOnly.dc.html",
       "x": 480,
-      "y": 1040,
+      "y": 1160,
       "w": 390,
       "h": 1560,
       "title": "A. Set table: text only"
@@ -27,15 +27,15 @@
     {
       "file": "BrisbaneLightUpload.dc.html",
       "x": 1080,
-      "y": 1040,
+      "y": 1160,
       "w": 390,
-      "h": 1560,
+      "h": 1640,
       "title": "B. Brisbane light: uploaded invite"
     },
     {
       "file": "BrisbaneLightTextOnly.dc.html",
       "x": 1560,
-      "y": 1040,
+      "y": 1160,
       "w": 390,
       "h": 1560,
       "title": "B. Brisbane light: text only"
@@ -43,15 +43,15 @@
     {
       "file": "QuietHostUpload.dc.html",
       "x": 2160,
-      "y": 1040,
+      "y": 1160,
       "w": 390,
-      "h": 1560,
+      "h": 1640,
       "title": "C. Quiet host: uploaded invite"
     },
     {
       "file": "QuietHostTextOnly.dc.html",
       "x": 2640,
-      "y": 1040,
+      "y": 1160,
       "w": 390,
       "h": 1560,
       "title": "C. Quiet host: text only"
@@ -61,21 +61,21 @@
     {
       "id": "dir-a",
       "x": 0,
-      "y": 900,
+      "y": 880,
       "w": 860,
       "text": "Direction A: Set table\nWarm neutrals, a paper ground, a serious serif for titles and a plain sans for everything else. The app is the good plate under the invite.\nRisk: reads formal if the type gets too elegant. Kept the serif to titles only and used deep green, not terracotta, to stay clear of the default 'AI cream' look."
     },
     {
       "id": "dir-b",
       "x": 1080,
-      "y": 900,
+      "y": 880,
       "w": 860,
       "text": "Direction B: Brisbane light\nBright white, a warm sun-coloured accent by default, big rounded friendly type, chips and pills, a small sun mark. Playful without being for kids.\nRisk: drifts toward Partiful if gradients creep in. No gradients anywhere; the warmth comes from one accent and a cream card tint."
     },
     {
       "id": "dir-c",
       "x": 2160,
-      "y": 900,
+      "y": 880,
       "w": 860,
       "text": "Direction C: Quiet host\nAlmost no colour of its own: black, white, one grey, and the accent taken from the invite. Editorial grid, precise spacing, the artwork does the talking.\nRisk: cold when there is no artwork. The text-only version leans on scale and spacing to carry warmth instead of colour."
     },

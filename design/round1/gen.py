@@ -58,6 +58,7 @@ def poster():
 
 def page(d, mode):
     upload = mode == "upload"
+    outfit_link = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&display=swap">' if upload else ''
     accent = d["up_accent"] if upload else d["accent"]
     acc_text = "#FFFFFF"
     eyebrow = d["eyebrow_style"]
@@ -77,7 +78,7 @@ def page(d, mode):
 <div style="display:flex;flex-direction:column;gap:14px;padding:16px;background:{d['surface']};border:1px solid {d['line']};border-radius:{d['radius']}">
   {sec("When", "Saturday 14 November<br>2 to 4pm")}
   {sec("Where", "12 Example Street, Paddington")}
-  <a href="#" style="display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:14px;font-weight:600;color:{accent};text-decoration:none;padding:8px 12px;border:1.5px solid {accent};border-radius:{d['btn_radius']};min-height:36px">{pin_svg(accent)}Open in Maps</a>
+  <a href="#" style="display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:14px;font-weight:600;color:{accent};text-decoration:none;border:1.5px solid {accent};border-radius:{d['btn_radius']};min-height:44px;padding:10px 14px;box-sizing:border-box">{pin_svg(accent)}Open in Maps</a>
 </div>'''
     details = f'''
 <div style="display:flex;flex-direction:column;gap:18px">
@@ -104,12 +105,13 @@ def page(d, mode):
 <x-dc>
 <helmet>
   <link rel="stylesheet" href="{d['fonts']}">
+  {outfit_link}
   <style>
     body {{ margin: 0; background: {d['bg']}; }}
     a {{ color: {accent}; }} a:hover {{ color: {d['ink']}; }}
   </style>
 </helmet>
-<div style="width:390px;min-height:1560px;background:{d['bg']};font-family:{d['body']};color:{d['ink']};display:flex;flex-direction:column;gap:22px;padding:28px 20px 40px;box-sizing:border-box">
+<div style="width:390px;min-height:{1640 if upload else 1560}px;background:{d['bg']};font-family:{d['body']};color:{d['ink']};display:flex;flex-direction:column;gap:22px;padding:28px 20px 40px;box-sizing:border-box">
   <div style="display:flex;align-items:center;gap:8px;color:{accent};{eyebrow}">{mark}<span>Hi Oliver, you're invited</span></div>
   {hero}
   {strip}
@@ -145,7 +147,7 @@ def names_board():
   <div style="font-size:13px;line-height:1.5;color:#6A6A66">{html.escape(mark)}</div>
   <div style="display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:#F5F5F4;border-radius:10px;font-size:13px;line-height:1.5;color:#111111">
     <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#6A6A66;font-weight:600">In the text</div>
-    <div>Hi Sarah! You're invited to Leo's 6th. See the details and RSVP: {dom}/i/{code}</div>
+    <div>Hi Tom! You're invited to Leo's 6th. See the details and RSVP: {dom}/i/{code}</div>
   </div>
 </div>'''
     also = "".join(f'<div style="display:flex;gap:8px;align-items:baseline;font-size:14px"><b style="color:#111111">{html.escape(a)}</b><span style="color:#6A6A66">{html.escape(b)}</span></div>' for a, b in ALSO)
@@ -189,9 +191,9 @@ for k in ["A", "B", "C"]:
     for mode, suffix in (("upload", "Upload"), ("text", "TextOnly")):
         fn = f"{d['key']}{suffix}.dc.html"
         open(fn, "w").write(page(d, mode))
-        boards.append({"file": fn, "x": x, "y": 1040, "w": 390, "h": 1560, "title": f"{k}. {d['name']}: {'uploaded invite' if mode=='upload' else 'text only'}"})
+        boards.append({"file": fn, "x": x, "y": 1160, "w": 390, "h": (1640 if mode=="upload" else 1560), "title": f"{k}. {d['name']}: {'uploaded invite' if mode=='upload' else 'text only'}"})
         x += 480
-    notes.append({"id": f"dir-{k.lower()}", "x": x - 960, "y": 900, "w": 860, "text": f"Direction {k}: {d['name']}\n{d['motivation']}\n{d['tradeoff']}"})
+    notes.append({"id": f"dir-{k.lower()}", "x": x - 960, "y": 880, "w": 860, "text": f"Direction {k}: {d['name']}\n{d['motivation']}\n{d['tradeoff']}"})
     x += 120
 canvas = {"artboards": boards, "annotations": notes + [{"id": "how-to-read", "x": 1300, "y": 0, "w": 420, "text": "How to read this canvas\nTop: five names, each shown inside the default text message.\nBelow: three visual directions. For each, the guest invite page twice: under a loud uploaded invite (the host's own artwork, here a stand-in poster) and as text only. The accent colour in the uploaded version is taken from the poster, which is how the real app will behave.\nAll copy is the approved default wording from the journeys page. Pick a name and a direction, or mix: one direction's type with another's colour is a fair ask."}], "launch": {"view": "canvas"}}
 json.dump(canvas, open("canvas.json", "w"), indent=2)
