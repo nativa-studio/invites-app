@@ -269,6 +269,78 @@
    "h": 3140,
    "title": "Gabriel's 4th, the whole suite",
    "page": "page-8"
+  },
+  {
+   "file": "All_StripPoolParty.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 2280,
+   "title": "Leo's pool party",
+   "page": "page-9"
+  },
+  {
+   "file": "All_StripBirthdayDrinks.dc.html",
+   "x": 480,
+   "y": 0,
+   "w": 390,
+   "h": 1720,
+   "title": "Birthday drinks",
+   "page": "page-9"
+  },
+  {
+   "file": "All_StripBabyShower.dc.html",
+   "x": 960,
+   "y": 0,
+   "w": 390,
+   "h": 1560,
+   "title": "Baby shower",
+   "page": "page-9"
+  },
+  {
+   "file": "All_StripMemorial.dc.html",
+   "x": 1440,
+   "y": 0,
+   "w": 390,
+   "h": 1560,
+   "title": "Memorial",
+   "page": "page-9"
+  },
+  {
+   "file": "All_BoardPoolParty.dc.html",
+   "x": 2080,
+   "y": 0,
+   "w": 390,
+   "h": 2140,
+   "title": "Leo's pool party",
+   "page": "page-9"
+  },
+  {
+   "file": "All_BoardBirthdayDrinks.dc.html",
+   "x": 2560,
+   "y": 0,
+   "w": 390,
+   "h": 1720,
+   "title": "Birthday drinks",
+   "page": "page-9"
+  },
+  {
+   "file": "All_SuiteStrip.dc.html",
+   "x": 3200,
+   "y": 0,
+   "w": 390,
+   "h": 2900,
+   "title": "Leo's pool party as a suite",
+   "page": "page-9"
+  },
+  {
+   "file": "All_GabrielSuite.dc.html",
+   "x": 3680,
+   "y": 0,
+   "w": 390,
+   "h": 3140,
+   "title": "Gabriel's 4th, poster palette",
+   "page": "page-9"
   }
  ],
  "annotations": [
@@ -391,11 +463,43 @@
    "w": 390,
    "page": "page-8",
    "text": "Gabriel's 4th, a Pokemon party, in the style of the reference: cobalt sky, halftone clouds, navy keylines, a snowy mountain over a yellow field, red and yellow accents. It is the page 7 suite layout with the palette swapped, and nothing else changed, which is the proof that a layout takes a palette.\n\nThe landscape is drawn fresh in that style. Pikachu himself is not: he is Nintendo's character, so he cannot ship inside the app's artwork. The dashed corner on the invitation card is where Marcia's own Pikachu picture drops in, cropped into the corner exactly as the reference does it. That is the upload path, and for a private party it is fine.\n\nGuest here is Mia. Dates, address and the programme are stand-ins for Marcia to replace. Access details (side gate, street parking) sit on Arrive, and the dress-up line sits in good to know because it decides what to bring, not whether to come."
+  },
+  {
+   "id": "all-0",
+   "x": 0,
+   "y": -120,
+   "w": 1800,
+   "page": "page-9",
+   "text": "Option 1. Monoline: one ink on paper (phase 1 gallery)"
+  },
+  {
+   "id": "all-2080",
+   "x": 2080,
+   "y": -120,
+   "w": 870,
+   "page": "page-9",
+   "text": "Option 2. Cut-paper colour from the board (phase 2 gallery)"
+  },
+  {
+   "id": "all-3200",
+   "x": 3200,
+   "y": -120,
+   "w": 870,
+   "page": "page-9",
+   "text": "Option 3. Stationery suite, Paperless Post feeling (layouts)"
+  },
+  {
+   "id": "all-intro",
+   "x": 0,
+   "y": -320,
+   "w": 1400,
+   "page": "page-9",
+   "text": "Every design option in one place. All three stay as options: the same strip underneath (cover, the details, the day, good to know, RSVP, after), dressed three ways. Left: the monoline sets, one ink on paper, which the phase 1 gallery ships first. Middle: the cut-paper colour sets from Marcia's board, phase 2. Right: the stationery suite with the envelope, the first of the layouts, shown on Leo's party and on Gabriel's real invite, which is the one built into the app.\nA host will eventually pick any of these from the Look step: Our artwork (a set in monoline or colour), Our layouts (the suite and later others), or Upload."
   }
  ],
  "launch": {
   "view": "canvas",
-  "page": "page-8"
+  "page": "page-9"
  },
  "pages": [
   {
@@ -429,6 +533,10 @@
   {
    "id": "page-8",
    "name": "Gabriel's 4th"
+  },
+  {
+   "id": "page-9",
+   "name": "All options"
   }
  ]
 }
