@@ -16,12 +16,13 @@ html = f'''<title>Gabriel Turns Four</title>
   .greet {{ font-family:{HAND}; font-size:15px; letter-spacing:0.14em; text-transform:uppercase; color:var(--crm); margin-top:28px; text-align:center; }}
 
   /* The stage: the sealed envelope, then the opening. */
-  .stage {{ position:relative; width:346px; max-width:100%; height:500px; perspective:1200px; transition:height .7s cubic-bezier(.4,0,.2,1), opacity .5s; }}
-  .env {{ position:absolute; left:0; right:0; top:180px; height:200px; transform-style:preserve-3d; }}
+  .stage {{ position:relative; width:346px; max-width:100%; height:500px; transition:height .7s cubic-bezier(.4,0,.2,1), opacity .5s; }}
+  .env {{ position:absolute; left:0; right:0; top:180px; height:200px; }}
   .back, .pocket {{ filter:drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }}
-  .back {{ position:absolute; inset:0; background:var(--red); border-radius:10px; }}
+  .back {{ position:absolute; inset:0; {liner} border-radius:10px; }}
+  .back::after {{ content:""; position:absolute; inset:0; border-radius:10px; box-shadow:inset 0 0 0 3px var(--red); }}
   .clip {{ position:absolute; left:-40px; right:-40px; top:-700px; bottom:0; overflow:hidden; z-index:2; }}
-  .card-slot {{ position:absolute; left:50%; top:894px; width:330px; margin-left:-165px; transform:scale(.62); transform-origin:top center; transition:transform .8s cubic-bezier(.4,0,.2,1), top .8s cubic-bezier(.4,0,.2,1); }}
+  .card-slot {{ position:absolute; left:50%; top:714px; width:330px; margin-left:-165px; transform:scale(.62); transform-origin:top center; transition:transform .8s cubic-bezier(.4,0,.2,1), top .8s cubic-bezier(.4,0,.2,1); }}
   .pocket {{ position:absolute; inset:0; z-index:3; border-radius:0 0 10px 10px; }}
   .pocket .sides {{ position:absolute; inset:0; background:var(--red-dark); border-radius:0 0 10px 10px; clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%); }}
   .pocket .edge {{ position:absolute; inset:0; background:var(--red); border-radius:0 0 10px 10px; clip-path:polygon(0 0,50% 58%,100% 0,100% 6%,50% 64%,0 6%); opacity:.6; }}
@@ -29,10 +30,10 @@ html = f'''<title>Gabriel Turns Four</title>
   .addr span {{ font-size:18px; opacity:.9; }}
   .stamp {{ position:absolute; right:18px; top:22px; width:64px; height:76px; background:#fff; padding:5px; box-sizing:border-box; border-radius:3px; box-shadow:0 1px 3px rgba(0,0,0,.2); }}
   .stamp > div {{ width:100%; height:100%; background:var(--sky); border:2px solid var(--navy); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; color:#fff; font-family:{DISPLAY}; }}
-  .flap {{ position:absolute; left:0; right:0; top:0; height:120px; transform-origin:top center; transform-style:preserve-3d; transition:transform .9s cubic-bezier(.4,0,.2,1); z-index:4; }}
-  .flap .face {{ position:absolute; inset:0; backface-visibility:hidden; clip-path:polygon(0 0,100% 0,50% 100%); }}
+  .flap {{ position:absolute; left:0; right:0; top:0; height:120px; transform:perspective(900px) rotateX(0deg); transform-origin:top center; transform-style:preserve-3d; transition:transform .9s cubic-bezier(.4,0,.2,1); z-index:4; }}
+  .flap .face {{ position:absolute; inset:0; clip-path:polygon(0 0,100% 0,50% 100%); }}
   .flap .front {{ background:var(--red); }}
-  .flap .backface {{ {liner} transform:rotateX(180deg); }}
+  .flap .backface {{ {liner} opacity:0; }}
   .flap .rim {{ position:absolute; inset:0; background:var(--red); clip-path:polygon(0 0,100% 0,50% 100%,50% 94%,97% 0,3% 0,50% 94%,50% 100%); }}
   .seal {{ position:absolute; left:50%; top:104px; width:52px; height:52px; margin-left:-26px; border-radius:50%; background:var(--yel); border:3px solid var(--navy); display:flex; align-items:center; justify-content:center; z-index:5; transition:opacity .3s, transform .3s; box-shadow:0 2px 0 rgba(27,42,74,.3); }}
   .hint {{ position:absolute; left:0; right:0; bottom:24px; text-align:center; font-family:{HAND}; font-size:20px; letter-spacing:.08em; color:var(--crm); transition:opacity .3s; }}
@@ -42,11 +43,16 @@ html = f'''<title>Gabriel Turns Four</title>
   .tap:focus-visible {{ outline:3px solid var(--yel); outline-offset:4px; }}
 
   /* Phases */
-  .open .flap {{ transform:rotateX(-180deg); z-index:1; }}
+  .open .flap {{ transform:perspective(900px) rotateX(180deg); }}
+  .open .flap .front {{ animation:frontoff .9s cubic-bezier(.4,0,.2,1) forwards; }}
+  .open .flap .backface {{ animation:backon .9s cubic-bezier(.4,0,.2,1) forwards; }}
+  @keyframes frontoff {{ 0%,49.9% {{ opacity:1 }} 50%,100% {{ opacity:0 }} }}
+  @keyframes backon {{ 0%,49.9% {{ opacity:0 }} 50%,100% {{ opacity:1 }} }}
+  .rise .flap {{ z-index:1; }}
   .open .seal, .open .hint {{ opacity:0; transform:scale(.6); pointer-events:none; }}
-  .rise .card-slot {{ top:760px; }}
+  .rise .card-slot {{ top:580px; }}
   .out .clip {{ overflow:visible; z-index:7; }}
-  .out .card-slot {{ top:700px; transform:scale(1); }}
+  .out .card-slot {{ top:520px; transform:scale(1); }}
   .out .back, .out .pocket {{ transform:translateY(120px) scale(.9); opacity:0; }}
   .out .flap {{ opacity:0; }}
   .back, .pocket, .flap {{ transition:transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }}
@@ -55,7 +61,7 @@ html = f'''<title>Gabriel Turns Four</title>
   .suite {{ display:none; flex-direction:column; align-items:center; gap:34px; width:100%; opacity:0; transition:opacity .5s; }}
   .done .suite {{ display:flex; opacity:1; }}
   .foot {{ font-size:13px; color:var(--crm); }}
-  @media (prefers-reduced-motion: reduce) {{ .stage, .env, .back, .pocket, .card-slot, .flap, .suite {{ transition:none !important; }} .hint::after {{ animation:none; }} }}
+  @media (prefers-reduced-motion: reduce) {{ .stage, .env, .back, .pocket, .card-slot, .flap, .suite {{ transition:none !important; }} .hint::after {{ animation:none; }} .open .flap .front {{ animation:none; opacity:0; }} .open .flap .backface {{ animation:none; opacity:1; }} }}
 </style>
 
 <div class="wrap" id="wrap">
@@ -90,7 +96,7 @@ html = f'''<title>Gabriel Turns Four</title>
   function step(cls, ms, next) {{ wrap.classList.add(cls); if (next) setTimeout(next, reduce ? 0 : ms); }}
   function open() {{
     if (opened) return; opened = true; clearTimeout(timer); tap.disabled = true;
-    step('open', 700, function () {{
+    step('open', 900, function () {{
       step('rise', 750, function () {{
         step('out', 800, function () {{
           step('done', 0);
