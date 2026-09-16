@@ -1,48 +1,20 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
-import { getEvent } from "@/lib/airtable";
-import { env } from "@/lib/env";
+import { Lilita_One, Nunito, Patrick_Hand_SC } from "next/font/google";
 import "./globals.css";
 
-const display = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-display",
-  axes: ["opsz", "SOFT"],
-});
+const display = Lilita_One({ weight: "400", subsets: ["latin"], variable: "--font-display" });
+const hand = Patrick_Hand_SC({ weight: "400", subsets: ["latin"], variable: "--font-hand" });
+const body = Nunito({ subsets: ["latin"], variable: "--font-body" });
 
-const body = Inter({ subsets: ["latin"], variable: "--font-body" });
-
-export async function generateMetadata(): Promise<Metadata> {
-  let title = "You're invited";
-  let description = "Open the invite to see the details and let us know if you can make it.";
-  let hasCover = false;
-  try {
-    const event = await getEvent();
-    if (event) {
-      title = event.title;
-      description = event.intro || description;
-      hasCover = Boolean(event.coverImageUrl);
-    }
-  } catch {
-    // Metadata falls back to the defaults when Airtable isn't reachable.
-  }
-  return {
-    ...(env.siteUrl ? { metadataBase: new URL(env.siteUrl) } : {}),
-    title: { default: title, template: `%s · ${title}` },
-    description,
-    robots: { index: false, follow: false },
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      ...(hasCover ? { images: [{ url: "/cover" }] } : {}),
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: { default: "Bunting", template: "%s" },
+  description: "Event invites you text. RSVPs that sort themselves.",
+  robots: { index: false, follow: false },
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en-AU" className={`${display.variable} ${hand.variable} ${body.variable}`}>
       <body>{children}</body>
     </html>
   );

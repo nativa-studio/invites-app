@@ -24,3 +24,9 @@ npm run dev
 ```
 
 See `PROTOTYPE.md` for the prototype's Airtable schema and setup notes.
+
+## Status
+
+Phase 1 foundation is in: schema and policies (`supabase/`), Google sign-in, event list, host dashboard with guest list and texting, and the guest invite with the envelope opening, RSVP questions, calendar and group link. The pilot event is Gabriel's 4th. See `SETUP.md` to load it.
+
+The Airtable prototype this replaced is tagged `prototype-airtable`.

@@ -1,65 +1,27 @@
-import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import EventCard from "@/components/EventCard";
-import RsvpForm from "@/components/RsvpForm";
-import { NotReady } from "@/components/Setup";
-import { getEvent, getGuestByToken } from "@/lib/airtable";
-import { firstName } from "@/lib/format";
-import { googleCalendarLink } from "@/lib/messages";
-import { getSiteUrl } from "@/lib/site-url";
-import { accentStyle } from "@/lib/theme";
-import { isValidToken } from "@/lib/tokens";
+import { getInvite } from "@/lib/guest/invite";
+import { getSiteUrl, inviteLink } from "@/lib/site-url";
+import { InvitePage } from "@/components/invite/InvitePage";
+import { formatInviteDate } from "@/lib/format";
 
-export const dynamic = "force-dynamic";
+type Params = { params: Promise<{ token: string }>; searchParams: Promise<{ open?: string }> };
 
-type Props = {
-  params: Promise<{ token: string }>;
-  searchParams: Promise<{ done?: string }>;
-};
-
-// Personal invite: the token in the link identifies the guest, so the page
-// greets them by name and they can answer with one tap.
-export default async function PersonalInvitePage({ params, searchParams }: Props) {
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { token } = await params;
-  const { done } = await searchParams;
-  if (!isValidToken(token)) notFound();
+  const invite = await getInvite(token);
+  if (!invite) return { title: "Invite" };
+  const e = invite.event;
+  const title = e.share_title ?? e.title;
+  const description = e.share_description ?? [formatInviteDate(e.date), e.intro].filter(Boolean).join(". ");
+  return { title, description, openGraph: { title, description, type: "website" } };
+}
 
-  let event = null;
-  let guest = null;
-  try {
-    [event, guest] = await Promise.all([getEvent(), getGuestByToken(token)]);
-  } catch (e) {
-    console.error("personal invite load failed", e);
-    return <NotReady />;
-  }
-  if (!event) return <NotReady />;
-  if (!guest) notFound();
-  const siteUrl = await getSiteUrl();
-  const calendarGoogle = googleCalendarLink(event, siteUrl);
-  const calendarIcs = event.date ? "/invite.ics" : null;
-
-  return (
-    <main className="page" style={accentStyle(event.accentColour)}>
-      <EventCard event={event} greeting={`Hi ${firstName(guest.name) || "there"}, you're invited`} />
-      <RsvpForm
-        mode="personal"
-        token={token}
-        hostName={event.hostName}
-        allowPlusOnes={event.allowPlusOnes}
-        maxPartySize={event.maxPartySize}
-        calendarGoogle={calendarGoogle}
-        calendarIcs={calendarIcs}
-        initialStatus={guest.status}
-        initialPartySize={guest.partySize}
-        initialMessage={guest.message}
-        justSubmitted={done === "1"}
-      />
-      <footer className="foot">
-        <span>With love from {event.hostName || "the host"}</span>
-        <span className="muted">
-          Not {firstName(guest.name)}? <Link href="/">Reply here instead</Link>.
-        </span>
-      </footer>
-    </main>
-  );
+export default async function Page({ params, searchParams }: Params) {
+  const { token } = await params;
+  const { open } = await searchParams;
+  const invite = await getInvite(token);
+  if (!invite) notFound();
+  const link = inviteLink(await getSiteUrl(), token);
+  return <InvitePage invite={invite} token={token} link={link} skipAnimation={open === "1"} />;
 }

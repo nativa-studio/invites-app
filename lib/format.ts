@@ -73,3 +73,28 @@ export function phoneKey(raw: string | null | undefined): string {
   const digits = normalisePhone(raw).replace(/\D/g, "");
   return digits.slice(-9);
 }
+
+// "14:00:00" or "14:00" to "2pm" / "2:30pm".
+export function formatTime(t: string | null | undefined): string {
+  if (!t) return "";
+  const [h, m] = t.split(":").map(Number);
+  if (Number.isNaN(h)) return t;
+  const suffix = h >= 12 ? "pm" : "am";
+  const hour = h % 12 === 0 ? 12 : h % 12;
+  return m ? `${hour}:${String(m).padStart(2, "0")}${suffix}` : `${hour}${suffix}`;
+}
+
+export function formatTimeRange(start: string | null | undefined, end: string | null | undefined, note: string | null | undefined): string {
+  if (note) return note;
+  if (start && end) return `${formatTime(start)} to ${formatTime(end)}`;
+  if (start) return `From ${formatTime(start)}`;
+  return "";
+}
+
+// "Sunday 1 November" without the year, for invites.
+export function formatInviteDate(ymd: string | null | undefined): string {
+  if (!ymd) return "";
+  const d = asUtcDate(ymd);
+  if (!d) return ymd;
+  return new Intl.DateTimeFormat(LOCALE, { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(d);
+}

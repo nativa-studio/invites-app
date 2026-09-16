@@ -1,3 +1,5 @@
+> Historical. This describes the Airtable prototype, tagged `prototype-airtable` in git. The product now runs on Supabase; see README.md and SETUP.md.
+
 # Prototype: single-event invite (Airtable-backed)
 
 A small Next.js app for sending a party invite by text and collecting RSVPs.

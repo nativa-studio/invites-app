@@ -1,0 +1,107 @@
+import type { PublicEvent } from "@/lib/db/types";
+import { copy } from "@/lib/copy";
+import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
+import { ICONS, Bubble, Camera, Gift, Kids, Plate, Cap, Cake } from "@/components/art/icons";
+import { GabrielCover } from "@/components/art/GabrielCover";
+
+export function mapsLink(e: PublicEvent): string | null {
+  const q = [e.venue, e.address].filter(Boolean).join(", ");
+  return q ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}` : null;
+}
+
+export function CoverCard({ e }: { e: PublicEvent }) {
+  const age = e.title.match(/turning (\d+)/i)?.[1];
+  return (
+    <div className="pcard tilt-l">
+      <div className="tape" />
+      {e.theme_id === "gabriel" && <GabrielCover width={282} />}
+      <div className="eyebrow">{age ? "Trainer wanted" : "You're invited"}</div>
+      <div className="title">{e.title.replace(" turning ", " turning ")}</div>
+      {e.type === "kids_party" && <div className="sub">a {e.theme_id === "gabriel" ? "Pokémon pool party" : "party"}</div>}
+      <div className="rule" />
+      <div className="para">{formatInviteDate(e.date)}<br />{formatTimeRange(e.start_time, e.end_time, e.time_note)}</div>
+      {e.host_line && <div className="small">{e.host_line}</div>}
+    </div>
+  );
+}
+
+export function DetailsCard({ e }: { e: PublicEvent }) {
+  const maps = mapsLink(e);
+  return (
+    <div className="pcard white tilt-r">
+      <div className="label red">{copy.sections.details}</div>
+      <div className="kv">
+        <div className="k">{copy.sections.when}</div><div>{formatInviteDate(e.date)}, {formatTimeRange(e.start_time, e.end_time, e.time_note).toLowerCase()}</div>
+        <div className="k">{copy.sections.where}</div><div>{e.venue}{e.address ? <><br />{e.address}</> : null}</div>
+        {e.what_to_bring && <><div className="k">{copy.sections.wear}</div><div>{e.what_to_bring}</div></>}
+      </div>
+      {maps && <a className="pill-link" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a>}
+    </div>
+  );
+}
+
+export function DayCard({ e }: { e: PublicEvent }) {
+  if (!e.runsheet.length) return null;
+  return (
+    <div className="pcard cream tilt-l">
+      <div className="label sky">{copy.sections.afternoon}</div>
+      <div className="stops">
+        {e.runsheet.map((s, i) => {
+          const Icon = ICONS[s.icon ?? ""] ?? Cap;
+          return (
+            <div className="stop" key={i}>
+              <div className="t">{formatTime(s.time)}</div>
+              <div><Icon size={52} /></div>
+              <div><div className="n">{s.title}</div>{s.note && <div className="b">{s.note}</div>}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function KnowCard({ e }: { e: PublicEvent }) {
+  const lines: { icon: React.ReactNode; text: string }[] = [];
+  if (e.serve_text) lines.push({ icon: /cake/i.test(e.serve_text) ? <Cake /> : <Plate />, text: e.serve_text });
+  if (e.plate_enabled && e.plate_host_note) lines.push({ icon: <Plate />, text: e.plate_host_note });
+  if (e.type === "kids_party") {
+    if (e.parents_mode === "stay") lines.push({ icon: <Kids />, text: e.siblings_welcome ? `${copy.lines.parentsStay} ${copy.lines.siblingsWelcome}` : copy.lines.parentsStay });
+    if (e.parents_mode === "drop_off") lines.push({ icon: <Kids />, text: copy.lines.dropOff });
+  }
+  if (e.gift_stance === "none") lines.push({ icon: <Gift />, text: copy.lines.giftsNone });
+  if (e.gift_stance === "optional") lines.push({ icon: <Gift />, text: e.gift_note ? `${copy.lines.giftsOptional} ${e.gift_note}` : copy.lines.giftsOptional });
+  if (e.photo_sharing === "kids_off_social") lines.push({ icon: <Camera />, text: copy.lines.photosKidsOff });
+  if (e.photo_sharing === "ask") lines.push({ icon: <Camera />, text: copy.lines.photosAsk });
+  if (e.photo_sharing === "share") lines.push({ icon: <Camera />, text: copy.lines.photosShare });
+  if (e.good_to_know) lines.push({ icon: <Bubble />, text: e.good_to_know });
+  if (!lines.length) return null;
+  return (
+    <div className="pcard white tilt-r">
+      <div className="tape sky" />
+      <div className="label red">{copy.sections.goodToKnow}</div>
+      <div className="lines">{lines.map((l, i) => <div className="line" key={i}>{l.icon}<div>{l.text}</div></div>)}</div>
+    </div>
+  );
+}
+
+export function AfterCard() {
+  return (
+    <div className="pcard cream">
+      <div className="two">
+        <div><Bubble /><div className="n">{copy.sections.updates}</div><div className="b">{copy.sections.updatesBody}</div></div>
+        <div><Camera /><div className="n">{copy.sections.photos}</div><div className="b">{copy.sections.photosBody}</div></div>
+      </div>
+    </div>
+  );
+}
+
+export function UpdatesCard({ e }: { e: PublicEvent }) {
+  if (!e.updates.length) return null;
+  return (
+    <div className="pcard white">
+      <div className="label sky">{copy.sections.updates}</div>
+      <div className="lines">{e.updates.map((u, i) => <div className="line" key={i}><Bubble size={36} /><div>{u.body}</div></div>)}</div>
+    </div>
+  );
+}

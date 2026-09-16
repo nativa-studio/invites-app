@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { env } from "./env";
+import { publicEnv as env } from "./env";
 
 // Public origin for building invite links: NEXT_PUBLIC_SITE_URL when set,
 // otherwise whatever host the current request came in on (Vercel sets
