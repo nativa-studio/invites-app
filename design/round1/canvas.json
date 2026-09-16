@@ -134,6 +134,33 @@
       "h": 1560,
       "title": "Memorial, the quiet version",
       "page": "page-3"
+    },
+    {
+      "file": "BoardDecisions.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1180,
+      "h": 980,
+      "title": "Decisions read from the board",
+      "page": "page-4"
+    },
+    {
+      "file": "BoardPoolParty.dc.html",
+      "x": 1280,
+      "y": 0,
+      "w": 390,
+      "h": 2140,
+      "title": "Leo's pool party, Summer set",
+      "page": "page-4"
+    },
+    {
+      "file": "BoardBirthdayDrinks.dc.html",
+      "x": 1760,
+      "y": 0,
+      "w": 390,
+      "h": 1720,
+      "title": "Birthday drinks, Native garden set",
+      "page": "page-4"
     }
   ],
   "annotations": [
@@ -228,7 +255,7 @@
   ],
   "launch": {
     "view": "canvas",
-    "page": "page-3"
+    "page": "page-4"
   },
   "pages": [
     {
@@ -242,6 +269,10 @@
     {
       "id": "page-3",
       "name": "Illustrated strip"
+    },
+    {
+      "id": "page-4",
+      "name": "From the board"
     }
   ]
 }
