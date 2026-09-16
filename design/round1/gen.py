@@ -148,9 +148,10 @@ NAMES = [
   ("Headcount", "headcount.app", "Says exactly what the host wants. Plain, confident, grown-up.", "Wordmark: one word, heavy sans, the 'o' as a small counter ring."),
   ("Cooee", "cooee.app", "The Australian call to gather. Distinctive and ownable, hard to copy.", "Wordmark: rounded lowercase, the double 'o' as two speech bubbles."),
   ("Rollup", "rollup.app", "A good roll-up is a good turnout. Playful, a little carnival.", "Wordmark: lowercase with a curl on the 'R', like a rolled flag."),
-  ("Bunting", "bunting.app", "The string of flags at every party, kids' or grown-up. Warm and original.", "Wordmark: a small pennant string under the word, never emoji."),
+  ("Bunting", "bunting.app", "The string of flags at every party, kids' or grown-up. Warm and original. Front-runner for celebrations; would jar on a memorial.", "Wordmark: a small pennant string under the word, never emoji."),
+  ("Kindly", "kindly.app", "Kindly reply, kindly let us know: the phrase on formal invitations for a century. Warm in joy and in sorrow, so it can hold memorials later. Front-runner if the domain and trademark checks pass.", "Wordmark: soft lowercase serif or a humanist sans, the 'K' with a gentle curve."),
 ]
-ALSO = [("Turnout", "clean, a little municipal"), ("Yep", "fun, hard to search for"), ("Sorted", "generic in Australia"), ("Pop In", "casual, common phrase"), ("Pencil Me In", "lovely, too long for a text"), ("Count Me In", "taken by two apps"), ("Rollcall", "taken by an invitation app"), ("Yeah Nah", "means no")]
+ALSO = [("Gathered", "warm, covers every occasion, common word"), ("Turnout", "clean, a little municipal"), ("Yep", "fun, hard to search for"), ("Sorted", "generic in Australia"), ("Pop In", "casual, common phrase"), ("Pencil Me In", "lovely, too long for a text"), ("Count Me In", "taken by two apps"), ("Rollcall", "taken by an invitation app"), ("Yeah Nah", "means no")]
 
 def names_board():
     cards = ""
@@ -183,13 +184,13 @@ def names_board():
     a {{ color: #111111; }} a:hover {{ color: #6A6A66; }}
   </style>
 </helmet>
-<div style="width:1240px;min-height:820px;background:#FAFAF8;font-family:'Manrope','Helvetica Neue',Arial,sans-serif;color:#111111;display:flex;flex-direction:column;gap:22px;padding:36px 40px;box-sizing:border-box">
+<div style="width:1480px;min-height:860px;background:#FAFAF8;font-family:'Manrope','Helvetica Neue',Arial,sans-serif;color:#111111;display:flex;flex-direction:column;gap:22px;padding:36px 40px;box-sizing:border-box">
   <div style="display:flex;flex-direction:column;gap:6px">
     <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#6A6A66;font-weight:600">Round one, name shortlist</div>
     <div style="font-size:30px;font-weight:800;letter-spacing:-0.03em;line-height:1.1">Five names, each read inside the text a guest receives</div>
     <div style="font-size:15px;color:#6A6A66;max-width:70ch;line-height:1.5">Criteria from the brief: works in a text message, no 'vite' or 'invit', warm not childish, usable in Australia. Domain and trademark checks are Marcia's final call; nothing here is confirmed available.</div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(5, minmax(0, 1fr));gap:14px">{cards}</div>
+  <div style="display:grid;grid-template-columns:repeat(6, minmax(0, 1fr));gap:14px">{cards}</div>
   <div style="display:flex;flex-direction:column;gap:10px;padding:18px 20px;background:#FFFFFF;border:1px solid #E4E4E1;border-radius:12px">
     <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#6A6A66;font-weight:600">Also considered</div>
     <div style="display:grid;grid-template-columns:repeat(4, minmax(0, 1fr));gap:8px 24px">{also}</div>
@@ -200,7 +201,7 @@ def names_board():
 </html>'''
 
 open("Names.dc.html", "w").write(names_board())
-boards = [{"file": "Names.dc.html", "x": 0, "y": 0, "w": 1240, "h": 820, "title": "Names"}]
+boards = [{"file": "Names.dc.html", "x": 0, "y": 0, "w": 1480, "h": 860, "title": "Names"}]
 notes = []
 x = 0
 for k in ["A", "B", "C"]:
@@ -212,6 +213,6 @@ for k in ["A", "B", "C"]:
         x += 480
     notes.append({"id": f"dir-{k.lower()}", "x": x - 960, "y": 880, "w": 860, "text": f"Direction {k}: {d['name']}\n{d['motivation']}\n{d['tradeoff']}"})
     x += 120
-canvas = {"artboards": boards, "annotations": notes + [{"id": "how-to-read", "x": 1300, "y": 0, "w": 420, "text": "How to read this canvas\nTop: five names, each shown inside the default text message.\nBelow: three visual directions. For each, the guest invite page twice: under a loud uploaded invite (the host's own artwork, here a stand-in poster) and as text only. The accent colour in the uploaded version is taken from the poster, which is how the real app will behave.\nAll copy is the approved default wording from the journeys page. Pick a name and a direction, or mix: one direction's type with another's colour is a fair ask."}], "launch": {"view": "canvas"}}
+canvas = {"artboards": boards, "annotations": notes + [{"id": "how-to-read", "x": 1560, "y": 0, "w": 420, "text": "How to read this canvas\nTop: five names, each shown inside the default text message.\nBelow: three visual directions. For each, the guest invite page twice: under a loud uploaded invite (the host's own artwork, here a stand-in poster) and as text only. The accent colour in the uploaded version is taken from the poster, which is how the real app will behave.\nAll copy is the approved default wording from the journeys page. Pick a name and a direction, or mix: one direction's type with another's colour is a fair ask."}], "launch": {"view": "canvas"}}
 json.dump(canvas, open("canvas.json", "w"), indent=2)
 print("wrote", len(boards), "artboards")

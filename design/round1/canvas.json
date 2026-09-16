@@ -4,8 +4,8 @@
       "file": "Main.dc.html",
       "x": 0,
       "y": 0,
-      "w": 1240,
-      "h": 820,
+      "w": 1480,
+      "h": 860,
       "title": "Names"
     },
     {
@@ -81,7 +81,7 @@
     },
     {
       "id": "how-to-read",
-      "x": 1300,
+      "x": 1560,
       "y": 0,
       "w": 420,
       "text": "How to read this canvas\nTop: five names, each shown inside the default text message.\nBelow: three visual directions. For each, the guest invite page twice: under a loud uploaded invite (the host's own artwork, here a stand-in poster) and as text only. The accent colour in the uploaded version is taken from the poster, which is how the real app will behave.\nAll copy is the approved default wording from the journeys page. Pick a name and a direction, or mix: one direction's type with another's colour is a fair ask."
