@@ -93,14 +93,14 @@ def page(d, mode):
 <div style="display:flex;flex-direction:column;gap:14px;padding:16px;background:{d['surface']};border:1px solid {d['line']};border-radius:{d['radius']}">
   {sec("clock", "Saturday 14 November, 2 to 4pm")}
   {sec("pin", "12 Example Street, Paddington")}
-  {sec("car", "Use the visitor carpark, entry off Latrobe Terrace.")}
-  {sec("shower", "Showers and change rooms available, plenty of shade.")}
   <a href="#" style="display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:14px;font-weight:600;color:{accent};text-decoration:none;border:1.5px solid {accent};border-radius:{d['btn_radius']};min-height:44px;padding:10px 14px;box-sizing:border-box">{pin_svg(accent)}Open in Maps</a>
 </div>'''
     details = f'''
 <div style="display:flex;flex-direction:column;gap:18px">
   {sec("grill", "We'll have a BBQ going.")}
   {sec("bag", "Swimmers, towel and a rashie. We have sunscreen.")}
+  {sec("car", "Use the visitor carpark, entry off Latrobe Terrace.")}
+  {sec("shower", "Showers and change rooms available, plenty of shade.")}
   {sec("gift", "Gifts are entirely optional. If you'd like to join in, there's also a group gift: Sarah is organising it, details after you reply.")}
   {sec("kids", "Stay or drop off, whatever suits you. We're keeping it to invited kids only. Sorry, siblings!")}
   {sec("calendar", "Please reply by 1 November so we can get the numbers right.")}
