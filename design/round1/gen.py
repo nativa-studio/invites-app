@@ -31,6 +31,19 @@ DIRS = {
     tradeoff="Risk: cold when there is no artwork. The text-only version leans on scale and spacing to carry warmth instead of colour."),
 }
 
+
+ICONS = {
+  "clock": '<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>',
+  "pin": '<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle>',
+  "grill": '<path d="M4 9h16"></path><path d="M6 9a6 6 0 0 0 12 0"></path><path d="M12 15v6M8 21l2-4M16 21l-2-4"></path><path d="M9 5c0-1 1-1 1-2M13 5c0-1 1-1 1-2"></path>',
+  "bag": '<path d="M6 8h12l1 13H5L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path>',
+  "gift": '<rect x="4" y="10" width="16" height="11" rx="1.5"></rect><path d="M4 14h16M12 10v11M12 10c-2 0-4-1-4-3s3-2 4 3c1-5 4-5 4-3s-2 3-4 3z"></path>',
+  "kids": '<circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="10" r="2.2"></circle><path d="M3 21v-2a6 6 0 0 1 12 0v2M14 21v-1.5a4 4 0 0 1 7 0V21"></path>',
+  "calendar": '<rect x="4" y="5" width="16" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16M9 15l2 2 4-4"></path>',
+}
+def icon(name, color):
+    return f'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 20px;margin-top:2px">{ICONS[name]}</svg>'
+
 def sun_svg(color):
     return f'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"></path></svg>'
 
@@ -63,10 +76,10 @@ def page(d, mode):
     acc_text = "#FFFFFF"
     eyebrow = d["eyebrow_style"]
     mark = sun_svg(accent) if d["key"] == "BrisbaneLight" else ""
-    def sec(label, body):
+    def sec(name, body):
         return f'''
-<div style="display:flex;flex-direction:column;gap:4px">
-  <div style="color:{d['muted']};{eyebrow}">{label}</div>
+<div style="display:flex;gap:12px;align-items:flex-start">
+  {icon(name, accent)}
   <div style="font-size:16px;line-height:1.5;color:{d['ink']}">{body}</div>
 </div>'''
     hero = poster() if upload else f'''
@@ -76,17 +89,17 @@ def page(d, mode):
 </div>'''
     strip = f'''
 <div style="display:flex;flex-direction:column;gap:14px;padding:16px;background:{d['surface']};border:1px solid {d['line']};border-radius:{d['radius']}">
-  {sec("When", "Saturday 14 November<br>2 to 4pm")}
-  {sec("Where", "12 Example Street, Paddington")}
+  {sec("clock", "Saturday 14 November, 2 to 4pm")}
+  {sec("pin", "12 Example Street, Paddington")}
   <a href="#" style="display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:14px;font-weight:600;color:{accent};text-decoration:none;border:1.5px solid {accent};border-radius:{d['btn_radius']};min-height:44px;padding:10px 14px;box-sizing:border-box">{pin_svg(accent)}Open in Maps</a>
 </div>'''
     details = f'''
 <div style="display:flex;flex-direction:column;gap:18px">
-  {sec("What we'll serve", "We'll have a BBQ going.")}
-  {sec("What to bring", "Swimmers, towel and a rashie. We have sunscreen.")}
-  {sec("Gifts", "Gifts are entirely optional. If you'd like to join in, there's also a group gift: Sarah is organising it, details after you reply.")}
-  {sec("Kids and parents", "Stay or drop off, whatever suits you. We're keeping it to invited kids only. Sorry, siblings!")}
-  {sec("Reply by", "Please reply by 1 November so we can get the numbers right.")}
+  {sec("grill", "We'll have a BBQ going.")}
+  {sec("bag", "Swimmers, towel and a rashie. We have sunscreen.")}
+  {sec("gift", "Gifts are entirely optional. If you'd like to join in, there's also a group gift: Sarah is organising it, details after you reply.")}
+  {sec("kids", "Stay or drop off, whatever suits you. We're keeping it to invited kids only. Sorry, siblings!")}
+  {sec("calendar", "Please reply by 1 November so we can get the numbers right.")}
 </div>'''
     rsvp = f'''
 <div style="display:flex;flex-direction:column;gap:12px;padding:20px 16px 22px;background:{d['surface']};border:1px solid {d['line']};border-radius:{d['radius']}">
