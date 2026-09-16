@@ -251,6 +251,24 @@
    "h": 2900,
    "title": "The suite as the guest's phone page",
    "page": "page-7"
+  },
+  {
+   "file": "GabrielCover.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 760,
+   "title": "The invitation card",
+   "page": "page-8"
+  },
+  {
+   "file": "GabrielSuite.dc.html",
+   "x": 480,
+   "y": 0,
+   "w": 390,
+   "h": 3140,
+   "title": "Gabriel's 4th, the whole suite",
+   "page": "page-8"
   }
  ],
  "annotations": [
@@ -365,11 +383,19 @@
    "w": 1180,
    "page": "page-7",
    "text": "Layouts test: the pool party as a stationery suite. This is the wedding-suite idea from the Pinterest references (invitation, details card, order of the day, reply card) with a Paperless Post feel: an envelope, a stamp, cards on a table, and the guest's own name already written on the reply card. Cut-paper colour from the board, chunky lettering, gingham liner, washi tape.\n\nWhy it matters: it is a candidate for the third Look card, Our layouts. A layout is a different skin over the same strip: the same sections in the same order (cover, the details, the day, good to know, RSVP, after), so the RSVP, calendar and everything after it are the same components. Each card here is one section of the strip wearing a card. That keeps a new layout to presentation code and artwork, not new behaviour, which is the cost test this page is for.\n\nBorderline placements, per the moment-of-need check: the details card carries a Wear line because for a pool party it decides the packing, and the order of the afternoon keeps the carpark and showers where they are needed, at arrive and swim, not on the invitation card."
+  },
+  {
+   "id": "gabriel-intro",
+   "x": 0,
+   "y": 820,
+   "w": 390,
+   "page": "page-8",
+   "text": "Gabriel's 4th, a Pokemon party, in the style of the reference: cobalt sky, halftone clouds, navy keylines, a snowy mountain over a yellow field, red and yellow accents. It is the page 7 suite layout with the palette swapped, and nothing else changed, which is the proof that a layout takes a palette.\n\nThe landscape is drawn fresh in that style. Pikachu himself is not: he is Nintendo's character, so he cannot ship inside the app's artwork. The dashed corner on the invitation card is where Marcia's own Pikachu picture drops in, cropped into the corner exactly as the reference does it. That is the upload path, and for a private party it is fine.\n\nGuest here is Mia. Dates, address and the programme are stand-ins for Marcia to replace. Access details (side gate, street parking) sit on Arrive, and the dress-up line sits in good to know because it decides what to bring, not whether to come."
   }
  ],
  "launch": {
   "view": "canvas",
-  "page": "page-7"
+  "page": "page-8"
  },
  "pages": [
   {
@@ -399,6 +425,10 @@
   {
    "id": "page-7",
    "name": "Layouts test"
+  },
+  {
+   "id": "page-8",
+   "name": "Gabriel's 4th"
   }
  ]
 }
