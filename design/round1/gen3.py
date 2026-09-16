@@ -44,7 +44,7 @@ def stop(t, name, label, body, ink):
     return f'''<div style="display:grid;grid-template-columns:52px 44px 1fr;gap:10px;align-items:start">
   <div style="font-family:{HEAD};font-size:20px;text-align:right;padding-top:8px">{t}</div>
   <div style="display:flex;justify-content:center">{svg(D[name], 44, ink)}</div>
-  <div style="padding-top:6px"><div style="font-family:{HEAD};font-size:22px;line-height:1">{label}</div><div style="font-size:15px;line-height:1.45;color:#4A443F">{body}</div></div>
+  <div style="padding-top:6px"><div style="font-family:{HEAD};font-size:22px;line-height:1">{label}</div><div style="font-size:15px;line-height:1.45;opacity:0.72">{body}</div></div>
 </div>'''
 
 def rsvp(q, ink, yes="Yes, we're coming", no="Sorry, can't make it"):
@@ -90,7 +90,7 @@ leo = "\n".join([
   f'<div style="font-size:13px;letter-spacing:0.14em;text-transform:uppercase;text-align:center">Hi Oliver, you\'re invited</div>',
   cluster(["balloon","sun","ring"], ink),
   title("Leo is<br>turning 6", 54),
-  para("A pool party in the backyard. Come for a swim, a sausage and some cake."),
+  para("A pool party at our building's pool. Come for a swim, a sausage and some cake."),
   divider(ink),
   title("The details"),
   para("Saturday 14 November<br>2 to 4pm<br>12 Example Street, Paddington"),
@@ -98,8 +98,8 @@ leo = "\n".join([
   divider(ink),
   title("The day"),
   '<div style="display:flex;flex-direction:column;gap:18px;width:100%">' + "\n".join([
-    stop("2:00","gate","Arrive","Through the side gate. Visitor carpark, entry off Latrobe Terrace.", ink),
-    stop("2:15","ring","Swim","Showers and change rooms, plenty of shade. Sunscreen sorted.", ink),
+    stop("2:00","gate","Arrive","Visitor carpark, entry off Example Street. We'll meet you at the pool gate.", ink),
+    stop("2:15","ring","Swim","Showers and change rooms available, plenty of shade.", ink),
     stop("3:15","cake","Cake and BBQ","We'll have a BBQ going. Tell us about allergies when you reply.", ink),
     stop("4:00","car","Pick up","Parents welcome to stay or drop off.", ink),
   ]) + '</div>',
@@ -114,11 +114,11 @@ leo = "\n".join([
   rsvp("Can Oliver make it? Please reply by 1 November so we can get the numbers right.", ink),
   divider(ink),
   '<div style="display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:16px;width:100%">'
-  + f'<div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">{svg(D["bubble"],48,ink)}<div style="font-family:{HEAD};font-size:22px">Updates</div><div style="font-size:14px;color:#4A443F">Anything that changes shows here.</div></div>'
-  + f'<div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">{svg(D["camera"],48,ink)}<div style="font-family:{HEAD};font-size:22px">Photos</div><div style="font-size:14px;color:#4A443F">A photo for you after the party.</div></div></div>',
-  f'<div style="font-size:13px;color:#4A443F;text-align:center">With love from Leo\'s mum and dad</div>',
+  + f'<div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">{svg(D["bubble"],48,ink)}<div style="font-family:{HEAD};font-size:22px">Updates</div><div style="font-size:14px;opacity:0.72">Anything that changes shows here.</div></div>'
+  + f'<div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">{svg(D["camera"],48,ink)}<div style="font-family:{HEAD};font-size:22px">Photos</div><div style="font-size:14px;opacity:0.72">A photo for you after the party.</div></div></div>',
+  f'<div style="font-size:13px;opacity:0.72;text-align:center">With love from Leo\'s mum and dad</div>',
 ])
-open("StripPoolParty.dc.html","w").write(strip(paper, ink, leo, 2080))
+open("StripPoolParty.dc.html","w").write(strip(paper, ink, leo, 2200))
 
 # 2. Birthday drinks (adult)
 ink2 = "#2C2A5A"; paper2 = "#F7F4FB"
@@ -138,9 +138,9 @@ drinks = "\n".join([
     stop("late","disco","Dancing","The playlist is not up for discussion.", ink2),
   ]) + '</div>',
   divider(ink2),
-  '<div style="display:flex;flex-direction:column;gap:14px">' + icon_line("gift","No gifts please. Your company is the present.", ink2) + icon_line("kids","Bring a partner or a friend, just add them to your numbers.", ink2) + '</div>',
+  '<div style="display:flex;flex-direction:column;gap:14px">' + icon_line("gift","No gifts please. Your company is the present.", ink2) + icon_line("kids","Bring a partner or a friend. We'll ask how many when you reply.", ink2) + '</div>',
   divider(ink2),
-  rsvp("Can you make it?", ink2, "Yes, I'm in", "Sorry, can't"),
+  rsvp("Can you make it? Please reply by 14 November.", ink2, "Yes, I'm in", "Sorry, can't"),
 ])
 open("StripBirthdayDrinks.dc.html","w").write(strip(paper2, ink2, drinks, 1720))
 
@@ -173,13 +173,13 @@ memorial = "\n".join([
   title("The details", 34),
   para("Thursday 27 November<br>11am<br>St Mary\'s, Kangaroo Point"),
   divider(ink4),
-  title("The afternoon", 34),
+  title("The day", 34),
   '<div style="display:flex;flex-direction:column;gap:18px;width:100%">' + "\n".join([
     stop("11:00","candle","Service","At St Mary\'s. Please arrive a little early.", ink4),
     stop("12:30","cake","Afternoon tea","In the hall next door. Stay as long as you like.", ink4),
   ]) + '</div>',
   divider(ink4),
-  '<div style="display:flex;flex-direction:column;gap:14px">' + icon_line("leaf","In lieu of flowers, a donation to the RSPCA would have made June very happy.", ink4) + icon_line("car","Parking behind the church, accessible entry from the car park.", ink4) + '</div>',
+  '<div style="display:flex;flex-direction:column;gap:14px">' + icon_line("leaf","In lieu of flowers, a donation to the RSPCA would have made June very happy.", ink4) + icon_line("car","Parking behind the church, accessible entry from the carpark.", ink4) + '</div>',
   divider(ink4),
   f'<div style="display:flex;flex-direction:column;gap:12px;align-items:center;width:100%">{title("Let us know", 40)}{para("It helps the family to know who is coming for the afternoon tea.")}<a href="#" style="display:flex;align-items:center;justify-content:center;min-height:54px;width:300px;border-radius:12px;background:{ink4};color:#FFFFFF;font-size:18px;font-weight:700;text-decoration:none">I\'ll be there</a><a href="#" style="display:flex;align-items:center;justify-content:center;min-height:54px;width:300px;border-radius:12px;border:2px solid {ink4};color:{ink4};font-size:18px;font-weight:700;text-decoration:none">I can\'t be there, but I\'m thinking of you</a></div>',
 ])
@@ -187,12 +187,12 @@ open("StripMemorial.dc.html","w").write(strip(paper4, ink4, memorial, 1560))
 
 c = json.load(open("canvas.json"))
 c["pages"].append({"id": "page-3", "name": "Illustrated strip"})
-boards = [("StripPoolParty.dc.html", 2080, "Leo's pool party, the full strip"), ("StripBirthdayDrinks.dc.html", 1720, "Birthday drinks, same skeleton"), ("StripBabyShower.dc.html", 1560, "Baby shower, same skeleton"), ("StripMemorial.dc.html", 1560, "Memorial, the quiet version")]
+boards = [("StripPoolParty.dc.html", 2200, "Leo's pool party, the full strip"), ("StripBirthdayDrinks.dc.html", 1720, "Birthday drinks, same skeleton"), ("StripBabyShower.dc.html", 1560, "Baby shower, same skeleton"), ("StripMemorial.dc.html", 1560, "Memorial, the quiet version")]
 x = 0
 for fn, h, t in boards:
     c["artboards"].append({"file": fn, "x": x, "y": 220, "w": 390, "h": h, "title": t, "page": "page-3"})
     x += 480
-c["annotations"].append({"id": "strip-intro", "x": 0, "y": -60, "w": 900, "page": "page-3", "text": "The illustrated strip. One skeleton for every event: cover, the details, the day, good to know, RSVP, after. What changes between events is the illustration set and the ink colour, never the structure.\nThe illustrations here are quick monoline stand-ins in one colour; the real sets would be drawn properly. An uploaded invite replaces the cover cluster and title; everything below it stays.\nThis is the fifth structure, and the one the Pinterest references point at."})
+c["annotations"].append({"id": "strip-intro", "x": 0, "y": -60, "w": 900, "page": "page-3", "text": "The illustrated strip. One skeleton for every event: cover, the details, the day, good to know, RSVP, after. What changes between events is the illustration set and the ink colour, never the order. Sections a host leaves empty simply drop out, which is why the shorter strips have fewer of them.\nThe illustrations here are quick monoline stand-ins in one colour; the real sets would be drawn properly. An uploaded invite replaces the cover cluster and title; everything below it stays.\nThis is the fifth structure, and the one the Pinterest references point at."})
 c["annotations"].append({"id": "strip-gallery", "x": 960, "y": -60, "w": 900, "page": "page-3", "text": "What this does to the theme gallery: the six themes become six illustration sets (kids' party, birthday, baby, home and family, celebration, quiet) in one ink colour on paper, rather than six colour schemes. Hosts pick a set and an ink; the accent can still come from an uploaded design.\nThe timeline reads from the runsheet items marked visible to guests, so hosts who write a runsheet get the illustrated day for free."})
 c["launch"] = {"view": "canvas", "page": "page-3"}
 json.dump(c, open("canvas.json", "w"), indent=2)
