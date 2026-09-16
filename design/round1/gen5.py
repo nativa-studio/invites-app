@@ -35,7 +35,7 @@ q = "\n".join([
   step_dots(1),
   card(stepper("How many kids?", 1, "kid") + stepper("How many grown-ups?", 1, "grown-up") + f'<div style="font-size:14px;opacity:0.7;text-align:center">Siblings are not on the list this time, so kids means Oliver.</div>'),
   card(f'<div style="font-family:{HEAD};font-size:20px">Any dietary needs?</div>' + chips(["Vegetarian","Vegan","Gluten free","Dairy free","Nut allergy","Halal","Other"], on=("Nut allergy",)) + field("Allergies or anything else we should know", "Oliver is anaphylactic to peanuts, has an EpiPen", "Oliver is anaphylactic to peanuts, EpiPen in his bag.")),
-  card(f'<div style="font-family:{HEAD};font-size:20px">Any access needs?</div>' + chips(["Step-free","Quiet space","Hearing","Vision","Other"]) + f'<div style="font-size:14px;opacity:0.7">Tap anything that applies, or skip.</div>'),
+  card(field("Any access needs?", "Step-free entry, a quiet corner, anything that helps") + f'<div style="font-size:14px;opacity:0.7">Only if it helps us. Skip if not.</div>'),
   card(f'<div style="font-family:{HEAD};font-size:20px">Staying or dropping off?</div>' + chips(["I\'ll stay","Drop off","Not sure yet"], on=("Drop off",)) + field("Best number on the day", "04...", "0400 111 222")),
   card(field("A note for Leo\'s mum", "Anything at all, optional")),
   primary("Send my reply"),
