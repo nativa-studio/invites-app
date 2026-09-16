@@ -39,6 +39,8 @@ ICONS = {
   "bag": '<path d="M6 8h12l1 13H5L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path>',
   "gift": '<rect x="4" y="10" width="16" height="11" rx="1.5"></rect><path d="M4 14h16M12 10v11M12 10c-2 0-4-1-4-3s3-2 4 3c1-5 4-5 4-3s-2 3-4 3z"></path>',
   "kids": '<circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="10" r="2.2"></circle><path d="M3 21v-2a6 6 0 0 1 12 0v2M14 21v-1.5a4 4 0 0 1 7 0V21"></path>',
+  "car": '<path d="M5 16l1.5-5.5A2 2 0 0 1 8.4 9h7.2a2 2 0 0 1 1.9 1.5L19 16"></path><rect x="3" y="16" width="18" height="4" rx="1"></rect><path d="M6 20v1M18 20v1M7 13h10"></path>',
+  "shower": '<path d="M5 5a4 4 0 0 1 7 2h3a4 4 0 0 1 4 4v1H9v-1a4 4 0 0 1 1-2.6"></path><path d="M9 15v1M12 15v3M15 15v1M12 20v1"></path>',
   "calendar": '<rect x="4" y="5" width="16" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16M9 15l2 2 4-4"></path>',
 }
 def icon(name, color):
@@ -91,6 +93,8 @@ def page(d, mode):
 <div style="display:flex;flex-direction:column;gap:14px;padding:16px;background:{d['surface']};border:1px solid {d['line']};border-radius:{d['radius']}">
   {sec("clock", "Saturday 14 November, 2 to 4pm")}
   {sec("pin", "12 Example Street, Paddington")}
+  {sec("car", "Use the visitor carpark, entry off Latrobe Terrace.")}
+  {sec("shower", "Showers and change rooms available, plenty of shade.")}
   <a href="#" style="display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:14px;font-weight:600;color:{accent};text-decoration:none;border:1.5px solid {accent};border-radius:{d['btn_radius']};min-height:44px;padding:10px 14px;box-sizing:border-box">{pin_svg(accent)}Open in Maps</a>
 </div>'''
     details = f'''
@@ -124,7 +128,7 @@ def page(d, mode):
     a {{ color: {accent}; }} a:hover {{ color: {d['ink']}; }}
   </style>
 </helmet>
-<div style="width:390px;min-height:{1640 if upload else 1560}px;background:{d['bg']};font-family:{d['body']};color:{d['ink']};display:flex;flex-direction:column;gap:22px;padding:28px 20px 40px;box-sizing:border-box">
+<div style="width:390px;min-height:{1720 if upload else 1640}px;background:{d['bg']};font-family:{d['body']};color:{d['ink']};display:flex;flex-direction:column;gap:22px;padding:28px 20px 40px;box-sizing:border-box">
   <div style="display:flex;align-items:center;gap:8px;color:{accent};{eyebrow}">{mark}<span>Hi Oliver, you're invited</span></div>
   {hero}
   {strip}
@@ -204,7 +208,7 @@ for k in ["A", "B", "C"]:
     for mode, suffix in (("upload", "Upload"), ("text", "TextOnly")):
         fn = f"{d['key']}{suffix}.dc.html"
         open(fn, "w").write(page(d, mode))
-        boards.append({"file": fn, "x": x, "y": 1160, "w": 390, "h": (1640 if mode=="upload" else 1560), "title": f"{k}. {d['name']}: {'uploaded invite' if mode=='upload' else 'text only'}"})
+        boards.append({"file": fn, "x": x, "y": 1160, "w": 390, "h": (1720 if mode=="upload" else 1640), "title": f"{k}. {d['name']}: {'uploaded invite' if mode=='upload' else 'text only'}"})
         x += 480
     notes.append({"id": f"dir-{k.lower()}", "x": x - 960, "y": 880, "w": 860, "text": f"Direction {k}: {d['name']}\n{d['motivation']}\n{d['tradeoff']}"})
     x += 120

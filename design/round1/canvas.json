@@ -13,7 +13,7 @@
       "x": 0,
       "y": 1160,
       "w": 390,
-      "h": 1640,
+      "h": 1720,
       "title": "A. Set table: uploaded invite"
     },
     {
@@ -21,7 +21,7 @@
       "x": 480,
       "y": 1160,
       "w": 390,
-      "h": 1560,
+      "h": 1640,
       "title": "A. Set table: text only"
     },
     {
@@ -29,7 +29,7 @@
       "x": 1080,
       "y": 1160,
       "w": 390,
-      "h": 1640,
+      "h": 1720,
       "title": "B. Brisbane light: uploaded invite"
     },
     {
@@ -37,7 +37,7 @@
       "x": 1560,
       "y": 1160,
       "w": 390,
-      "h": 1560,
+      "h": 1640,
       "title": "B. Brisbane light: text only"
     },
     {
@@ -45,7 +45,7 @@
       "x": 2160,
       "y": 1160,
       "w": 390,
-      "h": 1640,
+      "h": 1720,
       "title": "C. Quiet host: uploaded invite"
     },
     {
@@ -53,7 +53,7 @@
       "x": 2640,
       "y": 1160,
       "w": 390,
-      "h": 1560,
+      "h": 1640,
       "title": "C. Quiet host: text only"
     }
   ],
