@@ -149,7 +149,7 @@ NAMES = [
   ("Cooee", "cooee.app", "The Australian call to gather. Distinctive and ownable, hard to copy.", "Wordmark: rounded lowercase, the double 'o' as two speech bubbles."),
   ("Rollup", "rollup.app", "A good roll-up is a good turnout. Playful, a little carnival.", "Wordmark: lowercase with a curl on the 'R', like a rolled flag."),
   ("Bunting", "bunting.app", "The string of flags at every party, kids' or grown-up. Warm and original. Front-runner for celebrations; would jar on a memorial.", "Wordmark: a small pennant string under the word, never emoji."),
-  ("Kindly", "kindly.app", "Kindly reply, kindly let us know: the phrase on formal invitations for a century. Warm in joy and in sorrow, so it can hold memorials later. Front-runner if the domain and trademark checks pass.", "Wordmark: soft lowercase serif or a humanist sans, the 'K' with a gentle curve."),
+  ("Kindly", "kindly.app", "Kindly reply, kindly let us know: warm in joy and in sorrow, so it could hold memorials. Direct clash found: KindlyRSVP, an Australian digital invitation business (kindlyrsvp.com.au), plus kindly.rsvp overseas. Kept here for the record, not recommended.", "Wordmark: soft lowercase serif or a humanist sans, the 'K' with a gentle curve."),
 ]
 ALSO = [("Gathered", "warm, covers every occasion, common word"), ("Turnout", "clean, a little municipal"), ("Yep", "fun, hard to search for"), ("Sorted", "generic in Australia"), ("Pop In", "casual, common phrase"), ("Pencil Me In", "lovely, too long for a text"), ("Count Me In", "taken by two apps"), ("Rollcall", "taken by an invitation app"), ("Yeah Nah", "means no")]
 
