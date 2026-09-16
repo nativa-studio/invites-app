@@ -208,26 +208,17 @@
    "page": "page-5"
   },
   {
-   "file": "CoverText.dc.html",
+   "file": "CoverArtwork.dc.html",
    "x": 0,
    "y": 200,
    "w": 390,
    "h": 1500,
-   "title": "Just text",
-   "page": "page-6"
-  },
-  {
-   "file": "CoverArtwork.dc.html",
-   "x": 480,
-   "y": 200,
-   "w": 390,
-   "h": 1500,
-   "title": "Our artwork (monoline set, phase 1)",
+   "title": "Our artwork (the default; monoline set, phase 1)",
    "page": "page-6"
   },
   {
    "file": "CoverPhoto.dc.html",
-   "x": 960,
+   "x": 480,
    "y": 200,
    "w": 390,
    "h": 1500,
@@ -236,7 +227,7 @@
   },
   {
    "file": "CoverInvite.dc.html",
-   "x": 1440,
+   "x": 960,
    "y": 200,
    "w": 390,
    "h": 1500,
@@ -345,9 +336,9 @@
    "id": "covers-intro",
    "x": 0,
    "y": -140,
-   "w": 1900,
+   "w": 1420,
    "page": "page-6",
-   "text": "One strip, four covers. The host's Look step has three cards: Just text, Our artwork, Upload. Upload takes a photo or a finished invite, and the app tells them apart. Only the cover changes; the details, the day, good to know, RSVP and after are the same strip underneath.\nJust text: no drawings anywhere, the title carries it. Our artwork: the chosen set draws the cover and the small icons down the strip (this is what the Illustrated strip page shows). Upload a photo: the photo is the cover, the app types the title and intro under it, and the strip below is the text look in an ink picked from the photo. Upload a finished invite: the invite shows as it was made, then the strip below in an ink picked from it. In both upload cases the host can switch the small drawings on from any set if they want them.\n\nWhy this is cheap to grow: everything from The details down is one neutral set of components that only takes an ink colour and, optionally, an icon set. A new theme is artwork files, no code. A new cover treatment (envelope opening, ticket, cut-paper) is one component swapped at the top. A whole new page structure would be real development, which is why the strip is the one structure and the cover is where the personality lives."
+   "text": "One strip, three covers, two choices. The Look step has two cards: Our artwork (the default, so a host who skips the step still gets a drawn invite) and Upload. Upload takes a photo or a finished invite and the app tells them apart. There is no separate text-only look: the artwork already is the plain version, and the Quiet set is the plainest. Only the cover changes; the details, the day, good to know, RSVP and after are the same strip underneath.\nOur artwork: the chosen set draws the cover and the small icons down the strip. Upload a photo: the photo is the cover, the app types the title and intro under it, and the strip below runs in an ink picked from the photo. Upload a finished invite: shown as it was made, then the strip below in an ink picked from it. In both upload cases the host can keep the small drawings from any set.\n\nWhy this is cheap to grow: everything from The details down is one neutral set of components that only takes an ink colour and, optionally, an icon set. A new theme is artwork files, no code. A new cover treatment (envelope opening, ticket, cut-paper) is one component swapped at the top. A whole new page structure would be real development, which is why the strip is the one structure and the cover is where the personality lives."
   }
  ],
  "launch": {
@@ -377,7 +368,7 @@
   },
   {
    "id": "page-6",
-   "name": "Three covers"
+   "name": "Two looks"
   }
  ]
 }

@@ -22,7 +22,7 @@ A mobile-first web app. A host signs in with Google, creates an event, adds gues
 | Host sign-in | Google only in the UI. Email magic link may be used for local testing. |
 | Sending | From the host's own phone via `sms:` and WhatsApp links. The app never sends messages itself in phase 1. |
 | Guest identity | A secret token per guest in their personal link. No guest accounts, no phone verification. |
-| Invite looks | The guest page is an illustrated strip: cover, the details, the day (from the runsheet), good to know, RSVP, after. Three cover modes, all available on every event type: just text, our artwork (gallery set), upload (a plain photo or a finished invite as PDF, PNG, JPG; a photo gets the title typed over or under it, a finished invite is shown as is). Phase 1 gallery is six monoline illustration sets (SVG, one ink, five inks to pick from, fixed paper tint). Colour sets are phase 2. |
+| Invite looks | The guest page is an illustrated strip: cover, the details, the day (from the runsheet), good to know, RSVP, after. Two cover modes, both available on every event type: our artwork (gallery set, the default) and upload (a plain photo or a finished invite as PDF, PNG, JPG; a photo gets the title typed under it, a finished invite is shown as is). There is no separate text-only mode. Phase 1 gallery is six monoline illustration sets (SVG, one ink, five inks to pick from, fixed paper tint). Colour sets are phase 2. |
 | Uploaded PDFs | Converted to an image server-side at upload time. First page only. Original kept for download. |
 | Payments | None in phase 1. Group gift is PayID or bank details typed by the organiser. |
 | Guest cap | None. Hosts invite the right number. |
@@ -101,7 +101,7 @@ Migrations are SQL files in `supabase/migrations/`, numbered, applied in order. 
 
 ## Milestones, in order
 
-1. **Foundation.** Migrations for all tables, policies and guest RPCs. Google sign-in and profile creation. Event list and New event with Basics only. Add a guest. Personal link opens the text-only invite with the greeting. Seed script.
+1. **Foundation.** Migrations for all tables, policies and guest RPCs. Google sign-in and profile creation. Event list and New event with Basics only. Add a guest. Personal link opens the invite in the default artwork set with the greeting. Seed script.
 2. **RSVP.** The full RSVP conversation on the personal link with every optional question, the thank-you screen with calendar buttons, change my answer, group link flow with "Who's this from?", duplicate matching, opened tracking.
 3. **Share and dashboard.** Templates, Text, WhatsApp, Share, Copy, Send next, group link on and off, QR download, co-host invites, dashboard counts and nudges, guest list with trail and filters, Remind, New link, Merge.
 4. **Looks.** Upload with PDF conversion, ink pick from the artwork, six monoline illustration sets as inline SVG in the chosen ink, the illustrated timeline read from guest-visible runsheet items, share card, live preview in the Look step.
