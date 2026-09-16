@@ -7,3 +7,6 @@
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# Assembled design canvases (large, regenerated from the .dc.html sources)
+design/**/invite-app-*.html

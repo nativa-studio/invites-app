@@ -1,0 +1,93 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1240,
+      "h": 820,
+      "title": "Names"
+    },
+    {
+      "file": "SetTableUpload.dc.html",
+      "x": 0,
+      "y": 1040,
+      "w": 390,
+      "h": 1560,
+      "title": "A. Set table: uploaded invite"
+    },
+    {
+      "file": "SetTableTextOnly.dc.html",
+      "x": 480,
+      "y": 1040,
+      "w": 390,
+      "h": 1560,
+      "title": "A. Set table: text only"
+    },
+    {
+      "file": "BrisbaneLightUpload.dc.html",
+      "x": 1080,
+      "y": 1040,
+      "w": 390,
+      "h": 1560,
+      "title": "B. Brisbane light: uploaded invite"
+    },
+    {
+      "file": "BrisbaneLightTextOnly.dc.html",
+      "x": 1560,
+      "y": 1040,
+      "w": 390,
+      "h": 1560,
+      "title": "B. Brisbane light: text only"
+    },
+    {
+      "file": "QuietHostUpload.dc.html",
+      "x": 2160,
+      "y": 1040,
+      "w": 390,
+      "h": 1560,
+      "title": "C. Quiet host: uploaded invite"
+    },
+    {
+      "file": "QuietHostTextOnly.dc.html",
+      "x": 2640,
+      "y": 1040,
+      "w": 390,
+      "h": 1560,
+      "title": "C. Quiet host: text only"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "dir-a",
+      "x": 0,
+      "y": 900,
+      "w": 860,
+      "text": "Direction A: Set table\nWarm neutrals, a paper ground, a serious serif for titles and a plain sans for everything else. The app is the good plate under the invite.\nRisk: reads formal if the type gets too elegant. Kept the serif to titles only and used deep green, not terracotta, to stay clear of the default 'AI cream' look."
+    },
+    {
+      "id": "dir-b",
+      "x": 1080,
+      "y": 900,
+      "w": 860,
+      "text": "Direction B: Brisbane light\nBright white, a warm sun-coloured accent by default, big rounded friendly type, chips and pills, a small sun mark. Playful without being for kids.\nRisk: drifts toward Partiful if gradients creep in. No gradients anywhere; the warmth comes from one accent and a cream card tint."
+    },
+    {
+      "id": "dir-c",
+      "x": 2160,
+      "y": 900,
+      "w": 860,
+      "text": "Direction C: Quiet host\nAlmost no colour of its own: black, white, one grey, and the accent taken from the invite. Editorial grid, precise spacing, the artwork does the talking.\nRisk: cold when there is no artwork. The text-only version leans on scale and spacing to carry warmth instead of colour."
+    },
+    {
+      "id": "how-to-read",
+      "x": 1300,
+      "y": 0,
+      "w": 420,
+      "text": "How to read this canvas\nTop: five names, each shown inside the default text message.\nBelow: three visual directions. For each, the guest invite page twice: under a loud uploaded invite (the host's own artwork, here a stand-in poster) and as text only. The accent colour in the uploaded version is taken from the poster, which is how the real app will behave.\nAll copy is the approved default wording from the journeys page. Pick a name and a direction, or mix: one direction's type with another's colour is a fair ask."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}
