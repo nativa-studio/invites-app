@@ -19,10 +19,10 @@
   }
   * { box-sizing: border-box; }
   body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; padding-inline: 20px; padding-block: 32px 80px; }
-  .wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 36px; }
+  .wrap { max-width: 780px; margin: 0 auto; display: grid; gap: 40px; }
   h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
   h1 { font-size: clamp(34px, 6vw, 48px); font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; }
-  h2 { font-size: 24px; font-weight: 700; line-height: 1.15; }
+  h2 { font-size: 25px; font-weight: 700; line-height: 1.15; }
   h3 { font-size: 17px; font-weight: 700; }
   p { margin: 0; }
   a { color: var(--accent); }
@@ -31,112 +31,227 @@
   header.top { display: grid; gap: 14px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
   .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--ink-2); }
   .meta b { color: var(--ink); font-weight: 600; }
+  nav.toc ol { margin: 0; padding-left: 22px; columns: 2; display: grid; gap: 4px; }
+  nav.toc a { text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
   section { display: grid; gap: 14px; }
-  section > p { max-width: 66ch; }
-  ul, ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 66ch; }
+  section > p { max-width: 68ch; }
+  ul, ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 68ch; }
   li::marker { color: var(--ink-2); }
   .note { background: var(--note); border-left: 3px solid var(--accent); padding: 14px 16px; border-radius: 0 10px 10px 0; display: grid; gap: 6px; font-size: 15px; }
   .note.warn { border-left-color: var(--warn); }
   .note .eyebrow { color: var(--accent); }
   .note.warn .eyebrow { color: var(--warn); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; font-size: 15px; }
   .card b { font-family: var(--display); font-size: 16px; }
   .card span { color: var(--ink-2); }
+  .card .tag { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
   table { border-collapse: collapse; width: 100%; font-size: 14px; }
   th, td { text-align: left; padding: 8px 10px; border-top: 1px solid var(--line); vertical-align: top; }
   th { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); border-top: 0; }
   .tablewrap { overflow-x: auto; }
-  .num { counter-reset: n; list-style: none; padding: 0; }
+  .num { counter-reset: n; list-style: none; padding: 0; max-width: none; }
   .num li { display: grid; grid-template-columns: 32px 1fr; gap: 12px; padding-block: 8px; }
   .num li::before { counter-increment: n; content: counter(n); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 13px; background: var(--accent-soft); color: var(--accent); }
   .num b { display: block; }
   .num span { color: var(--ink-2); font-size: 15px; }
-  footer { padding-top: 28px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 14px; }
+  footer { padding-top: 28px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 14px; display: grid; gap: 8px; }
+  @media (max-width: 560px) { nav.toc ol { columns: 1; } }
 </style>
 
 <div class="wrap">
   <header class="top">
-    <p class="eyebrow">Brief for Claude Design</p>
+    <p class="eyebrow">Brief for Claude Design, version 2</p>
     <h1>Invites you text, replies that sort themselves</h1>
-    <p class="lede">A web app for sending an event invite by text and collecting RSVPs. Hosts bring their own invite design or pick a simple one, guests reply with one tap, and the host sees who is coming, how many, and what they need. This brief asks for the visual identity, the key screens, and a pass on the words.</p>
+    <p class="lede">A mobile-first web app for sending an event invite by text and running the RSVPs and the day around it. This brief asks for a name, a visual identity, the key screens, six themes, design tokens, and a pass on the words. It includes what competitors look like and what is current in app design, so the work starts from the market rather than from a blank canvas.</p>
     <div class="meta">
-      <span><b>Client</b> Marcia, Nativa Studio</span>
+      <span><b>Client</b> Marcia, Nativa Studio, Brisbane</span>
       <span><b>Stage</b> phase 1, pre-build</span>
-      <span><b>Platform</b> mobile-first web app, built in Next.js</span>
-      <span><b>Name</b> to be decided, propose options</span>
+      <span><b>Platform</b> mobile-first web app, Next.js on Vercel, Supabase behind it</span>
+      <span><b>Name</b> to be decided, part of this brief</span>
     </div>
   </header>
 
-  <section>
-    <h2>Read this first</h2>
-    <p>The full step-by-step experience for every kind of user is in the journeys page. It is the spec, and every screen you design should map to a step there. Please read it before anything below.</p>
-    <p><a href="https://claude.ai/artifact/RDfoisJ1vY7B9PNEXQyYi7">RSVP App Journeys, all ten journeys plus the default wording</a></p>
+  <nav class="toc">
+    <p class="eyebrow">Contents</p>
+    <ol>
+      <li><a href="#read">Read these first</a></li>
+      <li><a href="#product">The product</a></li>
+      <li><a href="#people">Who it is for</a></li>
+      <li><a href="#market">What competitors look like</a></li>
+      <li><a href="#trends">What is current in app design</a></li>
+      <li><a href="#name">Name brainstorm</a></li>
+      <li><a href="#directions">Three visual directions to explore</a></li>
+      <li><a href="#principles">Design principles</a></li>
+      <li><a href="#deliverables">Deliverables</a></li>
+      <li><a href="#screens">Screens and states</a></li>
+      <li><a href="#wording">The wording pass</a></li>
+      <li><a href="#constraints">Constraints and scope</a></li>
+      <li><a href="#process">How we will work</a></li>
+    </ol>
+  </nav>
+
+  <section id="read">
+    <h2>Read these first</h2>
+    <p>The step-by-step experience for every kind of user, and every default line of copy, is in the journeys page. It is the behavioural spec. Every screen you design maps to a step there.</p>
+    <p><a href="https://claude.ai/artifact/RDfoisJ1vY7B9PNEXQyYi7">RSVP App Journeys: ten journeys plus the default wording</a></p>
+    <p>The engineering side (data model, routes, milestones) lives in the repository as a build brief. You do not need it, but it is there if a question about feasibility comes up.</p>
   </section>
 
-  <section>
-    <h2>The product in one paragraph</h2>
-    <p>A host signs in with Google, creates an event in a few minutes, and adds guests. Every guest gets a personal link. The host texts the links from their own phone with one tap each, so the message arrives from someone the guest knows. The guest opens a page that greets them by name, sees the invite, taps yes or no, answers a couple of quick questions if the host asked (how many, dietary needs), and is done. The host watches replies arrive, chases the quiet ones, posts updates, runs a bring-a-plate list and a group gift, shares a runsheet for the day, and sends thank-you photos afterwards. Co-hosts share all of it.</p>
+  <section id="product">
+    <h2>The product</h2>
+    <p>A host signs in with Google, creates an event in a few minutes, and adds guests. Every guest gets a personal link. The host texts the links from their own phone with one tap each, so the message arrives from someone the guest knows. The guest opens a page that greets them by name, sees the invite, taps yes or no, answers a couple of quick questions if the host asked (how many, dietary needs), and is done. The host watches replies arrive, chases the quiet ones, posts updates, runs a bring-a-plate list and a group gift, shares a runsheet for the day, sends a see-you-soon message the day before, and sends thank-you photos afterwards. Co-hosts share all of it.</p>
+    <div class="grid">
+      <div class="card"><span class="tag">Sets it apart</span><b>Bring your own invite</b><span>Parents already design the invite in Canva. They upload it (PDF, PNG, JPG) and the app adds the RSVP underneath. The app must never compete with the host's artwork.</span></div>
+      <div class="card"><span class="tag">Sets it apart</span><b>Personal links, no accounts</b><span>No guest ever types a name, installs anything or verifies a phone. That is why replies come back.</span></div>
+      <div class="card"><span class="tag">Sets it apart</span><b>Sent from the host's own number</b><span>The app prepares every message; the host taps send. Beats every email-based product on delivery.</span></div>
+      <div class="card"><span class="tag">Sets it apart</span><b>Runs the whole event</b><span>Reminders, updates, bring-a-plate, group gift, runsheet, see-you-soon, thank-yous. Competitors stop at the RSVP.</span></div>
+      <div class="card"><span class="tag">Sets it apart</span><b>Kids' party literate</b><span>Children and adults counted separately, siblings, drop-off or stay, allergies handled properly.</span></div>
+      <div class="card"><span class="tag">Sets it apart</span><b>Australian first</b><span>Mobiles start with 04, dates read day-month, the tone is warm and plain. Nobody in this market speaks Australian.</span></div>
+    </div>
   </section>
 
-  <section>
+  <section id="people">
     <h2>Who it is for</h2>
     <div class="grid">
-      <div class="card"><b>Hosts</b><span>Parents organising a kids' party, adults doing a birthday or housewarming, someone running a baby shower, farewell, family gathering or community event. On their phone, busy, not designers.</span></div>
-      <div class="card"><b>Guests</b><span>Everyone the host knows. All ages, every phone, no app, no account. They get one link in a chat and must understand it in three seconds.</span></div>
+      <div class="card"><b>Hosts</b><span>Parents organising a kids' party, adults doing a birthday or housewarming, someone running a baby shower, farewell, family gathering or community event. On their phone, busy, not designers. Marcia's first hosts are her own clients and friends.</span></div>
+      <div class="card"><b>Guests</b><span>Everyone the host knows. All ages, every phone, no app, no account. One link in a chat, understood in three seconds.</span></div>
       <div class="card"><b>Co-hosts</b><span>The other parent, a partner, a friend helping. Same screens as the host, from their own phone.</span></div>
-      <div class="card"><b>Special guests</b><span>A speaker, MC, performer or helper who needs to know their part of the day.</span></div>
+      <div class="card"><b>Special guests and organisers</b><span>A speaker or helper who needs their part of the day; a guest running the group gift.</span></div>
     </div>
-    <p>Australian market first. Mobiles start with 04, dates read day-month, the tone is warm and plain.</p>
   </section>
 
-  <section>
-    <h2>What sets it apart</h2>
-    <ul>
-      <li><b>Bring your own invite.</b> Most parents already design the invite in Canva. They upload it (PDF, PNG or JPG) and the app adds the RSVP underneath. The app must never compete with the host's artwork.</li>
-      <li><b>Personal links.</b> No guest ever types a name or verifies a phone. That is the whole reason replies come back.</li>
-      <li><b>Sent from the host's own number.</b> The app prepares every message, the host taps send. It beats every email-based product on delivery.</li>
-      <li><b>Kids' party literate.</b> Children and adults counted separately, siblings, drop-off or stay, allergies handled properly.</li>
-      <li><b>Runs the whole event.</b> Reminders, updates, bring-a-plate, group gift, runsheet, see-you-soon message, thank-yous with photos. Competitors stop at the RSVP.</li>
-    </ul>
+  <section id="market">
+    <h2>What competitors look like</h2>
+    <p>Two families exist. The social apps (Partiful, Apple Invites, Luma) are page-first: a cover image, a black or white canvas, playful motion. The stationery apps (Paperless Post, Evite, Punchbowl, Greenvelope, InviteDrop) are card-first: an animated envelope, a designed card, a form underneath. Neither family is built around a host's own artwork, and none of them is warm and quiet at the same time.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>App</th><th>How it looks</th><th>Take</th><th>Leave</th></tr></thead>
+        <tbody>
+          <tr><td>Partiful</td><td>White canvas, full-bleed photo heroes washed in purple-to-pink gradients, black filled buttons and black headings with no blue accent, a custom display face at very large sizes with tight tracking, invitation cards scattered at tilted angles, 90s stickers. Deliberately "not too polished".</td><td>Confidence of the type, the one-colour button system, the sense that the page is a party surface rather than a dashboard.</td><td>The gradients (now the default look of every AI-made page), the US social tone, the phone-verification step.</td></tr>
+          <tr><td>Apple Invites</td><td>Photo-first. A full-bleed background from Photos, built-in images or an emoji field, title set over it, event cards you swipe between, subtle motion, dark mode throughout.</td><td>Restraint. The photo does the work and the type stays out of its way. Cards as the unit of the host's list.</td><td>The iPhone-only-ness, and a look that only works with a great photo.</td></tr>
+          <tr><td>Paperless Post</td><td>Refined stationery. Designer collaborations, an animated envelope the guest "opens", liners, stamps, serif type, muted palettes.</td><td>The moment of anticipation on open. The idea that an invite is an object.</td><td>The coin economy, the formality, anything that reads as a wedding.</td></tr>
+          <tr><td>Evite</td><td>Casual and colourful, huge template library, templates widely described as dated, and third-party ads inside the invitation.</td><td>Nothing visual.</td><td>Everything. This is the look to be furthest from.</td></tr>
+          <tr><td>Punchbowl</td><td>Cleaner than Evite, casual, built on licensed characters (Disney, Bluey, PAW Patrol) for kids' parties.</td><td>The recognition that kids' parties are their own category.</td><td>Character licensing. Our hosts bring their own artwork for that.</td></tr>
+          <tr><td>Luma</td><td>Event page with a cover image, professional-meetup feel, calendar-style list, no envelope, no stationery.</td><td>The tidy event page structure: cover, title, when, where, RSVP, then details.</td><td>The conference tone.</td></tr>
+          <tr><td>InviteDrop, Lemonvite</td><td>Newer, mobile-first. InviteDrop leans on an envelope animation around every invite; Lemonvite generates unique artwork per event and imports Canva designs.</td><td>Proof that "bring your Canva design" is a wanted feature. A small, considered moment on open.</td><td>Their US-only defaults and generic app chrome.</td></tr>
+        </tbody>
+      </table>
+    </div>
     <div class="note">
-      <p class="eyebrow">Competitive context</p>
-      <p>Partiful (free, social, US), Apple Invites (iPhone-only host), Evite (ads inside the invite), Paperless Post (coins), Punchbowl (subscription, licensed characters). Users punish ads, confusing pricing, guest sign-ups and platform lock. They reward no-account replies, text delivery, reminders and a page that looks good on a phone. We should look nothing like Evite and warmer than Partiful.</p>
+      <p class="eyebrow">The gap</p>
+      <p>Nobody owns "quiet, warm, host-first". Every competitor either shouts (gradients, stickers, envelopes) or reads as a tool (dashboards, forms). The space is a product that feels like a nicely set table: the host's invite is the centrepiece, and everything the app adds is the good plate underneath it.</p>
     </div>
   </section>
 
-  <section>
+  <section id="trends">
+    <h2>What is current in app design</h2>
+    <p>Where 2026 consumer apps have landed, and how it applies here. Use these as a checklist, not a style.</p>
+    <ul>
+      <li><b>Intentional minimalism.</b> Fewer controls, stronger hierarchy. Every element earns its place. For us: one primary action per screen, big yes and no, chips over dropdowns.</li>
+      <li><b>Micro-interactions as feedback, not decoration.</b> A tap confirms with a small movement, a save shows a toast, an error nudges. For us: the yes tap should feel good once, the dashboard trail should animate in when a reply lands.</li>
+      <li><b>Bottom sheets and cards.</b> Secondary actions live in a sheet near the thumb with a drag handle; content is organised as cards you can scan. For us: per-guest actions (Text, WhatsApp, Copy, New link, Merge) belong in a sheet, not a row of tiny buttons.</li>
+      <li><b>Progressive disclosure and conversational onboarding.</b> Ask for one thing at a time, show the result early. For us: event setup as a short conversation with a live preview, and the RSVP as a chat-like sequence rather than a form.</li>
+      <li><b>Empty states that feel filled.</b> A new host's first screen should show what the app does, not a blank list.</li>
+      <li><b>Glass and blur used surgically.</b> A floating bar or sheet may use it; backgrounds should not.</li>
+      <li><b>Dark mode is expected.</b> Phase 1 ships light only, but tokens should be dark-ready so it is a flip later, not a redesign.</li>
+      <li><b>Accessibility as default.</b> 44 px targets, AA contrast, reduced-motion respected, no meaning carried by colour alone.</li>
+    </ul>
+    <div class="note warn">
+      <p class="eyebrow">Anti-trends, please avoid</p>
+      <ul>
+        <li>The purple-to-blue or purple-to-pink gradient hero. It is the visual signature of AI-made products now.</li>
+        <li>Inter or Space Grotesk with rounded cards and an accent rail. Reads as a template.</li>
+        <li>Emoji as section markers, everything centred, confetti everywhere.</li>
+        <li>Near-black canvases with one acid pop colour. Wrong for a kids' party invite.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="name">
+    <h2>Name brainstorm</h2>
+    <p>The name has one job: it has to work in a text message. "I've sent you a [name]" or "reply on [name]" should sound natural to an Australian parent. Criteria:</p>
+    <ul>
+      <li>One or two syllables, easy to say and spell after hearing it once.</li>
+      <li>Not RSVP jargon, not "vite" or "invit" (that corner is crowded: Evite, Invitd, Invyt, InviteDrop, Lemonvite, Invitify).</li>
+      <li>Warm, a little playful, never childish, since the same product does a 40th and a farewell.</li>
+      <li>Available as a .com.au or .au and ideally .app, with no existing invitation app of the same name. Marcia will run the final checks; flag anything you find.</li>
+    </ul>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Starter</th><th>Why</th><th>Known clash</th></tr></thead>
+        <tbody>
+          <tr><td>Headcount</td><td>Says exactly what the host wants. Plain, confident.</td><td>None found among invitation apps. Generic word, check domains.</td></tr>
+          <tr><td>Turnout</td><td>Who showed up. Works for parties and community events alike.</td><td>None found among invitation apps.</td></tr>
+          <tr><td>Cooee</td><td>The Australian call to gather. Distinctive, ownable, hard to copy.</td><td>Common word in Australia, expect existing small businesses; check trademark class.</td></tr>
+          <tr><td>Pencil me in</td><td>What a guest says. Friendly, human, long.</td><td>Common phrase; the length hurts in a text.</td></tr>
+          <tr><td>Plus One</td><td>Party vocabulary, warm.</td><td>Very common name, several apps.</td></tr>
+          <tr><td>Count Me In</td><td>The perfect yes.</td><td>Taken twice: a shared-countdowns app and an events sign-up platform. Avoid.</td></tr>
+          <tr><td>Rollcall</td><td>Playful, school-gate.</td><td>An existing invitation app uses it. Avoid.</td></tr>
+          <tr><td>Yeah Nah</td><td>Very Australian, and literally yes or no.</td><td>An Android slang app exists, and "yeah nah" means no. Fun, but risky as a product name.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>Ask:</b> propose ten more names in the same spirit, then shortlist five with a one-line story for each, a wordmark sketch, and how it reads inside the default text message ("Hi Sarah! You're invited to Leo's 6th. See the details and RSVP: [name].app/i/abc"). Include one option that is a made-up word and one that is an Australian expression.</p>
+  </section>
+
+  <section id="directions">
+    <h2>Three visual directions to explore</h2>
+    <p>Starting points, not answers. Show each one under a loud portrait Canva invite and under the text-only look, so we can judge how well the chrome steps back and how well it carries a page on its own.</p>
+    <div class="grid">
+      <div class="card"><span class="tag">Direction A</span><b>Set table</b><span>Warm neutrals, a paper-like ground, a serious serif for titles with a plain sans for everything else, generous margins, one accent taken from the host's artwork. The app is the good plate under the invite. Risk: reads formal if the type gets too elegant.</span></div>
+      <div class="card"><span class="tag">Direction B</span><b>Brisbane light</b><span>Bright white, a warm sun-coloured accent by default, big rounded friendly type, chips and pills, small illustrated marks (a sun, a hat, a plate) used sparingly. Playful without being for kids. Risk: drifts toward Partiful if gradients creep in.</span></div>
+      <div class="card"><span class="tag">Direction C</span><b>Quiet host</b><span>Almost no colour of its own: black, white, one grey, and the accent from the invite. Editorial grid, precise spacing, the artwork does all the talking. Confident, modern, ages well. Risk: cold when there is no artwork, so the text-only look needs real care.</span></div>
+    </div>
+    <p>Whichever wins, the six gallery themes carry the personality (kids, playful, elegant, family, celebration) and the chrome stays consistent underneath.</p>
+  </section>
+
+  <section id="principles">
     <h2>Design principles</h2>
     <ol class="num">
-      <li><div><b>The invite is the hero, and it is usually theirs.</b><span>App chrome must be quiet enough to sit under a Canva design in any colour. Accent colour is picked from the upload, so every component must work in any hue.</span></div></li>
-      <li><div><b>Three looks, one layout.</b><span>Text only, a gallery theme, or an uploaded image. Only the top changes. Everything below (details, RSVP, calendar, extras) is identical across the three.</span></div></li>
-      <li><div><b>One tap wherever possible.</b><span>Big yes and no buttons, chips over dropdowns, steppers over number fields, nothing that needs a keyboard unless the host asked a question.</span></div></li>
-      <li><div><b>Feels like a message from a friend, not a form from a venue.</b><span>Warm, short, host's voice. See the wording section of the journeys page.</span></div></li>
+      <li><div><b>The invite is the hero, and it is usually theirs.</b><span>Chrome quiet enough to sit under any artwork in any colour. Accent is extracted from the upload, so every component must work in any hue and still pass contrast.</span></div></li>
+      <li><div><b>Three looks, one layout.</b><span>Text only, gallery theme, uploaded image. Only the top changes. Details, RSVP, calendar and extras are identical across the three.</span></div></li>
+      <li><div><b>One tap wherever possible.</b><span>Big yes and no, chips over dropdowns, steppers over number fields, nothing needs a keyboard unless the host asked a question.</span></div></li>
+      <li><div><b>Feels like a message from a friend, not a form from a venue.</b><span>Warm, short, host's voice.</span></div></li>
       <li><div><b>The dashboard is operated, not read.</b><span>Counts and what-needs-doing above the fold. State shown as shape and colour, not just numbers.</span></div></li>
-      <li><div><b>Phone first, laptop second.</b><span>Every screen at 390 px wide first. Hosts do most of this on their phone, guests do all of it there.</span></div></li>
+      <li><div><b>Phone first, laptop second.</b><span>Every screen at 390 px first. Hosts do most of this on their phone, guests do all of it there.</span></div></li>
+      <li><div><b>Kind to the nervous.</b><span>Sending a text to forty parents is a small act of courage. The Send next flow should feel like being handed each message by a calm friend.</span></div></li>
     </ol>
   </section>
 
-  <section>
+  <section id="deliverables">
     <h2>Deliverables</h2>
     <ol class="num">
-      <li><div><b>Identity direction</b><span>Two or three directions for name, wordmark, palette, type pairing, and the feel of the neutral chrome. Show each under a loud Canva invite and under the text-only look. Propose five name options with a line on each.</span></div></li>
-      <li><div><b>The guest invite page, all three looks</b><span>Personal-link version with greeting, details block (when, where with Open in Maps, what we'll serve, good to know, what to bring, gifts, accessibility, on the day), an update banner, yes and no buttons. Text-only, one gallery theme, and an uploaded portrait invite with the details strip.</span></div></li>
-      <li><div><b>The RSVP conversation</b><span>Yes path: count (single stepper and children-plus-adults), dietary chips with allergy line, accessibility chips, custom question, note. No path. Group-link version with "Who's this from?". The thank-you screen with calendar buttons and the extras cards (bring-a-plate, group gift, change my answer).</span></div></li>
-      <li><div><b>Bring-a-plate list and group gift block</b><span>As the guest sees them: the "what we'll serve" line, claim or add an item, dish tags, allergy banner. Gift block with organiser message, chip-in details, "I've chipped in".</span></div></li>
-      <li><div><b>Host: event setup</b><span>Event type choice, the Basics and Details form, and the Look step with its three cards and live phone preview, on phone and laptop.</span></div></li>
-      <li><div><b>Host: event dashboard and guest list</b><span>Counts, nudge strip, dietary summary, guest rows with the sent-opened-replied trail and Text, WhatsApp, Copy, View actions at 390 px. The Send next screen. The Remind list.</span></div></li>
-      <li><div><b>Runsheet</b><span>Host editing view with visibility per item, and the guest "now / next" view on the day, including a special guest's "your part" panel.</span></div></li>
-      <li><div><b>Six gallery themes</b><span>Two kids, two birthday (playful and elegant), one baby or family, one general celebration. Original artwork only, no licensed characters. Each as a small preview card plus the invite page dressed in it.</span></div></li>
-      <li><div><b>Share card</b><span>The 1200 by 630 preview that appears in iMessage and WhatsApp, for an uploaded portrait invite and for a theme.</span></div></li>
-      <li><div><b>Design tokens</b><span>Colour, type scale, spacing, radius, component states, ready for a developer to implement. Light theme only for phase 1.</span></div></li>
+      <li><div><b>Name shortlist</b><span>As described above: ten candidates, five shortlisted with story, wordmark sketch and text-message read.</span></div></li>
+      <li><div><b>Identity direction</b><span>The three directions explored, one recommended. For the recommendation: wordmark, palette (light, with dark-ready tokens), type pairing with sizes, button and chip system, iconography style, illustration or pattern language if any, motion principles, and how the extracted accent colour is applied and kept legible.</span></div></li>
+      <li><div><b>The guest invite page, all three looks</b><span>Personal-link version: greeting, hero (text, theme, or portrait upload with the details strip), update banner, details (when, where with Open in Maps, what we'll serve, good to know, what to bring, gifts and gift preferences, accessibility, on the day, parents and siblings lines), yes and no buttons.</span></div></li>
+      <li><div><b>The RSVP conversation</b><span>Yes path with every optional question (single stepper and children-plus-adults; names; dietary chips plus allergy line; accessibility chips; emergency contact; custom question; note). No path. Group-link version with "Who's this from?". Thank-you screen with calendar buttons and the extras cards. Change my answer.</span></div></li>
+      <li><div><b>Guest extras</b><span>Bring-a-plate list (what we'll serve line, claim or add, dish tags, allergy banner). Group gift block and the organiser page. Save-the-date view. See-you-soon view with the can-no-longer-make-it button. Runsheet now / next view and the special guest's "your part" panel. Thank-you page with photo.</span></div></li>
+      <li><div><b>Host: setup</b><span>Landing with Continue with Google. Event type choice. Basics and Details, one long form on mobile with sticky save. The Look step: three cards and a live phone preview, on phone and laptop. Ask guests settings. Guests (add one, paste a list, pick from contacts, copy from a past event, groups and roles). Share (template, per-guest actions, Send next, group link with QR for print, co-host invite).</span></div></li>
+      <li><div><b>Host: dashboard</b><span>Counts, nudge strip, dietary and accessibility summary, guest list at 390 px with the sent, opened, replied trail and the actions sheet. Remind list. Updates. Plate board. Group gift setup. Runsheet editor with visibility. Say thanks mode with per-guest photo upload. Duplicate event and copy guest list. Delete event.</span></div></li>
+      <li><div><b>Six gallery themes</b><span>Two kids, two birthday (playful and elegant), one baby or family, one general celebration. Original artwork only, no licensed characters. Each as a gallery card plus the invite page dressed in it.</span></div></li>
+      <li><div><b>Share card</b><span>The 1200 by 630 preview seen in iMessage and WhatsApp, for an uploaded portrait invite and for a theme.</span></div></li>
+      <li><div><b>Design tokens and components</b><span>Colour, type scale, spacing, radius, elevation, component states (default, hover, pressed, disabled, error, loading), ready for a developer.</span></div></li>
       <li><div><b>Wording pass</b><span>See below.</span></div></li>
     </ol>
   </section>
 
-  <section>
+  <section id="screens">
+    <h2>Screens and states</h2>
+    <p>Priority order for the first round is the guest invite page, the RSVP conversation and the host dashboard, because they are the product. Everything else can follow in a second round. For every screen, please show:</p>
+    <ul>
+      <li>The at-rest state with the example content (Leo's 6th, below).</li>
+      <li>The empty state (no guests yet, no replies yet, no updates yet) written so it teaches.</li>
+      <li>One error state (upload failed, link closed, wrong link).</li>
+      <li>Loading and saving feedback (skeleton or spinner, toast on save).</li>
+    </ul>
+    <p>Iconography: a single consistent set, outline or duotone, never mixed with emoji in the chrome. Emoji may appear only where the host or guest typed them. Motion: one signature moment on the yes tap, otherwise 150 to 250 ms transitions, all respecting reduced-motion.</p>
+  </section>
+
+  <section id="wording">
     <h2>The wording pass</h2>
-    <p>The journeys page ends with a table of every default line guests and hosts see. Those lines are approved in meaning, not in music. Please go through all of them and propose better wording wherever you think it can sound nicer, warmer or clearer, keeping the meaning and the length. Return a two-column table: current, proposed, with a short reason where it is not obvious.</p>
+    <p>The journeys page ends with a table of every default line guests and hosts see. Those lines are approved in meaning, not in music. Go through all of them and propose better wording wherever it can sound nicer, warmer or clearer, keeping the meaning and roughly the length. Return a two-column table, current and proposed, with a short reason where it is not obvious.</p>
     <p>Two we already suspect can improve:</p>
     <ul>
       <li><b>"What we'll serve"</b> as a label and its lines ("We'll have a BBQ going."). It reads like a menu board. Something that sounds like a host talking would be better.</li>
@@ -147,36 +262,39 @@
       <ul>
         <li>Australian English, spelling included.</li>
         <li>Never use an em dash. Use a comma, full stop, colon or brackets.</li>
-        <li>No exclamation marks in a row, one per line at most, and never in error messages.</li>
+        <li>One exclamation mark per line at most, never in error messages.</li>
         <li>Written as the host speaking ("we"), never as the app speaking.</li>
-        <li>Sibling and drop-off lines have been signed off word for word: "We're keeping it to invited kids only. Sorry, siblings!" and "Parents welcome to stay." Leave those as they are.</li>
+        <li>Signed off word for word, leave as they are: "We're keeping it to invited kids only. Sorry, siblings!" and "Parents welcome to stay." and "We would love to know if you can still make it :)"</li>
       </ul>
     </div>
   </section>
 
-  <section>
-    <h2>Constraints</h2>
+  <section id="constraints">
+    <h2>Constraints and scope</h2>
     <ul>
-      <li>Web app in Next.js. Design with components and tokens, not one-off pixels. Real fonts must be on Google Fonts or licensed for web.</li>
-      <li>Phone width of 390 px is the primary canvas. Tap targets at least 44 px. Colour contrast to WCAG AA on every accent hue, since the accent comes from the host's upload.</li>
-      <li>Uploaded invites are portrait more often than not, and arrive as PDF, PNG or JPG. Show the layout coping with a tall A5 design and a square one.</li>
-      <li>No licensed characters or brands in themes or examples. Hosts bring their own artwork.</li>
+      <li>Web app in Next.js. Design with components and tokens, not one-off pixels. Fonts on Google Fonts or licensed for web.</li>
+      <li>390 px is the primary canvas. Tap targets at least 44 px. Contrast to WCAG AA on every accent hue, since the accent comes from the host's upload.</li>
+      <li>Uploaded invites are portrait more often than not. Show the layout coping with a tall A5 design and a square one.</li>
+      <li>No licensed characters or brands in themes or examples.</li>
       <li>No ads, no watermarks, no "made with" badges on guest pages.</li>
-      <li>Light theme only in phase 1.</li>
+      <li>Light theme only in phase 1, tokens dark-ready.</li>
     </ul>
+    <p><b>Not in scope:</b> payments, in-app text sending, automatic reminders, day-of check-in, checklist, waitlist, view-only links, CSV export, a marketing site beyond a single landing page.</p>
+    <h3>Example content to design with</h3>
+    <p>Use one event throughout so the screens read as a set: Leo's 6th birthday, a pool party at home, Saturday 14 November, 2 to 4 pm, hosted by "Leo's mum and dad". Kids' party, children and adults counted separately, siblings not invited, drop-off or stay, BBQ served, bring-a-plate optional, gifts optional plus a group gift for a scooter organised by Sarah, one guest with a nut allergy. Guests: Oliver (contact Sarah), Ava and Mia (contact Tom), Grandma June as a special guest giving a speech. For the adult case, a second event: Marcia's birthday drinks, a Friday evening, text-only look, plus ones allowed, no gifts.</p>
   </section>
 
-  <section>
-    <h2>Not in scope</h2>
-    <p>Payments, in-app text sending, automatic reminders, check-in on the day, checklist, waitlist, view-only links, CSV export, marketing site. A single landing page with sign-in is enough for now.</p>
-  </section>
-
-  <section>
-    <h2>Example content to design with</h2>
-    <p>Use one event throughout so the screens read as a set: Leo's 6th birthday, a pool party at home, Saturday 14 November, 2 to 4pm, hosted by "Leo's mum and dad". Kids' party, children and adults counted separately, siblings not invited, drop-off or stay, BBQ served, bring-a-plate optional, gifts optional plus a group gift for a scooter organised by Sarah, one guest with a nut allergy. Guests: Oliver (contact Sarah), Ava and Mia (siblings, contact Tom), Grandma June as a special guest giving a speech.</p>
+  <section id="process">
+    <h2>How we will work</h2>
+    <ol class="num">
+      <li><div><b>Round one</b><span>Name shortlist, the three directions, and the guest invite page in each. Marcia picks a name and a direction.</span></div></li>
+      <li><div><b>Round two</b><span>Full guest journey, host dashboard, tokens, share card, wording pass.</span></div></li>
+      <li><div><b>Round three</b><span>Remaining host screens, six themes, states, handover.</span></div></li>
+    </ol>
+    <p>Feedback comes as comments on the design pages. The journeys page is the source of truth for behaviour; this brief is the source of truth for intent; Marcia is the source of truth for both.</p>
   </section>
 
   <footer>
-    <p>Questions and proposals back to Marcia. The journeys page is the source of truth for behaviour; this brief is the source of truth for intent.</p>
+    <p>Sources for the market and trends sections: <a href="https://studiokaki.co/partiful">Studio Kaki on the Partiful identity</a>, <a href="https://ixd.prattsi.org/2025/02/design-critique-partiful/">Pratt IXD critique of Partiful</a>, <a href="https://www.apple.com/newsroom/2025/02/introducing-apple-invites-a-new-app-that-brings-people-together/">Apple Invites announcement</a>, <a href="https://www.macrumors.com/2025/02/04/apple-invites-app-hands-on/">MacRumors hands-on</a>, <a href="https://party.pro/evite-vs-paperless-post/">party.pro on Evite and Paperless Post</a>, <a href="https://www.invitedrop.com/vs/luma">InviteDrop on Luma</a>, <a href="https://www.lemonvite.com/blog/partiful-vs-luma-vs-lemonvite">Lemonvite on Partiful and Luma</a>, <a href="https://muz.li/blog/whats-changing-in-mobile-app-design-ui-patterns-that-matter-in-2026/">Muzli on 2026 UI patterns</a>, <a href="https://gendesigns.ai/blog/mobile-ui-patterns-2026">GenDesigns on 2026 mobile patterns</a>, <a href="https://uxcam.com/blog/10-apps-with-great-user-onboarding/">UXCam on onboarding</a>, <a href="https://www.apple.com/newsroom/2026/06/apple-reveals-winners-of-the-2026-apple-design-awards/">Apple Design Awards 2026</a>.</p>
   </footer>
 </div>
