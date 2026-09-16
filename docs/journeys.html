@@ -1,0 +1,388 @@
+<title>RSVP App Journeys</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+  :root {
+    --bg: #f7f9f8;
+    --surface: #ffffff;
+    --ink: #17211f;
+    --ink-2: #5a6a66;
+    --line: #dbe3e0;
+    --accent: #0f6e63;
+    --accent-soft: #e3f1ee;
+    --guest: #b8551a;
+    --guest-soft: #fbeee3;
+    --host: #0f6e63;
+    --host-soft: #e3f1ee;
+    --note: #f1f4f3;
+    --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+    --body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1615; --surface: #172020; --ink: #e8eeec; --ink-2: #9db0ab; --line: #26332f;
+      --accent: #5fc4b4; --accent-soft: #163632; --guest: #f0a066; --guest-soft: #3a2415;
+      --host: #5fc4b4; --host-soft: #163632; --note: #1d2726;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1615; --surface: #172020; --ink: #e8eeec; --ink-2: #9db0ab; --line: #26332f;
+    --accent: #5fc4b4; --accent-soft: #163632; --guest: #f0a066; --guest-soft: #3a2415;
+    --host: #5fc4b4; --host-soft: #163632; --note: #1d2726;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; padding-inline: 20px; padding-block: 32px 80px; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(34px, 6vw, 48px); font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; }
+  h2 { font-size: 26px; font-weight: 700; line-height: 1.15; }
+  h3 { font-size: 17px; font-weight: 700; }
+  p { margin: 0; }
+  a { color: var(--accent); }
+  .lede { color: var(--ink-2); font-size: 18px; max-width: 60ch; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; }
+  header.top { display: grid; gap: 14px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--ink-2); }
+  .meta b { color: var(--ink); font-weight: 600; }
+
+  nav.toc { display: grid; gap: 6px; padding-block: 24px; border-bottom: 1px solid var(--line); }
+  nav.toc ol { margin: 0; padding-left: 22px; display: grid; gap: 4px; columns: 2; }
+  nav.toc a { text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; padding-block: 20px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+  .chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .chip.host { background: var(--host-soft); color: var(--host); }
+  .chip.guest { background: var(--guest-soft); color: var(--guest); }
+
+  section.journey { padding-block: 36px; border-bottom: 1px solid var(--line); display: grid; gap: 18px; }
+  .jhead { display: grid; gap: 8px; }
+  .jhead .who { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; color: var(--ink-2); }
+  .jhead .who span b { color: var(--ink); font-weight: 600; }
+
+  ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: step; }
+  ol.steps li { display: grid; grid-template-columns: 36px 1fr; gap: 14px; padding-block: 12px; position: relative; }
+  ol.steps li::before { counter-increment: step; content: counter(step); width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 14px; background: var(--surface); border: 1.5px solid var(--line); color: var(--ink-2); }
+  ol.steps li::after { content: ""; position: absolute; left: 14.5px; top: 44px; bottom: -2px; width: 1px; background: var(--line); }
+  ol.steps li:last-child::after { display: none; }
+  ol.steps li.host::before { border-color: var(--host); color: var(--host); }
+  ol.steps li.guest::before { border-color: var(--guest); color: var(--guest); }
+  ol.steps .t { font-weight: 600; }
+  ol.steps .d { color: var(--ink-2); font-size: 15px; margin-top: 2px; max-width: 62ch; }
+  ol.steps .d em { font-style: normal; color: var(--ink); }
+
+  .note { background: var(--note); border-left: 3px solid var(--accent); padding: 14px 16px; border-radius: 0 10px 10px 0; display: grid; gap: 6px; font-size: 15px; }
+  .note .eyebrow { color: var(--accent); }
+  .note ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+
+  .screen { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: 14px; display: grid; gap: 4px; max-width: 420px; }
+  .screen .eyebrow { font-size: 11px; }
+  .screen .big { font-family: var(--display); font-size: 22px; font-weight: 700; line-height: 1.1; }
+  .screen .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .screen .btn { padding: 8px 12px; border-radius: 999px; border: 1.5px solid var(--line); font-weight: 600; font-size: 13px; }
+  .screen .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-top: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); border-top: 0; }
+  .tablewrap { overflow-x: auto; }
+
+  footer { padding-top: 28px; color: var(--ink-2); font-size: 14px; display: grid; gap: 6px; }
+  @media (max-width: 560px) { nav.toc ol { columns: 1; } h2 { font-size: 23px; } }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Phase 1 experience review</p>
+    <h1>Every journey, step by step</h1>
+    <p class="lede">What each person sees and does, from the first text to the thank-you photo. Written for review before the design brief: the words are placeholders, the steps are the spec.</p>
+    <div class="meta">
+      <span><b>Product</b> event invites and RSVPs, name to come</span>
+      <span><b>Data</b> Airtable, Nativa Studio workspace</span>
+      <span><b>Sign in</b> Google, hosts only</span>
+      <span><b>Sending</b> from the host's own phone</span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <p class="eyebrow">Journeys</p>
+    <ol>
+      <li><a href="#j1">Host sets up an event</a></li>
+      <li><a href="#j2">Host and co-host, before the day</a></li>
+      <li><a href="#j3">Guest with a personal link</a></li>
+      <li><a href="#j4">Guest from the group link</a></li>
+      <li><a href="#j5">Save the date, both sides</a></li>
+      <li><a href="#j6">Special guest with a role</a></li>
+      <li><a href="#j7">Group gift organiser</a></li>
+      <li><a href="#j8">On the day</a></li>
+      <li><a href="#j9">After the party</a></li>
+      <li><a href="#j10">Next time</a></li>
+      <li><a href="#wording">Default wording</a></li>
+    </ol>
+  </nav>
+
+  <div class="legend">
+    <span class="chip host">Host or co-host step</span>
+    <span class="chip guest">Guest step</span>
+  </div>
+
+  <!-- 1 -->
+  <section class="journey" id="j1">
+    <div class="jhead">
+      <h2>1. Host sets up an event</h2>
+      <div class="who"><span><b>Who</b> the person throwing the party</span><span><b>Where</b> phone or laptop</span><span><b>Time</b> ten minutes with an uploaded invite, less for text only</span></div>
+    </div>
+    <ol class="steps">
+      <li class="host"><div><p class="t">Lands on the site</p><p class="d">One line of pitch, one button: <em>Continue with Google</em>. First sign-in creates their profile from their Google name and email. Nothing else to fill in.</p></div></li>
+      <li class="host"><div><p class="t">Dashboard</p><p class="d">First visit shows a single card, <em>Create your first event</em>. Later visits list events with date, people coming and no-reply counts, plus a New event button.</p></div></li>
+      <li class="host"><div><p class="t">Basics</p><p class="d">Event type first (kids' party, adult birthday, baby shower, engagement, housewarming or farewell, family gathering, community or school, workshop), which sets sensible defaults for every later switch. Then title, the date picked from a calendar, start time from a time picker with an optional end time (and an optional free-text line for things like "till late"), venue, address with an <em>Open in Google Maps</em> option (Apple Maps on iPhone) generated from it automatically, RSVP-by date, the host line ("Leo's mum and dad") and a phone for questions.</p></div></li>
+      <li class="host"><div><p class="t">Details</p><p class="d">Intro, good to know, <em>what we'll serve</em> (optional: pick from a list such as BBQ, lunch, dinner, brunch, morning tea, afternoon tea and cake, drinks and nibbles, pizza, high tea, or write your own; this same line heads the bring-a-plate list), what to bring ("swimmers, towel, rashie"), gifts as two independent settings: a stance (No gifts, Optional, Wish list link, Books only, plus a note) a <em>Group gift</em> switch that can sit alongside any of them, and optional <em>gift preference</em> chips in two rows, "happy with" (second-hand, hand-me-downs, homemade, books, experiences, vouchers) and "please avoid" (batteries, plastic, noisy toys, lollies, anything large), which the invite turns into one friendly sentence, accessibility at the venue, <em>access info</em> for the day (gate code, buzzer, parking, shown only to guests who said yes), and for kids' parties two controls: a three-way choice (<em>Parents welcome to stay</em>, <em>Drop-off party</em>, <em>Either</em>) and a <em>Siblings welcome</em> checkbox. A <em>Save the date</em> switch lives here too.</p></div></li>
+      <li class="host"><div><p class="t">Look</p><p class="d">Three cards side by side: <em>Text only</em>, <em>Choose a theme</em> (a gallery of six), <em>Upload my invite</em> (PDF, PNG or JPG). A live phone preview sits beside them and updates as they click. Accent colour is picked from the image or theme with an override. Upload mode has a switch for the small details strip under the picture, on by default. Below: the share card preview, showing how the link will look in iMessage and WhatsApp, with editable title and description.</p></div></li>
+      <li class="host"><div><p class="t">Ask guests</p><p class="d">What the RSVP collects: party size as one number or children and adults separately; names of everyone coming; dietary needs with an editable chip list; accessibility needs; one custom question; bring-a-plate on or off; group gift on or off, with the organiser set now or later.</p></div></li>
+      <li class="host"><div><p class="t">Guests</p><p class="d">Four ways in: add one (name, mobile, contact name for a child), paste a list one per line, pick from the phone's contacts, or copy from a past event. Guests can be tagged into groups the host names themselves (for example school, family, Leo's soccer team; typed once, then offered as chips, renamable at any time) and given roles (speaker, helper). Every guest gets their personal link the moment they are added.</p></div></li>
+      <li class="host"><div><p class="t">Share</p><p class="d">The text template with {name} and {link}, editable. Per guest: <em>Text</em>, <em>WhatsApp</em>, <em>Share</em>, <em>Copy</em>. A <em>Send next</em> mode walks the list with a counter. The group link with Copy and Share buttons and an on/off switch, plus a downloadable QR code meant only for print: a paper invite, a school noticeboard, a sign at the venue. Phone to phone, the host shares the link itself. <em>Add a co-host</em> by email or link.</p></div></li>
+      <li class="host"><div><p class="t">Done</p><p class="d">Lands on the event dashboard, journey 2, with <em>Add to Google Calendar</em> and <em>Apple / Outlook calendar</em> buttons for the host's own diary, the same ones guests get. Everything above can be edited at any time; guest links never change.</p></div></li>
+    </ol>
+    <div class="note">
+      <p class="eyebrow">For design</p>
+      <ul>
+        <li>The Look step is the signature screen: three cards plus a live phone preview, and it must work on a phone as well as a laptop.</li>
+        <li>Basics and Details are one long form on mobile with sticky Save. On desktop the preview stays visible throughout.</li>
+        <li>Event type should feel like the first friendly choice, not a settings dropdown.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="journey" id="j2">
+    <div class="jhead">
+      <h2>2. Host and co-host, before the day</h2>
+      <div class="who"><span><b>Who</b> everyone organising</span><span><b>Where</b> mostly phone</span><span><b>Time</b> a glance a day, a few minutes for reminders</span></div>
+    </div>
+    <ol class="steps">
+      <li class="host"><div><p class="t">Co-host joins</p><p class="d">Gets a text or email from the host with a link, signs in with Google, and the event is on their dashboard. Same powers as the host except deleting the event and removing co-hosts, and the same calendar buttons for their own diary. Every action shows who did it.</p></div></li>
+      <li class="host"><div><p class="t">Event dashboard</p><p class="d">Counts first: people coming (children and adults if split), said yes, said no, no reply, opened but not replied. Under them a summary line of dietary and accessibility needs, and a nudge strip: "RSVP closes in 3 days, 6 people haven't replied."</p></div></li>
+      <li class="host"><div><p class="t">Guest list</p><p class="d">Filter by status, group or role. Each row: name and contact, reply with numbers, a trail of sent, opened, replied, who added and who texted them, dietary chips, their plate item, gift tick. Actions: Text, WhatsApp, Copy, View, New link, Merge, Remove.</p></div></li>
+      <li class="host"><div><p class="t">Remind</p><p class="d">Opens the no-reply list with opened-but-not-replied first. Separate reminder template. Same buttons, same Send next flow. Each guest shows when they were last reminded.</p></div></li>
+      <li class="host"><div><p class="t">Post an update</p><p class="d">"Rain plan: we're moving indoors." The update appears at the top of every guest's invite, and one tap texts a nudge to everyone who said yes.</p></div></li>
+      <li class="host"><div><p class="t">Bring-a-plate board</p><p class="d">The host's "what we'll serve" line and the mode (optional, or everyone brings), then everything guests have claimed or added, who is bringing it, dish tags, anything the host asked for still unclaimed. The allergy banner as guests see it, plus the host's own line above it. Host can edit or remove any item.</p></div></li>
+      <li class="host"><div><p class="t">Group gift</p><p class="d">Set the gift and target, choose the organiser (me or a guest), text them the handover. Status shows once the organiser has added their details, and who has chipped in unless the surprise switch hides it.</p></div></li>
+      <li class="host"><div><p class="t">Runsheet</p><p class="d">Items with time, what happens, who is on it, and visibility: hosts only, all guests, or specific guests or roles. Reorder by drag. Guest-visible items appear on the invite as "On the day".</p></div></li>
+      <li class="host"><div><p class="t">Closing the list</p><p class="d">Switch the group link off, or end save-the-date mode to reveal the full invite. Each has a one-tap nudge to tell guests. There is no guest cap: hosts invite the right number.</p></div></li>
+    </ol>
+    <div class="note">
+      <p class="eyebrow">For design</p>
+      <ul>
+        <li>The dashboard is operated, not read: counts and the nudge strip above the fold, the list below.</li>
+        <li>The sent, opened, replied trail needs a compact visual per row that survives a 390px screen.</li>
+        <li>Send next is a focused one-guest-at-a-time screen with a progress count, not the full table.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="journey" id="j3">
+    <div class="jhead">
+      <h2>3. Guest with a personal link</h2>
+      <div class="who"><span><b>Who</b> anyone the host texted directly</span><span><b>Where</b> their phone, in the browser</span><span><b>Time</b> under a minute to reply</span></div>
+    </div>
+    <div class="screen">
+      <p class="eyebrow">In their chat</p>
+      <p>Hi Sarah! You're invited to Leo's 6th. See the details and RSVP: link</p>
+      <p class="d" style="color:var(--ink-2)">Then the preview card: the invite image, "You're invited: Leo's 6th Birthday", the app's domain.</p>
+    </div>
+    <ol class="steps">
+      <li class="guest"><div><p class="t">Taps the link</p><p class="d">The invite opens: <em>"Hi Oliver, you're invited"</em>, then the uploaded invite full width (tap to zoom), or the theme, or the text layout. Any update the host posted sits at the top.</p></div></li>
+      <li class="guest"><div><p class="t">Reads the details</p><p class="d">When and where with an <em>Open in Google Maps</em> button (Apple Maps on iPhone), what we'll serve, good to know, what to bring, gifts, accessibility at the venue, "On the day" timeline if the host shared one, whether parents stay or drop off and whether siblings are welcome, and "Questions? Text Leo's mum".</p></div></li>
+      <li class="guest"><div><p class="t">Yes or no</p><p class="d">Two big buttons. The wording can be customised per event ("I choose you!").</p></div></li>
+      <li class="guest"><div><p class="t">If yes, a few quick questions</p><p class="d">Only the ones the host switched on, in this order: how many (one stepper, or children and adults), names of everyone coming, dietary chips and an allergy line, accessibility chips, the custom question, a note for the host. Emergency contact if it is a drop-off party. When siblings are welcome, the children count and names include them, so no separate question is needed. Everything optional except the count.</p></div></li>
+      <li class="guest"><div><p class="t">Thank-you screen</p><p class="d">What they told us, repeated back. <em>Add to Google Calendar</em> and <em>Apple / Outlook calendar</em> buttons. Then the extras, each its own card: bring-a-plate (claim something or add their own, allergy banner at the top), group gift (who is organising, how to chip in, "I've chipped in"). And <em>Change my answer</em>.</p></div></li>
+      <li class="guest"><div><p class="t">If no</p><p class="d">"Sorry you'll miss it", an optional note, done. The link still works if plans change.</p></div></li>
+      <li class="guest"><div><p class="t">Coming back later</p><p class="d">The same link shows their reply, any updates, the plate list and the gift, and on the day the live timeline. Nothing to log into.</p></div></li>
+      <li class="guest"><div><p class="t">Wrong person</p><p class="d">A small "Not Oliver? Reply here instead" link at the bottom sends them into journey 4.</p></div></li>
+    </ol>
+    <div class="note">
+      <p class="eyebrow">For design</p>
+      <ul>
+        <li>This page is the product. Three looks (text, theme, upload) share one layout below the hero.</li>
+        <li>The questions after yes should feel like one short conversation, not a form. Chips over dropdowns everywhere.</li>
+        <li>The thank-you screen carries the extras, so it needs a clear hierarchy: confirmation, calendar, then the plate and gift cards.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="journey" id="j4">
+    <div class="jhead">
+      <h2>4. Guest from the group link</h2>
+      <div class="who"><span><b>Who</b> anyone who found the link in a group chat, on a post or via a QR code</span><span><b>Where</b> their phone</span></div>
+    </div>
+    <ol class="steps">
+      <li class="guest"><div><p class="t">Taps the link</p><p class="d">Same invite and preview card. The greeting reads <em>"You're invited to Leo's 6th! Tell us whether you can make it."</em></p></div></li>
+      <li class="guest"><div><p class="t">Yes or no, then who they are</p><p class="d">The same two big buttons first. The first question after is <em>"Who's this from?"</em>: name (child's name and a contact name for a kids' party), mobile optional "in case the host needs to reach you". Then the same questions as journey 3.</p></div></li>
+      <li class="guest"><div><p class="t">Gets their own link</p><p class="d">After sending, they land on a personal link of their own, with "Save this link to change your answer later" and a <em>Text me my link</em> button that opens Messages to themselves.</p></div></li>
+      <li class="host"><div><p class="t">On the host's side</p><p class="d">The reply appears tagged "via group link". If the name or number matches someone already invited who had not replied, it attaches to them instead of creating a second row. The occasional duplicate is a one-tap merge.</p></div></li>
+      <li class="guest"><div><p class="t">When the link is closed</p><p class="d">"RSVPs have closed" with a text-the-host button, so a late finder is not left guessing.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- 5 -->
+  <section class="journey" id="j5">
+    <div class="jhead">
+      <h2>5. Save the date, both sides</h2>
+      <div class="who"><span><b>Who</b> hosts sending early, guests receiving early</span></div>
+    </div>
+    <ol class="steps">
+      <li class="host"><div><p class="t">Host switches on save-the-date mode</p><p class="d">Needs only a title and a date. The look can be text, theme, or an uploaded save-the-date image. Guests are added and texted exactly as in journey 1.</p></div></li>
+      <li class="guest"><div><p class="t">Guest opens the link</p><p class="d">Title, date, "details coming soon", and one button: <em>Got it, I'll keep the date free</em>. Optional calendar hold. Because the link is theirs, the tap is recorded against their name (group-link guests are asked "Who's this from?" first).</p></div></li>
+      <li class="host"><div><p class="t">Host sees who has seen it</p><p class="d">The guest list shows each person's status by name: not opened, opened, or <em>keeping the date free</em> with the time they tapped. Counts sit above, and the usual reminder buttons cover those who have not responded.</p></div></li>
+      <li class="host"><div><p class="t">Host completes the event</p><p class="d">Fills in the details, swaps the image for the full invite, switches the mode off. One tap texts "details are up" to everyone.</p></div></li>
+      <li class="guest"><div><p class="t">Guest opens the same link again</p><p class="d">Full invite and the yes and no buttons. Nothing new to receive or find.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- 6 -->
+  <section class="journey" id="j6">
+    <div class="jhead">
+      <h2>6. Special guest with a role</h2>
+      <div class="who"><span><b>Who</b> a speaker, MC, performer, photographer or helper</span></div>
+    </div>
+    <ol class="steps">
+      <li class="host"><div><p class="t">Host gives a guest a role</p><p class="d">On the guest row. Runsheet items can then be assigned to that person or to the role.</p></div></li>
+      <li class="guest"><div><p class="t">Their invite grows a "Your part" panel</p><p class="d">Above the general timeline: their items with times, who to find when they arrive, and a text-the-host button. They still RSVP like everyone else.</p></div></li>
+      <li class="host"><div><p class="t">The night before</p><p class="d">Host filters the list by role and texts a reminder with the usual buttons.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- 7 -->
+  <section class="journey" id="j7">
+    <div class="jhead">
+      <h2>7. Group gift organiser</h2>
+      <div class="who"><span><b>Who</b> a guest (or the host) running the group present</span><span><b>Money</b> never passes through the app in phase 1</span></div>
+    </div>
+    <ol class="steps">
+      <li class="host"><div><p class="t">Host sets up the gift</p><p class="d">What it is, an optional target, and the organiser picked from the guest list or "me".</p></div></li>
+      <li class="guest"><div><p class="t">Organiser gets the handover text</p><p class="d">"Would you organise the group gift for Gabe? Everything is here: link". Their personal link opens an organiser page.</p></div></li>
+      <li class="guest"><div><p class="t">Organiser adds their details and a message for contributors</p><p class="d">PayID, bank details or a gift-fund link, plus everything a guest needs to chip in: a suggested amount, a chip-in-by date, what to write in the payment reference, and a note ("We're getting the blue scooter from Anaconda, $20 each is plenty"). The organiser can edit this any time and post short updates to contributors ("Target reached, buying Saturday"). A surprise switch hides contributions from the hosts when the gift is for one of them.</p></div></li>
+      <li class="guest"><div><p class="t">Guests see the gift block</p><p class="d">On the thank-you screen and on their link: "Sarah is organising a group gift, a scooter", the organiser's message with the suggested amount and date, how to chip in, the latest update if there is one, and an <em>I've chipped in</em> tick with an optional amount.</p></div></li>
+      <li class="guest"><div><p class="t">Organiser keeps track</p><p class="d">Who has chipped in, the running total from entered amounts, Text or WhatsApp nudges for those who have not, and a text to everyone who chipped in when the gift is bought.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- 8 -->
+  <section class="journey" id="j8">
+    <div class="jhead">
+      <h2>8. On the day</h2>
+      <div class="who"><span><b>Who</b> hosts, co-hosts, guests, special guests</span></div>
+    </div>
+    <ol class="steps">
+      <li class="host"><div><p class="t">The day before: "See you soon"</p><p class="d">The dashboard nudges the host to send it. One template, prefilled with the address, the Open in Maps link, the host's <em>access info</em> (gate code, buzzer, where to park, which door) and the start time. Same Text, WhatsApp and Send next buttons, to everyone who said yes only. Access info is a separate field on the event, shown only to guests who said yes, never on the group link.</p></div></li>
+      <li class="guest"><div><p class="t">Guest gets the message</p><p class="d">"See you tomorrow! 12 Example St, gate code 4321, park on the street. Everything you need: link". Their link now opens on a see-you-soon view: address and access info first, the day's timeline, and one button, <em>Sorry, I can no longer make it</em>, which flips their reply to no and lets them leave a note. Late drop-outs show on the dashboard with a time, so the host can adjust catering.</p></div></li>
+      <li class="host"><div><p class="t">Hosts open the event</p><p class="d">The dashboard leads with the runsheet in a live "now / next" view, host-only items included, and the final numbers underneath, including any late drop-outs.</p></div></li>
+      <li class="guest"><div><p class="t">Guests open their link</p><p class="d">The public timeline in the same now / next view: "2:30 cake, 3:30 pick-up". Special guests see their own items highlighted on top.</p></div></li>
+      <li class="host"><div><p class="t">Something changes</p><p class="d">Post an update, nudge everyone who said yes. Same buttons as before.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- 9 -->
+  <section class="journey" id="j9">
+    <div class="jhead">
+      <h2>9. After the party</h2>
+      <div class="who"><span><b>Who</b> host sending thanks, guests receiving them</span></div>
+    </div>
+    <ol class="steps">
+      <li class="host"><div><p class="t">Event switches to "Say thanks"</p><p class="d">The day after, the dashboard offers it. The list narrows to who came. Host uploads a photo per guest (Gabe opening their present) and a few shared photos for everyone.</p></div></li>
+      <li class="host"><div><p class="t">Sends</p><p class="d">Thank-you template, Text or WhatsApp per guest, Send next. Guests without a personal photo get the shared version. Sent and opened tracked as before.</p></div></li>
+      <li class="guest"><div><p class="t">Guest taps the link</p><p class="d">Their thank-you page: the message, their photo full size with tap to save, then the shared photos.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- 10 -->
+  <section class="journey" id="j10">
+    <div class="jhead">
+      <h2>10. Next time</h2>
+      <div class="who"><span><b>Who</b> a host who runs events more than once</span></div>
+    </div>
+    <ol class="steps">
+      <li class="host"><div><p class="t">Duplicate event</p><p class="d">Copies details, look, settings, plate items, runsheet and templates. Date and RSVP-by cleared. Guest list optional.</p></div></li>
+      <li class="host"><div><p class="t">Copy a guest list</p><p class="d">From any past event, all or by group. Fresh links for everyone; replies, dietary notes and photos are not carried over, groups and roles are.</p></div></li>
+      <li class="host"><div><p class="t">Delete an event</p><p class="d">Wipes guests, replies, dietary and accessibility notes, photos and files. Confirmed twice, because it is the privacy promise.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="journey" id="wording">
+    <div class="jhead">
+      <h2>Default wording guests see</h2>
+      <p class="lede" style="font-size:16px">A line appears only when the host has set the switch. Written as the host speaking, editable per event. These are the defaults.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Setting</th><th>Guests read</th></tr></thead>
+        <tbody>
+          <tr><td>Siblings welcome</td><td>Siblings are welcome, just include them in your numbers.</td></tr>
+          <tr><td>Siblings not invited</td><td>We're keeping it to invited kids only. Sorry, siblings!</td></tr>
+          <tr><td>Parents stay</td><td>Parents welcome to stay.</td></tr>
+          <tr><td>Drop-off party</td><td>This is a drop-off party. Drop at 2, pick up at 4, and we'll ask for a contact number when you RSVP.</td></tr>
+          <tr><td>Stay or drop off</td><td>Stay or drop off, whatever suits you. Let us know either way.</td></tr>
+          <tr><td>No gifts</td><td>No gifts please. Your company is the present.</td></tr>
+          <tr><td>Gifts optional</td><td>Gifts are entirely optional.</td></tr>
+          <tr><td>Wish list</td><td>If you'd like to bring something, there's a wish list here.</td></tr>
+          <tr><td>Books only</td><td>Books only please. A favourite from home is perfect.</td></tr>
+          <tr><td>Group gift, on its own</td><td>We're doing a group gift this year. Sarah is organising it, details below.</td></tr>
+          <tr><td>Group gift with "optional"</td><td>Gifts are entirely optional. If you'd like to join in, there's also a group gift: Sarah is organising it, details below.</td></tr>
+          <tr><td>Group gift with "no gifts"</td><td>No individual gifts please. If you'd like to give something, there's a group gift: Sarah is organising it, details below.</td></tr>
+          <tr><td>Gift preferences, "happy with" chips</td><td>Second-hand and hand-me-downs are welcome.</td></tr>
+          <tr><td>Gift preferences, "please avoid" chips</td><td>Please avoid anything with batteries or lots of plastic.</td></tr>
+          <tr><td>Gift preferences, both</td><td>Second-hand and hand-me-downs are welcome. Please avoid anything with batteries.</td></tr>
+          <tr><td>Group gift with wish list or books</td><td>The stance line, then: There's also a group gift if you'd rather join that: Sarah is organising it, details below.</td></tr>
+          <tr><td>Plus ones allowed</td><td>Bring a partner or a friend, just add them to your numbers.</td></tr>
+          <tr><td>No plus ones</td><td>We've kept the list small, so this invite is just for you.</td></tr>
+          <tr><td>Children and adults split</td><td>Tell us how many kids and how many grown-ups so we get the cake and the coffee right.</td></tr>
+          <tr><td>RSVP by, before the date</td><td>Please reply by 1 November so we can get the numbers right.</td></tr>
+          <tr><td>RSVP by, after the date</td><td>We would love to know if you can still make it :)</td></tr>
+          <tr><td>Group link switched off</td><td>RSVPs have closed for this one. If something's changed, text Marcia.</td></tr>
+          <tr><td>Dietary on</td><td>Any allergies or dietary needs? Tell us when you reply and we'll sort it.</td></tr>
+          <tr><td>Accessibility at the venue</td><td>Host-written, starter: Step-free entry, accessible toilet, quiet room upstairs.</td></tr>
+          <tr><td>Save the date</td><td>Save the date! Leo is turning 6 on Saturday 14 November. Details to come, but please keep the afternoon free.</td></tr>
+          <tr><td>What we'll serve, from the list</td><td>We'll have a BBQ going. / We'll have lunch. / We'll have afternoon tea and cake. / We'll have drinks and nibbles.</td></tr>
+          <tr><td>What we'll serve, write your own</td><td>Host-written, starter: We'll have sausages on the BBQ and drinks in the esky.</td></tr>
+          <tr><td>Bring-a-plate, optional (default)</td><td>Bring something for the table if you like. Claim an item below or add your own so we don't end up with five pavlovas.</td></tr>
+          <tr><td>Bring-a-plate, everyone brings</td><td>It's a bring-a-plate afternoon. Please claim something below or add your own.</td></tr>
+          <tr><td>Allergy banner</td><td>Please keep in mind: 1 guest with a nut allergy, 2 need gluten free.</td></tr>
+          <tr><td>Group link greeting</td><td>You're invited to Leo's 6th! Tell us whether you can make it.</td></tr>
+          <tr><td>Group link, name question</td><td>Who's this from?</td></tr>
+          <tr><td>See you soon (day before, yes guests only)</td><td>See you tomorrow! 12 Example St, gate code 4321, park on the street. Everything you need, and a button if plans have changed: {link}</td></tr>
+          <tr><td>Can no longer make it</td><td>Sorry to miss you. Thanks for letting us know.</td></tr>
+          <tr><td>Text message (default template)</td><td>Hi {name}! You're invited to {title}. See the details and RSVP: {link}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="journey">
+    <h2>What every RSVP can collect</h2>
+    <p class="lede" style="font-size:16px">All switchable per event. The event type sets the defaults.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Question</th><th>Shape</th><th>Default on for</th></tr></thead>
+        <tbody>
+          <tr><td>How many coming</td><td>One stepper, or children and adults</td><td>Everything; split on for kids' parties</td></tr>
+          <tr><td>Names of everyone</td><td>One line per person</td><td>Off for every event type, a host setting to switch on</td></tr>
+          <tr><td>Dietary needs</td><td>Chips plus an allergy line</td><td>Everything with food</td></tr>
+          <tr><td>Accessibility needs</td><td>Chips plus a note</td><td>Off, one tap to enable</td></tr>
+          <tr><td>Emergency contact</td><td>Name and mobile</td><td>Drop-off kids' parties</td></tr>
+          <tr><td>Custom question</td><td>Free text or a choice</td><td>Off</td></tr>
+          <tr><td>Bring-a-plate</td><td>Claim or add an item, tag the dish</td><td>Family gatherings, housewarmings</td></tr>
+          <tr><td>Group gift</td><td>Chipped-in tick, optional amount</td><td>Off until an organiser is set</td></tr>
+          <tr><td>Note for the host</td><td>Free text</td><td>Everything</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>Not in phase 1:</b> payments and in-app gift collection, sending texts or emails from the app, automatic reminders, day-of check-in, checklist, waitlist, view-only links, CSV export.</p>
+    <p>Review notes welcome on any step. Once agreed, this page becomes the brief's backbone.</p>
+  </footer>
+</div>
