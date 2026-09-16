@@ -19,14 +19,21 @@ def stamp():
 </div>'''
 
 def envelope():
-    # Terracotta envelope, gingham liner showing under the open flap, a stamp and a hand-written address.
-    return f'''<div style="position:relative;width:346px;height:236px;margin-top:20px">
-  <div style="position:absolute;left:0;right:0;top:0;height:150px;{gingham(SAGE)}clip-path:polygon(0 0,100% 0,50% 100%);border-radius:10px 10px 0 0"></div>
-  <div style="position:absolute;left:0;right:0;bottom:0;height:176px;background:{TERR};border-radius:10px;clip-path:polygon(0 0,50% 42%,100% 0,100% 100%,0 100%);{SHADOW}"></div>
-  <div style="position:absolute;left:0;right:0;bottom:0;height:176px;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 22px 26px;box-sizing:border-box">
-    <div style="font-family:{HAND};font-size:24px;line-height:1.2;color:{CREAM}">Oliver<br><span style="font-size:18px;opacity:0.9">plus family</span></div>
+    # An open envelope: back panel, the flap lifted up showing the gingham liner, the invitation
+    # peeking out of the pocket, then the front pocket with its two side flaps meeting in a V.
+    DARK = "#A8481F"
+    return f'''<div style="position:relative;width:346px;height:300px;margin-top:6px;filter:drop-shadow(0 16px 14px rgba(42,35,32,0.22))">
+  <div style="position:absolute;left:0;right:0;top:0;height:120px;{gingham(SAGE)}clip-path:polygon(50% 0,100% 100%,0 100%)"></div>
+  <div style="position:absolute;left:0;right:0;top:0;height:120px;background:{TERR};clip-path:polygon(50% 0,100% 100%,97% 100%,50% 6%,3% 100%,0 100%)"></div>
+  <div style="position:absolute;left:0;right:0;top:118px;height:182px;background:{TERR};border-radius:0 0 10px 10px"></div>
+  <div style="position:absolute;left:34px;right:34px;top:64px;height:150px;background:{PAPER};border-radius:6px 6px 0 0;box-shadow:0 -2px 6px rgba(42,35,32,0.12);display:flex;flex-direction:column;align-items:center;padding-top:14px;gap:4px">
+    <div style="font-family:{HAND};font-size:14px;letter-spacing:0.12em;color:{TERR}">SPLASH!</div>
+    <div style="font-family:{DISPLAY};font-size:26px;line-height:1;color:{INK}">Leo is turning 6</div>
   </div>
-  {stamp().replace('top:16px','top:80px')}
+  <div style="position:absolute;left:0;right:0;top:118px;height:182px;background:{DARK};border-radius:0 0 10px 10px;clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%)"></div>
+  <div style="position:absolute;left:0;right:0;top:118px;height:182px;background:{TERR};border-radius:0 0 10px 10px;clip-path:polygon(0 0,50% 58%,100% 0,100% 6%,50% 64%,0 6%);opacity:0.6"></div>
+  <div style="position:absolute;left:26px;bottom:20px;font-family:{HAND};font-size:24px;line-height:1.2;color:{CREAM}">Oliver<br><span style="font-size:18px;opacity:0.9">plus family</span></div>
+  {stamp().replace('top:16px','top:200px')}
 </div>'''
 
 def scene():
