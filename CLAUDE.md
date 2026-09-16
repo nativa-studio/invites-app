@@ -1,4 +1,4 @@
-# invites-app
+# Bunting (invites-app)
 
 Read `docs/build-brief.md` before doing anything. It is the engineering brief for phase 1: stack, data model, security model, routes, milestones and conventions. Behaviour comes from `docs/journeys.html`; look and wording intent from `docs/design-brief.html`.
 

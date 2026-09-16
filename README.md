@@ -1,6 +1,6 @@
-# invites-app
+# Bunting (working name)
 
-Working name. Event invites you text, RSVPs that sort themselves.
+Event invites you text, RSVPs that sort themselves. Repository name stays invites-app until the name clears its checks.
 
 A host creates an event, adds guests, and texts each guest a personal link from their own phone. The guest opens a page that greets them by name, taps yes or no, answers a couple of quick questions if asked, and is done. The host sees who is coming, how many, and what they need, and runs the rest of the event from the same place: reminders, updates, bring-a-plate, group gift, runsheet, thank-yous.
 
