@@ -6,7 +6,7 @@ A host creates an event, adds guests, and texts each guest a personal link from 
 
 ## Status
 
-Phase 1 is being built from the spec in `docs/`. The code currently in this repository is the single-event prototype (Airtable-backed, one host, password-protected dashboard) that phase 1 grows out of.
+Phase 1 is being built from the spec in `docs/` on Supabase (Postgres, Google sign-in, file storage, Sydney region). The code currently in this repository is the single-event prototype (Airtable-backed, one host, password-protected dashboard) whose guest pages phase 1 grows out of; its data layer is being replaced.
 
 ## Documents
 
