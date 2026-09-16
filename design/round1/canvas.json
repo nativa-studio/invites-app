@@ -98,6 +98,42 @@
       "h": 1300,
       "title": "4. Day timeline",
       "page": "page-2"
+    },
+    {
+      "file": "StripPoolParty.dc.html",
+      "x": 0,
+      "y": 220,
+      "w": 390,
+      "h": 2080,
+      "title": "Leo's pool party, the full strip",
+      "page": "page-3"
+    },
+    {
+      "file": "StripBirthdayDrinks.dc.html",
+      "x": 480,
+      "y": 220,
+      "w": 390,
+      "h": 1720,
+      "title": "Birthday drinks, same skeleton",
+      "page": "page-3"
+    },
+    {
+      "file": "StripBabyShower.dc.html",
+      "x": 960,
+      "y": 220,
+      "w": 390,
+      "h": 1560,
+      "title": "Baby shower, same skeleton",
+      "page": "page-3"
+    },
+    {
+      "file": "StripMemorial.dc.html",
+      "x": 1440,
+      "y": 220,
+      "w": 390,
+      "h": 1560,
+      "title": "Memorial, the quiet version",
+      "page": "page-3"
     }
   ],
   "annotations": [
@@ -172,11 +208,27 @@
       "w": 420,
       "page": "page-2",
       "text": "Four ways to organise the same invite. Sketch fidelity on purpose: judge the shape, not the styling. The Directions page shows the fifth, a plain scroll of rows, which stays as the fallback for text-only invites. Pick one shape, or one for uploaded invites and another for text-only, and the chosen direction's type and colour go on top."
+    },
+    {
+      "id": "strip-intro",
+      "x": 0,
+      "y": -60,
+      "w": 900,
+      "page": "page-3",
+      "text": "The illustrated strip. One skeleton for every event: cover, the details, the day, good to know, RSVP, after. What changes between events is the illustration set and the ink colour, never the structure.\nThe illustrations here are quick monoline stand-ins in one colour; the real sets would be drawn properly. An uploaded invite replaces the cover cluster and title; everything below it stays.\nThis is the fifth structure, and the one the Pinterest references point at."
+    },
+    {
+      "id": "strip-gallery",
+      "x": 960,
+      "y": -60,
+      "w": 900,
+      "page": "page-3",
+      "text": "What this does to the theme gallery: the six themes become six illustration sets (kids' party, birthday, baby, home and family, celebration, quiet) in one ink colour on paper, rather than six colour schemes. Hosts pick a set and an ink; the accent can still come from an uploaded design.\nThe timeline reads from the runsheet items marked visible to guests, so hosts who write a runsheet get the illustrated day for free."
     }
   ],
   "launch": {
     "view": "canvas",
-    "page": "page-2"
+    "page": "page-3"
   },
   "pages": [
     {
@@ -186,6 +238,10 @@
     {
       "id": "page-2",
       "name": "Structures"
+    },
+    {
+      "id": "page-3",
+      "name": "Illustrated strip"
     }
   ]
 }
