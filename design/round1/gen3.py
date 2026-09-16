@@ -109,6 +109,7 @@ leo = "\n".join([
     icon_line("towel","Swimmers, towel and a rashie. We have sunscreen.", ink),
     icon_line("gift","Gifts are entirely optional. There's also a group gift, Sarah is organising it.", ink),
     icon_line("kids","We're keeping it to invited kids only. Sorry, siblings!", ink),
+    icon_line("camera","We'd love you to take photos, just please keep photos of the kids off social media. Thank you!", ink),
   ]) + '</div>',
   divider(ink),
   rsvp("Can Oliver make it? Please reply by 1 November so we can get the numbers right.", ink),
@@ -118,7 +119,7 @@ leo = "\n".join([
   + f'<div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">{svg(D["camera"],48,ink)}<div style="font-family:{HEAD};font-size:22px">Photos</div><div style="font-size:14px;opacity:0.72">A photo for you after the party.</div></div></div>',
   f'<div style="font-size:13px;opacity:0.72;text-align:center">With love from Leo\'s mum and dad</div>',
 ])
-open("StripPoolParty.dc.html","w").write(strip(paper, ink, leo, 2200))
+open("StripPoolParty.dc.html","w").write(strip(paper, ink, leo, 2280))
 
 # 2. Birthday drinks (adult)
 ink2 = "#2C2A5A"; paper2 = "#F7F4FB"
@@ -187,7 +188,7 @@ open("StripMemorial.dc.html","w").write(strip(paper4, ink4, memorial, 1560))
 
 c = json.load(open("canvas.json"))
 c["pages"].append({"id": "page-3", "name": "Illustrated strip"})
-boards = [("StripPoolParty.dc.html", 2200, "Leo's pool party, the full strip"), ("StripBirthdayDrinks.dc.html", 1720, "Birthday drinks, same skeleton"), ("StripBabyShower.dc.html", 1560, "Baby shower, same skeleton"), ("StripMemorial.dc.html", 1560, "Memorial, the quiet version")]
+boards = [("StripPoolParty.dc.html", 2280, "Leo's pool party, the full strip"), ("StripBirthdayDrinks.dc.html", 1720, "Birthday drinks, same skeleton"), ("StripBabyShower.dc.html", 1560, "Baby shower, same skeleton"), ("StripMemorial.dc.html", 1560, "Memorial, the quiet version")]
 x = 0
 for fn, h, t in boards:
     c["artboards"].append({"file": fn, "x": x, "y": 220, "w": 390, "h": h, "title": t, "page": "page-3"})

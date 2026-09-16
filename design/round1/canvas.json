@@ -104,7 +104,7 @@
       "x": 0,
       "y": 220,
       "w": 390,
-      "h": 2200,
+      "h": 2280,
       "title": "Leo's pool party, the full strip",
       "page": "page-3"
     },
@@ -161,6 +161,51 @@
       "h": 1720,
       "title": "Birthday drinks, Native garden set",
       "page": "page-4"
+    },
+    {
+      "file": "R2Questions.dc.html",
+      "x": 0,
+      "y": 200,
+      "w": 390,
+      "h": 1900,
+      "title": "After yes: the questions",
+      "page": "page-5"
+    },
+    {
+      "file": "R2ThankYou.dc.html",
+      "x": 480,
+      "y": 200,
+      "w": 390,
+      "h": 1900,
+      "title": "Thank you, calendar, plate, gift",
+      "page": "page-5"
+    },
+    {
+      "file": "R2GroupLink.dc.html",
+      "x": 960,
+      "y": 200,
+      "w": 390,
+      "h": 1500,
+      "title": "Group link: who's this from",
+      "page": "page-5"
+    },
+    {
+      "file": "R2SeeYouSoon.dc.html",
+      "x": 1440,
+      "y": 200,
+      "w": 390,
+      "h": 1640,
+      "title": "See you soon, the day before",
+      "page": "page-5"
+    },
+    {
+      "file": "R2AfterParty.dc.html",
+      "x": 1920,
+      "y": 200,
+      "w": 390,
+      "h": 1500,
+      "title": "After the party",
+      "page": "page-5"
     }
   ],
   "annotations": [
@@ -251,11 +296,19 @@
       "w": 900,
       "page": "page-3",
       "text": "What this does to the theme gallery: the six themes become six illustration sets (kids' party, birthday, baby, home and family, celebration, quiet) in one ink colour on paper, rather than six colour schemes. Hosts pick a set and an ink; the accent can still come from an uploaded design.\nThe timeline reads from the runsheet items marked visible to guests, so hosts who write a runsheet get the illustrated day for free."
+    },
+    {
+      "id": "r2-guest-intro",
+      "x": 0,
+      "y": -80,
+      "w": 1000,
+      "page": "page-5",
+      "text": "Round two, guest side, phase 1 look: monoline in one ink on paper (charcoal here). Left to right: the questions after a yes as one short conversation (only the ones the host switched on; here all of them, for a drop-off kids' party), the thank-you screen with calendar buttons and the extras, the group link with the name asked after the buttons, the see-you-soon view the day before, and the thank-you page after the party.\nEvery line is the approved default wording. Cards are one-ink outlines; chips are pills; a filled pill is a selected chip."
     }
   ],
   "launch": {
     "view": "canvas",
-    "page": "page-4"
+    "page": "page-5"
   },
   "pages": [
     {
@@ -273,6 +326,10 @@
     {
       "id": "page-4",
       "name": "From the board"
+    },
+    {
+      "id": "page-5",
+      "name": "Round two, guest"
     }
   ]
 }

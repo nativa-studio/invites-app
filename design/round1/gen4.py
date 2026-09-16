@@ -1,7 +1,7 @@
 # Page 4: decisions read from Marcia's Pinterest board, and the strip dressed in them.
 import json
 
-PAL = dict(cream="#F6EFE1", paper="#FBF7EF", terracotta="#D96C3F", mustard="#E8B33A", sage="#9DB58C", olive="#4F6B4A", pink="#E7A9B5", burgundy="#8C2F39", cobalt="#2F5DA8", ink="#2A2320")
+PAL = dict(cream="#F6EFE1", paper="#FBF7EF", terracotta="#BD5528", mustard="#E8B33A", sage="#9DB58C", olive="#4F6B4A", pink="#E7A9B5", burgundy="#8C2F39", cobalt="#2F5DA8", ink="#2A2320")
 FONTS = "https://fonts.googleapis.com/css2?family=Lilita+One&family=Patrick+Hand+SC&family=Nunito:wght@400;700;800&display=swap"
 DISPLAY = "'Lilita One', 'Arial Rounded MT Bold', sans-serif"
 HAND = "'Patrick Hand SC', cursive"
@@ -68,7 +68,7 @@ def btn(t, bg, fg, border=None):
     b = f"border:2px solid {border};" if border else ""
     return f'<a href="#" style="display:flex;align-items:center;justify-content:center;min-height:56px;width:310px;border-radius:16px;background:{bg};color:{fg};font-family:{DISPLAY};font-size:20px;text-decoration:none;{b}">{t}</a>'
 def band(inner, style):
-    return f'<div style="width:390px;margin:0 -22px;padding:26px 22px;display:flex;flex-direction:column;align-items:center;gap:14px;{style}">{inner}</div>'
+    return f'<div style="width:390px;margin:0 -22px;padding:26px 22px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:14px;{style}">{inner}</div>'
 def sticker(t, bg, rot):
     return f'<div style="background:{bg};color:#FFFFFF;font-family:{DISPLAY};font-size:16px;padding:6px 12px;border-radius:999px;transform:rotate({rot}deg)">{t}</div>'
 
@@ -127,7 +127,7 @@ drinks = "\n".join([
   band(
     f'<div style="font-family:{HAND};font-size:18px;letter-spacing:0.1em;color:{PAL["ink"]}">HI TOM, YOU\'RE INVITED</div>'
     f'<div style="display:flex;gap:6px;align-items:flex-end">{wattle(64)}{waratah(84)}{glasses(64)}</div>'
-    + title("Marcia's<br>birthday drinks", 50)
+    + title("Marcia's<br>birthday drinks", 44)
     + f'<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">{sticker("Fri 21 Nov", PAL["burgundy"], -2)}{sticker("from 6:30pm", PAL["olive"], 2)}</div>',
     stripes(PAL["sage"] + "66") + "padding-top:34px;padding-bottom:30px;"),
   para("A Friday night at the pub, no speeches, one good playlist."),
