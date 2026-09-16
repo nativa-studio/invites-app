@@ -13,3 +13,7 @@ Read `docs/build-brief.md` before doing anything. It is the engineering brief fo
 - The Supabase secret key is for migrations and seeds only. App code reads only the publishable key.
 - Before pushing: `npm run typecheck`, `npm run lint`, `npm run test:e2e` all green.
 - Every milestone ends with 390 px screenshots for Marcia.
+
+## Self-check before publishing any screen or page
+
+Place information by the moment it is needed, not by what it is related to. Before putting anything on a screen, ask when the reader needs it. Deciding whether to come: date, time, place, who is hosting. Replying: the questions and nothing else. Coming: what to bring, parking, facilities, gifts. On the day: access details, timeline. After: thanks and photos. A detail never rides in a block above its moment just because it shares a topic with that block. Run this check over every screen before publishing, and say in the handover where anything borderline was placed and why.
