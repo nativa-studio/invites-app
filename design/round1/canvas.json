@@ -233,6 +233,24 @@
    "h": 1500,
    "title": "Upload: a finished invite",
    "page": "page-6"
+  },
+  {
+   "file": "SuiteFlatLay.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1180,
+   "h": 980,
+   "title": "The suite, flat lay",
+   "page": "page-7"
+  },
+  {
+   "file": "SuiteStrip.dc.html",
+   "x": 1280,
+   "y": 0,
+   "w": 390,
+   "h": 2900,
+   "title": "The suite as the guest's phone page",
+   "page": "page-7"
   }
  ],
  "annotations": [
@@ -339,11 +357,19 @@
    "w": 1420,
    "page": "page-6",
    "text": "One strip, three covers, two choices. The Look step has two cards: Our artwork (the default, so a host who skips the step still gets a drawn invite) and Upload. Upload takes a photo or a finished invite and the app tells them apart. There is no separate text-only look: the artwork already is the plain version, and the Quiet set is the plainest. Only the cover changes; the details, the day, good to know, RSVP and after are the same strip underneath.\nOur artwork: the chosen set draws the cover and the small icons down the strip. Upload a photo: the photo is the cover, the app types the title and intro under it, and the strip below runs in an ink picked from the photo. Upload a finished invite: shown as it was made, then the strip below in an ink picked from it. In both upload cases the host can keep the small drawings from any set.\n\nWhy this is cheap to grow: everything from The details down is one neutral set of components that only takes an ink colour and, optionally, an icon set. A new theme is artwork files, no code. A new cover treatment (envelope opening, ticket, cut-paper) is one component swapped at the top. A whole new page structure would be real development, which is why the strip is the one structure and the cover is where the personality lives."
+  },
+  {
+   "id": "layouts-intro",
+   "x": 0,
+   "y": 1040,
+   "w": 1180,
+   "page": "page-7",
+   "text": "Layouts test: the pool party as a stationery suite. This is the wedding-suite idea from the Pinterest references (invitation, details card, order of the day, reply card) with a Paperless Post feel: an envelope, a stamp, cards on a table, and the guest's own name already written on the reply card. Cut-paper colour from the board, chunky lettering, gingham liner, washi tape.\n\nWhy it matters: it is a candidate for the third Look card, Our layouts. A layout is a different skin over the same strip: the same sections in the same order (cover, the details, the day, good to know, RSVP, after), so the RSVP, calendar and everything after it are the same components. Each card here is one section of the strip wearing a card. That keeps a new layout to presentation code and artwork, not new behaviour, which is the cost test this page is for.\n\nBorderline placements, per the moment-of-need check: the details card carries a Wear line because for a pool party it decides the packing, and the order of the afternoon keeps the carpark and showers where they are needed, at arrive and swim, not on the invitation card."
   }
  ],
  "launch": {
   "view": "canvas",
-  "page": "page-6"
+  "page": "page-7"
  },
  "pages": [
   {
@@ -369,6 +395,10 @@
   {
    "id": "page-6",
    "name": "Two looks"
+  },
+  {
+   "id": "page-7",
+   "name": "Layouts test"
   }
  ]
 }
