@@ -1,7 +1,17 @@
 "use client";
+import Link from "next/link";
 import { useActionState } from "react";
 import { saveEvent, type SaveState } from "@/app/app/events/[id]/settings/actions";
+import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
+import { LayoutPicker } from "./LayoutPicker";
+
+const LAYOUT_OPTIONS = [
+  { id: "suite", name: "Stationery suite", line: "Cards in an envelope that opens" },
+  { id: "lineup", name: "The lineup", line: "One page, artwork along the bottom" },
+  { id: "peek", name: "Peek", line: "Characters leaning in from the edges" },
+  { id: "strip", name: "Illustrated strip", line: "A band of artwork across the top" },
+];
 
 type E = EventRow & Record<string, unknown>;
 const s = (v: unknown) => (v == null ? "" : String(v));
@@ -80,9 +90,18 @@ export function SettingsForm({ e }: { e: E }) {
 
       <section className="card">
         <h2 className="h2">Look</h2>
-        <Choice id="layout_id" label="Layout" value={e.layout_id} options={[["suite", "Stationery suite, cards and an envelope"], ["lineup", "The lineup, one page with artwork along the bottom"], ["peek", "Peek, characters leaning in from the edges"], ["strip", "Illustrated strip"]]} />
+        <LayoutPicker eventId={e.id} value={e.layout_id} options={LAYOUT_OPTIONS} />
         <Choice id="invite_image_path" label="Artwork" value={e.invite_image_path} options={[["", "None"], ["/artwork/gabriel-lineup.png", "Gabriel's lineup"]]} />
-        <span className="muted" style={{ fontSize: 13 }}>Uploading your own artwork is coming. For now the lineup layout uses the picture above.</span>
+        <span className="muted" style={{ fontSize: 13 }}>Uploading your own artwork is coming. The lineup and peek layouts use the picture above.</span>
+      </section>
+
+      <section className="card">
+        <h2 className="h2">{copy.host.sectionsHeading}</h2>
+        <Switch id="show_details" label="The details: when, where, what to wear" value={e.show_details} />
+        <Switch id="show_runsheet" label="The order of the afternoon" value={e.show_runsheet} />
+        <Switch id="show_good_to_know" label="Good to know" value={e.show_good_to_know} />
+        <Switch id="show_after" label="Updates and photos" value={e.show_after} />
+        <span className="muted" style={{ fontSize: 13 }}>{copy.host.sectionsHint}</span>
       </section>
 
       <section className="card">
@@ -105,7 +124,13 @@ export function SettingsForm({ e }: { e: E }) {
       </section>
 
       {state.error && <p className="notice" role="alert">{state.error}</p>}
-      {state.saved && <p className="muted" aria-live="polite">Saved.</p>}
+      {state.saved && (
+        <div className="saved" role="status" aria-live="polite">
+          <b>{copy.host.savedTitle}</b>
+          <p>{copy.host.savedBody}</p>
+          <Link className="btn primary" href={`/app/events/${e.id}`}>{copy.host.backToParty}</Link>
+        </div>
+      )}
       <div className="actions"><button className="btn primary" type="submit" disabled={pending}>{pending ? "Saving" : "Save"}</button></div>
     </form>
   );

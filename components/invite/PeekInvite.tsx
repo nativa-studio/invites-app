@@ -88,6 +88,7 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
           )}
         </header>
 
+        {e.show_details && (
         <section className="s sky">
           <Peeker who={cast.details} side="left" />
           <p className="label">{copy.sections.details}</p>
@@ -100,8 +101,9 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
           </div>
           {maps && <div className="mid"><a className="maps" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a></div>}
         </section>
+        )}
 
-        {e.runsheet.length > 0 && (
+        {e.show_runsheet && e.runsheet.length > 0 && (
           <section className="s sand">
             <Peeker who={cast.day} side="right" />
             <p className="label">{copy.sections.afternoon}</p>
@@ -119,7 +121,7 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
           </section>
         )}
 
-        {notes.length > 0 && (
+        {e.show_good_to_know && notes.length > 0 && (
           <section className="s blush">
             <Peeker who={cast.know} side="left" />
             <p className="label">{copy.sections.goodToKnow}</p>

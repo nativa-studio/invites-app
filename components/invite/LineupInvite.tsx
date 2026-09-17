@@ -55,6 +55,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
         </header>
 
         <div className="pad">
+          {e.show_details && (
           <section>
             <p className="label">{copy.sections.details}</p>
             <div className="kv">
@@ -66,8 +67,9 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
             </div>
             {maps && <div style={{ textAlign: "center" }}><a className="maps" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a></div>}
           </section>
+          )}
 
-          {e.runsheet.length > 0 && (
+          {e.show_runsheet && e.runsheet.length > 0 && (
             <section>
               <p className="label">{copy.sections.afternoon}</p>
               <div className="stops">
@@ -84,7 +86,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
             </section>
           )}
 
-          {notes.length > 0 && (
+          {e.show_good_to_know && notes.length > 0 && (
             <section>
               <p className="label">{copy.sections.goodToKnow}</p>
               <div className="notes">
@@ -100,12 +102,14 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
 
           <section>{reply}</section>
 
+          {e.show_after && (
           <section>
             <div className="after">
               <div><div className="n">{copy.sections.updates}</div><div className="b">{copy.sections.updatesBody}</div></div>
               <div><div className="n">{copy.sections.photos}</div><div className="b">{copy.sections.photosBody}</div></div>
             </div>
           </section>
+          )}
 
           <p className="foot">
             {e.host_phone ? <a href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}

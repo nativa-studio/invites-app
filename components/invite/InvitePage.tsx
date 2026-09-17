@@ -36,11 +36,11 @@ export function InvitePage({ invite, token, link, skipAnimation }: { invite: Inv
         <div className="greet">{copy.greeting(who)}</div>
         <Envelope addressee={guest.name} stamp={age} cover={<CoverCard e={e} />} openLabel="Tap to open" skipAnimation={skipAnimation ?? answered}>
           <UpdatesCard e={e} />
-          <DetailsCard e={e} />
-          <DayCard e={e} />
-          <KnowCard e={e} />
+          {e.show_details && <DetailsCard e={e} />}
+          {e.show_runsheet && <DayCard e={e} />}
+          {e.show_good_to_know && <KnowCard e={e} />}
           <Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />
-          <AfterCard />
+          {e.show_after && <AfterCard />}
           <div className="foot">{hostMobile ? <a href={hostMobile}>{copy.sections.questions(hostShort)}</a> : copy.sections.questions(hostShort)}</div>
         </Envelope>
       </div>
