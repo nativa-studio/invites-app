@@ -6,15 +6,17 @@
 .post .pcard.reply { border-style: dashed; border-color: var(--forest); }
 
 /* Anyone leaning in from an edge. Their own cut sits flush with the page, anchored by the feet. */
-.post .peeker { position: absolute; width: auto; height: 168px; z-index: 2; pointer-events: none; }
+.post .peeker { position: absolute; width: auto; height: 190px; z-index: 2; pointer-events: none; }
 .post .peeker.left { left: 0; }
 .post .peeker.right { right: 0; }
 
 /* The envelope moment. The two over the top stand behind the envelope and look over its edge,
    which keeps the stamp and the flap clear; the card comes up in front of everyone. */
-.post .opening { position: relative; padding: 112px 22px 48px; }
-.post .opening .peeker { top: 0; z-index: 0; }
-.post-stage { position: relative; width: 100%; max-width: 346px; margin: 0 auto; height: 300px; z-index: 1; }
+.post .opening { position: relative; z-index: 60; padding: 140px 22px 20px; }
+.post .opening .peeker { top: 0; height: 168px; z-index: 0; }
+/* With nobody looking over the envelope, the room kept for their heads is not needed. */
+.post .opening.nobody { padding-top: 36px; }
+.post-stage { position: relative; width: 100%; max-width: 346px; margin: 0 auto; height: 244px; z-index: 1; }
 
 /* C6 envelope, 162 by 114, drawn at 346 by 244. */
 .penv { position: absolute; left: 0; right: 0; top: 0; height: 244px; }
@@ -32,12 +34,11 @@
 .penv .flap { position: absolute; left: 0; right: 0; top: 0; height: 142px; transform: perspective(900px) rotateX(0deg); transform-origin: top center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.4,0,.2,1), opacity .5s; z-index: 4; }
 .penv .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0,100% 0,50% 100%); }
 .penv .flap .front { background: var(--red); }
+.penv .flap .note { position: absolute; left: 0; right: 0; top: 30px; text-align: center; font-family: var(--font-hand); font-size: 18px; letter-spacing: .08em; color: var(--crm); }
 .penv .flap .backface { opacity: 0; background-color: #fff; background-image: linear-gradient(90deg, color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%); background-size: 22px 22px; }
 .penv .flap .rim { position: absolute; inset: 0; background: var(--red); clip-path: polygon(0 0,100% 0,50% 100%,50% 94%,97% 0,3% 0,50% 94%,50% 100%); }
-.penv .seal { position: absolute; left: 50%; top: 116px; width: 52px; height: 52px; margin-left: -26px; border-radius: 50%; background: var(--yel); border: 3px solid var(--navy); display: flex; align-items: center; justify-content: center; z-index: 5; transition: opacity .3s, transform .3s; box-shadow: 0 2px 0 rgba(27,42,74,.3); }
-.post-stage .hint { position: absolute; left: 0; right: 0; top: 252px; text-align: center; font-family: var(--font-hand); font-size: 20px; letter-spacing: .08em; color: var(--crm); transition: opacity .3s; }
-.post-stage .hint::after { content: ""; display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--yel); margin: 6px auto 0; animation: post-pulse 1.4s ease-in-out infinite; }
-@keyframes post-pulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.8); opacity: .5 } }
+.penv .seal { position: absolute; left: 50%; top: 116px; width: 52px; height: 52px; margin-left: -26px; border-radius: 50%; background: var(--yel); border: 3px solid var(--navy); display: flex; align-items: center; justify-content: center; z-index: 5; transition: opacity .3s, transform .3s; box-shadow: 0 2px 0 rgba(27,42,74,.3); animation: post-breathe 1.8s ease-in-out infinite; }
+@keyframes post-breathe { 0%,100% { transform: scale(1) } 50% { transform: scale(1.1) } }
 .post-stage .tap { position: absolute; inset: 0; z-index: 6; background: transparent; border: 0; cursor: pointer; width: 100%; height: 100%; border-radius: 12px; }
 .post-stage .tap:focus-visible { outline: 3px solid var(--yel); outline-offset: 4px; }
 .penv .back, .penv .pocket { transition: transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }
@@ -46,7 +47,7 @@
 .post-stage.open .penv .flap .backface { animation: post-backon .9s cubic-bezier(.4,0,.2,1) forwards; }
 @keyframes post-frontoff { 0%,49.9% { opacity: 1 } 50%,100% { opacity: 0 } }
 @keyframes post-backon { 0%,49.9% { opacity: 0 } 50%,100% { opacity: 1 } }
-.post-stage.open .seal, .post-stage.open .hint { opacity: 0; transform: scale(.6); pointer-events: none; }
+.post-stage.open .seal { animation: none; opacity: 0; transform: scale(.6); pointer-events: none; }
 .post-stage.rise .penv .flap { z-index: 1; }
 /* Up and clear of the envelope, then the envelope drops away and the card settles where it lay. */
 .post-stage.rise .penv .card-slot { top: 60px; }
@@ -54,7 +55,7 @@
 .post-stage.out .penv .card-slot { top: 270px; }
 .post-stage.out .penv .back, .post-stage.out .penv .pocket { transform: translateY(110px) scale(.9); opacity: 0; }
 .post-stage.out .penv .flap { opacity: 0; }
-.post-stage.done .penv .back, .post-stage.done .penv .pocket, .post-stage.done .penv .flap, .post-stage.done .penv .seal, .post-stage.done .hint { display: none; }
+.post-stage.done .penv .back, .post-stage.done .penv .pocket, .post-stage.done .penv .flap, .post-stage.done .penv .seal { display: none; }
 .post-stage.done .penv .clip { overflow: visible; z-index: 7; }
 @media (prefers-reduced-motion: reduce) { .post-stage.open .penv .flap .front { animation: none; opacity: 0; } .post-stage.open .penv .flap .backface { animation: none; opacity: 1; } }
 
@@ -70,9 +71,9 @@
 .post-card .when .where { display: block; }
 .post-card .from { font-size: 11.5px; line-height: 1.25; opacity: 0.72; margin-top: 2px; }
 .post-card.with-hero .when { max-width: 204px; }
-.post-card.with-hero .from { max-width: 222px; }
+.post-card.with-hero .from { max-width: 214px; }
 /* Pikachu climbs up from under the card's bottom edge, arms up at the title. */
-.post-card .hero { position: absolute; right: -26px; bottom: -14px; height: 118px; width: auto; z-index: 0; }
+.post-card .hero { position: absolute; right: -20px; bottom: -6px; height: 110px; width: auto; z-index: 0; }
 /* On the narrowest phones the card is 303 wide, so the words get smaller and Pikachu gets smaller,
    rather than the two meeting in the middle. */
 @media (max-width: 389px) {
@@ -80,8 +81,8 @@
   .post-card .when { font-size: 14px; }
   .post-card .when b { font-size: 15px; }
   .post-card .from { font-size: 11px; }
-  .post-card .hero { height: 104px; right: -30px; }
-  .post-card.with-hero .when { max-width: 184px; }
+  .post-card .hero { height: 98px; right: -30px; }
+  .post-card.with-hero .when { max-width: 196px; }
   .post-card.with-hero .from { max-width: 200px; }
 }
 
@@ -89,8 +90,11 @@
    a slot with someone leaning on it leaves them room. */
 .post .strip { display: flex; flex-direction: column; align-items: center; gap: 30px; padding: 0 22px; }
 .post .slot { position: relative; width: 100%; display: flex; justify-content: center; }
+/* 94 here plus the 30 between cards is 124: a 190 tall character with 44 on the card below has
+   its top 22 behind the card above. The opening's bottom padding is set to give the same sum. */
 .post .slot.leaned { margin-top: 94px; }
 .post .slot .peeker { bottom: calc(100% - 44px); }
+.post .slot.lifted .peeker { bottom: calc(100% - 20px); }
 .post .slot .pcard { margin: 0; max-width: 346px; }
 .post .slot.leaned .pcard { padding-top: 44px; }
 .post .foot { font-size: 13px; color: var(--crm); text-align: center; margin-top: 8px; }

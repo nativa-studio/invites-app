@@ -21,10 +21,13 @@ function Peeker({ who, side }: { who: PeekChar | undefined; side: "left" | "righ
 }
 
 // A card, with whoever leans on it. The slot spans the page so the character is cut by the
-// page edge, not by the card.
-function Slot({ who, side, children }: { who?: PeekChar; side: "left" | "right"; children: React.ReactNode }) {
+// page edge, not by the card. Each character's head tucks behind the card above, so they come
+// up from between the cards rather than being cropped in mid air: slots stack downwards in
+// z-order, each one painting over the next one's character. `lift` raises a character whose
+// pale bill or belly would vanish into the card it leans on.
+function Slot({ who, side, order, lift, children }: { who?: PeekChar; side: "left" | "right"; order: number; lift?: boolean; children: React.ReactNode }) {
   return (
-    <div className={`slot ${who ? "leaned" : ""}`}>
+    <div className={`slot ${who ? "leaned" : ""} ${lift ? "lifted" : ""}`} style={{ zIndex: 40 - order }}>
       <Peeker who={who} side={side} />
       {children}
     </div>
@@ -68,19 +71,19 @@ export function PostInvite({
       <div className="page">
         <div className="greet">{greeting}</div>
 
-        <div className="opening">
+        <div className={`opening ${cast.topLeft || cast.topRight ? "" : "nobody"}`}>
           <Peeker who={cast.topLeft} side="left" />
           <Peeker who={cast.topRight} side="right" />
           <PostEnvelope addressee={addressee} stamp={age} card={<CoverCard e={e} hero={cast.hero} greeting={greeting} />} openLabel={copy.envelope.open} skipAnimation={skipAnimation} />
         </div>
 
         <div className="strip">
-          {e.updates.length > 0 && <Slot side="left"><UpdatesCard e={e} /></Slot>}
-          {e.show_details && <Slot who={cast.details} side="left"><DetailsCard e={e} /></Slot>}
-          {e.show_runsheet && e.runsheet.length > 0 && <Slot who={cast.day} side="right"><DayCard e={e} /></Slot>}
-          {e.show_good_to_know && <Slot who={cast.know} side="left"><KnowCard e={e} /></Slot>}
-          <Slot who={cast.reply} side="right">{reply}</Slot>
-          {e.show_after && <Slot side="left"><AfterCard /></Slot>}
+          {e.updates.length > 0 && <Slot side="left" order={0}><UpdatesCard e={e} /></Slot>}
+          {e.show_details && <Slot who={cast.details} side="left" order={1}><DetailsCard e={e} /></Slot>}
+          {e.show_runsheet && e.runsheet.length > 0 && <Slot who={cast.day} side="right" order={2}><DayCard e={e} /></Slot>}
+          {e.show_good_to_know && <Slot who={cast.know} side="left" order={3}><KnowCard e={e} /></Slot>}
+          <Slot who={cast.reply} side="right" order={4} lift>{reply}</Slot>
+          {e.show_after && <Slot side="left" order={5}><AfterCard /></Slot>}
           <div className="foot">{hostMobile ? <a href={hostMobile}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}</div>
         </div>
       </div>
