@@ -2,8 +2,9 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { normalisePhone } from "@/lib/format";
+import { copy } from "@/lib/copy";
 
-export type SaveState = { saved?: boolean; error?: string };
+export type SaveState = { saved?: boolean; error?: string; note?: string };
 
 // Artwork is stored as a path, and an empty choice clears it.
 const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "gift_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue"] as const;
@@ -28,9 +29,17 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
   if (!patch.title) return { error: "The event needs a title." };
   patch.host_phone = patch.host_phone ? normalisePhone(String(patch.host_phone)) : null;
 
-  const { error } = await supabase.from("events").update(patch).eq("id", id);
+  let note: string | undefined;
+  let { error } = await supabase.from("events").update(patch).eq("id", id);
+  // The section switches are columns from migration 0004. A database without them yet should
+  // still take every other change, and say plainly which part it could not.
+  if (error && /column "show_\w+" .*does not exist/i.test(error.message)) {
+    for (const k of Object.keys(patch)) if (k.startsWith("show_")) delete patch[k];
+    ({ error } = await supabase.from("events").update(patch).eq("id", id));
+    note = copy.host.savedWithoutSections;
+  }
   if (error) return { error: error.message };
   revalidatePath(`/app/events/${id}`);
   revalidatePath(`/app/events/${id}/settings`);
-  return { saved: true };
+  return { saved: true, note };
 }

@@ -1,17 +1,19 @@
 import type { Invite, Palette, PublicEvent, PublicGuest } from "@/lib/db/types";
 import { isValidToken } from "@/lib/tokens";
 import { callGuestRpc } from "./rpc";
+import { withSectionDefaults } from "@/lib/db/events";
 
 // Guest pages only ever call these. They run as anon and hit security definer functions.
 export async function getInvite(token: string): Promise<Invite | null> {
   if (!isValidToken(token)) return null;
-  return (await callGuestRpc<Invite | null>("get_invite", { p_token: token })) ?? null;
+  const invite = await callGuestRpc<Invite | null>("get_invite", { p_token: token });
+  return invite ? { ...invite, event: withSectionDefaults(invite.event) } : null;
 }
 
 export async function getEventBySlug(slug: string): Promise<PublicEvent | null> {
   if (!/^[a-z0-9-]{3,40}$/.test(slug)) return null;
   const data = await callGuestRpc<{ event: PublicEvent } | null>("get_event_by_slug", { p_slug: slug });
-  return data?.event ?? null;
+  return data?.event ? withSectionDefaults(data.event) : null;
 }
 
 export type InviteCard = {

@@ -33,12 +33,14 @@ function Slot({ who, side, children }: { who?: PeekChar; side: "left" | "right";
 
 // The card inside the envelope. What a guest needs to decide whether to come, and no more:
 // what, when, where, who from. The address and the rest follow down the page once it is open.
-function CoverCard({ e, hero }: { e: PublicEvent; hero?: PeekChar }) {
+function CoverCard({ e, hero, greeting }: { e: PublicEvent; hero?: PeekChar; greeting: string }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
+  // The group link's greeting is already "You're invited", so the eyebrow would say it twice.
+  const eyebrow = age ? copy.envelope.eyebrowBirthday : copy.greetingGroup;
   return (
     <div className={`post-card ${hero ? "with-hero" : ""}`}>
       <div className="text">
-        <div className="eyebrow">{age ? copy.envelope.eyebrowBirthday : copy.greetingGroup}</div>
+        {eyebrow.toLowerCase() !== greeting.toLowerCase() && <div className="eyebrow">{eyebrow}</div>}
         <div className="title">{e.title}</div>
         <div className="when">
           <b>{formatInviteDate(e.date)}</b>
@@ -69,7 +71,7 @@ export function PostInvite({
         <div className="opening">
           <Peeker who={cast.topLeft} side="left" />
           <Peeker who={cast.topRight} side="right" />
-          <PostEnvelope addressee={addressee} stamp={age} card={<CoverCard e={e} hero={cast.hero} />} openLabel={copy.envelope.open} skipAnimation={skipAnimation} />
+          <PostEnvelope addressee={addressee} stamp={age} card={<CoverCard e={e} hero={cast.hero} greeting={greeting} />} openLabel={copy.envelope.open} skipAnimation={skipAnimation} />
         </div>
 
         <div className="strip">

@@ -129,6 +129,7 @@ export function SettingsForm({ e }: { e: E }) {
         <div className="saved" role="status" aria-live="polite">
           <b>{copy.host.savedTitle}</b>
           <p>{copy.host.savedBody}</p>
+          {state.note && <p className="notice">{state.note}</p>}
           <Link className="btn primary" href={`/app/events/${e.id}`}>{copy.host.backToParty}</Link>
         </div>
       )}

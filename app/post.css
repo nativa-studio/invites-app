@@ -2,7 +2,7 @@
    peek characters cut by the page edge. Palette variables are set per event on .post. */
 .post { --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding-bottom: 56px; }
 .post .page { position: relative; max-width: 430px; margin: 0 auto; overflow: hidden; }
-.post .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--crm); padding: 28px 22px 0; text-align: center; position: relative; z-index: 3; }
+.post .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--crm); padding: 28px 22px 0; text-align: center; }
 .post .pcard.reply { border-style: dashed; border-color: var(--forest); }
 
 /* Anyone leaning in from an edge. Their own cut sits flush with the page, anchored by the feet. */
@@ -73,6 +73,17 @@
 .post-card.with-hero .from { max-width: 222px; }
 /* Pikachu climbs up from under the card's bottom edge, arms up at the title. */
 .post-card .hero { position: absolute; right: -26px; bottom: -14px; height: 118px; width: auto; z-index: 0; }
+/* On the narrowest phones the card is 303 wide, so the words get smaller and Pikachu gets smaller,
+   rather than the two meeting in the middle. */
+@media (max-width: 389px) {
+  .post-card .title { font-size: 30px; }
+  .post-card .when { font-size: 14px; }
+  .post-card .when b { font-size: 15px; }
+  .post-card .from { font-size: 11px; }
+  .post-card .hero { height: 104px; right: -30px; }
+  .post-card.with-hero .when { max-width: 184px; }
+  .post-card.with-hero .from { max-width: 200px; }
+}
 
 /* The cards down the page. A slot spans the page so a character is cut by the page edge, and
    a slot with someone leaning on it leaves them room. */
