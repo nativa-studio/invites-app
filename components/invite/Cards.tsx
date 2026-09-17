@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
+import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
 import { ICONS, Bubble, Camera, Gift, Kids, Plate, Cap, Cake } from "@/components/art/icons";
 
@@ -9,18 +10,19 @@ export function mapsLink(e: PublicEvent): string | null {
   return q ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}` : null;
 }
 
-// The cover: the host's own picture across the top, then everything a guest needs to decide
-// whether to come. The picture is whatever they uploaded. Nothing here is drawn for them.
+// The cover: the host's own picture at the top, then everything a guest needs to decide whether
+// to come. The picture is theirs. Nothing here is drawn for them.
 export function CoverCard({ e }: { e: PublicEvent }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
+  const art = coverFor(e.invite_image_path);
   return (
     <div className="pcard tilt-l">
-      {e.invite_image_path && (
+      <div className="tape" />
+      {art && (
         <div className="art">
-          <Image src={e.invite_image_path} alt="" width={1173} height={420} priority sizes="(max-width: 430px) 100vw, 340px" />
+          <Image src={art.src} alt="" width={art.w} height={art.h} priority sizes="(max-width: 430px) 100vw, 340px" />
         </div>
       )}
-      <div className="tape" />
       <div className="eyebrow">{age ? copy.envelope.eyebrowBirthday : copy.greetingGroup}</div>
       <div className="title">{e.title}</div>
       {e.intro && <div className="intro">{e.intro}</div>}

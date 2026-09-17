@@ -4,6 +4,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { formatInviteDate, formatTime, formatTimeRange, hostName } from "@/lib/format";
 import { mapsLink } from "./Cards";
+import { bandFor } from "@/lib/artwork";
 
 // Colours lifted from the artwork, used for the dots beside each good-to-know line.
 const DOTS = ["#EFB93C", "#7FAF95", "#93C7D6", "#E8763C", "#E0553F", "#3F6B57"];
@@ -32,7 +33,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
   const age = e.title.match(/turning (\d+)/i)?.[1];
   const maps = mapsLink(e);
   const notes = goodToKnow(e);
-  const artwork = e.invite_image_path;
+  const artwork = bandFor(e.invite_image_path);
 
   return (
     <main className="lineup">
@@ -50,7 +51,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
           </p>
           {e.host_line && <p className="from">{e.host_line}</p>}
           {artwork
-            ? <div className="art"><Image src={artwork} alt="" width={1173} height={420} priority sizes="(max-width: 430px) 100vw, 430px" /></div>
+            ? <div className="art"><Image src={artwork.src} alt="" width={artwork.w} height={artwork.h} priority sizes="(max-width: 430px) 100vw, 430px" /></div>
             : <div className="artless" />}
         </header>
 

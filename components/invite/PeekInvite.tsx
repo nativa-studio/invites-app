@@ -3,7 +3,7 @@ import "@/app/peek.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { formatInviteDate, formatTime, formatTimeRange, hostName } from "@/lib/format";
-import { castFor, type PeekChar } from "@/lib/peek-cast";
+import { castFor, type PeekChar } from "@/lib/artwork";
 import { mapsLink } from "./Cards";
 
 // Colours lifted off the characters themselves, so the words and the drawings agree.

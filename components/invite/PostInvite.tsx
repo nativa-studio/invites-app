@@ -5,7 +5,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { formatInviteDate, formatTimeRange, hostName } from "@/lib/format";
 import { paletteFor, paletteVars } from "@/components/art/palette";
-import { castFor, type PeekChar } from "@/lib/peek-cast";
+import { castFor, type PeekChar } from "@/lib/artwork";
 import { AfterCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { PostEnvelope } from "./PostEnvelope";
 
