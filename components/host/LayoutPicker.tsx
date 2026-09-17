@@ -35,6 +35,21 @@ function Thumb({ id }: { id: string }) {
       </svg>
     );
   }
+  if (id === "post") {
+    return (
+      <svg {...box} aria-hidden="true">
+        <rect x="1" y="1" width="54" height="82" rx="6" fill="#FDF6E4" stroke={ink} strokeWidth="1.6" />
+        <circle cx="6" cy="14" r="6" fill="#7FAF95" stroke={ink} strokeWidth="1.2" />
+        <circle cx="50" cy="14" r="6" fill="#E8763C" stroke={ink} strokeWidth="1.2" />
+        <rect x="6" y="16" width="44" height="26" rx="3" fill="#E0553F" stroke={ink} strokeWidth="1.4" />
+        <path d="M6 18 L28 32 L50 18" fill="none" stroke={ink} strokeWidth="1.4" />
+        <rect x="9" y="50" width="38" height="11" rx="3" fill="#FFFDF6" stroke={ink} strokeWidth="1.2" />
+        <circle cx="10" cy="50" r="4.5" fill="#93C7D6" stroke={ink} strokeWidth="1.2" />
+        <rect x="9" y="66" width="38" height="11" rx="3" fill="#FFFDF6" stroke={ink} strokeWidth="1.2" />
+        <circle cx="46" cy="66" r="4.5" fill="#F6C9D2" stroke={ink} strokeWidth="1.2" />
+      </svg>
+    );
+  }
   if (id === "strip") {
     return (
       <svg {...box} aria-hidden="true">

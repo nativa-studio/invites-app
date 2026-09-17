@@ -9,9 +9,15 @@ import { AfterCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } fro
 import { Rsvp } from "./Rsvp";
 import { LineupInvite } from "./LineupInvite";
 import { PeekInvite } from "./PeekInvite";
+import { PostInvite } from "./PostInvite";
 
 export function InvitePage({ invite, token, link, skipAnimation }: { invite: Invite; token: string; link: string; skipAnimation?: boolean }) {
   const { event: e, guest } = invite;
+  const answered = guest.status !== "pending";
+  const reply = <Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />;
+  if (e.layout_id === "post") {
+    return <PostInvite event={e} greeting={copy.greeting(firstName(guest.name))} addressee={guest.name} reply={reply} skipAnimation={skipAnimation ?? answered} />;
+  }
   // The lineup and the peek are each their own page from top to bottom, so they take over
   // before the suite is built.
   if (e.layout_id === "lineup" || e.layout_id === "peek") {
@@ -29,12 +35,11 @@ export function InvitePage({ invite, token, link, skipAnimation }: { invite: Inv
   const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
   const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
   const hostShort = hostName(e.host_line);
-  const answered = guest.status !== "pending";
   return (
     <main className="invite" style={paletteVars(p)}>
       <div className="wrap">
         <div className="greet">{copy.greeting(who)}</div>
-        <Envelope addressee={guest.name} stamp={age} cover={<CoverCard e={e} />} openLabel="Tap to open" skipAnimation={skipAnimation ?? answered}>
+        <Envelope addressee={guest.name} stamp={age} cover={<CoverCard e={e} />} openLabel={copy.envelope.open} skipAnimation={skipAnimation ?? answered}>
           <UpdatesCard e={e} />
           {e.show_details && <DetailsCard e={e} />}
           {e.show_runsheet && <DayCard e={e} />}

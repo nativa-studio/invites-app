@@ -16,6 +16,12 @@ export const copy = {
   },
   greeting: (name: string) => `Hi ${name}, something for you`,
   greetingGroup: "You're invited",
+  envelope: {
+    open: "Tap to open",
+    // On the group link the envelope has no name to carry, so it is addressed to whoever opened it.
+    toYou: "To you",
+    eyebrowBirthday: "Trainer wanted",
+  },
   rsvp: {
     heading: "RSVP",
     question: (name: string) => `Can ${name} make it?`,

@@ -33,5 +33,5 @@ export default async function Preview({
       <div className="para">{copy.host.previewReply}</div>
     </div>
   );
-  return <InviteBody e={e} greeting={greeting} reply={reply} layout={asLayout(layout)} />;
+  return <InviteBody e={e} greeting={greeting} reply={reply} layout={asLayout(layout)} addressee={guest?.name ? String(guest.name) : undefined} />;
 }

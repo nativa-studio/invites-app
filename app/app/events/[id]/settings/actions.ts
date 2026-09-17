@@ -9,7 +9,7 @@ export type SaveState = { saved?: boolean; error?: string };
 const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "gift_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue"] as const;
 const DATES = ["date", "rsvp_by"] as const;
 const TIMES = ["start_time", "end_time"] as const;
-const CHOICES = { layout_id: ["strip", "suite", "lineup", "peek"], parents_mode: ["stay", "drop_off", "either"], photo_sharing: ["none", "kids_off_social", "ask", "share"], gift_stance: ["none", "optional", "wishlist", "books"], ask_party_mode: ["single", "split"], status: ["draft", "live", "thanks", "archived"] } as const;
+const CHOICES = { layout_id: ["strip", "suite", "lineup", "peek", "post"], parents_mode: ["stay", "drop_off", "either"], photo_sharing: ["none", "kids_off_social", "ask", "share"], gift_stance: ["none", "optional", "wishlist", "books"], ask_party_mode: ["single", "split"], status: ["draft", "live", "thanks", "archived"] } as const;
 const SWITCHES = ["siblings_welcome", "ask_names", "ask_dietary", "ask_accessibility", "ask_emergency", "plate_enabled", "group_link_enabled", "save_the_date", "group_gift_enabled", "show_details", "show_runsheet", "show_good_to_know", "show_after"] as const;
 
 export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveState> {
