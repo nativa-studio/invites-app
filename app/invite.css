@@ -7,6 +7,7 @@
 .pcard.cream { background: var(--crm); }
 .pcard.tilt-l { transform: rotate(-1.2deg); }
 .pcard.tilt-r { transform: rotate(1deg); }
+.invite .pcard.reply { border-style: dashed; border-color: var(--forest); }
 .pcard .tape { position: absolute; left: 50%; top: -12px; width: 96px; height: 26px; margin-left: -48px; background: color-mix(in srgb, var(--yel) 85%, transparent); transform: rotate(-3deg); border-radius: 2px; }
 .pcard .tape.sky { background: color-mix(in srgb, var(--sky) 70%, white); }
 .pcard .eyebrow { font-family: var(--font-hand); font-size: 20px; letter-spacing: 0.12em; color: var(--red); text-transform: uppercase; text-align: center; }

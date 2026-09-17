@@ -61,7 +61,7 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
   const initialPartySize = current.party_size ?? (expectedTotal || 1);
 
   return (
-    <form action={formAction} className="pcard tilt-l" style={{ border: "3px dashed var(--forest)" }}>
+    <form action={formAction} className="pcard tilt-l reply">
       <input type="hidden" name="token" value={token} />
       <div className="rsvp-h"><Bolt /> {copy.rsvp.heading} <Bolt /></div>
       <div className="rsvp-q">Can <u>{who}</u> make it?</div>

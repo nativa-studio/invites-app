@@ -79,6 +79,13 @@ export function SettingsForm({ e }: { e: E }) {
       </section>
 
       <section className="card">
+        <h2 className="h2">Look</h2>
+        <Choice id="layout_id" label="Layout" value={e.layout_id} options={[["suite", "Stationery suite, cards and an envelope"], ["lineup", "The lineup, one page with artwork along the bottom"], ["strip", "Illustrated strip"]]} />
+        <Choice id="invite_image_path" label="Artwork" value={e.invite_image_path} options={[["", "None"], ["/artwork/gabriel-lineup.png", "Gabriel's lineup"]]} />
+        <span className="muted" style={{ fontSize: 13 }}>Uploading your own artwork is coming. For now the lineup layout uses the picture above.</span>
+      </section>
+
+      <section className="card">
         <h2 className="h2">What the reply asks</h2>
         <Choice id="ask_party_mode" label="How many" value={e.ask_party_mode} options={[["split", "Children and adults separately"], ["single", "One number"]]} />
         <Switch id="ask_names" label="Names of everyone coming" value={e.ask_names} />

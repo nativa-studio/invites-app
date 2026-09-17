@@ -7,7 +7,7 @@ import { Bolt } from "@/components/art/icons";
 export function ClaimForm({ slug }: { slug: string }) {
   const [state, formAction, pending] = useActionState<ClaimState, FormData>(claimAction, {});
   return (
-    <form action={formAction} className="pcard tilt-l" style={{ border: "3px dashed var(--forest)" }}>
+    <form action={formAction} className="pcard tilt-l reply">
       <input type="hidden" name="slug" value={slug} />
       <div className="rsvp-h"><Bolt /> {copy.rsvp.heading} <Bolt /></div>
       <div className="rsvp-q">{copy.rsvp.whoIsThis}</div>

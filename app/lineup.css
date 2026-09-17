@@ -1,0 +1,71 @@
+/* The lineup: one continuous cream page, the artwork standing along the bottom of the cover,
+   and every word living in the open space above it. No cards, no frames. Air and thin rules
+   do the dividing, because the drawing is already doing the talking. */
+.lineup {
+  --cream: #FDF6E4;
+  --page: #FDF6E4;
+  --ink: #2B2119;
+  --ink-soft: #6C5D4E;
+  --rule: #E3D7BF;
+  /* Read by the shared reply form, so one RSVP serves every layout. */
+  --navy: #2B2119;
+  --red: #E8763C;
+  --sky: #3F6B57;
+  --yel: #EFB93C;
+  --crm: #FDF6E4;
+  --paper: #FFFDF6;
+  --forest: #7FAF95;
+  min-height: 100vh;
+  background: var(--page);
+  color: var(--ink);
+  padding-bottom: 56px;
+}
+.lineup .page { max-width: 430px; margin: 0 auto; }
+.lineup .pad { padding: 0 24px; }
+
+/* Cover */
+.lineup .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); text-align: center; padding-top: 40px; }
+.lineup .eyebrow { font-family: var(--font-hand); font-size: 19px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); text-align: center; margin-top: 34px; }
+.lineup h1.title { font-family: var(--font-display); font-size: 58px; line-height: 0.98; text-align: center; margin-top: 10px; color: var(--ink); }
+.lineup .sub { font-size: 17px; line-height: 1.55; text-align: center; color: var(--ink-soft); margin-top: 14px; max-width: 33ch; margin-left: auto; margin-right: auto; }
+.lineup .when { font-size: 18px; line-height: 1.5; text-align: center; margin-top: 20px; }
+.lineup .from { font-size: 14px; text-align: center; color: var(--ink-soft); margin-top: 12px; }
+/* The art bleeds to both edges and sits on the page, not in a box. */
+.lineup .art { width: 100%; display: block; margin-top: 26px; }
+.lineup .art { overflow: hidden; }
+.lineup .art img { width: 104%; max-width: none; margin-left: -2%; height: auto; display: block; }
+.lineup .artless { height: 8px; width: 120px; margin: 40px auto 0; border-radius: 4px; background: linear-gradient(90deg, var(--yel) 0 25%, var(--forest) 25% 50%, #93C7D6 50% 75%, var(--red) 75% 100%); }
+
+/* Sections, divided by air and a hairline rather than by cards */
+.lineup section { padding-top: 38px; }
+.lineup section + section { border-top: 1px solid var(--rule); margin-top: 38px; }
+.lineup .label { font-family: var(--font-hand); font-size: 21px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); text-align: center; }
+.lineup .kv { display: grid; grid-template-columns: 74px 1fr; gap: 10px 14px; margin-top: 22px; font-size: 17px; line-height: 1.45; }
+.lineup .kv .k { font-family: var(--font-hand); font-size: 18px; color: var(--sky); padding-top: 2px; }
+.lineup .maps { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; margin-top: 22px; border: 2.5px solid var(--ink); border-radius: 999px; background: transparent; color: var(--ink); font-family: var(--font-display); font-size: 17px; text-decoration: none; }
+
+/* The day: times down a single hairline */
+.lineup .stops { margin-top: 22px; display: grid; gap: 22px; }
+.lineup .stop { display: grid; grid-template-columns: 62px 1fr; gap: 14px; }
+.lineup .stop .t { font-family: var(--font-display); font-size: 19px; color: var(--red); text-align: right; }
+.lineup .stop .body { border-left: 2px solid var(--rule); padding-left: 16px; }
+.lineup .stop .n { font-family: var(--font-display); font-size: 21px; line-height: 1.1; }
+.lineup .stop .b { font-size: 15px; line-height: 1.5; color: var(--ink-soft); margin-top: 2px; }
+
+/* Good to know: a coloured dot instead of an icon, so nothing competes with the drawing */
+.lineup .notes { margin-top: 22px; display: grid; gap: 16px; }
+.lineup .note-line { display: grid; grid-template-columns: 14px 1fr; gap: 14px; font-size: 16px; line-height: 1.5; }
+.lineup .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 7px; border: 2px solid var(--ink); }
+.lineup .after { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 22px; text-align: center; }
+.lineup .after .n { font-family: var(--font-display); font-size: 19px; }
+.lineup .after .b { font-size: 14px; color: var(--ink-soft); margin-top: 4px; }
+.lineup .foot { text-align: center; font-size: 14px; color: var(--ink-soft); padding-top: 38px; }
+.lineup .foot a { color: var(--sky); }
+
+/* The shared reply form, wearing this layout's clothes: no card, no tilt, no shadow. */
+.lineup .pcard { background: transparent; border: 0; box-shadow: none; transform: none; padding: 0; max-width: none; gap: 14px; }
+.lineup .pcard .tape { display: none; }
+.lineup .rsvp-h { font-family: var(--font-display); font-size: 38px; color: var(--red); }
+.lineup .pbtn { border-width: 2.5px; border-radius: 14px; max-width: 330px; }
+.lineup .q input[type=text], .lineup .q input[type=tel], .lineup .q textarea { border-width: 2px; background: var(--paper); }
+.lineup .chip { border-width: 2px; background: var(--paper); }

@@ -7,9 +7,20 @@ import { paletteFor, paletteVars } from "@/components/art/palette";
 import { Envelope } from "./Envelope";
 import { AfterCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { Rsvp } from "./Rsvp";
+import { LineupInvite } from "./LineupInvite";
 
 export function InvitePage({ invite, token, link, skipAnimation }: { invite: Invite; token: string; link: string; skipAnimation?: boolean }) {
   const { event: e, guest } = invite;
+  // The lineup is its own page from top to bottom, so it takes over before the suite is built.
+  if (e.layout_id === "lineup") {
+    return (
+      <LineupInvite
+        event={e}
+        greeting={copy.greeting(firstName(guest.contact_name || guest.name))}
+        reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />}
+      />
+    );
+  }
   const p = paletteFor(e.palette, e.theme_id);
   const who = firstName(guest.contact_name || guest.name);
   const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
