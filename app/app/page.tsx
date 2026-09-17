@@ -14,6 +14,7 @@ export default async function EventList() {
         <form action={signOut}><button className="btn small" type="submit">{copy.app.signOut}</button></form>
       </header>
       <h1 className="h1">{copy.app.yourEvents}</h1>
+      <div className="actions"><Link href="/app/events/new" className="btn primary">{copy.app.newEvent}</Link></div>
       {!events?.length && <p className="muted">{copy.app.noEvents}</p>}
       <div className="guest-list">
         {events?.map((e) => (
