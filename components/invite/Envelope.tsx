@@ -2,13 +2,32 @@
 import { useEffect, useRef, useState } from "react";
 import { Bolt } from "@/components/art/icons";
 
-type Props = { addressee: string; addresseeLine?: string; stamp: string; cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean };
+type Props = {
+  /** Which stationery: the suite's tall card, or the post's landscape one. */
+  variant: "suite" | "post";
+  addressee: string;
+  /** The age, stamped into the wax. Empty for an event that has none. */
+  stamp: string;
+  card: React.ReactNode;
+  openLabel: string;
+  skipAnimation?: boolean;
+  /** The suite keeps its page inside the envelope until the opening is over. The post layout
+   *  has its page below the envelope from the start, so it passes none. */
+  children?: React.ReactNode;
+};
 
-// The opening: tap (or wait), the flap lifts, the card rises, grows, and the envelope drops away.
-// The cover is drawn once, never twice: the envelope holds it until the opening is over, then
-// hands it to the page. Two copies at once would share one set of SVG pattern ids, and the
-// halftone shading would look up the copy inside the closed envelope and find nothing to paint.
-export function Envelope({ addressee, addresseeLine, stamp, cover, children, openLabel, skipAnimation }: Props) {
+// The envelope as it actually reaches you: the back, with the flap folded down and sealed, and
+// the name written under the seal. That is where a seal and a name go. A stamp belongs on the
+// front, which is not the side you are holding, so there is no stamp here any more: the age is
+// pressed into the wax instead.
+//
+// Tap, or wait, and the flap lifts away and the envelope leaves, in whichever direction its
+// layout calls for. The card is drawn once, never twice: two copies at once would share one set
+// of SVG pattern ids, and a cover's halftone shading would look up the copy inside the closed
+// envelope and find nothing to paint. So the suite, which hands the card on to the page below,
+// stops drawing it here the moment it does; the post layout, which keeps it where it lies,
+// never stops.
+export function Envelope({ variant, addressee, stamp, card, openLabel, skipAnimation, children }: Props) {
   const [phase, setPhase] = useState<"" | "open" | "rise" | "out" | "done">(skipAnimation ? "done" : "");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const started = useRef(false);
@@ -26,7 +45,7 @@ export function Envelope({ addressee, addresseeLine, stamp, cover, children, ope
         setPhase("out");
         setTimeout(() => {
           setPhase("done");
-          window.scrollTo({ top: 0 });
+          if (children) window.scrollTo({ top: 0 });
         }, wait(800));
       }, wait(750));
     }, wait(900));
@@ -39,28 +58,26 @@ export function Envelope({ addressee, addresseeLine, stamp, cover, children, ope
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const cls = ["env-root", phase === "open" ? "open" : "", phase === "rise" ? "open rise" : "", phase === "out" ? "open rise out" : "", phase === "done" ? "done" : ""].join(" ");
+  // `env-suite` / `env-post`, not the bare word: "post" is the page's own class and the two
+  // would collide.
+  const cls = ["env-root", `env-${variant}`, phase === "open" ? "open" : "", phase === "rise" ? "open rise" : "", phase === "out" ? "open rise out" : "", phase === "done" ? "done" : ""].join(" ");
   return (
-    <div className={cls} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 30 }}>
+    <div className={cls}>
       <div className="stage" aria-hidden={phase === "done"}>
-        <div className="env">
-          <div className="back" />
-          <div className="clip"><div className="card-slot">{phase !== "done" && cover}</div></div>
-          <div className="pocket">
-            <div className="sides" /><div className="edge" />
-            <div className="addr">{addressee}{addresseeLine && <><br /><span>{addresseeLine}</span></>}</div>
-            <div className="stamp"><div><Bolt size={26} /><div>{stamp}</div></div></div>
+        <div className="benv">
+          <div className="body"><span className="seams" /></div>
+          <div className="clip"><div className="card-slot">{(children ? phase !== "done" : true) && card}</div></div>
+          <div className="addr">{addressee}</div>
+          <div className="flap">
+            <div className="face front"><span className="note">{openLabel}</span></div>
+            <div className="face backface" />
+            <div className="rim" />
           </div>
-          <div className="flap"><div className="face front" /><div className="face backface" /><div className="rim" /></div>
-          <div className="seal"><Bolt size={30} /></div>
+          <div className="seal">{stamp ? <span className="age">{stamp}</span> : <Bolt size={28} />}</div>
         </div>
-        <div className="hint">{openLabel}</div>
-        <button type="button" className="tap" aria-label={openLabel} onClick={open} disabled={phase !== ""} />
+        {phase !== "done" && <button type="button" className="tap" aria-label={openLabel} onClick={open} disabled={phase !== ""} />}
       </div>
-      <div className="suite">
-        {phase === "done" && cover}
-        {children}
-      </div>
+      {children && <div className="suite">{phase === "done" && card}{children}</div>}
     </div>
   );
 }

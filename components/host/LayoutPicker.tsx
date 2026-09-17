@@ -50,18 +50,6 @@ function Thumb({ id }: { id: string }) {
       </svg>
     );
   }
-  if (id === "strip") {
-    return (
-      <svg {...box} aria-hidden="true">
-        <rect x="1" y="1" width="54" height="82" rx="6" fill="#FFFDF6" stroke={ink} strokeWidth="1.6" />
-        <rect x="4" y="5" width="48" height="10" rx="2" fill={art} />
-        <rect x="14" y="20" width="28" height="4" rx="2" fill={ink} />
-        <rect x="4" y="30" width="48" height="14" rx="3" fill="#E7F1F5" />
-        <rect x="4" y="48" width="48" height="14" rx="3" fill="#E3E9DE" />
-        <rect x="14" y="68" width="28" height="7" rx="3.5" fill="#E0553F" />
-      </svg>
-    );
-  }
   return (
     <svg {...box} aria-hidden="true">
       <rect x="1" y="1" width="54" height="82" rx="6" fill="#FDF6E4" stroke={ink} strokeWidth="1.6" />

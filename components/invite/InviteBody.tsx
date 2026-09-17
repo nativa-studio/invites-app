@@ -11,6 +11,7 @@ import { PostInvite } from "./PostInvite";
 
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
+// Every one of them arrives in an envelope, which is not optional anywhere.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 // `addressee` is the name written on the envelope where a layout has one; the group link has
 // none to borrow, so it is addressed to whoever opened it.
@@ -49,41 +50,29 @@ export function InviteBody({
     </>
   );
 
-  // The stationery suite: the cover arrives in an envelope that opens.
-  if (id === "suite") {
-    return (
-      <main className="invite" style={paletteVars(p)}>
-        <div className="wrap">
-          <div className="greet">{greeting}</div>
-          <Envelope
-            addressee={addressee ?? copy.envelope.toYou}
-            stamp={age}
-            cover={<CoverCard e={e} />}
-            openLabel={copy.envelope.open}
-            skipAnimation={skipAnimation}
-          >
-            {below}
-          </Envelope>
-        </div>
-      </main>
-    );
-  }
-
-  // The illustrated strip: the same cards, no envelope, straight down the page.
+  // The stationery suite, and the fallback for anything else: the cover arrives in an envelope.
+  // Every invite has one. An event still carrying the old "strip" choice lands here too, which
+  // is the nearest thing to what it used to show.
   return (
-    <main className="invite no-envelope" style={paletteVars(p)}>
+    <main className="invite" style={paletteVars(p)}>
       <div className="wrap">
         <div className="greet">{greeting}</div>
-        <div className="suite">
-          <CoverCard e={e} />
+        <Envelope
+          variant="suite"
+          addressee={addressee ?? copy.envelope.toYou}
+          stamp={age}
+          card={<CoverCard e={e} />}
+          openLabel={copy.envelope.open}
+          skipAnimation={skipAnimation}
+        >
           {below}
-        </div>
+        </Envelope>
       </div>
     </main>
   );
 }
 
-export const LAYOUTS = ["suite", "lineup", "peek", "post", "strip"] as const;
+export const LAYOUTS = ["suite", "lineup", "peek", "post"] as const;
 
 export function asLayout(v: string | undefined): PublicEvent["layout_id"] | undefined {
   return (LAYOUTS as readonly string[]).includes(v ?? "") ? (v as PublicEvent["layout_id"]) : undefined;

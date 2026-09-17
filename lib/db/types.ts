@@ -40,7 +40,7 @@ export type PublicEvent = {
   group_link_enabled: boolean;
   look_mode: "artwork" | "upload";
   theme_id: string;
-  layout_id: "strip" | "suite" | "lineup" | "peek" | "post";
+  layout_id: "suite" | "lineup" | "peek" | "post";
   ink: string;
   palette: Palette | null;
   invite_image_path: string | null;
