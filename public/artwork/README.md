@@ -9,3 +9,10 @@ nothing needs to live in the repo.
 
 Nothing in this folder belongs in the gallery of artwork sets the app offers to every host.
 Those must be original drawings.
+
+## gabriel-peek/
+
+The seven characters cut out of Marcia's second wallpaper file, one PNG each, for the peek
+layout. Same rule as above: this is Gabriel's event artwork, never gallery artwork the app
+offers other hosts. The cast is bound to the artwork it came from in lib/peek-cast.ts, and any
+other artwork gets the layout with no characters at all, which it is built to survive.

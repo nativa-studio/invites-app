@@ -8,13 +8,16 @@ import { Envelope } from "./Envelope";
 import { AfterCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { Rsvp } from "./Rsvp";
 import { LineupInvite } from "./LineupInvite";
+import { PeekInvite } from "./PeekInvite";
 
 export function InvitePage({ invite, token, link, skipAnimation }: { invite: Invite; token: string; link: string; skipAnimation?: boolean }) {
   const { event: e, guest } = invite;
-  // The lineup is its own page from top to bottom, so it takes over before the suite is built.
-  if (e.layout_id === "lineup") {
+  // The lineup and the peek are each their own page from top to bottom, so they take over
+  // before the suite is built.
+  if (e.layout_id === "lineup" || e.layout_id === "peek") {
+    const Whole = e.layout_id === "peek" ? PeekInvite : LineupInvite;
     return (
-      <LineupInvite
+      <Whole
         event={e}
         greeting={copy.greeting(firstName(guest.name))}
         reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />}

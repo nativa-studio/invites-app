@@ -9,6 +9,7 @@ import { paletteFor, paletteVars } from "@/components/art/palette";
 import { CoverCard, DetailsCard, DayCard, KnowCard } from "@/components/invite/Cards";
 import { ClaimForm } from "@/components/invite/ClaimForm";
 import { LineupInvite } from "@/components/invite/LineupInvite";
+import { PeekInvite } from "@/components/invite/PeekInvite";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -33,6 +34,7 @@ export default async function GroupLink({ params }: Params) {
     : <div className="pcard"><div className="label red">{copy.closed.title}</div><div className="para">{copy.closed.body}</div></div>;
   // The group link wears the same layout the host picked for the invite.
   if (e.layout_id === "lineup") return <LineupInvite event={e} greeting={copy.greetingGroup} reply={reply} />;
+  if (e.layout_id === "peek") return <PeekInvite event={e} greeting={copy.greetingGroup} reply={reply} />;
   return (
     <main className="invite no-envelope" style={paletteVars(p)}>
       <div className="wrap">

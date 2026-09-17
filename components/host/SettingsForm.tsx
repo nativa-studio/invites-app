@@ -80,7 +80,7 @@ export function SettingsForm({ e }: { e: E }) {
 
       <section className="card">
         <h2 className="h2">Look</h2>
-        <Choice id="layout_id" label="Layout" value={e.layout_id} options={[["suite", "Stationery suite, cards and an envelope"], ["lineup", "The lineup, one page with artwork along the bottom"], ["strip", "Illustrated strip"]]} />
+        <Choice id="layout_id" label="Layout" value={e.layout_id} options={[["suite", "Stationery suite, cards and an envelope"], ["lineup", "The lineup, one page with artwork along the bottom"], ["peek", "Peek, characters leaning in from the edges"], ["strip", "Illustrated strip"]]} />
         <Choice id="invite_image_path" label="Artwork" value={e.invite_image_path} options={[["", "None"], ["/artwork/gabriel-lineup.png", "Gabriel's lineup"]]} />
         <span className="muted" style={{ fontSize: 13 }}>Uploading your own artwork is coming. For now the lineup layout uses the picture above.</span>
       </section>
