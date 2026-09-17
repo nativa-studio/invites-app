@@ -5,6 +5,9 @@ import { Bolt } from "@/components/art/icons";
 type Props = { addressee: string; addresseeLine?: string; stamp: string; cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean };
 
 // The opening: tap (or wait), the flap lifts, the card rises, grows, and the envelope drops away.
+// The cover is drawn once, never twice: the envelope holds it until the opening is over, then
+// hands it to the page. Two copies at once would share one set of SVG pattern ids, and the
+// halftone shading would look up the copy inside the closed envelope and find nothing to paint.
 export function Envelope({ addressee, addresseeLine, stamp, cover, children, openLabel, skipAnimation }: Props) {
   const [phase, setPhase] = useState<"" | "open" | "rise" | "out" | "done">(skipAnimation ? "done" : "");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -42,7 +45,7 @@ export function Envelope({ addressee, addresseeLine, stamp, cover, children, ope
       <div className="stage" aria-hidden={phase === "done"}>
         <div className="env">
           <div className="back" />
-          <div className="clip"><div className="card-slot">{cover}</div></div>
+          <div className="clip"><div className="card-slot">{phase !== "done" && cover}</div></div>
           <div className="pocket">
             <div className="sides" /><div className="edge" />
             <div className="addr">{addressee}{addresseeLine && <><br /><span>{addresseeLine}</span></>}</div>

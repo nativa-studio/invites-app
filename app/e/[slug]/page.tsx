@@ -6,9 +6,10 @@ import { getSiteUrl } from "@/lib/site-url";
 import { copy } from "@/lib/copy";
 import { formatInviteDate } from "@/lib/format";
 import { ClaimForm } from "@/components/invite/ClaimForm";
-import { InviteBody } from "@/components/invite/InviteBody";
+import { InviteBody, asLayout } from "@/components/invite/InviteBody";
 
 type Params = { params: Promise<{ slug: string }> };
+type PageParams = Params & { searchParams: Promise<{ layout?: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
@@ -21,13 +22,14 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return { title, description, openGraph: { title, description, type: "website", images: [{ url: image, width: 1200, height: 630 }] }, twitter: { card: "summary_large_image", title, description, images: [image] } };
 }
 
-export default async function GroupLink({ params }: Params) {
+export default async function GroupLink({ params, searchParams }: PageParams) {
   const { slug } = await params;
+  const { layout } = await searchParams;
   const e = await getEventBySlug(slug);
   if (!e) notFound();
   const reply = e.group_link_enabled
     ? <ClaimForm slug={slug} />
     : <div className="pcard"><div className="label red">{copy.closed.title}</div><div className="para">{copy.closed.body}</div></div>;
   // The group link wears the same layout the host picked for the invite.
-  return <InviteBody e={e} greeting={copy.greetingGroup} reply={reply} />;
+  return <InviteBody e={e} greeting={copy.greetingGroup} reply={reply} layout={asLayout(layout)} />;
 }
