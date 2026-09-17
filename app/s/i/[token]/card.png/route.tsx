@@ -3,7 +3,6 @@ import { getInviteCard } from "@/lib/guest/invite";
 import { paletteFor } from "@/components/art/palette";
 import { CARD_SIZE, envelopeCard, type CardVariant } from "@/components/share/envelope-card";
 import { cardFonts } from "@/lib/fonts";
-import { shortWhen } from "@/lib/format";
 import { getSiteUrl } from "@/lib/site-url";
 
 // The picture under a personal link: the same envelope, addressed to the guest it belongs to.
@@ -21,7 +20,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ toke
       palette: paletteFor(card.palette, card.theme_id),
       addressee: card.addressee,
       title: card.share_title ?? card.title,
-      when: shortWhen(card.date, card.start_time),
       artwork: card.invite_image_path ? `${site}${card.invite_image_path}` : null,
       age: card.title.match(/turning (\d+)/i)?.[1] ?? null,
       variant,

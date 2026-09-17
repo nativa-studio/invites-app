@@ -3,7 +3,6 @@ import { getEventBySlug } from "@/lib/guest/invite";
 import { paletteFor } from "@/components/art/palette";
 import { CARD_SIZE, envelopeCard, type CardVariant } from "@/components/share/envelope-card";
 import { cardFonts } from "@/lib/fonts";
-import { shortWhen } from "@/lib/format";
 import { getSiteUrl } from "@/lib/site-url";
 
 // The picture a chat app shows under the group link: a sealed envelope, addressed to nobody
@@ -19,7 +18,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
     envelopeCard({
       palette: paletteFor(e.palette, e.theme_id),
       title: e.share_title ?? e.title,
-      when: shortWhen(e.date, e.start_time),
       artwork: e.invite_image_path ? `${site}${e.invite_image_path}` : null,
       age: e.title.match(/turning (\d+)/i)?.[1] ?? null,
       variant,
