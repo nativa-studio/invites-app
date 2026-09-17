@@ -14,7 +14,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const e = invite.event;
   const title = e.share_title ?? e.title;
   const description = e.share_description ?? [formatInviteDate(e.date), e.intro].filter(Boolean).join(". ");
-  return { title, description, openGraph: { title, description, type: "website" } };
+  const site = await getSiteUrl();
+  const image = `${site}/s/${e.slug}/card.png?v=${encodeURIComponent(e.date ?? "")}`;
+  return { title, description, openGraph: { title, description, type: "website", images: [{ url: image, width: 1200, height: 630 }] }, twitter: { card: "summary_large_image", title, description, images: [image] } };
 }
 
 export default async function Page({ params, searchParams }: Params) {

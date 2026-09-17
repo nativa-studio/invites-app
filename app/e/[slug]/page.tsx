@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import "@/app/invite.css";
 import { getEventBySlug } from "@/lib/guest/invite";
+import { getSiteUrl } from "@/lib/site-url";
 import { copy } from "@/lib/copy";
 import { formatInviteDate } from "@/lib/format";
 import { paletteFor, paletteVars } from "@/components/art/palette";
@@ -16,7 +17,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!e) return { title: "Invite" };
   const title = e.share_title ?? e.title;
   const description = e.share_description ?? [formatInviteDate(e.date), e.intro].filter(Boolean).join(". ");
-  return { title, description, openGraph: { title, description, type: "website" } };
+  const site = await getSiteUrl();
+  const image = `${site}/s/${e.slug}/card.png?v=${encodeURIComponent(e.date ?? "")}`;
+  return { title, description, openGraph: { title, description, type: "website", images: [{ url: image, width: 1200, height: 630 }] }, twitter: { card: "summary_large_image", title, description, images: [image] } };
 }
 
 export default async function GroupLink({ params }: Params) {
