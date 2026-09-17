@@ -60,3 +60,20 @@ p { margin: 0; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .notice { background: #fff6dd; border: 1.5px solid var(--mustard); border-radius: 12px; padding: 10px 14px; font-size: 14px; }
 code { font-size: 14px; background: #efe9db; padding: 2px 6px; border-radius: 6px; word-break: break-all; }
+
+/* The layout picker: a card each, with a drawing of the shape, and the real invite underneath
+   so a host can see what they are choosing rather than read the name of it. */
+.field .label-ish { font-family: var(--font-hand); font-size: 19px; }
+.layouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.layout { display: grid; grid-template-columns: 56px 1fr; grid-template-rows: auto auto; column-gap: 12px; align-items: center; padding: 12px; border: 2px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; }
+.layout:has(input:focus-visible) { outline: 3px solid var(--mustard); outline-offset: 2px; }
+.layout.on { border-color: var(--ink); box-shadow: 0 0 0 3px var(--mustard); }
+.layout input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.layout svg { grid-row: 1 / span 2; display: block; }
+.layout .n { font-family: var(--font-display); font-size: 17px; align-self: end; }
+.layout .b { font-size: 13px; color: var(--ink-2); line-height: 1.35; align-self: start; }
+.screen { height: 460px; border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; background: var(--cream); }
+.screen iframe { width: 100%; height: 100%; border: 0; display: block; }
+.saved { display: grid; gap: 10px; justify-items: start; background: #eef4ea; border: 1.5px solid var(--olive); border-radius: 12px; padding: 14px 16px; }
+.saved b { font-family: var(--font-display); font-size: 18px; }
+.saved p { font-size: 14px; color: var(--ink-2); }

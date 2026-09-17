@@ -1,46 +1,26 @@
-import "@/app/invite.css";
 import type { Invite } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { firstName, hostName } from "@/lib/format";
+import { firstName } from "@/lib/format";
 import { googleCalendarLink } from "@/lib/calendar";
-import { paletteFor, paletteVars } from "@/components/art/palette";
-import { Envelope } from "./Envelope";
-import { AfterCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
+import { InviteBody } from "./InviteBody";
 import { Rsvp } from "./Rsvp";
-import { LineupInvite } from "./LineupInvite";
 
-export function InvitePage({ invite, token, link, skipAnimation }: { invite: Invite; token: string; link: string; skipAnimation?: boolean }) {
+// A personal link. The layout itself lives in InviteBody, which the group link and the host's
+// preview use too, so the three can never drift apart. All this adds is who the guest is: their
+// name on the envelope, their greeting, and their own reply form.
+export function InvitePage({ invite, token, link, skipAnimation, layout }: { invite: Invite; token: string; link: string; skipAnimation?: boolean; layout?: Invite["event"]["layout_id"] }) {
   const { event: e, guest } = invite;
-  // The lineup is its own page from top to bottom, so it takes over before the suite is built.
-  if (e.layout_id === "lineup") {
-    return (
-      <LineupInvite
-        event={e}
-        greeting={copy.greeting(firstName(guest.contact_name || guest.name))}
-        reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />}
-      />
-    );
-  }
-  const p = paletteFor(e.palette, e.theme_id);
-  const who = firstName(guest.contact_name || guest.name);
-  const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
-  const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
-  const hostShort = hostName(e.host_line);
+  // Someone who has already replied lands on the invite open, so changing an answer does not
+  // mean sitting through the post again.
   const answered = guest.status !== "pending";
   return (
-    <main className="invite" style={paletteVars(p)}>
-      <div className="wrap">
-        <div className="greet">{copy.greeting(who)}</div>
-        <Envelope addressee={guest.name} addresseeLine={guest.name !== guest.contact_name && guest.contact_name ? undefined : undefined} stamp={age} cover={<CoverCard e={e} />} openLabel="Tap to open" skipAnimation={skipAnimation ?? answered}>
-          <UpdatesCard e={e} />
-          <DetailsCard e={e} />
-          <DayCard e={e} />
-          <KnowCard e={e} />
-          <Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />
-          <AfterCard />
-          <div className="foot">{hostMobile ? <a href={hostMobile}>{copy.sections.questions(hostShort)}</a> : copy.sections.questions(hostShort)}</div>
-        </Envelope>
-      </div>
-    </main>
+    <InviteBody
+      e={e}
+      greeting={copy.greeting(firstName(guest.name))}
+      addressee={guest.name}
+      skipAnimation={skipAnimation ?? answered}
+      layout={layout}
+      reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />}
+    />
   );
 }

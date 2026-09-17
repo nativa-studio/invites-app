@@ -4,9 +4,10 @@ import { firstName, formatShortDate, normalisePhone } from "@/lib/format";
 export type TemplateEvent = { title: string; date: string | null; text_template?: string | null; reminder_template?: string | null };
 export type TemplateGuest = { name: string; contact_name?: string | null };
 
+// {name} is the guest the invite is for, never the person whose phone it lands on.
 export function fillTemplate(template: string, e: TemplateEvent, g: TemplateGuest, link: string): string {
   const date = e.date ? ` on ${formatShortDate(e.date)}` : "";
-  const name = firstName(g.contact_name || g.name) || "there";
+  const name = firstName(g.name) || "there";
   return template.replaceAll("{name}", name).replaceAll("{title}", e.title).replaceAll("{date}", date).replaceAll("{link}", link);
 }
 

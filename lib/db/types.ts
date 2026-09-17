@@ -40,7 +40,7 @@ export type PublicEvent = {
   group_link_enabled: boolean;
   look_mode: "artwork" | "upload";
   theme_id: string;
-  layout_id: "strip" | "suite" | "lineup";
+  layout_id: "strip" | "suite" | "lineup" | "peek" | "post";
   ink: string;
   palette: Palette | null;
   invite_image_path: string | null;
@@ -63,6 +63,11 @@ export type PublicEvent = {
   plate_host_note: string | null;
   host_phone: string | null;
   status: "draft" | "live" | "thanks" | "archived";
+  /** Which parts of the invite the host wants shown. A section with nothing in it hides anyway. */
+  show_details: boolean;
+  show_runsheet: boolean;
+  show_good_to_know: boolean;
+  show_after: boolean;
   runsheet: RunsheetStop[];
   updates: Update[];
 };
