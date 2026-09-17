@@ -39,7 +39,7 @@ export default async function Dashboard({ params }: { params: Promise<{ id: stri
         <Link href="/app" className="brand">{copy.brand}</Link>
         <div className="actions">
           <Link href={`/app/events/${e.id}/settings`} className="btn small">Settings</Link>
-          {list[0] && <Link href={`/i/${list[0].token}?open=1`} className="btn small" target="_blank">Preview</Link>}
+          {list[0] && <Link href={`/i/${list[0].token}?envelope=1`} className="btn small" target="_blank">Preview</Link>}
         </div>
       </header>
       <div>

@@ -5,7 +5,7 @@ import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import { InvitePage } from "@/components/invite/InvitePage";
 import { formatInviteDate } from "@/lib/format";
 
-type Params = { params: Promise<{ token: string }>; searchParams: Promise<{ open?: string }> };
+type Params = { params: Promise<{ token: string }>; searchParams: Promise<{ open?: string; envelope?: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { token } = await params;
@@ -21,9 +21,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function Page({ params, searchParams }: Params) {
   const { token } = await params;
-  const { open } = await searchParams;
+  const { open, envelope } = await searchParams;
   const invite = await getInvite(token);
   if (!invite) notFound();
   const link = inviteLink(await getSiteUrl(), token);
-  return <InvitePage invite={invite} token={token} link={link} skipAnimation={open === "1"} />;
+  return <InvitePage invite={invite} token={token} link={link} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
 }

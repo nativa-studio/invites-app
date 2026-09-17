@@ -20,7 +20,7 @@ export function InvitePage({ invite, token, link, skipAnimation }: { invite: Inv
     <main className="invite" style={paletteVars(p)}>
       <div className="wrap">
         <div className="greet">{copy.greeting(who)}</div>
-        <Envelope addressee={guest.name} addresseeLine={guest.name !== guest.contact_name && guest.contact_name ? undefined : undefined} stamp={age} cover={<CoverCard e={e} />} openLabel="Tap to open" skipAnimation={skipAnimation || answered}>
+        <Envelope addressee={guest.name} addresseeLine={guest.name !== guest.contact_name && guest.contact_name ? undefined : undefined} stamp={age} cover={<CoverCard e={e} />} openLabel="Tap to open" skipAnimation={skipAnimation ?? answered}>
           <UpdatesCard e={e} />
           <DetailsCard e={e} />
           <DayCard e={e} />
