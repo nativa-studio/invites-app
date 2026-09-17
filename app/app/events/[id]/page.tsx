@@ -31,6 +31,9 @@ export default async function Dashboard({ params }: { params: Promise<{ id: stri
   const adults = yes.reduce((n, g) => n + (g.adults ?? 0), 0);
   const dietary = yes.flatMap((g) => g.dietary);
   const dietaryCounts = Object.entries(dietary.reduce<Record<string, number>>((m, d) => ({ ...m, [d]: (m[d] ?? 0) + 1 }), {}));
+  // What the host penciled in for people who have not replied yet, which is what catering hangs on.
+  const stillExpected = pending.reduce((n, g) => n + (g.expected_children ?? 0) + (g.expected_adults ?? 0), 0);
+  const withExpectations = pending.filter((g) => g.expected_children != null || g.expected_adults != null).length;
   const groupLink = `${site}/e/${e.slug}`;
 
   return (
@@ -53,6 +56,9 @@ export default async function Dashboard({ params }: { params: Promise<{ id: stri
         <div className="count"><b>{no.length}</b><span>{copy.host.saidNo}</span></div>
         <div className="count"><b>{pending.length}</b><span>{copy.host.noReply}{opened.length ? `, ${opened.length} ${copy.host.opened}` : ""}</span></div>
       </div>
+      {stillExpected > 0 && (
+        <p className="notice">Another {stillExpected} penciled in from {withExpectations} {withExpectations === 1 ? "guest" : "guests"} who have not replied, so around {people + stillExpected} all up.</p>
+      )}
       {dietaryCounts.length > 0 && (
         <p className="notice">Food: {dietaryCounts.map(([k, n]) => `${n} ${k.toLowerCase()}`).join(", ")}.{yes.some((g) => g.dietary_note) ? " Some notes too, see the guest list." : ""}</p>
       )}

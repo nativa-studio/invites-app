@@ -13,6 +13,14 @@ async function hostClient() {
 
 export type AddGuestState = { error?: string; added?: string };
 
+// A count the host typed, or nothing. Zero is a real answer, an empty box is not.
+function count(fd: FormData, key: string): number | null {
+  const raw = String(fd.get(key) ?? "").trim();
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isInteger(n) && n >= 0 && n <= 50 ? n : null;
+}
+
 export async function addGuest(_prev: AddGuestState, fd: FormData): Promise<AddGuestState> {
   const eventId = String(fd.get("event_id") ?? "");
   const name = String(fd.get("name") ?? "").trim();
@@ -20,7 +28,10 @@ export async function addGuest(_prev: AddGuestState, fd: FormData): Promise<AddG
   const phone = normalisePhone(String(fd.get("phone") ?? ""));
   if (!name) return { error: "A name is needed." };
   const { supabase, uid } = await hostClient();
-  const { error } = await supabase.from("guests").insert({ event_id: eventId, name, contact_name: contact || null, phone: phone || null, added_by: uid });
+  const { error } = await supabase.from("guests").insert({
+    event_id: eventId, name, contact_name: contact || null, phone: phone || null, added_by: uid,
+    expected_children: count(fd, "expected_children"), expected_adults: count(fd, "expected_adults"),
+  });
   if (error) return { error: error.message };
   revalidatePath(`/app/events/${eventId}`);
   return { added: name };
@@ -33,7 +44,10 @@ export async function addGuests(_prev: AddManyState, fd: FormData): Promise<AddM
   const list = parseGuestList(String(fd.get("list") ?? ""));
   if (!list.length) return { error: "No names found. One guest per line." };
   const { supabase, uid } = await hostClient();
-  const rows = list.map((g) => ({ event_id: eventId, name: g.name, phone: normalisePhone(g.phone) || null, added_by: uid }));
+  const rows = list.map((g) => ({
+    event_id: eventId, name: g.name, phone: normalisePhone(g.phone) || null, added_by: uid,
+    expected_children: g.children, expected_adults: g.adults,
+  }));
   const { error } = await supabase.from("guests").insert(rows);
   if (error) return { error: error.message };
   revalidatePath(`/app/events/${eventId}`);

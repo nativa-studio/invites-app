@@ -69,9 +69,10 @@ export function GuestList({ eventId, guests, event, site }: Props) {
             g.reminded_at ? `${copy.host.trail.reminded} ${formatDateTime(g.reminded_at)}` : null,
           ].filter(Boolean).join(" · ");
           const remind = g.status === "pending" && Boolean(g.sent_at);
+          const expecting = copy.host.expecting(g.expected_children, g.expected_adults);
           const detail = g.status === "yes"
             ? [g.party_size ? `${g.party_size} coming` : null, g.party_names.length ? g.party_names.join(", ") : null, g.dietary.length ? g.dietary.join(", ") : null, g.dietary_note, g.accessibility_note ? `Access: ${g.accessibility_note}` : null, g.note ? `"${g.note}"` : null].filter(Boolean).join(" · ")
-            : g.note ? `"${g.note}"` : "";
+            : [g.status === "pending" && expecting ? expecting : null, g.note ? `"${g.note}"` : null].filter(Boolean).join(" · ");
           return (
             <article className="guest" key={g.id}>
               <div className="row">

@@ -97,14 +97,25 @@ export const copy = {
     addOne: "One at a time",
     addMany: "Paste a list",
     pasteLabel: "One guest per line",
-    pasteHint: "Name and mobile on the same line, in any order. Copy straight from a note or a spreadsheet. Guests with no mobile still get a link you can share by hand.",
-    pasteExample: "Priya Nair 0400 111 222\nThe Nguyens, 0400 222 333\nSam from swimming",
+    pasteHint: "Name and mobile on the same line, in any order. Copy straight from a note or a spreadsheet. Add how many you expect with 2a 2k, or 2 adults 2 kids. Guests with no mobile still get a link you can share by hand.",
+    pasteExample: "Priya Nair 0400 111 222 2a 2k\nThe Nguyens, 0400 222 333, 2 adults 3 kids\nSam from swimming 1a",
     addAll: "Add them all",
     pickContacts: "Pick from contacts",
     noContactsApi: "Your phone does not let a website read contacts. Paste a list instead, or type them in.",
     name: "Name (as it appears on the invite, e.g. Oliver or The Nairs)",
     contactName: "Who you're texting (e.g. Priya), if different",
     phone: "Mobile",
+    expected: "How many you expect (optional)",
+    expectedHint: "Only a guess, so their reply is one tap. They can change it.",
+    expectedChildren: "Children",
+    expectedAdults: "Adults",
+    expecting: (children: number | null, adults: number | null) => {
+      const parts = [
+        children ? `${children} ${children === 1 ? "child" : "children"}` : null,
+        adults ? `${adults} ${adults === 1 ? "adult" : "adults"}` : null,
+      ].filter(Boolean);
+      return parts.length ? `expecting ${parts.join(" and ")}` : "";
+    },
     add: "Add",
     text: "Text",
     textPick: "Text, pick in Messages",

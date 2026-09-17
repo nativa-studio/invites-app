@@ -76,6 +76,8 @@ export type PublicGuest = {
   party_size: number | null;
   children: number | null;
   adults: number | null;
+  expected_children: number | null;
+  expected_adults: number | null;
   party_names: string[];
   dietary: string[];
   dietary_note: string | null;
@@ -106,6 +108,8 @@ export type GuestRow = {
   party_size: number | null;
   children: number | null;
   adults: number | null;
+  expected_children: number | null;
+  expected_adults: number | null;
   party_names: string[];
   dietary: string[];
   dietary_note: string | null;

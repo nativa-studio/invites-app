@@ -54,8 +54,11 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
   }
 
   const partyMode = e.ask_party_mode;
-  const initialChildren = current.children ?? 1;
-  const initialAdults = current.adults ?? 1;
+  // The host's guess seeds the steppers until the guest gives their own numbers.
+  const initialChildren = current.children ?? guest.expected_children ?? 1;
+  const initialAdults = current.adults ?? guest.expected_adults ?? 1;
+  const expectedTotal = (guest.expected_children ?? 0) + (guest.expected_adults ?? 0);
+  const initialPartySize = current.party_size ?? (expectedTotal || 1);
 
   return (
     <form action={formAction} className="pcard tilt-l" style={{ border: "3px dashed var(--forest)" }}>
@@ -83,7 +86,7 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
                 <Stepper name="adults" label={copy.questions.adults} initial={initialAdults} />
               </>
             ) : (
-              <Stepper name="party_size" label="people" initial={current.party_size ?? 1} />
+              <Stepper name="party_size" label="people" initial={initialPartySize} />
             )}
           </div>
           {e.ask_names && (

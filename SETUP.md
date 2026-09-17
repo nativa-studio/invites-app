@@ -7,7 +7,10 @@ Three things need doing outside this repo. Each takes a few minutes.
 Open the Supabase dashboard for the `invites-dev` project (Sydney), go to **SQL Editor**, and run these two files in order, each pasted whole:
 
 1. `supabase/migrations/0001_init.sql` (tables, security policies, guest functions, storage buckets)
-2. `supabase/seed.sql` (Gabriel's party, the guest-visible order of the afternoon, one preview guest)
+2. `supabase/migrations/0002_expected_party.sql` (how many the host expects per guest)
+3. `supabase/seed.sql` (Gabriel's party, the guest-visible order of the afternoon, one preview guest)
+
+Run any new file in `supabase/migrations/` the same way, in number order. Each one is safe to run once.
 
 The seed can be run again later: it replaces the event with slug `gabriel-4`.
 

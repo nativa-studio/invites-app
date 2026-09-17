@@ -30,6 +30,14 @@ function OneForm({ eventId }: { eventId: string }) {
       <div className="field"><label htmlFor="g-name">{copy.host.name}</label><input id="g-name" name="name" type="text" required autoComplete="off" /></div>
       <div className="field"><label htmlFor="g-contact">{copy.host.contactName}</label><input id="g-contact" name="contact_name" type="text" autoComplete="off" /></div>
       <div className="field"><label htmlFor="g-phone">{copy.host.phone}</label><input id="g-phone" name="phone" type="tel" inputMode="tel" placeholder="04xx xxx xxx" /></div>
+      <fieldset style={{ border: 0, padding: 0, margin: 0, display: "grid", gap: 6 }}>
+        <legend className="field" style={{ padding: 0 }}><span style={{ fontFamily: "var(--font-hand)", fontSize: 19 }}>{copy.host.expected}</span></legend>
+        <div style={{ display: "flex", gap: 10 }}>
+          <div className="field" style={{ flex: 1 }}><label htmlFor="g-kids">{copy.host.expectedChildren}</label><input id="g-kids" name="expected_children" type="number" inputMode="numeric" min={0} max={50} placeholder="0" /></div>
+          <div className="field" style={{ flex: 1 }}><label htmlFor="g-adults">{copy.host.expectedAdults}</label><input id="g-adults" name="expected_adults" type="number" inputMode="numeric" min={0} max={50} placeholder="0" /></div>
+        </div>
+        <span className="muted" style={{ fontSize: 13 }}>{copy.host.expectedHint}</span>
+      </fieldset>
       {state.error && <p className="notice" role="alert">{state.error}</p>}
       {state.added && <p className="muted" aria-live="polite">Added {state.added}.</p>}
       <div className="actions"><button className="btn primary" type="submit" disabled={pending}>{copy.host.add}</button></div>
