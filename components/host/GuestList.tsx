@@ -13,6 +13,7 @@ type Props = { eventId: string; guests: GuestRow[]; event: TemplateEvent; site: 
 export function GuestList({ eventId, guests, event, site }: Props) {
   const [filter, setFilter] = useState<"all" | "yes" | "no" | "pending" | "unsent">("all");
   const canShare = useHasShare();
+  const [busy, setBusy] = useState<string | null>(null);
   const [, start] = useTransition();
   const shown = guests.filter((g) => filter === "all" ? true : filter === "unsent" ? !g.sent_at : g.status === filter);
   const unsent = guests.filter((g) => !g.sent_at);
@@ -23,17 +24,28 @@ export function GuestList({ eventId, guests, event, site }: Props) {
     const body = remind ? reminderText(event, g, link) : inviteText(event, g, link);
     try {
       await navigator.share({ text: body });
-      start(() => { void markSent(eventId, g.id, remind ? "reminded" : "sent"); });
     } catch {
-      // The person closed the share sheet, or the browser has no share support.
+      // The person closed the share sheet without sending, so nothing is marked.
+      return;
     }
+    start(() => { void markSent(eventId, g.id, remind ? "reminded" : "sent"); });
   }
 
-  function sendVia(g: GuestRow, kind: "sms" | "wa", remind = false) {
+  // Opening WhatsApp leaves this page, which would cancel a request still in flight, so the
+  // guest is marked as sent before anything navigates. Messages does not unload the page, but
+  // the same order keeps both routes honest.
+  async function sendVia(g: GuestRow, kind: "sms" | "wa", remind = false) {
+    if (busy) return;
+    setBusy(g.id);
     const link = `${site}/i/${g.token}`;
     const body = remind ? reminderText(event, g, link) : inviteText(event, g, link);
     const href = kind === "sms" ? smsLink(g.phone ?? "", body) : whatsappLink(g.phone ?? "", body);
-    start(() => { void markSent(eventId, g.id, remind ? "reminded" : "sent"); });
+    try {
+      await markSent(eventId, g.id, remind ? "reminded" : "sent");
+    } catch {
+      // Sending matters more than the record of it. Open the message either way.
+    }
+    setBusy(null);
     window.location.href = href;
   }
 
@@ -44,8 +56,8 @@ export function GuestList({ eventId, guests, event, site }: Props) {
           <h2 className="h2">{copy.host.sendNext}</h2>
           <p><b>{next.contact_name || next.name}</b> <span className="muted">({unsent.length} to go)</span></p>
           <div className="actions">
-            <button className="btn primary small" type="button" onClick={() => sendVia(next, "sms")}>{next.phone ? copy.host.text : copy.host.textPick}</button>
-            {next.phone && <button className="btn small" type="button" onClick={() => sendVia(next, "wa")}>{copy.host.whatsapp}</button>}
+            <button className="btn primary small" type="button" disabled={busy !== null} onClick={() => void sendVia(next, "sms")}>{next.phone ? copy.host.text : copy.host.textPick}</button>
+            {next.phone && <button className="btn small" type="button" disabled={busy !== null} onClick={() => void sendVia(next, "wa")}>{copy.host.whatsapp}</button>}
             {canShare && <button className="btn small" type="button" onClick={() => void shareVia(next)}>{copy.host.share}</button>}
           </div>
         </div>
@@ -82,8 +94,8 @@ export function GuestList({ eventId, guests, event, site }: Props) {
               {detail && <p style={{ fontSize: 14 }}>{detail}</p>}
               <p className="trail">{trail}{g.phone ? ` · ${g.phone}` : " · no mobile, pick them in Messages"}</p>
               <div className="actions">
-                <button type="button" className="btn small primary" onClick={() => sendVia(g, "sms", remind)}>{remind ? copy.host.remind : g.phone ? copy.host.text : copy.host.textPick}</button>
-                {g.phone && <button type="button" className="btn small" onClick={() => sendVia(g, "wa", remind)}>{copy.host.whatsapp}</button>}
+                <button type="button" className="btn small primary" disabled={busy !== null} onClick={() => void sendVia(g, "sms", remind)}>{remind ? copy.host.remind : g.phone ? copy.host.text : copy.host.textPick}</button>
+                {g.phone && <button type="button" className="btn small" disabled={busy !== null} onClick={() => void sendVia(g, "wa", remind)}>{copy.host.whatsapp}</button>}
                 {canShare && <button type="button" className="btn small" onClick={() => void shareVia(g, remind)}>{copy.host.share}</button>}
                 <CopyButton text={link} label={copy.host.copy} />
                 <button type="button" className="btn small" onClick={() => { if (confirm("Make a new link? The old one stops working.")) start(() => { void newLink(eventId, g.id); }); }}>{copy.host.newLink}</button>

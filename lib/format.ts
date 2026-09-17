@@ -54,13 +54,24 @@ export function nextDay(ymd: string): string {
   return d.toISOString().slice(0, 10);
 }
 
+// Titles and relations a host types as part of how they address someone. "Auntie Rose" is
+// greeted as Auntie Rose, never as Auntie.
+const TITLES = /^(mr|mrs|ms|miss|mx|dr|prof|sir|aunt|aunty|auntie|uncle|nan|nanna|nana|pop|poppy|gran|granny|grandma|grandpa|nonna|nonno|oma|opa|yia|tia|tio)\.?$/i;
+
+// How to greet a guest by the name the host stored. Households and couples keep their whole
+// name; a plain "Priya Nair" shortens to Priya.
 export function firstName(name: string): string {
   const trimmed = name.trim();
   if (!trimmed) return "";
-  // "Sarah & Tom" or "Sarah and Tom" greets as "Sarah & Tom"; a single
-  // "Sarah Jones" greets as "Sarah".
+  // Couples and groups: "Sarah & Tom", "Mia + Sam", "Sarah and Tom".
   if (/[&+]|\band\b/i.test(trimmed)) return trimmed;
-  return trimmed.split(/\s+/)[0];
+  // Households: "The Nairs", "Nguyen family".
+  if (/^the\b/i.test(trimmed)) return trimmed;
+  if (/\b(family|household|crew|mob|clan)$/i.test(trimmed)) return trimmed;
+  const words = trimmed.split(/\s+/);
+  // "Auntie Rose", "Dr Jane Patel": keep the title with the name that follows it.
+  if (words.length > 1 && TITLES.test(words[0])) return `${words[0]} ${words[1]}`;
+  return words[0];
 }
 
 export function normalisePhone(raw: string | null | undefined): string {
@@ -97,4 +108,11 @@ export function formatInviteDate(ymd: string | null | undefined): string {
   const d = asUtcDate(ymd);
   if (!d) return ymd;
   return new Intl.DateTimeFormat(LOCALE, { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(d);
+}
+
+// A host writes their sign-off however they like: "With love from Leo's mum and dad",
+// "From Marcia and Tom", or just "Marcia". Sentences elsewhere need the people, not the phrase.
+export function hostName(hostLine: string | null | undefined, fallback = "the host"): string {
+  const trimmed = (hostLine ?? "").trim().replace(/^(with (love|thanks) )?from\s+/i, "").trim();
+  return trimmed || fallback;
 }

@@ -1,7 +1,7 @@
 import "@/app/invite.css";
 import type { Invite } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { firstName } from "@/lib/format";
+import { firstName, hostName } from "@/lib/format";
 import { googleCalendarLink } from "@/lib/calendar";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { Envelope } from "./Envelope";
@@ -14,7 +14,7 @@ export function InvitePage({ invite, token, link, skipAnimation }: { invite: Inv
   const who = firstName(guest.contact_name || guest.name);
   const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
   const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
-  const hostShort = e.host_line?.replace(/^with love from /i, "") ?? "the host";
+  const hostShort = hostName(e.host_line);
   const answered = guest.status !== "pending";
   return (
     <main className="invite" style={paletteVars(p)}>

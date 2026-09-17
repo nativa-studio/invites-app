@@ -1,7 +1,7 @@
 "use client";
 import { useActionState, useState } from "react";
 import { copy } from "@/lib/copy";
-import { formatShortDate, firstName } from "@/lib/format";
+import { formatShortDate, firstName, hostName } from "@/lib/format";
 import type { PublicEvent, PublicGuest } from "@/lib/db/types";
 import { rsvpAction, type RsvpState } from "@/app/i/[token]/actions";
 import { Bolt } from "@/components/art/icons";
@@ -31,7 +31,7 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
   const editing = editingFrom === state;
   const current: PublicGuest = state.ok ? state.guest : guest;
   const answered = current.status !== "pending";
-  const host = e.host_line?.replace(/^with love from /i, "") ?? "The host";
+  const host = hostName(e.host_line, "The host");
   const who = firstName(guest.name);
 
   if (answered && !editing) {
