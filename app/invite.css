@@ -65,45 +65,52 @@
 .foot { font-size: 13px; color: var(--crm); text-align: center; }
 .foot a { color: var(--crm); }
 
-/* The envelope */
-.stage { position: relative; width: 346px; max-width: 100%; height: 500px; }
-.env { position: absolute; left: 0; right: 0; top: 180px; height: 200px; }
-.env .back { position: absolute; inset: 0; border-radius: 10px; background-color: #fff; background-image: linear-gradient(90deg, color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%); background-size: 22px 22px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
-.env .back::after { content: ""; position: absolute; inset: 0; border-radius: 10px; box-shadow: inset 0 0 0 3px var(--red); }
-.env .clip { position: absolute; left: -40px; right: -40px; top: -700px; bottom: 6px; overflow: hidden; z-index: 2; }
-.env .card-slot { position: absolute; left: 50%; top: 714px; width: 340px; margin-left: -170px; transform: scale(.62); transform-origin: top center; transition: transform .8s cubic-bezier(.4,0,.2,1), top .8s cubic-bezier(.4,0,.2,1); }
-.env .pocket { position: absolute; inset: 0; z-index: 3; border-radius: 0 0 10px 10px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
-.env .pocket .sides { position: absolute; inset: 0; background: color-mix(in srgb, var(--red) 82%, black); border-radius: 0 0 10px 10px; clip-path: polygon(0 0,50% 58%,100% 0,100% 100%,0 100%); }
-.env .pocket .edge { position: absolute; inset: 0; background: var(--red); border-radius: 0 0 10px 10px; clip-path: polygon(0 0,50% 58%,100% 0,100% 6%,50% 64%,0 6%); opacity: .6; }
-.env .addr { position: absolute; left: 26px; bottom: 22px; font-family: var(--font-hand); font-size: 24px; line-height: 1.2; color: var(--crm); }
-.env .addr span { font-size: 18px; opacity: .9; }
-.env .stamp { position: absolute; right: 18px; top: 22px; width: 64px; height: 76px; background: #fff; padding: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
-.env .stamp > div { width: 100%; height: 100%; background: var(--sky); border: 2px solid var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #fff; font-family: var(--font-display); font-size: 22px; line-height: 1; }
-.env .flap { position: absolute; left: 0; right: 0; top: 0; height: 120px; transform: perspective(900px) rotateX(0deg); transform-origin: top center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.4,0,.2,1), opacity .5s; z-index: 4; }
-.env .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0,100% 0,50% 100%); }
-.env .flap .front { background: var(--red); }
-.env .flap .backface { opacity: 0; background-color: #fff; background-image: linear-gradient(90deg, color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%); background-size: 22px 22px; }
-.env .flap .rim { position: absolute; inset: 0; background: var(--red); clip-path: polygon(0 0,100% 0,50% 100%,50% 94%,97% 0,3% 0,50% 94%,50% 100%); }
-.env .seal { position: absolute; left: 50%; top: 104px; width: 52px; height: 52px; margin-left: -26px; border-radius: 50%; background: var(--yel); border: 3px solid var(--navy); display: flex; align-items: center; justify-content: center; z-index: 5; transition: opacity .3s, transform .3s; box-shadow: 0 2px 0 rgba(27,42,74,.3); }
-.stage .hint { position: absolute; left: 0; right: 0; bottom: 24px; text-align: center; font-family: var(--font-hand); font-size: 20px; letter-spacing: .08em; color: var(--crm); transition: opacity .3s; }
-.stage .hint::after { content: ""; display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--yel); margin: 8px auto 0; animation: pulse 1.4s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.8); opacity: .5 } }
-.stage .tap { position: absolute; inset: 0; z-index: 6; background: transparent; border: 0; cursor: pointer; width: 100%; height: 100%; border-radius: 12px; }
+/* The envelope, seen from the back.
+   That is the side a hand-delivered invitation shows you: the flap folded down, a seal where it
+   closes, and the name written under it. There is no stamp, because a stamp goes on the front.
+   The age is pressed into the wax instead. Both layouts that have an envelope share this
+   drawing and differ only in the sizes set as variables. */
+.env-root { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+.env-suite { --env-w: 346px; --stage-h: 500px; --env-top: 180px; --env-h: 200px; --flap-h: 116px; }
+.stage { position: relative; width: var(--env-w); max-width: 100%; height: var(--stage-h); }
+.benv { position: absolute; left: 0; right: 0; top: var(--env-top); height: var(--env-h); }
+.benv .body { position: absolute; inset: 0; border-radius: 10px; background: var(--red); overflow: hidden; z-index: 3; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); transition: transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }
+/* The bottom flap, just showing, so the back reads as an envelope and not a red card. */
+.benv .body .seams { position: absolute; inset: 0; background: color-mix(in srgb, var(--red) 88%, black); clip-path: polygon(0 100%, 50% calc(var(--flap-h) - 2px), 100% 100%); }
+.benv .clip { position: absolute; z-index: 2; overflow: hidden; }
+.benv .card-slot { position: absolute; transition: top .8s cubic-bezier(.4,0,.2,1), transform .8s cubic-bezier(.4,0,.2,1); }
+.benv .addr { position: absolute; left: 14px; right: 14px; top: calc(var(--flap-h) + 22px); z-index: 4; text-align: center; font-family: var(--font-hand); font-size: 28px; line-height: 1.15; color: var(--crm); transition: transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }
+.benv .flap { position: absolute; left: 0; right: 0; top: 0; height: var(--flap-h); z-index: 5; transform: perspective(900px) rotateX(0deg); transform-origin: top center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.4,0,.2,1), opacity .5s; }
+.benv .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0,100% 0,50% 100%); }
+.benv .flap .front { background: color-mix(in srgb, var(--red) 93%, white); }
+.benv .flap .note { position: absolute; left: 0; right: 0; top: 24%; text-align: center; font-family: var(--font-hand); font-size: 17px; letter-spacing: .08em; color: color-mix(in srgb, var(--crm) 80%, var(--red)); }
+.benv .flap .backface { opacity: 0; background-color: #fff; background-image: linear-gradient(90deg, color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%); background-size: 22px 22px; }
+.benv .flap .rim { position: absolute; inset: 0; background: color-mix(in srgb, var(--red) 72%, black); opacity: .55; clip-path: polygon(0 0,100% 0,50% 100%,50% 97%,97% 1%,3% 1%,50% 97%,50% 100%); }
+.benv .seal { position: absolute; left: 50%; top: calc(var(--flap-h) - 28px); width: 56px; height: 56px; margin-left: -28px; z-index: 6; border-radius: 50%; background: var(--yel); border: 3px solid var(--navy); display: flex; align-items: center; justify-content: center; color: var(--navy); font-family: var(--font-display); font-size: 27px; line-height: 1; box-shadow: 0 2px 0 rgba(27,42,74,.3); transition: opacity .3s, transform .3s; animation: seal-breathe 1.9s ease-in-out infinite; }
+@keyframes seal-breathe { 0%,100% { transform: scale(1) } 50% { transform: scale(1.07) } }
+.stage .tap { position: absolute; inset: 0; z-index: 7; background: transparent; border: 0; cursor: pointer; width: 100%; height: 100%; border-radius: 12px; }
 .stage .tap:focus-visible { outline: 3px solid var(--yel); outline-offset: 4px; }
-.env .back, .env .pocket { transition: transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }
-.open .env .flap { transform: perspective(900px) rotateX(180deg); }
-.open .env .flap .front { animation: frontoff .9s cubic-bezier(.4,0,.2,1) forwards; }
-.open .env .flap .backface { animation: backon .9s cubic-bezier(.4,0,.2,1) forwards; }
+.open .benv .flap { transform: perspective(900px) rotateX(180deg); }
+.open .benv .flap .front { animation: frontoff .9s cubic-bezier(.4,0,.2,1) forwards; }
+.open .benv .flap .backface { animation: backon .9s cubic-bezier(.4,0,.2,1) forwards; }
 @keyframes frontoff { 0%,49.9% { opacity: 1 } 50%,100% { opacity: 0 } }
 @keyframes backon { 0%,49.9% { opacity: 0 } 50%,100% { opacity: 1 } }
-.open .seal, .open .hint { opacity: 0; transform: scale(.6); pointer-events: none; }
-.rise .env .flap { z-index: 1; }
-.rise .env .card-slot { top: 580px; }
-.out .env .clip { overflow: visible; z-index: 7; }
-.out .env .card-slot { top: 520px; transform: scale(1); }
-.out .env .back, .out .env .pocket { transform: translateY(120px) scale(.9); opacity: 0; }
-.out .env .flap { opacity: 0; }
-.done .stage { display: none; }
+.open .benv .seal { animation: none; opacity: 0; transform: scale(.6); pointer-events: none; }
+.rise .benv .flap { z-index: 1; }
+.out .benv .body, .out .benv .addr { transform: translateY(130px) scale(.92); opacity: 0; }
+.out .benv .flap { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .benv .seal { animation: none; }
+  .open .benv .flap .front { animation: none; opacity: 0; }
+  .open .benv .flap .backface { animation: none; opacity: 1; }
+}
+
+/* The suite: a tall card that rises clear of the envelope before the envelope drops away. */
+.env-suite .benv .clip { left: -40px; right: -40px; top: -700px; bottom: 6px; }
+.env-suite .benv .card-slot { left: 50%; top: 714px; width: 340px; margin-left: -170px; transform: scale(.62); transform-origin: top center; }
+.env-suite.rise .benv .card-slot { top: 580px; }
+.env-suite.out .benv .clip { overflow: visible; z-index: 8; }
+.env-suite.out .benv .card-slot { top: 520px; transform: scale(1); }
+.env-suite.done .stage { display: none; }
 .suite { display: none; flex-direction: column; align-items: center; gap: 30px; width: 100%; opacity: 0; transition: opacity .5s; }
-.done .suite, .no-envelope .suite { display: flex; opacity: 1; }
-@media (prefers-reduced-motion: reduce) { .open .env .flap .front { animation: none; opacity: 0; } .open .env .flap .backface { animation: none; opacity: 1; } }
+.done .suite { display: flex; opacity: 1; }

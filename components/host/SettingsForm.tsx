@@ -11,7 +11,6 @@ const LAYOUT_OPTIONS = [
   { id: "lineup", name: "The lineup", line: "One page, artwork along the bottom" },
   { id: "peek", name: "Peek", line: "Characters leaning in from the edges" },
   { id: "post", name: "In the post", line: "An envelope opens, and the characters lean in" },
-  { id: "strip", name: "Illustrated strip", line: "The same cards, no envelope, straight down" },
 ];
 
 type E = EventRow & Record<string, unknown>;
