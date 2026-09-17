@@ -139,12 +139,6 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
           {reply}
         </section>
 
-        <section className="s mint">
-          <div className="after">
-            <div><div className="n">{copy.sections.updates}</div><div className="b">{copy.sections.updatesBody}</div></div>
-            <div><div className="n">{copy.sections.photos}</div><div className="b">{copy.sections.photosBody}</div></div>
-          </div>
-        </section>
 
         <p className="foot">
           {e.host_phone ? <a href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}

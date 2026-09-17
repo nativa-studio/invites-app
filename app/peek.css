@@ -27,17 +27,21 @@
 .peek .page { max-width: 430px; margin: 0 auto; position: relative; overflow: hidden; }
 
 /* Anyone leaning in from an edge. Cropped by the page, never by a box. */
-.peek .peeker { position: absolute; top: -56px; width: auto; height: 124px; z-index: 2; pointer-events: none; }
-.peek .peeker.left { left: -40px; }
-.peek .peeker.right { right: -40px; }
+/* Anyone leaning in from an edge. Your file has already cropped each of them at the screen
+   edge, so their own cut sits flush with the page and nothing is taken off twice. They are
+   anchored by their feet, not their heads, so a tall one and a short one lean on a panel by
+   the same amount. */
+.peek .peeker { position: absolute; bottom: calc(100% - 44px); width: auto; height: 168px; z-index: 2; pointer-events: none; }
+.peek .peeker.left { left: -18px; }
+.peek .peeker.right { right: -18px; }
 
 /* Cover */
-.peek .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); text-align: center; padding: 34px 20px 0; }
+.peek .greet { position: relative; z-index: 3; font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); text-align: center; padding: 34px 20px 0; }
 .peek .cover { position: relative; padding: 0 22px; }
 /* The two over the title lean in behind the words, the way they do on the wallpaper. */
-.peek .cover .peeker { top: -34px; height: 154px; z-index: 0; }
-.peek .cover .peeker.left { left: -34px; }
-.peek .cover .peeker.right { right: -30px; }
+.peek .cover .peeker { top: -12px; bottom: auto; height: 156px; z-index: 0; }
+.peek .cover .peeker.left { left: 0; }
+.peek .cover .peeker.right { right: 0; }
 .peek .cover > :not(.peeker) { position: relative; z-index: 1; }
 .peek .eyebrow { font-family: var(--font-hand); font-size: 19px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); text-align: center; margin-top: 26px; }
 .peek h1.title { font-family: var(--font-display); font-size: 52px; line-height: 0.97; text-align: center; margin-top: 10px; text-wrap: balance; }
@@ -57,12 +61,11 @@
 .peek .heroless { display: block; height: 8px; width: 130px; margin: 34px auto 0; border-radius: 4px; background: linear-gradient(90deg, var(--yel) 0 25%, #7FAF95 25% 50%, #93C7D6 50% 75%, var(--red) 75% 100%); }
 
 /* Sections: a soft panel each, with room above for whoever is leaning on it */
-.peek .s { position: relative; margin: 62px 18px 0; padding: 34px 20px 28px; border-radius: 24px; background: var(--panel); }
+.peek .s { position: relative; margin: 130px 18px 0; padding: 52px 20px 30px; border-radius: 24px; background: var(--panel); }
 .peek .s.sky { background: #E7F1F5; }
 .peek .s.sand { background: #F6EADB; }
 .peek .s.blush { background: #FBEBEF; }
 .peek .s.butter { background: #FBF2D9; }
-.peek .s.mint { background: #EAF2EC; margin-top: 22px; }
 .peek .label { font-family: var(--font-hand); font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; line-height: 1.2; }
 .peek .s.sky .label { color: var(--sky); }
 .peek .s.sand .label { color: #8A5A34; }
@@ -85,10 +88,7 @@
 .peek .note-line { display: grid; grid-template-columns: 14px 1fr; gap: 14px; font-size: 16px; line-height: 1.5; }
 .peek .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 7px; border: 2px solid var(--ink); }
 
-.peek .after { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; }
-.peek .after .n { font-family: var(--font-display); font-size: 19px; color: var(--forest); }
-.peek .after .b { font-size: 14px; color: var(--ink-soft); margin-top: 4px; }
-.peek .foot { text-align: center; font-size: 14px; color: var(--ink-soft); padding: 30px 24px 0; }
+.peek .foot { text-align: center; font-size: 14px; color: var(--ink-soft); padding: 34px 24px 0; }
 .peek .foot a { color: var(--sky); }
 
 /* The shared reply form, wearing this layout's clothes: it is already on a panel. */
