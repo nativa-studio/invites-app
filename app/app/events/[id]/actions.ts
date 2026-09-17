@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { normalisePhone } from "@/lib/format";
+import { parseGuestList } from "@/lib/parse-guests";
 
 async function hostClient() {
   const supabase = await createClient();
@@ -23,6 +24,20 @@ export async function addGuest(_prev: AddGuestState, fd: FormData): Promise<AddG
   if (error) return { error: error.message };
   revalidatePath(`/app/events/${eventId}`);
   return { added: name };
+}
+
+export type AddManyState = { error?: string; added?: number };
+
+export async function addGuests(_prev: AddManyState, fd: FormData): Promise<AddManyState> {
+  const eventId = String(fd.get("event_id") ?? "");
+  const list = parseGuestList(String(fd.get("list") ?? ""));
+  if (!list.length) return { error: "No names found. One guest per line." };
+  const { supabase, uid } = await hostClient();
+  const rows = list.map((g) => ({ event_id: eventId, name: g.name, phone: normalisePhone(g.phone) || null, added_by: uid }));
+  const { error } = await supabase.from("guests").insert(rows);
+  if (error) return { error: error.message };
+  revalidatePath(`/app/events/${eventId}`);
+  return { added: rows.length };
 }
 
 export async function markSent(eventId: string, guestId: string, kind: "sent" | "reminded") {

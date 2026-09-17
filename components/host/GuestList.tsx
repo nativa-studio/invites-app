@@ -6,15 +6,28 @@ import { inviteText, reminderText, smsLink, whatsappLink, type TemplateEvent } f
 import type { GuestRow } from "@/lib/db/types";
 import { markSent, newLink, removeGuest } from "@/app/app/events/[id]/actions";
 import { CopyButton } from "./CopyButton";
+import { useHasShare } from "./capabilities";
 
 type Props = { eventId: string; guests: GuestRow[]; event: TemplateEvent; site: string };
 
 export function GuestList({ eventId, guests, event, site }: Props) {
   const [filter, setFilter] = useState<"all" | "yes" | "no" | "pending" | "unsent">("all");
+  const canShare = useHasShare();
   const [, start] = useTransition();
   const shown = guests.filter((g) => filter === "all" ? true : filter === "unsent" ? !g.sent_at : g.status === filter);
-  const unsent = guests.filter((g) => !g.sent_at && g.phone);
+  const unsent = guests.filter((g) => !g.sent_at);
   const next = unsent[0];
+
+  async function shareVia(g: GuestRow, remind = false) {
+    const link = `${site}/i/${g.token}`;
+    const body = remind ? reminderText(event, g, link) : inviteText(event, g, link);
+    try {
+      await navigator.share({ text: body });
+      start(() => { void markSent(eventId, g.id, remind ? "reminded" : "sent"); });
+    } catch {
+      // The person closed the share sheet, or the browser has no share support.
+    }
+  }
 
   function sendVia(g: GuestRow, kind: "sms" | "wa", remind = false) {
     const link = `${site}/i/${g.token}`;
@@ -31,8 +44,9 @@ export function GuestList({ eventId, guests, event, site }: Props) {
           <h2 className="h2">{copy.host.sendNext}</h2>
           <p><b>{next.contact_name || next.name}</b> <span className="muted">({unsent.length} to go)</span></p>
           <div className="actions">
-            <button className="btn primary small" type="button" onClick={() => sendVia(next, "sms")}>{copy.host.text}</button>
-            <button className="btn small" type="button" onClick={() => sendVia(next, "wa")}>{copy.host.whatsapp}</button>
+            <button className="btn primary small" type="button" onClick={() => sendVia(next, "sms")}>{next.phone ? copy.host.text : copy.host.textPick}</button>
+            {next.phone && <button className="btn small" type="button" onClick={() => sendVia(next, "wa")}>{copy.host.whatsapp}</button>}
+            {canShare && <button className="btn small" type="button" onClick={() => void shareVia(next)}>{copy.host.share}</button>}
           </div>
         </div>
       ) : guests.length > 0 && <p className="muted">{copy.host.allSent}</p>}
@@ -54,6 +68,7 @@ export function GuestList({ eventId, guests, event, site }: Props) {
             g.replied_at ? `${copy.host.trail.replied} ${formatDateTime(g.replied_at)}` : null,
             g.reminded_at ? `${copy.host.trail.reminded} ${formatDateTime(g.reminded_at)}` : null,
           ].filter(Boolean).join(" · ");
+          const remind = g.status === "pending" && Boolean(g.sent_at);
           const detail = g.status === "yes"
             ? [g.party_size ? `${g.party_size} coming` : null, g.party_names.length ? g.party_names.join(", ") : null, g.dietary.length ? g.dietary.join(", ") : null, g.dietary_note, g.accessibility_note ? `Access: ${g.accessibility_note}` : null, g.note ? `"${g.note}"` : null].filter(Boolean).join(" · ")
             : g.note ? `"${g.note}"` : "";
@@ -64,10 +79,11 @@ export function GuestList({ eventId, guests, event, site }: Props) {
                 <span className={`pill ${g.status}`}>{g.status === "yes" ? "Yes" : g.status === "no" ? "No" : "No reply"}</span>
               </div>
               {detail && <p style={{ fontSize: 14 }}>{detail}</p>}
-              <p className="trail">{trail}{g.phone ? ` · ${g.phone}` : " · no mobile"}</p>
+              <p className="trail">{trail}{g.phone ? ` · ${g.phone}` : " · no mobile, pick them in Messages"}</p>
               <div className="actions">
-                {g.phone && <button type="button" className="btn small primary" onClick={() => sendVia(g, "sms", g.status === "pending" && Boolean(g.sent_at))}>{g.status === "pending" && g.sent_at ? copy.host.remind : copy.host.text}</button>}
-                {g.phone && <button type="button" className="btn small" onClick={() => sendVia(g, "wa", g.status === "pending" && Boolean(g.sent_at))}>{copy.host.whatsapp}</button>}
+                <button type="button" className="btn small primary" onClick={() => sendVia(g, "sms", remind)}>{remind ? copy.host.remind : g.phone ? copy.host.text : copy.host.textPick}</button>
+                {g.phone && <button type="button" className="btn small" onClick={() => sendVia(g, "wa", remind)}>{copy.host.whatsapp}</button>}
+                {canShare && <button type="button" className="btn small" onClick={() => void shareVia(g, remind)}>{copy.host.share}</button>}
                 <CopyButton text={link} label={copy.host.copy} />
                 <button type="button" className="btn small" onClick={() => { if (confirm("Make a new link? The old one stops working.")) start(() => { void newLink(eventId, g.id); }); }}>{copy.host.newLink}</button>
                 <button type="button" className="btn small" onClick={() => { if (confirm(`Remove ${g.name}?`)) start(() => { void removeGuest(eventId, g.id); }); }}>Remove</button>
