@@ -1,14 +1,25 @@
-import type { PublicEvent } from "./types";
+import type { PublicEvent, RunsheetStop, Update } from "./types";
 
-// The section switches arrived in migration 0004. Until a database carries them, the event
-// comes back without those keys, and a missing switch must read as "shown", never as "hidden":
-// an invite that lost its details because a column was not there yet would be a bad day.
-export function withSectionDefaults<T extends Partial<Pick<PublicEvent, "show_details" | "show_runsheet" | "show_good_to_know" | "show_after">>>(e: T): T {
+// A row straight from the events table is not what a layout reads.
+//
+// Two of the fields the layouts use are not columns at all: the guest RPC builds `runsheet` and
+// `updates` by joining two other tables. Read the row directly, as the host's own preview does,
+// and those come back undefined, which is enough to throw the whole page. Migration 0004's
+// section columns are the other half: a database without them yet must read as "shown", never
+// as "hidden", because an invite that lost its details to a missing column would be a bad day.
+//
+// So everything that renders a layout passes its event through here first.
+export function eventForRender<T extends Partial<PublicEvent>>(
+  e: T,
+  extra?: { runsheet?: RunsheetStop[]; updates?: Update[] },
+): T {
   return {
     ...e,
     show_details: e.show_details ?? true,
     show_runsheet: e.show_runsheet ?? true,
     show_good_to_know: e.show_good_to_know ?? true,
     show_after: e.show_after ?? true,
+    runsheet: extra?.runsheet ?? e.runsheet ?? [],
+    updates: extra?.updates ?? e.updates ?? [],
   };
 }
