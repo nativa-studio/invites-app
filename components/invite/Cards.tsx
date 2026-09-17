@@ -1,25 +1,32 @@
+import Image from "next/image";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
 import { ICONS, Bubble, Camera, Gift, Kids, Plate, Cap, Cake } from "@/components/art/icons";
-import { GabrielCover } from "@/components/art/GabrielCover";
 
 export function mapsLink(e: PublicEvent): string | null {
   const q = [e.venue, e.address].filter(Boolean).join(", ");
   return q ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}` : null;
 }
 
+// The cover: the host's own picture across the top, then everything a guest needs to decide
+// whether to come. The picture is whatever they uploaded. Nothing here is drawn for them.
 export function CoverCard({ e }: { e: PublicEvent }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
   return (
     <div className="pcard tilt-l">
+      {e.invite_image_path && (
+        <div className="art">
+          <Image src={e.invite_image_path} alt="" width={1173} height={420} priority sizes="(max-width: 430px) 100vw, 340px" />
+        </div>
+      )}
       <div className="tape" />
-      {e.theme_id === "gabriel" && <GabrielCover width={282} />}
-      <div className="eyebrow">{age ? "Trainer wanted" : "You're invited"}</div>
-      <div className="title">{e.title.replace(" turning ", " turning ")}</div>
-      {e.type === "kids_party" && <div className="sub">a {e.theme_id === "gabriel" ? "Pokémon pool party" : "party"}</div>}
+      <div className="eyebrow">{age ? copy.envelope.eyebrowBirthday : copy.greetingGroup}</div>
+      <div className="title">{e.title}</div>
+      {e.intro && <div className="intro">{e.intro}</div>}
       <div className="rule" />
       <div className="para">{formatInviteDate(e.date)}<br />{formatTimeRange(e.start_time, e.end_time, e.time_note)}</div>
+      {e.venue && <div className="where">{e.venue}</div>}
       {e.host_line && <div className="small">{e.host_line}</div>}
     </div>
   );
