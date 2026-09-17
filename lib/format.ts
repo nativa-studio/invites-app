@@ -116,3 +116,10 @@ export function hostName(hostLine: string | null | undefined, fallback = "the ho
   const trimmed = (hostLine ?? "").trim().replace(/^(with (love|thanks) )?from\s+/i, "").trim();
   return trimmed || fallback;
 }
+
+// Date and start time in the fewest words, for a link preview where a long line would spill.
+export function shortWhen(date: string | null | undefined, start: string | null | undefined): string {
+  const day = formatInviteDate(date);
+  if (!day) return "";
+  return start ? `${day}, from ${formatTime(start)}` : day;
+}

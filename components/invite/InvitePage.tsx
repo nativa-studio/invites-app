@@ -16,13 +16,13 @@ export function InvitePage({ invite, token, link, skipAnimation }: { invite: Inv
     return (
       <LineupInvite
         event={e}
-        greeting={copy.greeting(firstName(guest.contact_name || guest.name))}
+        greeting={copy.greeting(firstName(guest.name))}
         reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />}
       />
     );
   }
   const p = paletteFor(e.palette, e.theme_id);
-  const who = firstName(guest.contact_name || guest.name);
+  const who = firstName(guest.name);
   const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
   const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
   const hostShort = hostName(e.host_line);
@@ -31,7 +31,7 @@ export function InvitePage({ invite, token, link, skipAnimation }: { invite: Inv
     <main className="invite" style={paletteVars(p)}>
       <div className="wrap">
         <div className="greet">{copy.greeting(who)}</div>
-        <Envelope addressee={guest.name} addresseeLine={guest.name !== guest.contact_name && guest.contact_name ? undefined : undefined} stamp={age} cover={<CoverCard e={e} />} openLabel="Tap to open" skipAnimation={skipAnimation ?? answered}>
+        <Envelope addressee={guest.name} stamp={age} cover={<CoverCard e={e} />} openLabel="Tap to open" skipAnimation={skipAnimation ?? answered}>
           <UpdatesCard e={e} />
           <DetailsCard e={e} />
           <DayCard e={e} />
