@@ -232,3 +232,16 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .guest-group { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
 .guest-group > span { font-size: 13px; color: var(--app-muted, #6b7280); }
 .guest-group select { flex: 0 1 auto; max-width: 220px; font-size: 14px; padding: 6px 8px; }
+
+/* A card that folds. The heading is the control, so the whole line is the tap target rather than
+   a small chevron, and the arrow turns to say which way it is going. */
+details.drop { display: block; }
+details.drop > summary {
+  cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; font-size: 17px; font-weight: 650; min-height: 28px;
+}
+details.drop > summary::-webkit-details-marker { display: none; }
+details.drop > summary::after { content: "\203A"; font-size: 22px; line-height: 1; transform: rotate(90deg); transition: transform .15s ease; }
+details.drop[open] > summary::after { transform: rotate(-90deg); }
+details.drop > .drop-body { display: grid; gap: 12px; margin-top: 14px; }
+@media (prefers-reduced-motion: reduce) { details.drop > summary::after { transition: none; } }
