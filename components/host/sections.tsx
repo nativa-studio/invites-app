@@ -43,14 +43,13 @@ export const SECTIONS: Section[] = [
   {
     id: "details",
     title: "The details",
-    blurb: "The same when and where, spelled out, plus what to wear and a link to the map.",
+    blurb: "When and where, spelled out, and a link to the map.",
     show: { column: "show_details", label: "Show the details on the invite" },
-    fields: ["venue", "address", "what_to_bring", "show_details"],
+    fields: ["venue", "address", "show_details"],
     render: (e) => (
       <>
         <Field id="venue" label="Venue" value={e.venue} />
         <Field id="address" label="Address" value={e.address} hint="Used for Open in Maps and the calendar file" />
-        <Field id="what_to_bring" label="What to bring or wear" value={e.what_to_bring} hint='e.g. "Swimmers, a towel and a hat"' />
       </>
     ),
   },
@@ -65,11 +64,12 @@ export const SECTIONS: Section[] = [
   {
     id: "know",
     title: "Good to know",
-    blurb: "Food, gifts, parents, photos. Each line only appears when you have said something about it.",
+    blurb: "What to bring, food, gifts, parents, photos. Each line only appears when you have said something about it.",
     show: { column: "show_good_to_know", label: "Show good to know" },
-    fields: ["serve_text", "gift_stance", "gift_note", "parents_mode", "siblings_welcome", "photo_sharing", "good_to_know", "plate_host_note", "show_good_to_know"],
+    fields: ["what_to_bring", "serve_text", "gift_stance", "gift_note", "parents_mode", "siblings_welcome", "photo_sharing", "good_to_know", "plate_host_note", "show_good_to_know"],
     render: (e) => (
       <>
+        <Field id="what_to_bring" label="What to bring or wear" value={e.what_to_bring} hint='e.g. "Swimmers, a towel and a hat"' />
         <Field id="serve_text" label="What you'll serve" value={e.serve_text} />
         <Choice id="gift_stance" label="Gifts" value={e.gift_stance} options={[["none", "No gifts please"], ["optional", "Gifts optional"], ["books", "Books only"], ["wishlist", "Wish list link"]]} />
         <Field id="gift_note" label="Gift note (optional)" value={e.gift_note} />
