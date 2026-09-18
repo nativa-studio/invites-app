@@ -99,6 +99,15 @@ export const SECTIONS: Section[] = [
 
 export const sectionById = (id: string) => SECTIONS.find((s) => s.id === id);
 
+// The parts that are switched off.
+//
+// A host edits the invite by tapping the part they mean, which works for every part that is on
+// the page and for none of the parts that are not. Switching one back on meant knowing it existed
+// and finding a tab of switches. These are offered by name instead, and open the same drawer.
+export function hiddenSections(e: EventRow): Section[] {
+  return SECTIONS.filter((s) => s.show && (e as unknown as Record<string, unknown>)[s.show.column] === false);
+}
+
 // The show switch is a field like any other, so it saves through the same manifest. It is drawn
 // apart from the section's own wording because it answers a different question: not what this
 // part says, but whether it is there at all.

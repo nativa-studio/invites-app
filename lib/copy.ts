@@ -164,6 +164,7 @@ export const copy = {
     guestGroupNone: "No group",
     guestGroupNew: "New group...",
     guestGroupAsk: "What do you call this group? Family, School, The neighbours",
+    offParts: "Not on the invite at the moment. Tap one to see it and switch it back on.",
     deleteHeading: "Delete this event",
     deleteBlurb: (guests: number, replies: number) =>
       guests === 0
