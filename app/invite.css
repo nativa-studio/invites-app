@@ -81,8 +81,20 @@
 .foot { font-size: 13px; color: var(--crm); text-align: center; }
 .foot a { color: var(--crm); }
 
-/* The envelope */
-.stage { position: relative; width: 346px; max-width: 100%; height: 500px; }
+/* The envelope.
+
+   The stage keeps 180px of empty room above the envelope, because that is what the card rises
+   into: at the top of its rise it stands 84px clear of the envelope's top edge.
+
+   That room sat below the greeting, so before anyone tapped anything the page read as a line of
+   text, a field of blue, and then an envelope a long way down. The room is still there, it is just
+   pulled up behind the greeting now, where at rest it is only background. The card passes over the
+   greeting as it rises, which is the right way round: by then the greeting has done its job and
+   the card is the thing coming towards you.
+
+   -150 is the most that can be taken. At the top of the rise the card then stands 29px below the
+   top of the screen; past about -160 it starts to run off it. Measured. */
+.stage { position: relative; width: 346px; max-width: 100%; height: 500px; margin-top: -150px; }
 .env { position: absolute; left: 0; right: 0; top: 180px; height: 200px; }
 .env .back { position: absolute; inset: 0; border-radius: 10px; background-color: #fff; background-image: linear-gradient(90deg, color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%); background-size: 22px 22px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
 .env .back::after { content: ""; position: absolute; inset: 0; border-radius: 10px; box-shadow: inset 0 0 0 3px var(--red); }
