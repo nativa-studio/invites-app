@@ -86,7 +86,6 @@ export async function newLink(eventId: string, guestId: string) {
   revalidatePath(`/app/events/${eventId}`);
 }
 
-<<<<<<< HEAD
 // Moving a guest into a group, or out of one.
 //
 // A group could only be set as a guest was added, so a list pasted in one go was stuck with
@@ -103,8 +102,6 @@ export async function setGuestGroup(eventId: string, guestId: string, group: str
   revalidatePath(`/app/events/${eventId}`);
 }
 
-=======
->>>>>>> origin/main
 export type DeleteState = { error?: string };
 
 // Deleting an event, and meaning it.
