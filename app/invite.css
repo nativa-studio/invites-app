@@ -91,9 +91,9 @@
 .env .addr span { display: block; font-size: 14px; letter-spacing: .1em; opacity: .85; }
 /* The postmark, printed on the paper rather than stuck to it. Low contrast on purpose: a real one
    is ink on a coloured envelope, and it must not compete with the name. */
-/* The characters stand along the bottom of the envelope, feet over its edge, so the paper never
-   cuts them. Outside the pocket, which clips, and under the flap so the opening still reads. */
-.env .cast { position: absolute; right: 6px; bottom: -14px; width: 208px; height: auto; z-index: 3; pointer-events: none; }
+/* The characters stand on the envelope, inside its edges on every side. Outside the pocket, which
+   clips, so nothing cuts them; small enough that nothing needs to. */
+.env .cast { position: absolute; right: 16px; bottom: 12px; width: 158px; height: auto; z-index: 3; pointer-events: none; }
 .env .flap { position: absolute; left: 0; right: 0; top: 0; height: 120px; transform: perspective(900px) rotateX(0deg); transform-origin: top center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.4,0,.2,1), opacity .5s; z-index: 4; }
 .env .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0,100% 0,50% 100%); }
 .env .flap .front { background: var(--red); }
