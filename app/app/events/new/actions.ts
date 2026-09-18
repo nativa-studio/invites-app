@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { defaultsFor, EVENT_TYPES } from "@/lib/event-types";
+import { LAYOUT_IDS } from "@/lib/layouts";
 
 export type NewEventState = { error?: string };
 
@@ -11,6 +12,9 @@ export async function createEvent(_prev: NewEventState, fd: FormData): Promise<N
   const type = String(fd.get("type") ?? "");
   if (!title) return { error: "Your event needs a title." };
   if (!EVENT_TYPES.some((t) => t.id === type)) return { error: "Please pick a kind of event." };
+  // The look is picked before the event exists, so it rides along and is applied with the type's
+  // other starting settings. An unknown value falls back rather than failing the whole creation.
+  const layout = String(fd.get("layout_id") ?? "");
 
   const date = String(fd.get("date") ?? "").trim();
   const start = String(fd.get("start_time") ?? "").trim();
@@ -37,9 +41,11 @@ export async function createEvent(_prev: NewEventState, fd: FormData): Promise<N
   if (error || !id) return { error: error?.message ?? "That did not save. Please try again." };
 
   // The type's starting settings, applied once. The host owns them from here.
-  const { error: settingsError } = await supabase.from("events").update(defaultsFor(type)).eq("id", id as string);
+  const settings: Record<string, unknown> = { ...defaultsFor(type) };
+  if (LAYOUT_IDS.includes(layout)) settings.layout_id = layout;
+  const { error: settingsError } = await supabase.from("events").update(settings).eq("id", id as string);
   if (settingsError) return { error: settingsError.message };
 
   revalidatePath("/app");
-  redirect(`/app/events/${id as string}/settings?new=1`);
+  redirect(`/app/events/${id as string}/look?new=1`);
 }

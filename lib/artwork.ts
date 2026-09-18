@@ -50,14 +50,19 @@ const CASTS: Record<string, PeekCast> = {
   },
 };
 
+// There is one bundled set, so an event that has not named one gets it rather than getting
+// nothing. Asking a host to pick artwork from a list of one only ever produced invites with the
+// pictures missing. When uploads land, an event names its own set and this fallback goes.
+const set = (artwork: string | null | undefined) => artwork || GABRIEL;
+
 export function coverFor(artwork: string | null | undefined): Picture | null {
-  return (artwork && COVERS[artwork]) || null;
+  return COVERS[set(artwork)] ?? null;
 }
 
 export function bandFor(artwork: string | null | undefined): Picture | null {
-  return (artwork && BANDS[artwork]) || null;
+  return BANDS[set(artwork)] ?? null;
 }
 
 export function castFor(artwork: string | null | undefined): PeekCast {
-  return (artwork && CASTS[artwork]) || {};
+  return CASTS[set(artwork)] ?? {};
 }

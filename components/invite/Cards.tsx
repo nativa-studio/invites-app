@@ -10,13 +10,17 @@ export function mapsLink(e: PublicEvent): string | null {
   return q ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}` : null;
 }
 
+// data-section on each card is the handle the host's preview edits by: tap a card there and the
+// drawer knows which part of the invite you meant. The names are the contract, so they match the
+// sections a host is offered. A guest page carries the attribute and nothing reads it.
+//
 // The cover: the host's own picture at the top, then everything a guest needs to decide whether
 // to come. The picture is theirs. Nothing here is drawn for them.
 export function CoverCard({ e }: { e: PublicEvent }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
   const art = coverFor(e.invite_image_path);
   return (
-    <div className="pcard tilt-l">
+    <div className="pcard tilt-l" data-section="cover">
       <div className="tape" />
       {art && (
         <div className="art">
@@ -26,9 +30,16 @@ export function CoverCard({ e }: { e: PublicEvent }) {
       <div className="eyebrow">{age ? copy.envelope.eyebrowBirthday : copy.greetingGroup}</div>
       <div className="title">{e.title}</div>
       {e.intro && <div className="intro">{e.intro}</div>}
-      <div className="rule" />
-      <div className="para">{formatInviteDate(e.date)}<br />{formatTimeRange(e.start_time, e.end_time, e.time_note)}</div>
-      {e.venue && <div className="where">{e.venue}</div>}
+      {/* When and where belong to the details card, which follows immediately. Printing them on
+          the cover as well just makes a guest read the same two lines twice. If the host has
+          turned the details off, the cover carries them, because nowhere else would. */}
+      {!e.show_details && (
+        <>
+          <div className="rule" />
+          <div className="para">{formatInviteDate(e.date)}<br />{formatTimeRange(e.start_time, e.end_time, e.time_note)}</div>
+          {e.venue && <div className="where">{e.venue}</div>}
+        </>
+      )}
       {e.host_line && <div className="small">{e.host_line}</div>}
     </div>
   );
@@ -37,7 +48,7 @@ export function CoverCard({ e }: { e: PublicEvent }) {
 export function DetailsCard({ e }: { e: PublicEvent }) {
   const maps = mapsLink(e);
   return (
-    <div className="pcard white tilt-r">
+    <div className="pcard white tilt-r" data-section="details">
       <div className="label red">{copy.sections.details}</div>
       <div className="kv">
         <div className="k">{copy.sections.when}</div><div>{formatInviteDate(e.date)}, {formatTimeRange(e.start_time, e.end_time, e.time_note).toLowerCase()}</div>
@@ -52,7 +63,7 @@ export function DetailsCard({ e }: { e: PublicEvent }) {
 export function DayCard({ e }: { e: PublicEvent }) {
   if (!e.runsheet.length) return null;
   return (
-    <div className="pcard cream tilt-l">
+    <div className="pcard cream tilt-l" data-section="day">
       <div className="label sky">{copy.sections.afternoon}</div>
       <div className="stops">
         {e.runsheet.map((s, i) => {
@@ -86,7 +97,7 @@ export function KnowCard({ e }: { e: PublicEvent }) {
   if (e.good_to_know) lines.push({ icon: <Bubble />, text: e.good_to_know });
   if (!lines.length) return null;
   return (
-    <div className="pcard white tilt-r">
+    <div className="pcard white tilt-r" data-section="know">
       <div className="tape sky" />
       <div className="label red">{copy.sections.goodToKnow}</div>
       <div className="lines">{lines.map((l, i) => <div className="line" key={i}>{l.icon}<div>{l.text}</div></div>)}</div>
@@ -96,7 +107,7 @@ export function KnowCard({ e }: { e: PublicEvent }) {
 
 export function AfterCard() {
   return (
-    <div className="pcard cream">
+    <div className="pcard cream" data-section="after">
       <div className="two">
         <div><Bubble /><div className="n">{copy.sections.updates}</div><div className="b">{copy.sections.updatesBody}</div></div>
         <div><Camera /><div className="n">{copy.sections.photos}</div><div className="b">{copy.sections.photosBody}</div></div>
@@ -108,7 +119,7 @@ export function AfterCard() {
 export function UpdatesCard({ e }: { e: PublicEvent }) {
   if (!e.updates.length) return null;
   return (
-    <div className="pcard white">
+    <div className="pcard white" data-section="updates">
       <div className="label sky">{copy.sections.updates}</div>
       <div className="lines">{e.updates.map((u, i) => <div className="line" key={i}><Bubble size={36} /><div>{u.body}</div></div>)}</div>
     </div>

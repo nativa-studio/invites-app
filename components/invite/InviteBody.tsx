@@ -35,15 +35,17 @@ export function InviteBody({
   const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
   const host = hostName(e.host_line);
   const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
-  // Everything below the cover, in the order the moment asks for it: what changed, the details,
-  // the day, good to know, the reply, then what happens after.
+  // Everything below the cover, in the order the moment asks for it. What changed, then the
+  // details, which is everything needed to decide. Then the reply, while the deciding is still
+  // in hand. Everything after it is for someone who has already said yes: the order of the day,
+  // what to bring, what happens afterwards.
   const below = (
     <>
       <UpdatesCard e={e} />
       {e.show_details && <DetailsCard e={e} />}
+      {reply}
       {e.show_runsheet && <DayCard e={e} />}
       {e.show_good_to_know && <KnowCard e={e} />}
-      {reply}
       {e.show_after && <AfterCard />}
       <div className="foot">{hostMobile ? <a href={hostMobile}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}</div>
     </>

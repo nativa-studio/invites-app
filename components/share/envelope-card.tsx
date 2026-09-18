@@ -140,26 +140,53 @@ function opening({ palette: p, addressee, title, artwork }: CardInput) {
 
 // C. Sealed. No artwork at all, which is what every event gets before a host uploads anything,
 // and what a memorial or a quiet dinner should get regardless.
-function sealed({ palette: p, addressee, title }: CardInput) {
-  const EW = 900, EH = 512, FLAP = 226;
-  return ground(p,
-    <div style={{ position: "relative", width: EW, height: EH, display: "flex", transform: "rotate(1deg)" }}>
-      <svg width={EW} height={EH} viewBox={`0 0 ${EW} ${EH}`} style={{ position: "absolute", left: 0, top: 0 }}>
-        <rect x="5" y="5" width={EW - 10} height={EH - 10} rx="16" fill={PAPER} stroke={p.navy} strokeWidth="7" />
-        <path d={`M9 14 L${EW - 9} 14 L${EW / 2} ${FLAP} Z`} fill={shade(PAPER, -0.07)} stroke={p.navy} strokeWidth="7" strokeLinejoin="round" />
-        <circle cx={EW / 2} cy={FLAP} r="36" fill={p.red} stroke={p.navy} strokeWidth="6" />
-        <circle cx={EW / 2} cy={FLAP} r="23" fill="none" stroke={shade(p.red, 0.4)} strokeWidth="3" />
-      </svg>
-      <div style={{ position: "absolute", left: 0, top: 302, width: EW, display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {addressee ? <div style={{ display: "flex", fontFamily: HAND, fontSize: 30, letterSpacing: 8, color: p.red }}>TO</div> : null}
-        <div style={{ display: "flex", fontFamily: HAND, fontSize: addressee ? 86 : 60, color: p.navy, lineHeight: 1.02, marginTop: 4 }}>{addressee ?? title}</div>
+// A sealed envelope, front on, filling the frame. This is the picture a text message shows, so it
+// has one job: look like a letter addressed to the person reading it, before they have read a word
+// of the message. The name is the loudest thing on it, and the stamp carries the age the way the
+// invite's own seal does.
+function sealed({ palette: p, addressee, title, age }: CardInput) {
+  const ink = shade(p.red, -0.45);
+  const name = (addressee ?? title).toUpperCase();
+  // Fit the name to the space rather than guessing from its length. A guest is called whatever
+  // they are called, and the group link puts a whole title here, so a fixed size either wraps a
+  // long one with one word stranded on the second line, or wastes half the envelope on a short
+  // one. 0.62em is close enough to this face's average capital, and the floor and ceiling keep
+  // both extremes readable.
+  const room = W - 260;
+  const track = name.length > 22 ? 8 : 14;
+  const size = Math.max(34, Math.min(82, Math.floor((room / name.length - track) / 0.62)));
+  return (
+    <div style={{ width: W, height: H, display: "flex", background: "#FFFFFF", padding: 26, fontFamily: "Nunito" }}>
+      <div style={{ position: "relative", width: W - 52, height: H - 52, display: "flex", background: p.red, borderRadius: 22 }}>
+        {/* The postmark: a ring and its cancellation lines, up in the corner where one lands. */}
+        <svg width="360" height="150" viewBox="0 0 360 150" style={{ position: "absolute", left: 300, top: 34 }}>
+          <g fill="none" stroke={ink} strokeWidth="3" opacity="0.5">
+            <circle cx="72" cy="72" r="56" />
+            <circle cx="72" cy="72" r="42" />
+            {[0, 1, 2, 3].map((i) => (
+              <path key={i} d={`M140 ${44 + i * 18} q30 -10 60 0 t60 0 t60 0`} />
+            ))}
+          </g>
+        </svg>
+        {/* The stamp, with the age on it where a denomination would be. */}
+        <div style={{ position: "absolute", right: 44, top: 34, width: 132, height: 156, display: "flex", padding: 9, background: "#FFFFFF", borderRadius: 3, transform: "rotate(2deg)" }}>
+          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: shade(p.red, 0.82), border: `3px solid ${ink}` }}>
+            <div style={{ display: "flex", fontFamily: DISPLAY, fontSize: age && age.length > 1 ? 66 : 80, color: ink }}>{age ?? ""}</div>
+          </div>
+        </div>
+        {/* Who it is for. Letterspaced capitals, the way a name is written on an envelope. */}
+        <div style={{ position: "absolute", left: 96, top: 300, width: W - 260, display: "flex" }}>
+          <div style={{ display: "flex", fontSize: size, letterSpacing: track, color: PAPER, lineHeight: 1.1 }}>{name}</div>
+        </div>
       </div>
-    </div>,
+    </div>
   );
 }
 
 export function envelopeCard(input: CardInput) {
-  const variant: CardVariant = input.variant ?? (input.artwork ? "posted" : "sealed");
+  // A sealed envelope is what a message should show: a letter with the reader's name on it.
+  // The other two stay reachable with ?style= for comparing them.
+  const variant: CardVariant = input.variant ?? "sealed";
   if (variant === "opening") return opening(input);
   if (variant === "sealed") return sealed(input);
   return posted(input);
