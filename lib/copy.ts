@@ -31,10 +31,8 @@ export const copy = {
     no: "Sorry, can't make it",
     yesQuiet: "I'll be there",
     noQuiet: "I can't be there, but I'm thinking of you",
-    whoIsThis: "Who's this from?",
     yourName: "Your name",
     yourMobile: "Your mobile (optional, so we can text you the details)",
-    continue: "Continue",
     change: "Change my answer",
     keep: "Keep it",
   },
@@ -150,7 +148,10 @@ export const copy = {
     sendNext: "Send next",
     allSent: "Everyone has been sent their link.",
     groupLink: "Group link for chats",
-    groupLinkHint: "Anyone can open it. It asks their name, then gives them a personal link of their own.",
+    groupLinkHint: "Anyone can open it and reply on the spot. They put their name in as they answer.",
+    groupLinks: "A link for each group",
+    groupLinksHint: "Paste a different one into each chat and you'll see where every reply came from, without having to ask.",
+    groupLinksNone: "Once your guests have groups, each one gets its own link here.",
     remind: "Remind",
     newLink: "New link",
     trail: {
@@ -165,6 +166,11 @@ export const copy = {
     text: "Hi {name}! You're invited to {title}{date}. Everything is here, and you can reply with one tap: {link}",
     reminder: "Hi {name}, just checking you saw this one. {title}{date}. Can you make it? {link}",
     seeYouSoon: "See you tomorrow! {address}. Everything you need: {link}",
+  },
+  // After the envelope opens you are looking at one card and nothing else, and on a phone there is
+  // no sign the page goes on. This says so, and gets out of the way the moment you scroll.
+  more: {
+    label: "There's more below",
   },
   closed: {
     title: "This link is closed",

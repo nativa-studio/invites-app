@@ -70,7 +70,27 @@ export async function submitRsvp(token: string, input: RsvpInput): Promise<Publi
   });
 }
 
-export async function claimGroupLink(slug: string, name: string, phone: string): Promise<string> {
-  const data = await callGuestRpc<{ token: string }>("claim_group_link", { p_slug: slug, p_name: name, p_phone: phone || null });
-  return data.token;
+// A host can hand out a link per group, so whoever replies through it arrives already labelled
+// with where they are from. The group rides in the link rather than in a question, because the
+// host already knows the answer and the guest should not have to.
+//
+// The four argument function arrives in migration 0005. A database that has not had it yet still
+// claims the link; the label is the only thing lost, and the reply is the thing that matters.
+export async function claimGroupLink(slug: string, name: string, phone: string, group?: string | null): Promise<string> {
+  const args = { p_slug: slug, p_name: name, p_phone: phone || null };
+  try {
+    const data = await callGuestRpc<{ token: string }>("claim_group_link", { ...args, p_group: group || null });
+    return data.token;
+  } catch (err) {
+    if (!isMissingFunction(err)) throw err;
+    const data = await callGuestRpc<{ token: string }>("claim_group_link", args);
+    return data.token;
+  }
+}
+
+// Postgres and PostgREST word it differently, and neither carries a code we can read through the
+// client, so the wording is what there is to go on.
+function isMissingFunction(err: unknown): boolean {
+  const m = err instanceof Error ? err.message : "";
+  return /could not find the function|does not exist/i.test(m);
 }

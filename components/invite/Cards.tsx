@@ -3,7 +3,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime, hostName } from "@/lib/format";
-import { ICONS, Bubble, Camera, Gift, Kids, Plate, Cap, Cake, Towel } from "@/components/art/icons";
+import { ICONS, Bubble, Camera, Clock, Gift, Kids, Pin, Plate, Cap, Cake, Towel } from "@/components/art/icons";
 import { goodToKnow, type NoteKind } from "@/lib/good-to-know";
 
 export function mapsLink(e: PublicEvent): string | null {
@@ -22,7 +22,6 @@ export function CoverCard({ e }: { e: PublicEvent }) {
   const art = coverFor(e.invite_image_path);
   return (
     <div className="pcard tilt-l" data-section="cover">
-      <div className="tape" />
       {art && (
         <div className="art">
           <Image src={art.src} alt="" width={art.w} height={art.h} priority sizes="(max-width: 430px) 100vw, 340px" />
@@ -46,15 +45,31 @@ export function CoverCard({ e }: { e: PublicEvent }) {
   );
 }
 
+// When and where, as a clock and a pin. The words "When" and "Where" spent a column telling a
+// reader what they could already see: a date is a date, an address is an address. A symbol says
+// it in the width of an icon and in any language, and the words stay behind it for anyone
+// listening to the page rather than looking at it.
+//
+// Three layouts printed these two rows from their own copies. They share this one now, so a
+// change lands everywhere at once.
+export function WhenWhere({ e }: { e: PublicEvent }) {
+  return (
+    <div className="kv icons">
+      <div className="k"><Clock size={30} /><span className="sr">{copy.sections.when}</span></div>
+      <div>{formatInviteDate(e.date)}, {formatTimeRange(e.start_time, e.end_time, e.time_note).toLowerCase()}</div>
+      <div className="k"><Pin size={30} /><span className="sr">{copy.sections.where}</span></div>
+      <div>{e.venue}{e.address ? <><br />{e.address}</> : null}</div>
+    </div>
+  );
+}
+
 export function DetailsCard({ e }: { e: PublicEvent }) {
   const maps = mapsLink(e);
   return (
     <div className="pcard white tilt-r" data-section="details">
+      <div className="tape" />
       <div className="label red">{copy.sections.details}</div>
-      <div className="kv">
-        <div className="k">{copy.sections.when}</div><div>{formatInviteDate(e.date)}, {formatTimeRange(e.start_time, e.end_time, e.time_note).toLowerCase()}</div>
-        <div className="k">{copy.sections.where}</div><div>{e.venue}{e.address ? <><br />{e.address}</> : null}</div>
-      </div>
+      <WhenWhere e={e} />
       {maps && <a className="pill-link" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a>}
     </div>
   );

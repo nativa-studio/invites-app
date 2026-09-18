@@ -2,6 +2,7 @@ import { copy } from "@/lib/copy";
 import { loadEvent, loadGuests } from "@/lib/db/host";
 import { getSiteUrl } from "@/lib/site-url";
 import { CopyButton } from "@/components/host/CopyButton";
+import { groupSlug } from "@/lib/groups";
 
 // Tracking: the screen you check rather than the screen you fill in. Counts first, then the one
 // or two lines that tell you what needs doing, then the link you paste into a group chat.
@@ -23,6 +24,10 @@ export default async function Tracking({ params }: { params: Promise<{ id: strin
   const stillExpected = pending.reduce((n, g) => n + (g.expected_children ?? 0) + (g.expected_adults ?? 0), 0);
   const withExpectations = pending.filter((g) => g.expected_children != null || g.expected_adults != null).length;
   const groupLink = `${site}/e/${e.slug}`;
+  // One link per group, built from the groups the guests already carry. Paste the school one in
+  // the school chat and every reply through it arrives labelled, so a name nobody recognises
+  // still says where it came from.
+  const groupsInUse = [...new Set(list.flatMap((g) => g.groups ?? []))].sort((a, b) => a.localeCompare(b));
 
   return (
     <>
@@ -44,6 +49,26 @@ export default async function Tracking({ params }: { params: Promise<{ id: strin
         <p className="hint">{copy.host.groupLinkHint}</p>
         <code>{groupLink}</code>
         <div className="actions"><CopyButton text={groupLink} label={copy.host.copy} /></div>
+      </section>
+      <section className="card">
+        <h2 className="h2">{copy.host.groupLinks}</h2>
+        <p className="hint">{copy.host.groupLinksHint}</p>
+        {groupsInUse.length === 0 ? (
+          <p className="hint">{copy.host.groupLinksNone}</p>
+        ) : (
+          <div className="grouplinks">
+            {groupsInUse.map((g) => {
+              const link = `${groupLink}/${groupSlug(g)}`;
+              return (
+                <div className="grouplink" key={g}>
+                  <b>{g}</b>
+                  <code>{link}</code>
+                  <CopyButton text={link} label={copy.host.copy} />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
     </>
   );

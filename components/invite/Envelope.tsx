@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Bolt } from "@/components/art/icons";
+import { ScrollCue } from "./ScrollCue";
 
 type Mascot = { src: string; w: number; h: number };
 type Props = { addressee: string; addresseeLine?: string; cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean; mascot?: Mascot | null };
@@ -66,6 +67,7 @@ export function Envelope({ addressee, addresseeLine, cover, children, openLabel,
         {phase === "done" && cover}
         {children}
       </div>
+      <ScrollCue ready={phase === "done"} />
     </div>
   );
 }

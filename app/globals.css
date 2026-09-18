@@ -189,3 +189,10 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .saved { display: grid; gap: 8px; justify-items: start; background: var(--app-sunk); border: 1px solid var(--app-line); border-left: 2px solid var(--app-ink); border-radius: 0 8px 8px 0; padding: 14px 16px; }
 .saved b { font-size: 15px; font-weight: 700; }
 .saved p { font-size: 14px; color: var(--app-mute); }
+
+/* A link for each group. One row per group: what it is called, the link itself, and the button
+   that puts it on the clipboard ready for that chat. */
+.grouplinks { display: flex; flex-direction: column; gap: 14px; }
+.grouplink { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px 12px; }
+.grouplink b { grid-column: 1 / -1; font-size: 15px; }
+.grouplink code { min-width: 0; }

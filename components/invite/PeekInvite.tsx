@@ -5,7 +5,8 @@ import { copy } from "@/lib/copy";
 import { goodToKnow } from "@/lib/good-to-know";
 import { formatInviteDate, formatTime, formatTimeRange, hostName } from "@/lib/format";
 import { castFor, type PeekChar } from "@/lib/artwork";
-import { mapsLink } from "./Cards";
+import { mapsLink, WhenWhere } from "./Cards";
+import { ScrollCue } from "./ScrollCue";
 
 // Colours lifted off the characters themselves, so the words and the drawings agree.
 const TITLE_INK = ["#D2452F", "#2F7D96", "#3F6B57", "#B4762A"];
@@ -80,12 +81,7 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
         <section className="s sky" data-section="details">
           <Peeker who={cast.details} side="left" />
           <p className="label">{copy.sections.details}</p>
-          <div className="kv">
-            <div className="k">{copy.sections.when}</div>
-            <div>{formatInviteDate(e.date)}, {formatTimeRange(e.start_time, e.end_time, e.time_note).toLowerCase()}</div>
-            <div className="k">{copy.sections.where}</div>
-            <div>{e.venue}{e.address ? <><br />{e.address}</> : null}</div>
-          </div>
+          <WhenWhere e={e} />
           {maps && <div className="mid"><a className="maps" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a></div>}
         </section>
         )}
@@ -144,6 +140,7 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
 
 
       </div>
+      <ScrollCue anchor="header" />
     </main>
   );
 }
