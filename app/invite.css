@@ -80,7 +80,7 @@
 .env .clip { position: absolute; left: -40px; right: -40px; top: -700px; bottom: 6px; overflow: hidden; z-index: 2; }
 /* The card lies on its side while it is in the envelope, because that is the only way a portrait
    card fits a landscape one, and it turns upright as it comes out. */
-.env .card-slot { position: absolute; left: 50%; top: 560px; width: 340px; margin-left: -170px; transform: rotate(-90deg) scale(.30); transform-origin: center center; transition: transform .85s cubic-bezier(.4,0,.2,1), top .85s cubic-bezier(.4,0,.2,1); }
+.env .card-slot { position: absolute; left: 50%; top: 512px; width: 340px; margin-left: -170px; transform: rotate(-90deg) scale(.50); transform-origin: center center; transition: transform .85s cubic-bezier(.4,0,.2,1), top .85s cubic-bezier(.4,0,.2,1); }
 .env .pocket { position: absolute; inset: 0; z-index: 3; border-radius: 0 0 10px 10px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
 /* Anything printed on the paper is clipped by the paper. Without this the character hangs off the
    corner the way the stamp used to, which is the fault it was brought in to replace. */
@@ -93,7 +93,7 @@
    is ink on a coloured envelope, and it must not compete with the name. */
 /* The characters stand on the envelope, inside its edges on every side. Outside the pocket, which
    clips, so nothing cuts them; small enough that nothing needs to. */
-.env .cast { position: absolute; right: 16px; bottom: 12px; width: 158px; height: auto; z-index: 3; pointer-events: none; }
+.env .cast { position: absolute; right: 14px; bottom: 12px; width: 118px; height: auto; z-index: 3; pointer-events: none; }
 .env .flap { position: absolute; left: 0; right: 0; top: 0; height: 120px; transform: perspective(900px) rotateX(0deg); transform-origin: top center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.4,0,.2,1), opacity .5s; z-index: 4; }
 .env .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0,100% 0,50% 100%); }
 .env .flap .front { background: var(--red); }
@@ -113,7 +113,7 @@
 @keyframes backon { 0%,49.9% { opacity: 0 } 50%,100% { opacity: 1 } }
 .open .seal, .open .hint { opacity: 0; transform: scale(.6); pointer-events: none; }
 .rise .env .flap { z-index: 1; }
-.rise .env .card-slot { top: 470px; transform: rotate(-90deg) scale(.36); }
+.rise .env .card-slot { top: 408px; transform: rotate(-90deg) scale(.52); }
 .out .env .clip { overflow: visible; z-index: 7; }
 .out .env .card-slot { top: 300px; transform: rotate(0deg) scale(1); }
 .out .env .cast, .out .env .back, .out .env .pocket { transform: translateY(120px) scale(.9); opacity: 0; }
