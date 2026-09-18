@@ -249,3 +249,22 @@ details.drop > .drop-body { display: grid; gap: 12px; margin-top: 14px; }
 /* The parts of the invite that are switched off, offered by name under the preview because they
    are not on the page to be tapped. */
 .off-parts { display: grid; gap: 8px; }
+
+/* The message as a chat app draws it. Not a mock of any one app, just the shape they share: a
+   card with a picture, a title and a line, then the message under it. Every piece is a button,
+   because every piece is wording a host can change. */
+.chat { display: grid; gap: 10px; justify-items: start; }
+.chat .bubble-card,
+.chat .bubble {
+  display: grid; gap: 4px; text-align: left; width: 100%; cursor: pointer;
+  border: 1px solid var(--app-line); border-radius: 12px; background: var(--app-sunk);
+  padding: 12px; font: inherit; color: inherit;
+}
+.chat .bubble-card:hover, .chat .bubble:hover { border-color: var(--app-ink); }
+.chat .bubble-card { padding: 0; overflow: hidden; }
+.chat .bubble-card .art { display: block; }
+.chat .bubble-card .art img { display: block; width: 100%; height: auto; }
+.chat .bubble-card .t { padding: 10px 12px 0; font-weight: 650; font-size: 15px; }
+.chat .bubble-card .d { padding: 0 12px; font-size: 14px; color: var(--app-muted, #6b7280); }
+.chat .bubble-card .u { padding: 2px 12px 12px; font-size: 13px; color: var(--app-muted, #6b7280); }
+.chat .bubble { font-size: 15px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
