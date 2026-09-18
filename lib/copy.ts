@@ -226,11 +226,6 @@ export const copy = {
     reminder: "Hi {name}, just checking you saw this one. {title}{date}. Can you make it? {link}",
     seeYouSoon: "See you tomorrow! {address}. Everything you need: {link}",
   },
-  // After the envelope opens you are looking at one card and nothing else, and on a phone there is
-  // no sign the page goes on. This says so, and gets out of the way the moment you scroll.
-  more: {
-    label: "There's more below",
-  },
   closed: {
     title: "This link is closed",
     body: "The host has closed the group link. Text them and they'll send you your own.",

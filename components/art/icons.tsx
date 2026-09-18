@@ -48,7 +48,4 @@ export function Clock({ size = 48 }: P) {
 export function Pin({ size = 48 }: P) {
   return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58S12 39 12 26a20 20 0 0 1 40 0c0 13-20 32-20 32z" fill={S.red} {...kl} /><circle cx="32" cy="25" r="8" fill={S.crm} {...kl} /></svg>);
 }
-export function Chev({ size = 30 }: P) {
-  return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M16 24l16 16 16-16" fill="none" stroke={S.navy} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" /></svg>);
-}
 export const ICONS: Record<string, (p: P) => React.ReactElement> = { cap: Cap, ball: Ball, ring: Ring, cake: Cake, car: Car, gift: Gift, camera: Camera, kids: Kids, towel: Towel, plate: Plate, gate: Gate, bolt: Bolt, clock: Clock, pin: Pin };
