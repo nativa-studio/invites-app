@@ -66,7 +66,6 @@ export function PostInvite({
 }: { event: PublicEvent; greeting: string; addressee: string; reply: React.ReactNode; skipAnimation?: boolean }) {
   const p = paletteFor(e.palette, e.theme_id);
   const host = hostName(e.host_line);
-  const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
   const cast = castFor(e.invite_image_path);
   const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
 
@@ -78,7 +77,7 @@ export function PostInvite({
         <div className={`opening ${cast.topLeft || cast.topRight ? "" : "nobody"}`}>
           <Peeker who={cast.topLeft} side="left" />
           <Peeker who={cast.topRight} side="right" />
-          <PostEnvelope addressee={addressee} stamp={age} card={<CoverCard e={e} hero={cast.hero} greeting={greeting} />} openLabel={copy.envelope.open} skipAnimation={skipAnimation} />
+          <PostEnvelope addressee={addressee} card={<CoverCard e={e} hero={cast.hero} greeting={greeting} />} openLabel={copy.envelope.open} skipAnimation={skipAnimation} />
         </div>
 
         <div className="strip">

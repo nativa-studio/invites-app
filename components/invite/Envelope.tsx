@@ -1,14 +1,16 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Bolt } from "@/components/art/icons";
 
-type Props = { addressee: string; addresseeLine?: string; stamp: string; cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean };
+type Mascot = { src: string; w: number; h: number };
+type Props = { addressee: string; addresseeLine?: string; cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean; mascot?: Mascot | null };
 
 // The opening: tap (or wait), the flap lifts, the card rises, grows, and the envelope drops away.
 // The cover is drawn once, never twice: the envelope holds it until the opening is over, then
 // hands it to the page. Two copies at once would share one set of SVG pattern ids, and the
 // halftone shading would look up the copy inside the closed envelope and find nothing to paint.
-export function Envelope({ addressee, addresseeLine, stamp, cover, children, openLabel, skipAnimation }: Props) {
+export function Envelope({ addressee, addresseeLine, cover, children, openLabel, skipAnimation, mascot }: Props) {
   const [phase, setPhase] = useState<"" | "open" | "rise" | "out" | "done">(skipAnimation ? "done" : "");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const started = useRef(false);
@@ -49,9 +51,21 @@ export function Envelope({ addressee, addresseeLine, stamp, cover, children, ope
           <div className="pocket">
             <div className="sides" /><div className="edge" />
             <div className="addr">{addressee}{addresseeLine && <><br /><span>{addresseeLine}</span></>}</div>
-            <div className="stamp"><div><Bolt size={26} /><div>{stamp}</div></div></div>
+            {/* The event's own character, sitting in the corner the stamp used to crowd. */}
+            {mascot && <Image className="mascot" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="110px" />}
           </div>
           <div className="flap"><div className="face front" /><div className="face backface" /><div className="rim" /></div>
+          {/* A postmark rather than a stamp. A stamp is a white rectangle with its own hard edge,
+              which fought the envelope's corner and hung off it; ink cannot. It sits outside the
+              pocket because the pocket's shadow makes a stacking context of its own, so nothing
+              inside it can print over the flap, which is exactly what a cancellation mark does. */}
+          <svg className="mark" viewBox="0 0 150 54" aria-hidden="true">
+            <g fill="none" stroke="currentColor" strokeWidth="2.4">
+              <circle cx="26" cy="27" r="21" />
+              <circle cx="26" cy="27" r="15" />
+              {[0, 1, 2].map((i) => <path key={i} d={`M58 ${14 + i * 13} q13 -6 26 0 t26 0 t26 0`} />)}
+            </g>
+          </svg>
           <div className="seal"><Bolt size={30} /></div>
         </div>
         <div className="hint">{openLabel}</div>

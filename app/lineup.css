@@ -1,7 +1,9 @@
 /* The lineup: one continuous cream page, the artwork standing along the bottom of the cover,
    and every word living in the open space above it. No cards, no frames. Air and thin rules
    do the dividing, because the drawing is already doing the talking. */
-.lineup {
+/* Full-bleed artwork and the envelope's clip box are both wider than the page on purpose. Clip
+   rather than hide: hidden would make this a scroll container and break the sticky pieces. */
+.lineup { overflow-x: clip;
   --cream: #FDF6E4;
   --page: #FDF6E4;
   --ink: #2B2119;

@@ -1,5 +1,8 @@
 /* Guest invite: the stationery suite. Palette variables are set per event on .invite. */
-.invite { --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding: 0 16px 56px; }
+/* The envelope's clip box is deliberately wider than the stage so the card can rise out of it,
+   which spilled 18px past the viewport and gave a guest's phone a sideways scroll. Clip rather
+   than hide: hidden would make this a scroll container and break the sticky pieces inside it. */
+.invite { overflow-x: clip; --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding: 0 16px 56px; }
 .invite .wrap { max-width: 390px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 30px; }
 .invite .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--crm); margin-top: 28px; text-align: center; }
 .pcard { position: relative; width: 100%; max-width: 340px; background: var(--paper); border-radius: 8px; border: 3px solid var(--navy); padding: 24px 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -73,12 +76,21 @@
 .env .clip { position: absolute; left: -40px; right: -40px; top: -700px; bottom: 6px; overflow: hidden; z-index: 2; }
 .env .card-slot { position: absolute; left: 50%; top: 714px; width: 340px; margin-left: -170px; transform: scale(.62); transform-origin: top center; transition: transform .8s cubic-bezier(.4,0,.2,1), top .8s cubic-bezier(.4,0,.2,1); }
 .env .pocket { position: absolute; inset: 0; z-index: 3; border-radius: 0 0 10px 10px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
+/* Anything printed on the paper is clipped by the paper. Without this the character hangs off the
+   corner the way the stamp used to, which is the fault it was brought in to replace. */
+.env .pocket { overflow: hidden; }
 .env .pocket .sides { position: absolute; inset: 0; background: color-mix(in srgb, var(--red) 82%, black); border-radius: 0 0 10px 10px; clip-path: polygon(0 0,50% 58%,100% 0,100% 100%,0 100%); }
 .env .pocket .edge { position: absolute; inset: 0; background: var(--red); border-radius: 0 0 10px 10px; clip-path: polygon(0 0,50% 58%,100% 0,100% 6%,50% 64%,0 6%); opacity: .6; }
-.env .addr { position: absolute; left: 26px; bottom: 22px; font-family: var(--font-hand); font-size: 24px; line-height: 1.2; color: var(--crm); }
-.env .addr span { font-size: 18px; opacity: .9; }
-.env .stamp { position: absolute; right: 18px; top: 22px; width: 64px; height: 76px; background: #fff; padding: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
-.env .stamp > div { width: 100%; height: 100%; background: var(--sky); border: 2px solid var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #fff; font-family: var(--font-display); font-size: 22px; line-height: 1; }
+.env .addr { position: absolute; left: 26px; right: 104px; bottom: 26px; font-family: var(--font-body); font-weight: 700; font-size: 20px; letter-spacing: .16em; text-transform: uppercase; line-height: 1.25; color: var(--crm); z-index: 2; overflow-wrap: anywhere; }
+.env .addr span { display: block; font-size: 14px; letter-spacing: .1em; opacity: .85; }
+/* The postmark, printed on the paper rather than stuck to it. Low contrast on purpose: a real one
+   is ink on a coloured envelope, and it must not compete with the name. */
+/* Above the flap, because a cancellation mark is printed after the letter is sealed and lands
+   across whatever is under it. */
+.env .mark { position: absolute; right: 14px; top: 18px; width: 118px; height: 42px; color: color-mix(in srgb, var(--red) 45%, black); opacity: .5; z-index: 5; transform: rotate(-3deg); }
+/* The event's character, leaning on the bottom corner. It sits under the flap so the opening still
+   reads, and it is decoration, so it carries no alt text. */
+.env .mascot { position: absolute; right: 8px; bottom: -8px; width: 70px; height: auto; z-index: 1; transform: rotate(-4deg); transform-origin: bottom right; pointer-events: none; }
 .env .flap { position: absolute; left: 0; right: 0; top: 0; height: 120px; transform: perspective(900px) rotateX(0deg); transform-origin: top center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.4,0,.2,1), opacity .5s; z-index: 4; }
 .env .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0,100% 0,50% 100%); }
 .env .flap .front { background: var(--red); }
@@ -90,7 +102,7 @@
 @keyframes pulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.8); opacity: .5 } }
 .stage .tap { position: absolute; inset: 0; z-index: 6; background: transparent; border: 0; cursor: pointer; width: 100%; height: 100%; border-radius: 12px; }
 .stage .tap:focus-visible { outline: 3px solid var(--yel); outline-offset: 4px; }
-.env .back, .env .pocket { transition: transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }
+.env .mark, .env .back, .env .pocket { transition: transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }
 .open .env .flap { transform: perspective(900px) rotateX(180deg); }
 .open .env .flap .front { animation: frontoff .9s cubic-bezier(.4,0,.2,1) forwards; }
 .open .env .flap .backface { animation: backon .9s cubic-bezier(.4,0,.2,1) forwards; }
@@ -101,7 +113,7 @@
 .rise .env .card-slot { top: 580px; }
 .out .env .clip { overflow: visible; z-index: 7; }
 .out .env .card-slot { top: 520px; transform: scale(1); }
-.out .env .back, .out .env .pocket { transform: translateY(120px) scale(.9); opacity: 0; }
+.out .env .mark, .out .env .back, .out .env .pocket { transform: translateY(120px) scale(.9); opacity: 0; }
 .out .env .flap { opacity: 0; }
 .done .stage { display: none; }
 .suite { display: none; flex-direction: column; align-items: center; gap: 30px; width: 100%; opacity: 0; transition: opacity .5s; }

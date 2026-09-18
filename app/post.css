@@ -1,6 +1,8 @@
 /* In the post: the suite's ground and cards, an envelope drawn to a real proportion, and the
    peek characters cut by the page edge. Palette variables are set per event on .post. */
-.post { --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding-bottom: 56px; }
+/* Full-bleed artwork and the envelope's clip box are both wider than the page on purpose. Clip
+   rather than hide: hidden would make this a scroll container and break the sticky pieces. */
+.post { overflow-x: clip; --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding-bottom: 56px; }
 .post .page { position: relative; max-width: 430px; margin: 0 auto; overflow: hidden; }
 .post .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--crm); padding: 28px 22px 0; text-align: center; }
 .post .pcard.reply { border-style: dashed; border-color: var(--forest); }
@@ -29,8 +31,8 @@
 .penv .pocket .sides { position: absolute; inset: 0; background: color-mix(in srgb, var(--red) 82%, black); border-radius: 0 0 10px 10px; clip-path: polygon(0 0,50% 58%,100% 0,100% 100%,0 100%); }
 .penv .pocket .edge { position: absolute; inset: 0; background: var(--red); border-radius: 0 0 10px 10px; clip-path: polygon(0 0,50% 58%,100% 0,100% 5%,50% 63%,0 5%); opacity: .6; }
 .penv .addr { position: absolute; left: 26px; right: 100px; bottom: 22px; font-family: var(--font-hand); font-size: 27px; line-height: 1.15; color: var(--crm); }
-.penv .stamp { position: absolute; right: 18px; top: 22px; width: 64px; height: 76px; background: #fff; padding: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
-.penv .stamp > div { width: 100%; height: 100%; background: var(--sky); border: 2px solid var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #fff; font-family: var(--font-display); font-size: 22px; line-height: 1; }
+/* Ink on the paper, over the flap, rather than a white rectangle stuck to the corner. */
+.penv .mark { position: absolute; right: 14px; top: 18px; width: 118px; height: 42px; color: color-mix(in srgb, var(--red) 45%, black); opacity: .5; z-index: 5; transform: rotate(-3deg); }
 .penv .flap { position: absolute; left: 0; right: 0; top: 0; height: 142px; transform: perspective(900px) rotateX(0deg); transform-origin: top center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.4,0,.2,1), opacity .5s; z-index: 4; }
 .penv .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0,100% 0,50% 100%); }
 .penv .flap .front { background: var(--red); }

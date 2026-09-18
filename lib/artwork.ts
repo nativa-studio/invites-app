@@ -38,6 +38,11 @@ const BANDS: Record<string, Picture> = {
   [GABRIEL]: { src: GABRIEL, w: 1173, h: 420 },
 };
 
+/** The one character that leans on the envelope, cut from the same set. */
+const MASCOTS: Record<string, Picture> = {
+  [GABRIEL]: { src: "/artwork/gabriel-peek/pikachu-head.png", w: 340, h: 420 },
+};
+
 const CASTS: Record<string, PeekCast> = {
   [GABRIEL]: {
     topLeft: g("bulbasaur", 200, 365, ""),
@@ -61,6 +66,10 @@ export function coverFor(artwork: string | null | undefined): Picture | null {
 
 export function bandFor(artwork: string | null | undefined): Picture | null {
   return BANDS[set(artwork)] ?? null;
+}
+
+export function mascotFor(artwork: string | null | undefined): Picture | null {
+  return MASCOTS[set(artwork)] ?? null;
 }
 
 export function castFor(artwork: string | null | undefined): PeekCast {

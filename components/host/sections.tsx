@@ -23,32 +23,31 @@ export const SECTIONS: Section[] = [
   {
     id: "cover",
     title: "The cover",
-    blurb: "What a guest sees first, and everything they need to decide whether to come.",
-    fields: ["title", "host_line", "intro", "date", "start_time", "end_time", "time_note", "venue"],
+    blurb: "The title, the line under it, and who it is from. When and where live on the details card below, so they are not said twice.",
+    fields: ["title", "host_line", "intro"],
     render: (e) => (
       <>
         <Field id="title" label="Title" value={e.title} hint='For a birthday, keep the form "Name is turning N" and the age lands on the seal.' />
         <Field id="host_line" label="From" value={e.host_line} hint="Shown under the title, e.g. With love from Gabriel's mum and dad" />
         <Field id="intro" label="A line or two" value={e.intro} rows={3} />
-        <div className="counts">
-          <Field id="date" label="Date" value={e.date} type="date" />
-          <Field id="start_time" label="Start" value={e.start_time} type="time" />
-          <Field id="end_time" label="End" value={e.end_time} type="time" />
-        </div>
-        <Field id="time_note" label="Time, in your words (optional)" value={e.time_note} hint='Replaces the times, e.g. "From 2pm, come when you can"' />
-        <Field id="venue" label="Where" value={e.venue} hint="e.g. Our place, or the park's name" />
       </>
     ),
   },
   {
     id: "details",
     title: "The details",
-    blurb: "When and where, spelled out, and a link to the map.",
+    blurb: "When and where, and a link to the map. Switch this off and the cover carries the date and place instead, so they are never lost.",
     show: { column: "show_details", label: "Show the details on the invite" },
-    fields: ["venue", "address", "show_details"],
+    fields: ["date", "start_time", "end_time", "time_note", "venue", "address", "show_details"],
     render: (e) => (
       <>
-        <Field id="venue" label="Venue" value={e.venue} />
+        <div className="counts">
+          <Field id="date" label="Date" value={e.date} type="date" />
+          <Field id="start_time" label="Start" value={e.start_time} type="time" />
+          <Field id="end_time" label="End" value={e.end_time} type="time" />
+        </div>
+        <Field id="time_note" label="Time, in your words (optional)" value={e.time_note} hint='Replaces the times, e.g. "From 2pm, come when you can"' />
+        <Field id="venue" label="Venue" value={e.venue} hint="e.g. Our place, or the park's name" />
         <Field id="address" label="Address" value={e.address} hint="Used for Open in Maps and the calendar file" />
       </>
     ),

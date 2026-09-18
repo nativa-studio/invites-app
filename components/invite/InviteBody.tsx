@@ -3,6 +3,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { hostName } from "@/lib/format";
 import { paletteFor, paletteVars } from "@/components/art/palette";
+import { mascotFor } from "@/lib/artwork";
 import { AfterCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { LineupInvite } from "./LineupInvite";
@@ -32,7 +33,6 @@ export function InviteBody({
   }
 
   const p = paletteFor(e.palette, e.theme_id);
-  const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
   const host = hostName(e.host_line);
   const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
   // Everything below the cover, in the order the moment asks for it. What changed, then the
@@ -59,10 +59,10 @@ export function InviteBody({
           <div className="greet">{greeting}</div>
           <Envelope
             addressee={addressee ?? copy.envelope.toYou}
-            stamp={age}
             cover={<CoverCard e={e} />}
             openLabel={copy.envelope.open}
             skipAnimation={skipAnimation}
+            mascot={mascotFor(e.invite_image_path)}
           >
             {below}
           </Envelope>
