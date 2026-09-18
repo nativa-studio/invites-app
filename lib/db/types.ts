@@ -68,6 +68,8 @@ export type PublicEvent = {
   show_runsheet: boolean;
   show_good_to_know: boolean;
   show_after: boolean;
+  /** The order the parts below the cover appear in. Empty means the default. */
+  section_order: string[];
   runsheet: RunsheetStop[];
   updates: Update[];
 };

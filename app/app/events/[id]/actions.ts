@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { normalisePhone } from "@/lib/format";
 import { parseGuestList } from "@/lib/parse-guests";
+import { orderedParts, PART_SWITCH } from "@/lib/invite-parts";
 
 async function hostClient() {
   const supabase = await createClient();
@@ -152,4 +153,26 @@ export async function deleteEvent(_prev: DeleteState, fd: FormData): Promise<Del
   }
   revalidatePath("/app");
   redirect("/app");
+}
+
+// The order the parts of the invite come in.
+//
+// The whole list is written at once rather than one part's position, because a list cannot end up
+// with two things claiming the same place. Anything unknown is dropped here as well as on read:
+// the column is the host's arrangement, not a dumping ground.
+export async function setSectionOrder(eventId: string, order: string[]) {
+  const { supabase } = await hostClient();
+  const clean = orderedParts(order);
+  await supabase.from("events").update({ section_order: clean }).eq("id", eventId);
+  revalidatePath(`/app/events/${eventId}`);
+}
+
+// One part on or off, from the same list that reorders them, so a host is not sent to a tab of
+// switches to hide something they are looking at.
+export async function setSectionShown(eventId: string, column: string, shown: boolean) {
+  const allowed = new Set(Object.values(PART_SWITCH));
+  if (!allowed.has(column)) return;
+  const { supabase } = await hostClient();
+  await supabase.from("events").update({ [column]: shown }).eq("id", eventId);
+  revalidatePath(`/app/events/${eventId}`);
 }

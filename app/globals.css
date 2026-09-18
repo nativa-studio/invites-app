@@ -268,3 +268,17 @@ details.drop > .drop-body { display: grid; gap: 12px; margin-top: 14px; }
 .chat .bubble-card .d { padding: 0 12px; font-size: 14px; color: var(--app-muted, #6b7280); }
 .chat .bubble-card .u { padding: 2px 12px 12px; font-size: 13px; color: var(--app-muted, #6b7280); }
 .chat .bubble { font-size: 15px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+
+/* What the invite is made of. One row per part: its name, which is also how you edit its words,
+   then move it or take it off. Up and down rather than dragging, because a drag inside a page
+   that is already scrolling is a fight and there are six parts at most. */
+.parts { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.part { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid var(--app-line); }
+.part .n { flex: 1 1 auto; min-width: 140px; text-align: left; background: none; border: 0; padding: 0; font: inherit; font-weight: 650; color: inherit; cursor: pointer; }
+.part .n:hover { text-decoration: underline; }
+.part .moves { display: flex; gap: 6px; flex: 0 0 auto; }
+/* An arrow is a small thing to hit, so these keep the full 44px target rather than inheriting
+   the 36px of a small button. */
+.part .moves .btn { min-width: 44px; min-height: 44px; padding: 0 10px; }
+.part.off .n { color: var(--app-muted, #6b7280); font-weight: 500; }
+.tag-off { margin-left: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--app-muted, #6b7280); }

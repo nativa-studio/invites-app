@@ -1,9 +1,11 @@
+import React from "react";
 import "@/app/invite.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { mascotFor } from "@/lib/artwork";
+import { orderedParts, type InvitePart } from "@/lib/invite-parts";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { LineupInvite } from "./LineupInvite";
@@ -37,18 +39,26 @@ export function InviteBody({
   }
 
   const p = paletteFor(e.palette, e.theme_id);
-  // Everything below the cover, in the order the moment asks for it. What changed, then the
-  // details, which is everything needed to decide. Then the reply, while the deciding is still
-  // in hand. Everything after it is for someone who has already said yes: the order of the day,
-  // what to bring, what happens afterwards.
+  // Everything below the cover, in whatever order the host has put it in. The default is the one
+  // the self-check asks for, each thing at the moment it is needed: what changed, then everything
+  // needed to decide, then the reply while the deciding is still in hand, then the things that
+  // only matter to someone who has already said yes.
+  //
+  // A part that is switched off draws nothing wherever it sits, so the order and the switches
+  // stay independent of each other.
+  const draw: Record<InvitePart, React.ReactNode> = {
+    updates: <UpdatesCard e={e} />,
+    details: e.show_details ? <DetailsCard e={e} /> : null,
+    reply,
+    day: e.show_runsheet ? <DayCard e={e} /> : null,
+    know: e.show_good_to_know ? <KnowCard e={e} /> : null,
+    after: e.show_after ? <AskCard e={e} /> : null,
+  };
   const below = (
     <>
-      <UpdatesCard e={e} />
-      {e.show_details && <DetailsCard e={e} />}
-      {reply}
-      {e.show_runsheet && <DayCard e={e} />}
-      {e.show_good_to_know && <KnowCard e={e} />}
-      {e.show_after && <AskCard e={e} />}
+      {orderedParts(e.section_order).map((part) => (
+        <React.Fragment key={part}>{draw[part]}</React.Fragment>
+      ))}
     </>
   );
 
