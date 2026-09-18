@@ -1,11 +1,12 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { copy } from "@/lib/copy";
 import { formatDateTime } from "@/lib/format";
 import { inviteText, reminderText, smsLink, whatsappLink, type TemplateEvent } from "@/lib/messages";
 import type { GuestRow } from "@/lib/db/types";
 import { markSent, newLink, removeGuest, setGuestGroup } from "@/app/app/events/[id]/actions";
 import { CopyButton } from "./CopyButton";
+import { Sheet } from "./Sheet";
 import { useHasShare } from "./capabilities";
 
 type Props = { eventId: string; guests: GuestRow[]; event: TemplateEvent; site: string };
@@ -16,6 +17,8 @@ export function GuestList({ eventId, guests, event, site }: Props) {
   const [busy, setBusy] = useState<string | null>(null);
   // Which guest has their ways-to-share open. One at a time, so the list stays a list.
   const [sharing, setSharing] = useState<string | null>(null);
+  // The guest waiting on a group name, which is what the New group sheet is for.
+  const [naming, setNaming] = useState<GuestRow | null>(null);
   const [, start] = useTransition();
   // "No group" is here because finding the unlabelled ones by scrolling is the thing that makes
   // labelling a long list not worth starting.
@@ -30,14 +33,26 @@ export function GuestList({ eventId, guests, event, site }: Props) {
 
   // Changing a guest's group. A new name is asked for rather than typed into every row, because
   // a host names a group once and then uses it forty times.
+  //
+  // Naming one opens the sheet, not the browser's own prompt box. The prompt arrived as a grey
+  // system dialog with nothing of this app about it, could not show the examples as a hint under
+  // the field, and on iOS sits over the page looking like the browser asking, not us.
+  //
+  // Opening it is a state change, which re-renders the row, which is what puts the select back on
+  // the group the guest actually has. Otherwise cancelling left the row reading "New group...".
   function changeGroup(g: GuestRow, picked: string) {
     if (picked === "__new") {
-      const name = window.prompt(copy.host.guestGroupAsk, "")?.trim();
-      if (!name) return;
-      start(() => { void setGuestGroup(eventId, g.id, name); });
+      setNaming(g);
       return;
     }
     start(() => { void setGuestGroup(eventId, g.id, picked); });
+  }
+
+  function saveNewGroup(name: string) {
+    const g = naming;
+    setNaming(null);
+    if (!g) return;
+    start(() => { void setGuestGroup(eventId, g.id, name); });
   }
   const unsent = guests.filter((g) => !g.sent_at);
   const next = unsent[0];
@@ -157,6 +172,53 @@ export function GuestList({ eventId, guests, event, site }: Props) {
           );
         })}
       </div>
+
+      {/* Keyed by guest, so naming a group for one guest never opens holding the last one's typing. */}
+      {naming && (
+        <NewGroupSheet
+          key={naming.id}
+          guest={naming}
+          onClose={() => setNaming(null)}
+          onSave={saveNewGroup}
+        />
+      )}
     </section>
+  );
+}
+
+// Naming a group, in the sheet everything else here uses.
+function NewGroupSheet({ guest, onClose, onSave }: { guest: GuestRow; onClose: () => void; onSave: (name: string) => void }) {
+  const [name, setName] = useState("");
+  const field = useRef<HTMLInputElement>(null);
+  const clean = name.trim();
+
+  // The keyboard should be up and in the field, since typing a name is the only thing to do here.
+  useEffect(() => { field.current?.focus(); }, []);
+
+  return (
+    <Sheet title={copy.host.guestGroupNewTitle} blurb={copy.host.guestGroupFor(guest.name)} dirty={clean.length > 0} onClose={onClose}>
+      <form
+        className="sheet-body"
+        onSubmit={(ev) => { ev.preventDefault(); if (clean) onSave(clean); }}
+      >
+        <div className="field">
+          <label htmlFor="new-group">{copy.host.guestGroupAsk}</label>
+          <input
+            id="new-group"
+            ref={field}
+            type="text"
+            value={name}
+            onChange={(ev) => setName(ev.target.value)}
+            autoComplete="off"
+            autoCapitalize="words"
+            enterKeyHint="done"
+          />
+          <span className="hint">{copy.host.guestGroupEg}</span>
+        </div>
+        <div className="sheet-foot">
+          <button className="btn primary" type="submit" disabled={!clean}>{copy.host.guestGroupSave}</button>
+        </div>
+      </form>
+    </Sheet>
   );
 }
