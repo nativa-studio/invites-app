@@ -196,3 +196,33 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .grouplink { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px 12px; }
 .grouplink b { grid-column: 1 / -1; font-size: 15px; }
 .grouplink code { min-width: 0; }
+
+/* A way out of the full size preview. The preview is the guest's page with no host chrome on it,
+   so without this the only way back was the browser's own control, which a phone hides as soon as
+   you scroll. Fixed to the top so it is there wherever you have got to. */
+.preview-back {
+  position: fixed; top: 12px; left: 12px; z-index: 80;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 999px; text-decoration: none;
+  background: #fff; color: #1c1917; border: 2px solid #1c1917;
+  font-size: 14px; font-weight: 600; line-height: 1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .2);
+}
+.preview-back::before { content: "\2039"; font-size: 18px; line-height: 1; }
+
+/* Where everyone is from. One row per group: the name, how it is going, and the link that
+   brought them in. */
+.grouprow { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px; padding: 12px 0; border-top: 1px solid var(--app-line); }
+/* Every cell is placed by hand. Left to auto-placement the button landed in the first column and
+   shoved the group's name to the right. */
+.grouprow .n { grid-column: 1; grid-row: 1; font-weight: 650; font-size: 16px; }
+.grouprow .b { grid-column: 1; grid-row: 2; font-size: 14px; color: var(--app-muted, #6b7280); }
+.grouprow > button { grid-column: 2; grid-row: 1 / span 2; }
+.grouprow.plain .b { grid-column: 1 / -1; }
+
+/* Deleting the event. Marked out so it does not read as one more setting, without shouting at a
+   host who is only passing through. */
+.card.danger { border-color: #d4b3ad; }
+.card.danger .h2 { color: #9b2c17; }
+.btn.danger { background: #b3311a; border-color: #b3311a; color: #fff; }
+.btn.danger:disabled { opacity: .6; }

@@ -45,7 +45,7 @@ export function InviteEditor({ e }: { e: EventRow }) {
         <iframe key={src} src={src} title="Your invite" />
       </div>
       <div className="actions">
-        <a className="btn small" href={`/app/preview/${e.id}`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
+        <a className="btn small" href={`/app/preview/${e.id}?full=1`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
       </div>
       {/* Keyed by section, so tapping a different part of the invite gets a fresh drawer rather
           than one still holding the last one's unsaved state. */}

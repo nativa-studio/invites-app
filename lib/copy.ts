@@ -155,6 +155,21 @@ export const copy = {
     groupLinkNameHint: "School, Family, The neighbours",
     groupLinkNameBlank: "Type a name above and your link appears here.",
     groupLinksInUse: "Already in use",
+    groupsHeading: "Where everyone is from",
+    groupsBlurb: "Every group you've used, who's in it and who has replied. Guests never see any of this.",
+    groupsEmpty: "No groups yet. Add a guest with a group, or hand out a group link, and they show up here.",
+    groupsNone: "No group",
+    groupsNoneHint: ", added before you started using groups or through the plain link",
+    deleteHeading: "Delete this event",
+    deleteBlurb: (guests: number, replies: number) =>
+      guests === 0
+        ? "Nothing is stored for it yet, so this just removes the event."
+        : `This removes the event and everything with it: ${guests} ${guests === 1 ? "guest" : "guests"}, ${replies} ${replies === 1 ? "reply" : "replies"}, every personal link, every note about food and access, and any photos. It cannot be undone.`,
+    deleteStart: "Delete event",
+    deleteConfirmLabel: (title: string) => `Type ${title} to confirm`,
+    deleteConfirm: "Delete it",
+    deleting: "Deleting",
+    deleteCancel: "Keep it",
     remind: "Remind",
     newLink: "New link",
     trail: {
