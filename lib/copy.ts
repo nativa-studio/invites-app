@@ -110,7 +110,7 @@ export const copy = {
     saidYes: "said yes",
     saidNo: "said no",
     noReply: "no reply",
-    opened: "opened, not replied",
+    opened: "opened it",
     addGuest: "Add a guest",
     addOne: "One at a time",
     addMany: "Paste a list",

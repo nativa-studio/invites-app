@@ -47,6 +47,23 @@ p { margin: 0; }
 /* A state, not a category, so it is a word in a quiet outline rather than a colour. */
 .tag { font-size: 12.5px; font-weight: 600; color: var(--app-mute); border: 1px solid var(--app-line-2); border-radius: 999px; padding: 3px 10px; }
 
+/* The event list. Tiles rather than rows, because a host recognises an event by the look of its
+   invite before they read its name. Two across on a phone, more as the screen allows. The picture
+   is taller than it is wide, since that is the shape of the thing it stands for. */
+.evt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.evt-card { display: grid; gap: 0; border: 1px solid var(--app-line); border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; background: var(--app-bg); min-width: 0; }
+.evt-card:hover { border-color: var(--app-line-2); }
+.evt-art { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; background: var(--app-sunk); border-bottom: 1px solid var(--app-line); overflow: hidden; }
+.evt-art img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.evt-art svg { width: 44px; height: auto; }
+.evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
+.evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+.evt-when { font-size: 12.5px; color: var(--app-mute); }
+.evt-foot { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 5px; }
+.evt-foot .tag { padding: 2px 8px; font-size: 11.5px; }
+.evt-foot .tag.on { color: var(--app-ink); border-color: var(--app-ink); }
+.evt-count { font-size: 12px; color: var(--app-mute); }
+
 /* The five headers. A row on a phone, scrolling sideways if the names outgrow the screen,
    because losing one off the edge is worse than a row that moves. */
 /* min-width 0 is load bearing: a grid child sizes to its content by default, so without it the
