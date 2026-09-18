@@ -76,6 +76,8 @@
 
 .peek .kv { display: grid; grid-template-columns: 74px 1fr; gap: 10px 14px; margin-top: 20px; font-size: 17px; line-height: 1.45; }
 .peek .kv .k { font-family: var(--font-hand); font-size: 18px; color: var(--sky); padding-top: 2px; }
+.peek .kv.icons { grid-template-columns: 34px 1fr; align-items: start; }
+.peek .kv.icons .k { padding-top: 0; }
 .peek .maps { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; margin-top: 20px; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--paper); color: var(--ink); font-family: var(--font-display); font-size: 17px; text-decoration: none; }
 
 /* The day: the time is a sticker, not a column */

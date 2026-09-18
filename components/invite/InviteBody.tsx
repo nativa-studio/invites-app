@@ -9,6 +9,7 @@ import { Envelope } from "./Envelope";
 import { LineupInvite } from "./LineupInvite";
 import { PeekInvite } from "./PeekInvite";
 import { PostInvite } from "./PostInvite";
+import { ScrollCue } from "./ScrollCue";
 
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
@@ -78,6 +79,7 @@ export function InviteBody({
           {below}
         </div>
       </div>
+      <ScrollCue />
     </main>
   );
 }

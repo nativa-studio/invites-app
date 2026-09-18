@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Bolt } from "@/components/art/icons";
+import { ScrollCue } from "./ScrollCue";
 
 type Props = { addressee: string; card: React.ReactNode; openLabel: string; skipAnimation?: boolean };
 
@@ -59,6 +60,7 @@ export function PostEnvelope({ addressee, card, openLabel, skipAnimation }: Prop
         <div className="seal"><Bolt size={30} /></div>
       </div>
       {phase !== "done" && <button type="button" className="tap" aria-label={openLabel} onClick={open} disabled={phase !== ""} />}
+      <ScrollCue ready={phase === "done"} anchor=".opening" />
     </div>
   );
 }

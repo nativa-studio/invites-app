@@ -33,6 +33,11 @@
 .pcard .label.red { color: var(--red); } .pcard .label.sky { color: var(--sky); } .pcard .label.forest { color: var(--forest); }
 .pcard .kv { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; font-size: 16px; line-height: 1.4; width: 100%; max-width: 290px; }
 .pcard .kv .k { font-family: var(--font-hand); font-size: 19px; color: var(--sky); }
+/* The symbol column. A clock and a pin replace the words When and Where, so the column is only
+   as wide as the picture, and the words behind them are still read aloud. */
+.pcard .kv.icons { grid-template-columns: 34px 1fr; align-items: start; gap: 12px 12px; }
+.kv .k svg { display: block; }
+.sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .pcard .stops { display: flex; flex-direction: column; gap: 14px; width: 100%; }
 .pcard .stop { display: grid; grid-template-columns: 48px 56px 1fr; gap: 8px; align-items: start; }
 .pcard .stop .t { font-family: var(--font-display); font-size: 17px; color: var(--red); padding-top: 14px; }
@@ -122,3 +127,24 @@
 .suite { display: none; flex-direction: column; align-items: center; gap: 30px; width: 100%; opacity: 0; transition: opacity .5s; }
 .done .suite, .no-envelope .suite { display: flex; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .open .env .flap .front { animation: none; opacity: 0; } .open .env .flap .backface { animation: none; opacity: 1; } }
+
+/* "There's more below". A bar along the very bottom edge, not a pill dropped into the middle of
+   the card: it only ever appears on a screen where the card is already cut off, so it should read
+   as the edge of the window rather than as something landing on the words. It covers the last
+   strip of the page and leaves the moment the page moves. */
+.more {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 13px 16px calc(13px + env(safe-area-inset-bottom));
+  border: 0; border-top: 2px solid var(--navy);
+  background: var(--navy); color: var(--crm, #fff);
+  font-family: var(--font-display); font-size: 15px; line-height: 1; white-space: nowrap;
+  cursor: pointer; animation: more-in .4s ease both;
+}
+/* The arrow is what moves, not the bar. A target that never stops shifting is one a thumb has to
+   chase, and it is the thumb this is here to help. */
+.more svg { display: block; animation: more-bob 1.9s ease-in-out .5s infinite; }
+.more svg path { stroke: var(--crm, #fff); }
+@keyframes more-in { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes more-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .more, .more svg { animation: none; } }

@@ -25,6 +25,9 @@ export function PickMode() {
 
   return (
     <style>{`
+      /* A guest gets told the page continues. A host who is editing is tapping the parts, and a
+         bar across the bottom of the frame would only sit on top of one of them. */
+      .more { display: none; }
       [data-section] { cursor: pointer; position: relative; }
       [data-section]::after {
         content: ""; position: absolute; inset: -6px; border-radius: 10px; pointer-events: none;

@@ -42,4 +42,13 @@ export function Bubble({ size = 48 }: P) {
 export function Gate({ size = 48 }: P) {
   return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="22" width="44" height="34" fill={S.forest} {...kl} /><path d="M10 22c14-10 30-10 44 0" fill={S.crm} {...kl} /><path d="M22 56V30M32 56V28M42 56V30" stroke={S.navy} strokeWidth="3" /></svg>);
 }
-export const ICONS: Record<string, (p: P) => React.ReactElement> = { cap: Cap, ball: Ball, ring: Ring, cake: Cake, car: Car, gift: Gift, camera: Camera, kids: Kids, towel: Towel, plate: Plate, gate: Gate, bolt: Bolt };
+export function Clock({ size = 48 }: P) {
+  return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="34" r="24" fill={S.crm} {...kl} /><path d="M32 20v14h11" fill="none" stroke={S.navy} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" /><path d="M26 8h12" stroke={S.navy} strokeWidth="4" strokeLinecap="round" /><path d="M32 8v2" stroke={S.navy} strokeWidth="4" strokeLinecap="round" /></svg>);
+}
+export function Pin({ size = 48 }: P) {
+  return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58S12 39 12 26a20 20 0 0 1 40 0c0 13-20 32-20 32z" fill={S.red} {...kl} /><circle cx="32" cy="25" r="8" fill={S.crm} {...kl} /></svg>);
+}
+export function Chev({ size = 30 }: P) {
+  return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M16 24l16 16 16-16" fill="none" stroke={S.navy} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" /></svg>);
+}
+export const ICONS: Record<string, (p: P) => React.ReactElement> = { cap: Cap, ball: Ball, ring: Ring, cake: Cake, car: Car, gift: Gift, camera: Camera, kids: Kids, towel: Towel, plate: Plate, gate: Gate, bolt: Bolt, clock: Clock, pin: Pin };

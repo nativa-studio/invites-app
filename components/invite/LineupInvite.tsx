@@ -4,7 +4,8 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { goodToKnow } from "@/lib/good-to-know";
 import { formatInviteDate, formatTime, formatTimeRange, hostName } from "@/lib/format";
-import { mapsLink } from "./Cards";
+import { mapsLink, WhenWhere } from "./Cards";
+import { ScrollCue } from "./ScrollCue";
 import { bandFor } from "@/lib/artwork";
 
 // Colours lifted from the artwork, used for the dots beside each good-to-know line.
@@ -47,12 +48,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
           {e.show_details && (
           <section data-section="details">
             <p className="label">{copy.sections.details}</p>
-            <div className="kv">
-              <div className="k">{copy.sections.when}</div>
-              <div>{formatInviteDate(e.date)}, {formatTimeRange(e.start_time, e.end_time, e.time_note).toLowerCase()}</div>
-              <div className="k">{copy.sections.where}</div>
-              <div>{e.venue}{e.address ? <><br />{e.address}</> : null}</div>
-            </div>
+            <WhenWhere e={e} />
             {maps && <div style={{ textAlign: "center" }}><a className="maps" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a></div>}
           </section>
           )}
@@ -104,6 +100,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
 
         </div>
       </div>
+      <ScrollCue anchor="header" />
     </main>
   );
 }
