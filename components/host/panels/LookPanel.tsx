@@ -3,15 +3,8 @@ import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
 import { Choice, Switch } from "@/components/host/fields";
 import { LayoutPicker } from "@/components/host/LayoutPicker";
+import { LAYOUTS } from "@/lib/layouts";
 import { PanelForm } from "@/components/host/PanelForm";
-
-const LAYOUT_OPTIONS = [
-  { id: "suite", name: "Stationery suite", line: "Cards in an envelope that opens" },
-  { id: "lineup", name: "The lineup", line: "One page, artwork along the bottom" },
-  { id: "peek", name: "Peek", line: "Characters leaning in from the edges" },
-  { id: "post", name: "In the post", line: "An envelope opens, and the characters lean in" },
-  { id: "strip", name: "Illustrated strip", line: "The same cards, no envelope, straight down" },
-];
 
 // What the invite looks like: its shape, its picture, and which parts of it show at all.
 export const LOOK_FIELDS = ["layout_id", "invite_image_path", "show_details", "show_runsheet", "show_good_to_know", "show_after"] as const;
@@ -20,7 +13,7 @@ export function LookPanel({ e }: { e: EventRow }) {
   return (
     <PanelForm eventId={e.id} fields={LOOK_FIELDS}>
       <section className="card">
-        <LayoutPicker eventId={e.id} value={e.layout_id} options={LAYOUT_OPTIONS} />
+        <LayoutPicker eventId={e.id} value={e.layout_id} options={LAYOUTS} />
         <Choice
           id="invite_image_path"
           label="Artwork"

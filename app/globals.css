@@ -47,6 +47,25 @@ p { margin: 0; }
 /* A state, not a category, so it is a word in a quiet outline rather than a colour. */
 .tag { font-size: 12.5px; font-weight: 600; color: var(--app-mute); border: 1px solid var(--app-line-2); border-radius: 999px; padding: 3px 10px; }
 
+/* Setup, one question per step. The step number is small and the question is the loudest thing
+   on the screen, so it reads as being asked something rather than filling in a form. */
+.steps { display: grid; gap: 14px; }
+.step-count { font-size: 12.5px; font-weight: 600; color: var(--app-mute); margin: 0; }
+.step-heading { margin: -8px 0 2px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.tile { display: grid; gap: 4px; justify-items: start; text-align: left; padding: 13px; border: 1px solid var(--app-line-2); border-radius: 10px; background: var(--app-bg); cursor: pointer; font: inherit; color: inherit; min-width: 0; }
+.tile:hover { border-color: var(--app-mute); }
+/* The chosen one is a heavier outline, not a fill: a filled tile in a neutral app reads as a
+   button you still have to press. */
+.tile.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
+.tiles.art .tile { justify-items: center; text-align: center; }
+.tiles.art svg { width: 42px; height: auto; margin-bottom: 4px; }
+.tile-name { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+.tile-line { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; }
+/* Back on the left, on with it on the right, and it follows you down a long last step. */
+.step-bar { position: sticky; bottom: 0; z-index: 5; display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; background: var(--app-bg); border-top: 1px solid var(--app-line); }
+.step-bar .btn:disabled { opacity: 0.4; cursor: default; }
+
 /* The event list. Tiles rather than rows, because a host recognises an event by the look of its
    invite before they read its name. Two across on a phone, more as the screen allows. The picture
    is taller than it is wide, since that is the shape of the thing it stands for. */

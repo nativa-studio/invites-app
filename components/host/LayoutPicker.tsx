@@ -3,7 +3,7 @@ import { useState } from "react";
 import { copy } from "@/lib/copy";
 import { LayoutThumb } from "./LayoutThumb";
 
-export type LayoutOption = { id: string; name: string; line: string };
+import type { LayoutOption } from "@/lib/layouts";
 
 export function LayoutPicker({ eventId, value, options }: { eventId: string; value: string; options: LayoutOption[] }) {
   const [chosen, setChosen] = useState(value);
