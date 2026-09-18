@@ -92,10 +92,10 @@
 .lineup header .art { margin-bottom: -2px; }
 
 /* The card is a fixed height, and not an arbitrary one: the slot positions a card by its top edge
-   and turns it about its centre, so a shorter card rides higher and pokes out of the envelope.
-   589 is the suite's card, measured, which is what the shared geometry is built around. The space
-   it buys is spent the way this layout spends space anyway, with the artwork pushed to the
-   bottom of the cover. */
+   and turns it about its centre, so a shorter card rides higher and pokes out of the envelope. At
+   this layout's natural 365 the card sat 91px above the pocket; 589 puts it 21px inside, measured.
+   The space it buys is spent the way this layout spends space anyway, with the artwork pushed to
+   the bottom of the cover. */
 .lineup header { height: 589px; display: flex; flex-direction: column; }
 .lineup header .art { margin-top: auto; }
 
