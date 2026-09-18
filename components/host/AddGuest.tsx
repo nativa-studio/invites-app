@@ -12,8 +12,8 @@ export function AddGuest({ eventId }: { eventId: string }) {
     <section className="card">
       <h2 className="h2">{copy.host.addGuest}</h2>
       <div className="actions" role="tablist" aria-label="How to add guests">
-        <button type="button" className="btn small" aria-pressed={mode === "one"} style={mode === "one" ? { background: "var(--ink)", color: "#fff" } : undefined} onClick={() => setMode("one")}>{copy.host.addOne}</button>
-        <button type="button" className="btn small" aria-pressed={mode === "many"} style={mode === "many" ? { background: "var(--ink)", color: "#fff" } : undefined} onClick={() => setMode("many")}>{copy.host.addMany}</button>
+        <button type="button" className="btn small" aria-pressed={mode === "one"} onClick={() => setMode("one")}>{copy.host.addOne}</button>
+        <button type="button" className="btn small" aria-pressed={mode === "many"} onClick={() => setMode("many")}>{copy.host.addMany}</button>
       </div>
       {mode === "one" ? <OneForm eventId={eventId} /> : <ManyForm eventId={eventId} hasPicker={hasPicker} />}
     </section>
@@ -31,7 +31,7 @@ function OneForm({ eventId }: { eventId: string }) {
       <div className="field"><label htmlFor="g-contact">{copy.host.contactName}</label><input id="g-contact" name="contact_name" type="text" autoComplete="off" /></div>
       <div className="field"><label htmlFor="g-phone">{copy.host.phone}</label><input id="g-phone" name="phone" type="tel" inputMode="tel" placeholder="04xx xxx xxx" /></div>
       <fieldset style={{ border: 0, padding: 0, margin: 0, display: "grid", gap: 6 }}>
-        <legend className="field" style={{ padding: 0 }}><span style={{ fontFamily: "var(--font-hand)", fontSize: 19 }}>{copy.host.expected}</span></legend>
+        <legend className="field" style={{ padding: 0 }}><span className="label-ish">{copy.host.expected}</span></legend>
         <div style={{ display: "flex", gap: 10 }}>
           <div className="field" style={{ flex: 1 }}><label htmlFor="g-kids">{copy.host.expectedChildren}</label><input id="g-kids" name="expected_children" type="number" inputMode="numeric" min={0} max={50} placeholder="0" /></div>
           <div className="field" style={{ flex: 1 }}><label htmlFor="g-adults">{copy.host.expectedAdults}</label><input id="g-adults" name="expected_adults" type="number" inputMode="numeric" min={0} max={50} placeholder="0" /></div>

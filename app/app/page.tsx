@@ -19,7 +19,7 @@ export default async function EventList() {
       <div className="guest-list">
         {events?.map((e) => (
           <Link key={e.id} href={`/app/events/${e.id}`} className="card" style={{ textDecoration: "none", color: "inherit" }}>
-            <span style={{ fontFamily: "var(--font-display)", fontSize: 22 }}>{e.title}</span>
+            <span style={{ fontSize: 17, fontWeight: 600 }}>{e.title}</span>
             <span className="muted">{e.date ? formatLongDate(e.date) : "Date to come"}</span>
           </Link>
         ))}

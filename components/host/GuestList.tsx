@@ -65,7 +65,7 @@ export function GuestList({ eventId, guests, event, site }: Props) {
 
       <div className="actions" role="tablist" aria-label="Filter guests">
         {(["all", "yes", "no", "pending", "unsent"] as const).map((f) => (
-          <button key={f} type="button" className="btn small" aria-pressed={filter === f} style={filter === f ? { background: "var(--ink)", color: "#fff" } : undefined} onClick={() => setFilter(f)}>
+          <button key={f} type="button" className="btn small" aria-pressed={filter === f} onClick={() => setFilter(f)}>
             {f === "all" ? "All" : f === "yes" ? "Yes" : f === "no" ? "No" : f === "pending" ? "No reply" : "Not sent"}
           </button>
         ))}

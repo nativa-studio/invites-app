@@ -14,7 +14,7 @@ export function NewEventForm() {
         <h2 className="h2">What kind of event</h2>
         <div style={{ display: "grid", gap: 8 }}>
           {EVENT_TYPES.map((t) => (
-            <label key={t.id} className="guest" style={{ cursor: "pointer", borderColor: type === t.id ? "var(--terracotta)" : undefined, borderWidth: type === t.id ? 2.5 : 1.5 }}>
+            <label key={t.id} className="guest" style={{ cursor: "pointer", borderColor: type === t.id ? "var(--app-ink)" : undefined }}>
               <span style={{ display: "flex", gap: 10, alignItems: "center" }}>
                 <input type="radio" name="type" value={t.id} checked={type === t.id} onChange={() => setType(t.id)} style={{ width: 20, height: 20 }} />
                 <span className="name">{t.label}</span>

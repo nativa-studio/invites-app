@@ -1,18 +1,19 @@
-/* Tokens. The invite side overrides the palette per event; the host side uses the warm board palette. */
+/* Tokens.
+   Two palettes live here and they do not mix. The invite side sets its own colours per event,
+   on the page itself, and owns the display and handwriting faces. The app side, everything a
+   host uses to set an event up, is deliberately colourless: a white surface, one ink, hairlines,
+   and the system's own typeface. The only colour a host should see in the tool is an invite. */
 :root {
-  --cream: #f6efe1;
-  --paper: #fbf7ef;
-  --ink: #2a2320;
-  --ink-2: #6b625c;
-  --line: #e4dccb;
-  --terracotta: #bd5528;
-  --mustard: #e8b33a;
-  --sage: #9db58c;
-  --olive: #4f6b4a;
-  --cobalt: #2f5da8;
-  --burgundy: #8c2f39;
-  --ok: #4f6b4a;
-  --warn: #bd5528;
+  /* The app */
+  --app-bg: #ffffff;
+  --app-sunk: #f7f7f6;
+  --app-line: #e4e3e1;
+  --app-line-2: #d6d3d1;
+  --app-ink: #1c1917;
+  --app-mute: #78716c;
+  --app-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* The invites. Per-event colours arrive as inline variables; these are the faces. */
   --font-display: "Lilita One", "Arial Rounded MT Bold", sans-serif;
   --font-hand: "Patrick Hand SC", cursive;
   --font-body: "Nunito", "Helvetica Neue", Arial, sans-serif;
@@ -20,60 +21,77 @@
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-body { background: var(--cream); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
-a { color: var(--cobalt); }
+/* Every invite paints its own ground over this, so white here is the app's, not theirs. */
+body { background: var(--app-bg); color: var(--app-ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 button, input, textarea, select { font: inherit; color: inherit; }
-h1, h2, h3 { margin: 0; font-weight: 400; line-height: 1.05; text-wrap: balance; }
+h1, h2, h3 { margin: 0; line-height: 1.15; text-wrap: balance; }
 p { margin: 0; }
-:focus-visible { outline: 3px solid var(--mustard); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
-/* Host side */
-.host { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; display: grid; gap: 20px; }
-.host header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.brand { font-family: var(--font-display); font-size: 26px; color: var(--terracotta); text-decoration: none; }
-.h1 { font-family: var(--font-display); font-size: 34px; }
-.h2 { font-family: var(--font-hand); font-size: 24px; letter-spacing: 0.04em; color: var(--olive); }
-.muted { color: var(--ink-2); }
-.card { background: var(--paper); border: 1.5px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 12px; }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 2px solid var(--ink); background: transparent; color: var(--ink); font-weight: 700; text-decoration: none; cursor: pointer; }
-.btn.primary { background: var(--terracotta); border-color: var(--terracotta); color: #fff; }
-.btn.small { min-height: 40px; padding: 0 14px; font-size: 14px; }
-.btn[aria-disabled="true"], .btn:disabled { opacity: 0.5; pointer-events: none; }
-.field { display: grid; gap: 6px; }
-.field label { font-family: var(--font-hand); font-size: 19px; }
-.field input, .field textarea, .field select { min-height: 46px; border: 2px solid var(--ink); border-radius: 12px; padding: 10px 12px; background: #fff; width: 100%; }
-.field textarea { min-height: 90px; }
-.counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
-.count { background: var(--paper); border: 1.5px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 2px; }
-.count b { font-family: var(--font-display); font-size: 30px; line-height: 1; font-variant-numeric: tabular-nums; }
-.count span { font-size: 13px; color: var(--ink-2); }
-.guest-list { display: grid; gap: 10px; }
-.guest { background: var(--paper); border: 1.5px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 8px; }
-.guest .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.guest .name { font-weight: 700; font-size: 17px; }
-.guest .trail { font-size: 13px; color: var(--ink-2); }
-.pill { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 700; border: 1.5px solid currentColor; }
-.pill.yes { color: var(--olive); background: #e9efe4; }
-.pill.no { color: var(--burgundy); background: #f5e3e5; }
-.pill.pending { color: var(--ink-2); background: #efe9db; }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.notice { background: #fff6dd; border: 1.5px solid var(--mustard); border-radius: 12px; padding: 10px 14px; font-size: 14px; }
-code { font-size: 14px; background: #efe9db; padding: 2px 6px; border-radius: 6px; word-break: break-all; }
+/* The app. Nothing in here carries the product's colours or its party typefaces. */
+.host { max-width: 720px; margin: 0 auto; padding: 20px 16px 64px; display: grid; gap: 18px; font-family: var(--app-font); color: var(--app-ink); }
+.host a { color: var(--app-ink); text-underline-offset: 2px; }
+.host :focus-visible { outline: 2px solid var(--app-ink); outline-offset: 2px; border-radius: 4px; }
+.host header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--app-line); }
+.brand { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--app-ink); text-decoration: none; }
+.h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; color: var(--app-ink); }
+.muted { color: var(--app-mute); font-size: 15px; }
+.card { background: var(--app-bg); border: 1px solid var(--app-line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; }
 
-/* The layout picker: a card each, with a drawing of the shape, and the real invite underneath
-   so a host can see what they are choosing rather than read the name of it. */
-.field .label-ish { font-family: var(--font-hand); font-size: 19px; }
-.layouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.layout { display: grid; grid-template-columns: 56px 1fr; grid-template-rows: auto auto; column-gap: 12px; align-items: center; padding: 12px; border: 2px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; }
-.layout:has(input:focus-visible) { outline: 3px solid var(--mustard); outline-offset: 2px; }
-.layout.on { border-color: var(--ink); box-shadow: 0 0 0 3px var(--mustard); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid var(--app-line-2); background: var(--app-bg); color: var(--app-ink); font-size: 15px; font-weight: 600; text-decoration: none; cursor: pointer; }
+.btn:hover { border-color: var(--app-ink); }
+.btn.primary { background: var(--app-ink); border-color: var(--app-ink); color: #fff; }
+.btn.small { min-height: 36px; padding: 0 12px; font-size: 14px; }
+.btn[aria-disabled="true"], .btn:disabled { opacity: 0.45; pointer-events: none; }
+/* A pressed toggle, such as a guest-list filter, is the one place the app fills with ink. */
+.btn[aria-pressed="true"] { background: var(--app-ink); border-color: var(--app-ink); color: #fff; }
+
+.field { display: grid; gap: 5px; }
+.field label, .field .label-ish { font-size: 14px; font-weight: 600; color: var(--app-ink); }
+.field input, .field textarea, .field select { min-height: 42px; border: 1px solid var(--app-line-2); border-radius: 8px; padding: 9px 11px; background: var(--app-bg); width: 100%; font-family: var(--app-font); }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--app-ink); }
+.field textarea { min-height: 84px; }
+
+/* Two by two on a phone, so four counts never leave one stranded on its own row. */
+.counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+.count { background: var(--app-sunk); border: 1px solid var(--app-line); border-radius: 10px; padding: 11px 12px; display: grid; gap: 1px; }
+.count b { font-size: 24px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.count span { font-size: 12.5px; color: var(--app-mute); }
+
+.guest-list { display: grid; gap: 8px; }
+.guest { background: var(--app-bg); border: 1px solid var(--app-line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; }
+.guest .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.guest .name { font-weight: 600; font-size: 15.5px; }
+.guest .trail { font-size: 12.5px; color: var(--app-mute); }
+
+/* Status reads by weight and a mark, not by colour. A guest who cannot come is not an error. */
+.pill { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; border: 1px solid var(--app-line-2); background: var(--app-bg); color: var(--app-mute); }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 1px solid currentColor; }
+.pill.yes { color: var(--app-ink); border-color: var(--app-ink); }
+.pill.yes::before { background: currentColor; }
+.pill.no::before { background: transparent; }
+.pill.pending { border-style: dashed; }
+
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.notice { background: var(--app-sunk); border: 1px solid var(--app-line); border-left: 2px solid var(--app-ink); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 14px; color: var(--app-mute); }
+.notice b { color: var(--app-ink); }
+code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--app-sunk); border: 1px solid var(--app-line); padding: 2px 6px; border-radius: 5px; word-break: break-all; }
+
+/* The layout picker: a card each with a drawing of the shape, and the real invite underneath,
+   so a host sees what they are choosing rather than reads the name of it. */
+.layouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 8px; }
+.layout { display: grid; grid-template-columns: 50px 1fr; grid-template-rows: auto auto; column-gap: 11px; align-items: center; padding: 11px; border: 1px solid var(--app-line-2); border-radius: 10px; background: var(--app-bg); cursor: pointer; }
+.layout:has(input:focus-visible) { outline: 2px solid var(--app-ink); outline-offset: 2px; }
+.layout.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
 .layout input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .layout svg { grid-row: 1 / span 2; display: block; }
-.layout .n { font-family: var(--font-display); font-size: 17px; align-self: end; }
-.layout .b { font-size: 13px; color: var(--ink-2); line-height: 1.35; align-self: start; }
-.screen { height: 460px; border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; background: var(--cream); }
+.layout .n { font-size: 14px; font-weight: 600; align-self: end; }
+.layout .b { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; align-self: start; }
+/* The one window in the tool where colour is allowed, because what is in it is an invite. */
+.screen { height: 460px; border: 1px solid var(--app-line-2); border-radius: 10px; overflow: hidden; background: var(--app-sunk); }
 .screen iframe { width: 100%; height: 100%; border: 0; display: block; }
-.saved { display: grid; gap: 10px; justify-items: start; background: #eef4ea; border: 1.5px solid var(--olive); border-radius: 12px; padding: 14px 16px; }
-.saved b { font-family: var(--font-display); font-size: 18px; }
-.saved p { font-size: 14px; color: var(--ink-2); }
+
+.saved { display: grid; gap: 8px; justify-items: start; background: var(--app-sunk); border: 1px solid var(--app-line); border-left: 2px solid var(--app-ink); border-radius: 0 8px 8px 0; padding: 14px 16px; }
+.saved b { font-size: 15px; font-weight: 700; }
+.saved p { font-size: 14px; color: var(--app-mute); }
