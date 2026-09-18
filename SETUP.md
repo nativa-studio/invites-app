@@ -81,5 +81,34 @@ running app never reads it. The secret key still belongs only in `.env.local` on
 `apply` wraps each migration in a transaction, so one that fails partway leaves nothing behind,
 and it refuses any file outside `supabase/migrations/`.
 
-`.claude/settings.json` carries the permission rule that lets a session run this script without
-being stopped. It names this one command, not `curl` in general.
+### Letting a Claude Code session run it
+
+A session is stopped from running this script unless the repository carries a permission rule, and
+a session cannot add that rule itself: committing a change to its own permissions is refused, by
+design. So this is a person's job, once.
+
+It has to be on `main`, because a new session clones `main`. On a feature branch it has no effect.
+
+Through the GitHub web interface: Add file, Create new file, name it `.claude/settings.json`,
+paste the block below, then commit **directly to `main`** rather than to a new branch.
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 scripts/supabase-sql.py:*)",
+      "Bash(python3 scripts/supabase-sql.py *)",
+      "Bash(./scripts/supabase-sql.py:*)",
+      "Bash(./scripts/supabase-sql.py *)"
+    ]
+  }
+}
+```
+
+The rule names this one script, not `curl` in general, so it does not become permission to call
+anything on the internet.
+
+That is half of it. The other half is the token: set `SUPABASE_ACCESS_TOKEN` as an environment
+variable on the Claude Code environment, not in `.env.local`, which is git ignored and so never
+reaches a new session. With the rule but no token the script has no credentials; with the token but
+no rule the session is stopped before it runs. Both, once, and it stops coming up.
