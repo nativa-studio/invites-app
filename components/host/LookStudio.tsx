@@ -4,11 +4,6 @@ import { copy } from "@/lib/copy";
 import { LAYOUTS } from "@/lib/layouts";
 import { LayoutThumb } from "./LayoutThumb";
 
-const ARTWORK: [string, string][] = [
-  ["", "No picture"],
-  ["/artwork/gabriel-lineup.png", "Gabriel's lineup"],
-];
-
 type Sections = { details: boolean; day: boolean; know: boolean; after: boolean };
 
 const SECTION_LABELS: [keyof Sections, string, string][] = [
@@ -18,7 +13,7 @@ const SECTION_LABELS: [keyof Sections, string, string][] = [
   ["after", "show_after", "Updates and photos"],
 ];
 
-export type LookState = { layout: string; artwork: string; sections: Sections };
+export type LookState = { layout: string; sections: Sections };
 
 // Everything that decides what the invite looks like, with one preview that answers for all of
 // it. Previously the preview only knew about the layout, so flicking a section switch or changing
@@ -28,16 +23,12 @@ export type LookState = { layout: string; artwork: string; sections: Sections };
 // The controls carry their own form names, so the panel's field manifest saves them as before.
 export function LookStudio({ eventId, saved }: { eventId: string; saved: LookState }) {
   const [layout, setLayout] = useState(saved.layout);
-  const [artwork, setArtwork] = useState(saved.artwork);
   const [sections, setSections] = useState(saved.sections);
 
   const on = SECTION_LABELS.filter(([k]) => sections[k]).map(([k]) => k).join(",");
-  const src = `/app/preview/${eventId}?layout=${layout}&art=${encodeURIComponent(artwork)}&show=${on}`;
+  const src = `/app/preview/${eventId}?layout=${layout}&show=${on}`;
   const savedName = LAYOUTS.find((l) => l.id === saved.layout)?.name ?? saved.layout;
-  const changed =
-    layout !== saved.layout ||
-    artwork !== saved.artwork ||
-    SECTION_LABELS.some(([k]) => sections[k] !== saved.sections[k]);
+  const changed = layout !== saved.layout || SECTION_LABELS.some(([k]) => sections[k] !== saved.sections[k]);
 
   return (
     <>
@@ -65,16 +56,6 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
               <span className="b">{o.line}</span>
             </label>
           ))}
-        </div>
-      </section>
-
-      <section className="card">
-        <div className="field">
-          <label htmlFor="invite_image_path">Artwork</label>
-          <select id="invite_image_path" name="invite_image_path" value={artwork} onChange={(e) => setArtwork(e.target.value)}>
-            {ARTWORK.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-          </select>
-          <span className="hint">Uploading your own is coming. The lineup, peek and post looks build their pictures from this.</span>
         </div>
       </section>
 
