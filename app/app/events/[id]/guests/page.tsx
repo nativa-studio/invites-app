@@ -12,7 +12,7 @@ export default async function Guests({ params }: { params: Promise<{ id: string 
   const site = await getSiteUrl();
   return (
     <>
-      <AddGuest eventId={e.id} startOpen={list.length === 0} />
+      <AddGuest eventId={e.id} none={list.length === 0} />
       <GroupsPanel guests={list} base={`${site}/e/${e.slug}`} />
       <GuestList eventId={e.id} guests={list} event={{ title: e.title, date: e.date, text_template: e.text_template, reminder_template: e.reminder_template }} site={site} />
     </>

@@ -4,28 +4,40 @@ import { copy } from "@/lib/copy";
 import { addGuest, addGuests, type AddGuestState, type AddManyState } from "@/app/app/events/[id]/actions";
 
 import { contactPicker, useHasContactPicker } from "./capabilities";
+import { Sheet } from "./Sheet";
 
-// Adding guests folds away, because on a phone the empty form was taller than the screen and the
-// list it belongs to started below it. The thing a host comes to this tab for is the list; adding
-// is what they do once and then rarely.
+// Adding guests opens a sheet, the same one everything else in here opens.
 //
-// It is open on an event with nobody on it yet, which is the one time adding is the whole job.
-// A details element rather than a toggle of our own, so it opens with no JavaScript and reads
-// correctly to a screen reader.
-export function AddGuest({ eventId, startOpen }: { eventId: string; startOpen?: boolean }) {
+// It used to be a fold, which meant the Guests tab opened on a column of blank boxes, or on a
+// heading you had to know to tap. A sheet keeps the list as the thing you see and gives the form
+// the whole screen when you want it, which is what a form with six fields needs on a phone.
+//
+// It stays open after a guest is added and the form clears itself, because a host adding guests
+// is usually adding several, and closing after each one would mean tapping Add a guest fifty
+// times.
+export function AddGuest({ eventId, none }: { eventId: string; none?: boolean }) {
   const [mode, setMode] = useState<"one" | "many">("one");
+  const [open, setOpen] = useState(false);
   const hasPicker = useHasContactPicker();
   return (
-    <details className="card drop" open={startOpen}>
-      <summary>{copy.host.addGuest}</summary>
-      <div className="drop-body">
-        <div className="actions" role="tablist" aria-label="How to add guests">
-          <button type="button" className="btn small" aria-pressed={mode === "one"} onClick={() => setMode("one")}>{copy.host.addOne}</button>
-          <button type="button" className="btn small" aria-pressed={mode === "many"} onClick={() => setMode("many")}>{copy.host.addMany}</button>
-        </div>
-        {mode === "one" ? <OneForm eventId={eventId} /> : <ManyForm eventId={eventId} hasPicker={hasPicker} />}
+    <>
+      <div className="actions">
+        <button type="button" className={`btn ${none ? "primary" : "small"}`} onClick={() => setOpen(true)}>
+          {copy.host.addGuest}
+        </button>
       </div>
-    </details>
+      {open && (
+        <Sheet title={copy.host.addGuest} onClose={() => setOpen(false)}>
+          <div className="sheet-body">
+            <div className="actions" role="group" aria-label="How to add guests">
+              <button type="button" className="btn small" aria-pressed={mode === "one"} onClick={() => setMode("one")}>{copy.host.addOne}</button>
+              <button type="button" className="btn small" aria-pressed={mode === "many"} onClick={() => setMode("many")}>{copy.host.addMany}</button>
+            </div>
+            {mode === "one" ? <OneForm eventId={eventId} /> : <ManyForm eventId={eventId} hasPicker={hasPicker} />}
+          </div>
+        </Sheet>
+      )}
+    </>
   );
 }
 
