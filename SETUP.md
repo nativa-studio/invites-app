@@ -53,3 +53,33 @@ LOCAL_PG_URL=postgres://postgres:postgres@localhost/bunting_test NEXT_PUBLIC_SUP
 ```
 
 Then open `http://localhost:3000/i/previewgab4`.
+
+## Applying migrations
+
+Migrations are SQL files in `supabase/migrations/`, numbered and applied in order. Two ways to
+run them.
+
+**From the Supabase dashboard.** SQL Editor, paste the file, run. Always available, needs nothing
+set up.
+
+**From a Claude Code session or your own machine**, with `scripts/supabase-sql.py`:
+
+```
+python3 scripts/supabase-sql.py check                                   # what is applied
+python3 scripts/supabase-sql.py apply supabase/migrations/0005_group_links.sql
+python3 scripts/supabase-sql.py query "select count(*) from public.guests"
+```
+
+It needs a Supabase personal access token from
+https://supabase.com/dashboard/account/tokens, as `SUPABASE_ACCESS_TOKEN`. Put it in `.env.local`
+for your own machine. For Claude Code on the web, set it as an environment variable on the
+environment instead, so it is not pasted into a conversation and survives a new session.
+
+This is not the secret key and not the database password. It is revocable in one click and the
+running app never reads it. The secret key still belongs only in `.env.local` on your own machine.
+
+`apply` wraps each migration in a transaction, so one that fails partway leaves nothing behind,
+and it refuses any file outside `supabase/migrations/`.
+
+`.claude/settings.json` carries the permission rule that lets a session run this script without
+being stopped. It names this one command, not `curl` in general.

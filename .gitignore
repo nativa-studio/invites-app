@@ -11,3 +11,6 @@
 /out/
 design/**/invite-app-*.html
 next-env.d.ts
+
+# Python bytecode from scripts/
+__pycache__/
