@@ -3,7 +3,8 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
-import { ICONS, Bubble, Camera, Gift, Kids, Plate, Cap, Cake } from "@/components/art/icons";
+import { ICONS, Bubble, Camera, Gift, Kids, Plate, Cap, Cake, Towel } from "@/components/art/icons";
+import { goodToKnow, type NoteKind } from "@/lib/good-to-know";
 
 export function mapsLink(e: PublicEvent): string | null {
   const q = [e.venue, e.address].filter(Boolean).join(", ");
@@ -53,7 +54,6 @@ export function DetailsCard({ e }: { e: PublicEvent }) {
       <div className="kv">
         <div className="k">{copy.sections.when}</div><div>{formatInviteDate(e.date)}, {formatTimeRange(e.start_time, e.end_time, e.time_note).toLowerCase()}</div>
         <div className="k">{copy.sections.where}</div><div>{e.venue}{e.address ? <><br />{e.address}</> : null}</div>
-        {e.what_to_bring && <><div className="k">{copy.sections.wear}</div><div>{e.what_to_bring}</div></>}
       </div>
       {maps && <a className="pill-link" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a>}
     </div>
@@ -81,26 +81,28 @@ export function DayCard({ e }: { e: PublicEvent }) {
   );
 }
 
+// One picture per kind of line. Serving gets a cake when the wording mentions one, which is the
+// only place the text itself decides.
+function noteIcon(kind: NoteKind, text: string): React.ReactNode {
+  if (kind === "bring") return <Towel />;
+  if (kind === "serve") return /cake/i.test(text) ? <Cake /> : <Plate />;
+  if (kind === "plate") return <Plate />;
+  if (kind === "parents") return <Kids />;
+  if (kind === "gifts") return <Gift />;
+  if (kind === "photos") return <Camera />;
+  return <Bubble />;
+}
+
 export function KnowCard({ e }: { e: PublicEvent }) {
-  const lines: { icon: React.ReactNode; text: string }[] = [];
-  if (e.serve_text) lines.push({ icon: /cake/i.test(e.serve_text) ? <Cake /> : <Plate />, text: e.serve_text });
-  if (e.plate_enabled && e.plate_host_note) lines.push({ icon: <Plate />, text: e.plate_host_note });
-  if (e.type === "kids_party") {
-    if (e.parents_mode === "stay") lines.push({ icon: <Kids />, text: e.siblings_welcome ? `${copy.lines.parentsStay} ${copy.lines.siblingsWelcome}` : copy.lines.parentsStay });
-    if (e.parents_mode === "drop_off") lines.push({ icon: <Kids />, text: copy.lines.dropOff });
-  }
-  if (e.gift_stance === "none") lines.push({ icon: <Gift />, text: copy.lines.giftsNone });
-  if (e.gift_stance === "optional") lines.push({ icon: <Gift />, text: e.gift_note ? `${copy.lines.giftsOptional} ${e.gift_note}` : copy.lines.giftsOptional });
-  if (e.photo_sharing === "kids_off_social") lines.push({ icon: <Camera />, text: copy.lines.photosKidsOff });
-  if (e.photo_sharing === "ask") lines.push({ icon: <Camera />, text: copy.lines.photosAsk });
-  if (e.photo_sharing === "share") lines.push({ icon: <Camera />, text: copy.lines.photosShare });
-  if (e.good_to_know) lines.push({ icon: <Bubble />, text: e.good_to_know });
+  const lines = goodToKnow(e);
   if (!lines.length) return null;
   return (
     <div className="pcard white tilt-r" data-section="know">
       <div className="tape sky" />
       <div className="label red">{copy.sections.goodToKnow}</div>
-      <div className="lines">{lines.map((l, i) => <div className="line" key={i}>{l.icon}<div>{l.text}</div></div>)}</div>
+      <div className="lines">
+        {lines.map((l, i) => <div className="line" key={i}>{noteIcon(l.kind, l.text)}<div>{l.text}</div></div>)}
+      </div>
     </div>
   );
 }
