@@ -38,9 +38,9 @@ const BANDS: Record<string, Picture> = {
   [GABRIEL]: { src: GABRIEL, w: 1173, h: 420 },
 };
 
-/** The one character that leans on the envelope, cut from the same set. */
+/** The characters that stand along the envelope. The same band the lineup layout uses. */
 const MASCOTS: Record<string, Picture> = {
-  [GABRIEL]: { src: "/artwork/gabriel-peek/pikachu-head.png", w: 340, h: 420 },
+  [GABRIEL]: { src: GABRIEL, w: 1173, h: 420 },
 };
 
 const CASTS: Record<string, PeekCast> = {

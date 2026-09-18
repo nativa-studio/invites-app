@@ -51,21 +51,12 @@ export function Envelope({ addressee, addresseeLine, cover, children, openLabel,
           <div className="pocket">
             <div className="sides" /><div className="edge" />
             <div className="addr">{addressee}{addresseeLine && <><br /><span>{addresseeLine}</span></>}</div>
-            {/* The event's own character, sitting in the corner the stamp used to crowd. */}
-            {mascot && <Image className="mascot" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="110px" />}
           </div>
           <div className="flap"><div className="face front" /><div className="face backface" /><div className="rim" /></div>
-          {/* A postmark rather than a stamp. A stamp is a white rectangle with its own hard edge,
-              which fought the envelope's corner and hung off it; ink cannot. It sits outside the
-              pocket because the pocket's shadow makes a stacking context of its own, so nothing
-              inside it can print over the flap, which is exactly what a cancellation mark does. */}
-          <svg className="mark" viewBox="0 0 150 54" aria-hidden="true">
-            <g fill="none" stroke="currentColor" strokeWidth="2.4">
-              <circle cx="26" cy="27" r="21" />
-              <circle cx="26" cy="27" r="15" />
-              {[0, 1, 2].map((i) => <path key={i} d={`M58 ${14 + i * 13} q13 -6 26 0 t26 0 t26 0`} />)}
-            </g>
-          </svg>
+          {/* The event's characters, standing along the envelope rather than printed on it. They sit
+              outside the pocket on purpose: inside it they would be clipped by the paper's edge,
+              which is what made the last one look badly cut. */}
+          {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="240px" priority />}
           <div className="seal"><Bolt size={30} /></div>
         </div>
         <div className="hint">{openLabel}</div>

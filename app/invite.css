@@ -13,8 +13,12 @@
 .invite .pcard.reply { border-style: dashed; border-color: var(--forest); }
 /* The host's own picture, framed at the top of the card the way a poster is. Two by three, so a
    tall poster keeps its sky and its foreground and a wide one is not stretched to fill. */
-.pcard .art { width: 100%; aspect-ratio: 2 / 3; border: 3px solid var(--navy); border-radius: 5px; overflow: hidden; background: var(--sky); }
-.pcard .art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+/* A card that comes out of a landscape envelope has to look like it could have fitted. A 2:3
+   art panel under a title and an intro made the card 1:2.6, a ribbon rather than a card. */
+.pcard .art { width: 100%; aspect-ratio: 1 / 1; border: 3px solid var(--navy); border-radius: 5px; overflow: hidden; background: var(--sky); }
+/* A tall poster in a square window shows half of itself. Anchor low: whatever a host puts on
+   an invite, the subject is usually nearer the bottom than the sky is. */
+.pcard .art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 82%; }
 .pcard .intro { font-size: 15px; line-height: 1.5; text-align: center; max-width: 290px; opacity: 0.85; }
 .pcard .where { font-family: var(--font-hand); font-size: 21px; color: var(--sky); text-align: center; line-height: 1.2; }
 .pcard .tape { position: absolute; left: 50%; top: -12px; width: 96px; height: 26px; margin-left: -48px; background: color-mix(in srgb, var(--yel) 85%, transparent); transform: rotate(-3deg); border-radius: 2px; }
@@ -74,7 +78,9 @@
 .env .back { position: absolute; inset: 0; border-radius: 10px; background-color: #fff; background-image: linear-gradient(90deg, color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%); background-size: 22px 22px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
 .env .back::after { content: ""; position: absolute; inset: 0; border-radius: 10px; box-shadow: inset 0 0 0 3px var(--red); }
 .env .clip { position: absolute; left: -40px; right: -40px; top: -700px; bottom: 6px; overflow: hidden; z-index: 2; }
-.env .card-slot { position: absolute; left: 50%; top: 714px; width: 340px; margin-left: -170px; transform: scale(.62); transform-origin: top center; transition: transform .8s cubic-bezier(.4,0,.2,1), top .8s cubic-bezier(.4,0,.2,1); }
+/* The card lies on its side while it is in the envelope, because that is the only way a portrait
+   card fits a landscape one, and it turns upright as it comes out. */
+.env .card-slot { position: absolute; left: 50%; top: 560px; width: 340px; margin-left: -170px; transform: rotate(-90deg) scale(.30); transform-origin: center center; transition: transform .85s cubic-bezier(.4,0,.2,1), top .85s cubic-bezier(.4,0,.2,1); }
 .env .pocket { position: absolute; inset: 0; z-index: 3; border-radius: 0 0 10px 10px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
 /* Anything printed on the paper is clipped by the paper. Without this the character hangs off the
    corner the way the stamp used to, which is the fault it was brought in to replace. */
@@ -85,12 +91,9 @@
 .env .addr span { display: block; font-size: 14px; letter-spacing: .1em; opacity: .85; }
 /* The postmark, printed on the paper rather than stuck to it. Low contrast on purpose: a real one
    is ink on a coloured envelope, and it must not compete with the name. */
-/* Above the flap, because a cancellation mark is printed after the letter is sealed and lands
-   across whatever is under it. */
-.env .mark { position: absolute; right: 14px; top: 18px; width: 118px; height: 42px; color: color-mix(in srgb, var(--red) 45%, black); opacity: .5; z-index: 5; transform: rotate(-3deg); }
-/* The event's character, leaning on the bottom corner. It sits under the flap so the opening still
-   reads, and it is decoration, so it carries no alt text. */
-.env .mascot { position: absolute; right: 8px; bottom: -8px; width: 70px; height: auto; z-index: 1; transform: rotate(-4deg); transform-origin: bottom right; pointer-events: none; }
+/* The characters stand along the bottom of the envelope, feet over its edge, so the paper never
+   cuts them. Outside the pocket, which clips, and under the flap so the opening still reads. */
+.env .cast { position: absolute; right: 6px; bottom: -14px; width: 208px; height: auto; z-index: 3; pointer-events: none; }
 .env .flap { position: absolute; left: 0; right: 0; top: 0; height: 120px; transform: perspective(900px) rotateX(0deg); transform-origin: top center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.4,0,.2,1), opacity .5s; z-index: 4; }
 .env .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0,100% 0,50% 100%); }
 .env .flap .front { background: var(--red); }
@@ -102,7 +105,7 @@
 @keyframes pulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.8); opacity: .5 } }
 .stage .tap { position: absolute; inset: 0; z-index: 6; background: transparent; border: 0; cursor: pointer; width: 100%; height: 100%; border-radius: 12px; }
 .stage .tap:focus-visible { outline: 3px solid var(--yel); outline-offset: 4px; }
-.env .mark, .env .back, .env .pocket { transition: transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }
+.env .cast, .env .back, .env .pocket { transition: transform .8s cubic-bezier(.4,0,.2,1), opacity .5s; }
 .open .env .flap { transform: perspective(900px) rotateX(180deg); }
 .open .env .flap .front { animation: frontoff .9s cubic-bezier(.4,0,.2,1) forwards; }
 .open .env .flap .backface { animation: backon .9s cubic-bezier(.4,0,.2,1) forwards; }
@@ -110,10 +113,10 @@
 @keyframes backon { 0%,49.9% { opacity: 0 } 50%,100% { opacity: 1 } }
 .open .seal, .open .hint { opacity: 0; transform: scale(.6); pointer-events: none; }
 .rise .env .flap { z-index: 1; }
-.rise .env .card-slot { top: 580px; }
+.rise .env .card-slot { top: 470px; transform: rotate(-90deg) scale(.36); }
 .out .env .clip { overflow: visible; z-index: 7; }
-.out .env .card-slot { top: 520px; transform: scale(1); }
-.out .env .mark, .out .env .back, .out .env .pocket { transform: translateY(120px) scale(.9); opacity: 0; }
+.out .env .card-slot { top: 300px; transform: rotate(0deg) scale(1); }
+.out .env .cast, .out .env .back, .out .env .pocket { transform: translateY(120px) scale(.9); opacity: 0; }
 .out .env .flap { opacity: 0; }
 .done .stage { display: none; }
 .suite { display: none; flex-direction: column; align-items: center; gap: 30px; width: 100%; opacity: 0; transition: opacity .5s; }
