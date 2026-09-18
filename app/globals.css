@@ -73,8 +73,19 @@ p { margin: 0; }
 .evt-card { display: grid; gap: 0; border: 1px solid var(--app-line); border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; background: var(--app-bg); min-width: 0; }
 .evt-card:hover { border-color: var(--app-line-2); }
 .evt-art { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; background: var(--app-sunk); border-bottom: 1px solid var(--app-line); overflow: hidden; }
-.evt-art img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .evt-art svg { width: 44px; height: auto; }
+
+/* An invite, small: the card in front, its envelope open behind it. Percentages throughout, so
+   one drawing serves a tile on the event list and a smaller one elsewhere. The two sit side by
+   side with only a little overlap, so the open flap is never cut in half: a clipped flap reads as
+   a stray triangle rather than an envelope. */
+.ithumb { position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; }
+.ithumb-env { position: absolute; right: 1%; bottom: 12%; width: 56%; height: 44%; }
+.ithumb-env svg { width: 100%; height: 100%; display: block; }
+.ithumb-card { position: absolute; left: 1%; top: 20%; width: 52%; aspect-ratio: 5 / 7; overflow: hidden; border-radius: 2px; background: #fff; box-shadow: 0 2px 8px rgba(28, 25, 23, 0.28); display: flex; align-items: center; justify-content: center; }
+.ithumb-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+/* Without artwork the card carries the title, which is still the thing you are looking for. */
+.ithumb-title { padding: 8%; font-size: 10.5px; font-weight: 600; line-height: 1.2; text-align: center; color: var(--app-ink); overflow-wrap: anywhere; }
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .evt-when { font-size: 12.5px; color: var(--app-mute); }

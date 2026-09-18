@@ -1,8 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { formatLongDate } from "@/lib/format";
-import { coverFor } from "@/lib/artwork";
-import { LayoutThumb } from "./LayoutThumb";
+import { InviteThumb } from "./InviteThumb";
 
 export type EventSummary = {
   id: string;
@@ -11,6 +9,7 @@ export type EventSummary = {
   status: string | null;
   layout_id: string | null;
   invite_image_path: string | null;
+  theme_id: string | null;
   yes: number;
   pending: number;
   people: number;
@@ -23,20 +22,14 @@ const STATUS: Record<string, string> = {
   archived: "Archived",
 };
 
-// One event, as a card you can recognise at a glance. The picture is the event's own artwork when
-// it has some; without it, the layout's drawing, so the tile still says which invite this is
-// rather than sitting empty. A tile is taller than it is wide because an invite is.
+// One event, as a card you can recognise at a glance: the invite itself, drawn the way an invite
+// looks in the hand, then the words underneath.
 export function EventCard({ e }: { e: EventSummary }) {
-  const cover = coverFor(e.invite_image_path);
   const status = STATUS[e.status ?? "draft"] ?? "Draft";
   return (
     <Link href={`/app/events/${e.id}`} className="evt-card">
       <span className="evt-art">
-        {cover ? (
-          <Image src={cover.src} alt="" width={cover.w} height={cover.h} sizes="200px" />
-        ) : (
-          <LayoutThumb id={e.layout_id ?? "suite"} />
-        )}
+        <InviteThumb artwork={e.invite_image_path} title={e.title} themeId={e.theme_id} />
       </span>
       <span className="evt-body">
         <span className="evt-title">{e.title}</span>
