@@ -9,3 +9,12 @@ export const LAYOUTS: LayoutOption[] = [
 ];
 
 export const LAYOUT_IDS = LAYOUTS.map((l) => l.id);
+
+// The first one is the default, and anything unrecognised lands on it.
+//
+// The database still defaults layout_id to 'strip', a layout that was cut. Those events render as
+// the suite, which is the right thing, but the picker showed nothing chosen and the line under it
+// read "Guests see strip." Reading the saved value through here means both agree.
+export function asLayoutId(v: string | null | undefined): string {
+  return LAYOUT_IDS.includes(v ?? "") ? (v as string) : LAYOUTS[0].id;
+}

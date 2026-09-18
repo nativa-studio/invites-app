@@ -98,7 +98,12 @@ p { margin: 0; }
    because losing one off the edge is worse than a row that moves. */
 /* min-width 0 is load bearing: a grid child sizes to its content by default, so without it the
    row of headers widens the whole page instead of scrolling inside itself. */
-.evt-nav { display: flex; gap: 2px; min-width: 0; overflow-x: auto; border-bottom: 1px solid var(--app-line); margin: -4px 0 2px; scrollbar-width: none; }
+/* The bar scrolls, because six tabs do not fit across a phone. `.more` is put on by the nav when
+   there is something off the right edge, and fades the last few pixels so a half-cut tab reads as
+   "there is more this way" rather than as a bug. */
+.evt-nav { display: flex; gap: 2px; min-width: 0; overflow-x: auto; border-bottom: 1px solid var(--app-line); margin: -4px 0 2px; scrollbar-width: none; scroll-behavior: smooth; }
+.evt-nav.more { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent); }
+@media (prefers-reduced-motion: reduce) { .evt-nav { scroll-behavior: auto; } }
 .evt-nav::-webkit-scrollbar { display: none; }
 .evt-nav a { flex: 0 0 auto; padding: 9px 8px; font-size: 14px; font-weight: 600; color: var(--app-mute); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; }
 .evt-nav a:hover { color: var(--app-ink); }
@@ -225,6 +230,15 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 
 /* Deleting the event. Marked out so it does not read as one more setting, without shouting at a
    host who is only passing through. */
+/* A settings card: its name and the way in on one line, then what it currently says. The Change
+   button sits on the heading rather than under the list, so it is in the same place on every card
+   however long the list is. */
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.card-head .h2 { margin: 0; }
+.sum { display: grid; grid-template-columns: minmax(0, 11ch) minmax(0, 1fr); gap: 6px 12px; margin: 0; font-size: 15px; }
+.sum dt { color: var(--app-mute); }
+.sum dd { margin: 0; overflow-wrap: anywhere; }
+.sum dd.muted { color: var(--app-mute); }
 .card.danger { border-color: #d4b3ad; }
 .card.danger .h2 { color: #9b2c17; }
 .btn.danger { background: #b3311a; border-color: #b3311a; color: #fff; }
@@ -235,19 +249,6 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .guest-group { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
 .guest-group > span { font-size: 13px; color: var(--app-muted, #6b7280); }
 .guest-group select { flex: 0 1 auto; max-width: 220px; font-size: 14px; padding: 6px 8px; }
-
-/* A card that folds. The heading is the control, so the whole line is the tap target rather than
-   a small chevron, and the arrow turns to say which way it is going. */
-details.drop { display: block; }
-details.drop > summary {
-  cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; font-size: 17px; font-weight: 650; min-height: 28px;
-}
-details.drop > summary::-webkit-details-marker { display: none; }
-details.drop > summary::after { content: "\203A"; font-size: 22px; line-height: 1; transform: rotate(90deg); transition: transform .15s ease; }
-details.drop[open] > summary::after { transform: rotate(-90deg); }
-details.drop > .drop-body { display: grid; gap: 12px; margin-top: 14px; }
-@media (prefers-reduced-motion: reduce) { details.drop > summary::after { transition: none; } }
 
 /* The parts of the invite that are switched off, offered by name under the preview because they
    are not on the page to be tapped. */

@@ -1,23 +1,53 @@
 "use client";
+import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
+import { formatLongDate, formatTimeRange } from "@/lib/format";
 import { Choice, Field, Switch } from "@/components/host/fields";
-import { PanelForm } from "@/components/host/PanelForm";
+import { EditCard, Sum } from "@/components/host/EditCard";
 
 // Everything the invite says in words, in the order a guest meets it: what and when, then where,
-// then the things they need to know if they come, then what the reply asks them.
+// then the things they need to know if they come.
+//
+// Each card says what it currently reads and opens a sheet to change it. It used to be one form
+// of thirty-odd fields with a single Save at the bottom, which on a phone meant scrolling past
+// twenty things you were not changing to reach the button, and no way to see what anything said
+// without reading it out of an input.
 export const DETAILS_FIELDS = [
-  "title", "host_line", "intro", "date", "start_time", "end_time", "time_note", "rsvp_by", "status",
+  "title", "host_line", "intro", "date", "start_time", "end_time", "time_note", "status",
   "venue", "address", "parking", "access_info", "accessibility_venue", "host_phone",
   "serve_text", "what_to_bring", "plate_enabled", "plate_host_note", "gift_stance", "gift_note",
   "parents_mode", "siblings_welcome", "photo_sharing", "good_to_know",
-  "ask_party_mode", "ask_names", "ask_dietary", "ask_accessibility", "ask_emergency", "custom_question", "group_link_enabled",
 ] as const;
 
+const BASICS = ["title", "host_line", "intro", "date", "start_time", "end_time", "time_note", "status"] as const;
+const PLACE = ["venue", "address", "parking", "access_info", "accessibility_venue", "host_phone"] as const;
+const KNOW = ["serve_text", "what_to_bring", "plate_enabled", "plate_host_note", "gift_stance", "gift_note", "parents_mode", "siblings_welcome", "photo_sharing", "good_to_know"] as const;
+
+const STATUS: [string, string][] = [["draft", "Draft (links show a holding page)"], ["live", "Live"], ["thanks", "Say thanks (after the party)"], ["archived", "Archived"]];
+const GIFTS: [string, string][] = [["none", "No gifts please"], ["optional", "Gifts optional"], ["books", "Books only"], ["wishlist", "Wish list link"]];
+const PARENTS: [string, string][] = [["stay", "Parents and family welcome to stay"], ["drop_off", "Drop-off party"], ["either", "Either, say nothing"]];
+const PHOTOS: [string, string][] = [["none", "Say nothing"], ["kids_off_social", "Please keep photos of the kids off social media"], ["ask", "Please ask before posting anyone's photos"], ["share", "Share away"]];
+
+const label = (options: [string, string][], value: unknown) => options.find(([v]) => v === value)?.[1] ?? null;
+
 export function DetailsPanel({ e }: { e: EventRow }) {
+  const when = [formatLongDate(e.date), formatTimeRange(e.start_time, e.end_time, e.time_note)].filter(Boolean).join(", ");
   return (
-    <PanelForm eventId={e.id} fields={DETAILS_FIELDS}>
-      <section className="card">
-        <h2 className="h2">The basics</h2>
+    <>
+      <EditCard
+        eventId={e.id}
+        title={copy.host.basicsHeading}
+        blurb={copy.host.basicsBlurb}
+        fields={BASICS}
+        summary={
+          <>
+            <Sum label="Title" value={e.title} />
+            <Sum label="From" value={e.host_line} />
+            <Sum label="When" value={when} />
+            <Sum label="Status" value={label(STATUS, e.status)} />
+          </>
+        }
+      >
         <Field id="title" label="Title" value={e.title} hint='For a birthday, keep the form "Name is turning N" and the age lands on the seal.' />
         <Field id="host_line" label="From" value={e.host_line} hint="Shown under the title, e.g. With love from Gabriel's mum and dad" />
         <Field id="intro" label="Intro" value={e.intro} rows={3} />
@@ -27,44 +57,59 @@ export function DetailsPanel({ e }: { e: EventRow }) {
           <Field id="end_time" label="End (optional)" value={e.end_time} type="time" />
         </div>
         <Field id="time_note" label="Time, in your words (optional)" value={e.time_note} hint='Overrides the times, e.g. "From 2pm, come when you can"' />
-        <Field id="rsvp_by" label="Reply by" value={e.rsvp_by} type="date" />
-        <Choice id="status" label="Status" value={e.status} options={[["draft", "Draft (links show a holding page)"], ["live", "Live"], ["thanks", "Say thanks (after the party)"], ["archived", "Archived"]]} />
-      </section>
+        <Choice id="status" label="Status" value={e.status} options={STATUS} />
+      </EditCard>
 
-      <section className="card">
-        <h2 className="h2">The place</h2>
+      <EditCard
+        eventId={e.id}
+        title={copy.host.placeHeading}
+        blurb={copy.host.placeBlurb}
+        fields={PLACE}
+        summary={
+          <>
+            <Sum label="Venue" value={e.venue} />
+            <Sum label="Address" value={e.address} />
+            <Sum label="Parking" value={e.parking} />
+            <Sum label="Getting in" value={e.access_info} />
+            <Sum label="Your mobile" value={e.host_phone} />
+          </>
+        }
+      >
         <Field id="venue" label="Venue" value={e.venue} hint="e.g. Our place, or the park's name" />
         <Field id="address" label="Address" value={e.address} hint="Used for Open in Maps and the calendar" />
         <Field id="parking" label="Parking (optional)" value={e.parking} />
         <Field id="access_info" label="Getting in (yes guests only)" value={e.access_info} hint="Gate code, buzzer, which door. Shown only to people who said yes." />
         <Field id="accessibility_venue" label="Accessibility at the venue (optional)" value={e.accessibility_venue} />
         <Field id="host_phone" label="Your mobile" value={e.host_phone} type="tel" hint='Powers the "Questions? Text" line on the invite' />
-      </section>
+      </EditCard>
 
-      <section className="card">
-        <h2 className="h2">Good to know</h2>
+      <EditCard
+        eventId={e.id}
+        title={copy.host.knowHeading}
+        blurb={copy.host.knowBlurb}
+        fields={KNOW}
+        summary={
+          <>
+            <Sum label="Food" value={e.serve_text} />
+            <Sum label="Bring or wear" value={e.what_to_bring} />
+            <Sum label="Bring a plate" value={e.plate_enabled ? "On" : null} />
+            <Sum label="Gifts" value={label(GIFTS, e.gift_stance)} />
+            <Sum label="Parents" value={label(PARENTS, e.parents_mode)} />
+            <Sum label="Photos" value={label(PHOTOS, e.photo_sharing)} />
+          </>
+        }
+      >
         <Field id="serve_text" label="What we'll serve" value={e.serve_text} />
         <Field id="what_to_bring" label="What to bring / wear" value={e.what_to_bring} />
         <Switch id="plate_enabled" label="Bring a plate" value={e.plate_enabled} />
         <Field id="plate_host_note" label="Bring a plate wording" value={e.plate_host_note} />
-        <Choice id="gift_stance" label="Gifts" value={e.gift_stance} options={[["none", "No gifts please"], ["optional", "Gifts optional"], ["books", "Books only"], ["wishlist", "Wish list link"]]} />
+        <Choice id="gift_stance" label="Gifts" value={e.gift_stance} options={GIFTS} />
         <Field id="gift_note" label="Gift note (optional)" value={e.gift_note} />
-        <Choice id="parents_mode" label="Parents" value={e.parents_mode} options={[["stay", "Parents and family welcome to stay"], ["drop_off", "Drop-off party"], ["either", "Either, say nothing"]]} />
+        <Choice id="parents_mode" label="Parents" value={e.parents_mode} options={PARENTS} />
         <Switch id="siblings_welcome" label="Little brothers and sisters welcome" value={e.siblings_welcome} />
-        <Choice id="photo_sharing" label="Photos" value={e.photo_sharing} options={[["none", "Say nothing"], ["kids_off_social", "Please keep photos of the kids off social media"], ["ask", "Please ask before posting anyone's photos"], ["share", "Share away"]]} />
+        <Choice id="photo_sharing" label="Photos" value={e.photo_sharing} options={PHOTOS} />
         <Field id="good_to_know" label="Anything else (optional)" value={e.good_to_know} rows={2} />
-      </section>
-
-      <section className="card">
-        <h2 className="h2">What the reply asks</h2>
-        <Choice id="ask_party_mode" label="How many" value={e.ask_party_mode} options={[["split", "Children and adults separately"], ["single", "One number"]]} />
-        <Switch id="ask_names" label="Names of everyone coming" value={e.ask_names} />
-        <Switch id="ask_dietary" label="Food needs and allergies" value={e.ask_dietary} />
-        <Switch id="ask_accessibility" label="Access needs (free text)" value={e.ask_accessibility} />
-        <Switch id="ask_emergency" label="Emergency contact (drop-off parties)" value={e.ask_emergency} />
-        <Field id="custom_question" label="One extra question (optional)" value={e.custom_question} />
-        <Switch id="group_link_enabled" label="Group link open (for chats)" value={e.group_link_enabled} />
-      </section>
-    </PanelForm>
+      </EditCard>
+    </>
   );
 }
