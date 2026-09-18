@@ -50,6 +50,11 @@
 .pcard .lines { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 .pcard .line { display: flex; gap: 14px; align-items: center; font-size: 15px; line-height: 1.45; }
 .pcard .line > svg { flex: 0 0 auto; }
+/* A line that is also a link, which the Questions line is when there is a mobile to text. It reads
+   as the sentence it is, underlined so it is plainly tappable, rather than as a button. The whole
+   line is the target, picture included, so it clears 44px however short the words are. */
+a.line { color: inherit; min-height: 44px; text-decoration: none; }
+a.line span { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--sky); }
 .pcard .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; }
 .pcard .two > div { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
 .pcard .two .n { font-family: var(--font-display); font-size: 19px; }

@@ -106,7 +106,7 @@ export const copy = {
     sectionsHint: "A section with nothing in it stays hidden anyway. These are for leaving one out on purpose.",
     savedTitle: "Saved.",
     savedBody: "Your guests' links show the change straight away.",
-    savedWithoutSections: "One thing did not save: the section switches need migration 0004 in the database first. Everything else is saved.",
+    savedWithout: (cols: string[]) => `${cols.length === 1 ? "One setting" : `${cols.length} settings`} did not save: the database does not have ${cols.length === 1 ? "a column" : "columns"} called ${cols.join(", ")} yet, so it needs the newest migration run against it. Everything else is saved.`,
     backToParty: "Back to the party",
     coming: "coming",
     saidYes: "said yes",

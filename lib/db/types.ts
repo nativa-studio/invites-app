@@ -62,6 +62,9 @@ export type PublicEvent = {
   plate_mode: string;
   plate_host_note: string | null;
   host_phone: string | null;
+  // The wording of the Questions block. Null falls back to the line built from host_line.
+  // Optional because a database without migration 0007 does not send it.
+  ask_note?: string | null;
   status: "draft" | "live" | "thanks" | "archived";
   /** Which parts of the invite the host wants shown. A section with nothing in it hides anyway. */
   show_details: boolean;

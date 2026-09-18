@@ -2,7 +2,8 @@ import Image from "next/image";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
-import { formatInviteDate, formatTimeRange, formatTime, hostName } from "@/lib/format";
+import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
+import { askLine } from "@/lib/ask-line";
 import { ICONS, Bubble, Camera, Clock, Gift, Kids, Pin, Plate, Cap, Cake, Towel } from "@/components/art/icons";
 import { goodToKnow, type NoteKind } from "@/lib/good-to-know";
 
@@ -125,20 +126,26 @@ export function KnowCard({ e }: { e: PublicEvent }) {
 // The last block: who to ask. A guest who has read to the end has a question, not a wish to be
 // told that photos will arrive one day.
 export function AskCard({ e }: { e: PublicEvent }) {
-  const host = hostName(e.host_line);
   const sms = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
+  const line = askLine(e);
   return (
     <div className="pcard cream" data-section="after">
-      <div className="ask">
-        <Bubble />
-        <div className="n">{copy.sections.askHeading}</div>
+      <div className="label red">{copy.sections.askHeading}</div>
+      <div className="lines">
+        {/* The same shape as every other line on the invite, a picture and the words. It used to be
+            a full width button under a heading, which on a phone wrapped to two lines and read as
+            a form rather than as the end of a note.
+            Where there is a number to text, the whole line is the link, picture included. The
+            words alone came to 22px, and this is the one thing on the invite a guest with a
+            question has to be able to hit. */}
         {sms
-          ? <a className="pill-link" href={sms}>{copy.sections.askBody(host)}</a>
-          : <div className="b">{copy.sections.askBody(host)}</div>}
+          ? <a className="line" href={sms}><Bubble /><span>{line}</span></a>
+          : <div className="line"><Bubble /><span>{line}</span></div>}
       </div>
     </div>
   );
 }
+
 
 export function UpdatesCard({ e }: { e: PublicEvent }) {
   if (!e.updates.length) return null;
