@@ -7,7 +7,7 @@ import { copy } from "@/lib/copy";
 export type SaveState = { saved?: boolean; error?: string; note?: string };
 
 // Artwork is stored as a path, and an empty choice clears it.
-const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "gift_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue", "yes_label", "no_label"] as const;
+const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "gift_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue", "yes_label", "no_label", "ask_note"] as const;
 const DATES = ["date", "rsvp_by"] as const;
 const TIMES = ["start_time", "end_time"] as const;
 const CHOICES = { layout_id: ["suite", "lineup"], parents_mode: ["stay", "drop_off", "either"], photo_sharing: ["none", "kids_off_social", "ask", "share"], gift_stance: ["none", "optional", "wishlist", "books"], ask_party_mode: ["single", "split"], status: ["draft", "live", "thanks", "archived"] } as const;
@@ -22,6 +22,14 @@ const SWITCHES = ["siblings_welcome", "ask_names", "ask_dietary", "ask_accessibi
 // to declare them saves nothing rather than the wrong thing.
 function declared(fd: FormData): Set<string> {
   return new Set(String(fd.get("_fields") ?? "").split(",").map((s) => s.trim()).filter(Boolean));
+}
+
+// Postgres and PostgREST each have their own way of saying they do not know a column. Both name
+// it, which is all we need.
+function unknownColumn(message: string): string | null {
+  return message.match(/column "([a-z_]+)".*does not exist/i)?.[1]
+    ?? message.match(/could not find the '([a-z_]+)' column/i)?.[1]
+    ?? null;
 }
 
 export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveState> {
@@ -43,17 +51,27 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
   if (own.has("host_phone")) patch.host_phone = patch.host_phone ? normalisePhone(String(patch.host_phone)) : null;
   if (Object.keys(patch).length === 0) return { error: "Nothing to save." };
 
-  let note: string | undefined;
-  let { error } = await supabase.from("events").update(patch).eq("id", id);
-  // The section switches are columns from migration 0004. A database without them yet should
-  // still take every other change, and say plainly which part it could not.
-  if (error && /column "show_\w+" .*does not exist/i.test(error.message)) {
-    for (const k of Object.keys(patch)) if (k.startsWith("show_")) delete patch[k];
-    if (Object.keys(patch).length === 0) return { error: copy.host.savedWithoutSections };
+  // A database that has not had the latest migration run against it is missing the newest columns.
+  // Everything else in the same save should still go through, and the host should be told which
+  // one thing did not and why, rather than losing the lot to one unknown name.
+  //
+  // This used to name the section switches specifically. Generalised after the second column
+  // landed in the same position: the error already says which column it does not know, so read it
+  // and drop that one. The loop is bounded by the size of the patch, and every pass either drops
+  // a column or stops.
+  const missed: string[] = [];
+  let error: { message: string } | null = null;
+  for (;;) {
     ({ error } = await supabase.from("events").update(patch).eq("id", id));
-    note = copy.host.savedWithoutSections;
+    if (!error) break;
+    const unknown = unknownColumn(error.message);
+    if (!unknown || !(unknown in patch)) break;
+    delete patch[unknown];
+    missed.push(unknown);
+    if (Object.keys(patch).length === 0) return { error: copy.host.savedWithout(missed) };
   }
   if (error) return { error: error.message };
+  const note = missed.length ? copy.host.savedWithout(missed) : undefined;
   for (const p of ["", "/look", "/details", "/guests", "/rsvp", "/invite"]) revalidatePath(`/app/events/${id}${p}`);
   return { saved: true, note };
 }

@@ -111,8 +111,13 @@ export function formatInviteDate(ymd: string | null | undefined): string {
 }
 
 // A host writes their sign-off however they like: "With love from Leo's mum and dad",
-// "From Marcia and Tom", or just "Marcia". Sentences elsewhere need the people, not the phrase.
+// "From Marcia and Tom", "With love Gabe, Tommy and Ma", or just "Marcia". Sentences elsewhere
+// need the people, not the phrase.
+//
+// Every part of the opener is optional and independent. The old pattern required the word "from",
+// so "With love Gabe, Tommy and Ma" matched nothing and the invite's last line read "Text With
+// love Gabe, Tommy and Ma".
 export function hostName(hostLine: string | null | undefined, fallback = "the host"): string {
-  const trimmed = (hostLine ?? "").trim().replace(/^(with (love|thanks) )?from\s+/i, "").trim();
+  const trimmed = (hostLine ?? "").trim().replace(/^((with\s+)?(love|thanks)\s+)?(from\s+)?/i, "").trim();
   return trimmed || fallback;
 }

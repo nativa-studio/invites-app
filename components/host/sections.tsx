@@ -1,5 +1,6 @@
 import type { EventRow } from "@/lib/db/types";
 import { Choice, Field, Switch } from "@/components/host/fields";
+import { askLine } from "@/lib/ask-line";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
 // data-section names the invite carries, so tapping a card on the preview finds its entry here.
@@ -83,10 +84,17 @@ export const SECTIONS: Section[] = [
   {
     id: "after",
     title: "Questions",
-    blurb: "The last block on the invite: who to ask. It uses your mobile from the details, so there is nothing to write here.",
+    blurb: "The last block on the invite: how to reach you. Leave it empty and it reads \u201cText\u201d and your name from the sign-off. The line is tappable when you have put your mobile in the details.",
     show: { column: "show_after", label: "Show the questions block" },
-    fields: ["show_after"],
-    render: () => null,
+    fields: ["ask_note", "show_after"],
+    render: (e) => (
+      <Field
+        id="ask_note"
+        label="What the last line says"
+        value={e.ask_note}
+        hint={`Empty means \u201c${askLine({ ask_note: null, host_line: e.host_line })}\u201d`}
+      />
+    ),
   },
   {
     id: "updates",
