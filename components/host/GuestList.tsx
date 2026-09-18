@@ -14,6 +14,8 @@ export function GuestList({ eventId, guests, event, site }: Props) {
   const [filter, setFilter] = useState<"all" | "yes" | "no" | "pending" | "unsent" | "nogroup">("all");
   const canShare = useHasShare();
   const [busy, setBusy] = useState<string | null>(null);
+  // Which guest has their ways-to-share open. One at a time, so the list stays a list.
+  const [sharing, setSharing] = useState<string | null>(null);
   const [, start] = useTransition();
   // "No group" is here because finding the unlabelled ones by scrolling is the thing that makes
   // labelling a long list not worth starting.
@@ -110,7 +112,11 @@ export function GuestList({ eventId, guests, event, site }: Props) {
             <article className="guest" key={g.id}>
               <div className="row">
                 <span className="name">{g.name}{g.contact_name && g.contact_name !== g.name ? <span className="muted"> · {g.contact_name}</span> : null}</span>
-                <span className={`pill ${g.status}`}>{g.status === "yes" ? "Yes" : g.status === "no" ? "No" : "No reply"}</span>
+                {/* "No reply" on a guest who has never been sent their link reads as their fault.
+                    Until it goes out, the thing that has not happened is the sending. */}
+                <span className={`pill ${g.status === "pending" && !g.sent_at ? "unsent" : g.status}`}>
+                  {g.status === "yes" ? "Yes" : g.status === "no" ? "No" : g.sent_at ? copy.host.noReply : copy.host.notSent}
+                </span>
               </div>
               {detail && <p style={{ fontSize: 14 }}>{detail}</p>}
               <p className="trail">{trail}{g.phone ? ` · ${g.phone}` : " · no mobile, pick them in Messages"}</p>
@@ -129,14 +135,24 @@ export function GuestList({ eventId, guests, event, site }: Props) {
                   <option value="__new">{copy.host.guestGroupNew}</option>
                 </select>
               </label>
-              <div className="actions">
-                <button type="button" className="btn small primary" disabled={busy !== null} onClick={() => void sendVia(g, "sms", remind)}>{remind ? copy.host.remind : g.phone ? copy.host.text : copy.host.textPick}</button>
-                {g.phone && <button type="button" className="btn small" disabled={busy !== null} onClick={() => void sendVia(g, "wa", remind)}>{copy.host.whatsapp}</button>}
-                {canShare && <button type="button" className="btn small" onClick={() => void shareVia(g, remind)}>{copy.host.share}</button>}
-                <CopyButton text={link} label={copy.host.copy} />
-                <button type="button" className="btn small" onClick={() => { if (confirm("Make a new link? The old one stops working.")) start(() => { void newLink(eventId, g.id); }); }}>{copy.host.newLink}</button>
-                <button type="button" className="btn small" onClick={() => { if (confirm(`Remove ${g.name}?`)) start(() => { void removeGuest(eventId, g.id); }); }}>Remove</button>
-              </div>
+              {/* One Share, which opens the ways to share. Six buttons on every row meant the two
+                  that matter, Text and WhatsApp, sat in a crowd with New link and Remove, and a
+                  destructive button was one row away from the one you tap fifty times. */}
+              {sharing === g.id ? (
+                <div className="actions">
+                  <button type="button" className="btn small primary" disabled={busy !== null} onClick={() => void sendVia(g, "sms", remind)}>{g.phone ? copy.host.text : copy.host.textPick}</button>
+                  {g.phone && <button type="button" className="btn small" disabled={busy !== null} onClick={() => void sendVia(g, "wa", remind)}>{copy.host.whatsapp}</button>}
+                  {canShare && <button type="button" className="btn small" onClick={() => void shareVia(g, remind)}>{copy.host.shareMore}</button>}
+                  <CopyButton text={link} label={copy.host.copy} />
+                  <button type="button" className="btn small" onClick={() => setSharing(null)}>{copy.host.shareClose}</button>
+                </div>
+              ) : (
+                <div className="actions">
+                  <button type="button" className="btn small primary" onClick={() => setSharing(g.id)}>{remind ? copy.host.remind : copy.host.share}</button>
+                  <button type="button" className="btn small" onClick={() => { if (confirm("Make a new link? The old one stops working.")) start(() => { void newLink(eventId, g.id); }); }}>{copy.host.newLink}</button>
+                  <button type="button" className="btn small" onClick={() => { if (confirm(`Remove ${g.name}?`)) start(() => { void removeGuest(eventId, g.id); }); }}>Remove</button>
+                </div>
+              )}
             </article>
           );
         })}
