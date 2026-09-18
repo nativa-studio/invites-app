@@ -7,9 +7,6 @@ import { mascotFor } from "@/lib/artwork";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { LineupInvite } from "./LineupInvite";
-import { PeekInvite } from "./PeekInvite";
-import { PostInvite } from "./PostInvite";
-import { ScrollCue } from "./ScrollCue";
 
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
@@ -28,10 +25,6 @@ export function InviteBody({
 }) {
   const id = layout ?? e.layout_id;
   if (id === "lineup") return <LineupInvite event={e} greeting={greeting} reply={reply} />;
-  if (id === "peek") return <PeekInvite event={e} greeting={greeting} reply={reply} />;
-  if (id === "post") {
-    return <PostInvite event={e} greeting={greeting} addressee={addressee ?? copy.envelope.toYou} reply={reply} skipAnimation={skipAnimation} />;
-  }
 
   const p = paletteFor(e.palette, e.theme_id);
   // Everything below the cover, in the order the moment asks for it. What changed, then the
@@ -50,41 +43,29 @@ export function InviteBody({
   );
 
   // The stationery suite: the cover arrives in an envelope that opens.
-  if (id === "suite") {
-    return (
-      <main className="invite" style={paletteVars(p)}>
-        <div className="wrap">
-          <div className="greet">{greeting}</div>
-          <Envelope
-            addressee={addressee ?? copy.envelope.toYou}
-            cover={<CoverCard e={e} />}
-            openLabel={copy.envelope.open}
-            skipAnimation={skipAnimation}
-            mascot={mascotFor(e.invite_image_path)}
-          >
-            {below}
-          </Envelope>
-        </div>
-      </main>
-    );
-  }
-
-  // The illustrated strip: the same cards, no envelope, straight down the page.
+  //
+  // Everything that is not the lineup is this, rather than only a row that says "suite". An event
+  // saved under a layout that has since been deleted still opens, on the nearest thing to what it
+  // showed, which is why there is no migration to go with the deletion.
   return (
-    <main className="invite no-envelope" style={paletteVars(p)}>
+    <main className="invite" style={paletteVars(p)}>
       <div className="wrap">
         <div className="greet">{greeting}</div>
-        <div className="suite">
-          <CoverCard e={e} />
+        <Envelope
+          addressee={addressee ?? copy.envelope.toYou}
+          cover={<CoverCard e={e} />}
+          openLabel={copy.envelope.open}
+          skipAnimation={skipAnimation}
+          mascot={mascotFor(e.invite_image_path)}
+        >
           {below}
-        </div>
+        </Envelope>
       </div>
-      <ScrollCue />
     </main>
   );
 }
 
-export const LAYOUTS = ["suite", "lineup", "peek", "post", "strip"] as const;
+export const LAYOUTS = ["suite", "lineup"] as const;
 
 export function asLayout(v: string | undefined): PublicEvent["layout_id"] | undefined {
   return (LAYOUTS as readonly string[]).includes(v ?? "") ? (v as PublicEvent["layout_id"]) : undefined;
