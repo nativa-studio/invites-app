@@ -1,10 +1,13 @@
 import { redirect } from "next/navigation";
 import { copy } from "@/lib/copy";
 import { createClient } from "@/lib/supabase/server";
+import { publicEnv } from "@/lib/env";
 import { signInWithGoogle } from "@/app/auth/actions";
+import { NotConfigured } from "@/components/host/NotConfigured";
 
 export default async function Landing({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
   const { next, error } = await searchParams;
+  if (!publicEnv.configured) return <NotConfigured />;
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   if (data?.claims) redirect("/app");

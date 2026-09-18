@@ -5,6 +5,10 @@ import { publicEnv } from "@/lib/env";
 // Refreshes the auth cookies on every request and sends signed-out visitors away from /app.
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
+  // This runs on every request. Without the Supabase settings there is no session to refresh, and
+  // throwing here would take down the landing page and every guest link as well, with an error
+  // nobody can read. Let the request through and let the page that needs sign-in say so.
+  if (!publicEnv.configured) return response;
   const supabase = createServerClient(publicEnv.supabaseUrl, publicEnv.supabaseKey, {
     cookies: {
       getAll: () => request.cookies.getAll(),
