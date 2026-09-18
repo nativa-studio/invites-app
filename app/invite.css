@@ -112,6 +112,23 @@ a.line span { text-decoration: underline; text-decoration-thickness: 2px; text-u
 /* The card lies on its side while it is in the envelope, because that is the only way a portrait
    card fits a landscape one, and it turns upright as it comes out. */
 .env .card-slot { position: absolute; left: 50%; top: 512px; width: 340px; margin-left: -170px; transform: rotate(-90deg) scale(.50); transform-origin: center center; transition: transform .85s cubic-bezier(.4,0,.2,1), top .85s cubic-bezier(.4,0,.2,1); }
+/* The card has to fit the envelope, and the sum is not obvious: the slot turns it a quarter turn
+   about its centre and halves it, so the card's HEIGHT becomes its width on screen. At 719 tall
+   the cover came to 364 across in a 342 envelope and stuck out 11px each side.
+
+   So the card is held to a height in the slot, and the artwork gives up the difference: it is the
+   one part that can lose height without losing meaning, and its image crops rather than squashes.
+   A fixed height on the card alone would only have worked until someone wrote a longer intro.
+
+   640 is chosen with room to spare: half of it is 320, plus about 4 for the card's tilt, in 342.
+   On the page the card is its own height again, the same as the lineup's.
+
+   box-sizing is spelled out because this stylesheet has no reset: the one in globals.css is the
+   host app's and never reaches a guest's page. Without it the 640 was the content box and the
+   card came out at 694, padding and border on top. */
+.card-slot .pcard { box-sizing: border-box; height: 640px; }
+.card-slot .pcard .art { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
+
 .env .pocket { position: absolute; inset: 0; z-index: 3; border-radius: 0 0 10px 10px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
 /* Anything printed on the paper is clipped by the paper. Without this the character hangs off the
    corner the way the stamp used to, which is the fault it was brought in to replace. */
