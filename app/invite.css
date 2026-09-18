@@ -33,11 +33,19 @@
 .pcard .rule { width: 40px; height: 4px; background: var(--yel); border: 2px solid var(--navy); border-radius: 2px; }
 .pcard .para { font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; }
 .pcard .small { font-size: 13px; opacity: 0.75; text-align: center; }
-/* The sign-off. Roomier than the cards above it and with no label, because it is the end of a
-   note rather than another section of one. */
-.pcard.signoff { gap: 10px; padding-top: 26px; padding-bottom: 26px; }
-.pcard.signoff .para { font-family: var(--font-hand); font-size: 20px; line-height: 1.4; }
-.pcard.signoff .small { font-size: 14px; opacity: 0.8; }
+/* The sign-off, the end of the note.
+   Roomier than the cards above it and with no label, because a label would make it another
+   section of a document and this is the bit that stops being one. The message is in the hand: it
+   is the host talking, not the event describing itself. */
+.pcard.signoff { gap: 12px; padding-top: 30px; padding-bottom: 26px; }
+.pcard.signoff .msg { font-family: var(--font-hand); font-size: 24px; line-height: 1.35; text-align: center; max-width: 290px; color: var(--navy); }
+/* The name is a signature, so it is in the same hand as the message and a size down, not the
+   letterspaced capitals the rest of the app labels things with. Capitals read as a label on a
+   form, which is the one thing this block is not. */
+.pcard.signoff .sig { font-family: var(--font-hand); font-size: 17px; text-align: center; opacity: 0.8; }
+/* The seal off the envelope, pressed into the paper the way wax closes a letter. Turned a few
+   degrees because a hand pressing a stamp does not line it up. */
+.pcard.signoff .stamp { width: 44px; height: 44px; margin-top: 4px; border-radius: 50%; background: var(--yel); border: 3px solid var(--navy); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 0 rgba(27,42,74,.3); transform: rotate(-7deg); }
 .pcard .label { font-family: var(--font-hand); font-size: 22px; letter-spacing: 0.06em; text-align: center; }
 .pcard .label.red { color: var(--red); } .pcard .label.sky { color: var(--sky); } .pcard .label.forest { color: var(--forest); }
 .pcard .kv { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; font-size: 16px; line-height: 1.4; width: 100%; max-width: 290px; }

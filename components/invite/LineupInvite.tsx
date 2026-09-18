@@ -8,6 +8,7 @@ import { askLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
 import { bandFor, mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
+import { Bolt } from "@/components/art/icons";
 
 // Colours lifted from the artwork, used for the dots beside each good-to-know line.
 const DOTS = ["#EFB93C", "#7FAF95", "#93C7D6", "#E8763C", "#E0553F", "#3F6B57"];
@@ -124,6 +125,9 @@ export function LineupInvite({
           <section data-section="signoff" className="signoff">
             <p className="msg">{signoffMessage(e)}</p>
             {e.host_line && <p className="from">{e.host_line}</p>}
+            {/* The seal off the envelope, pressed in at the end the way wax closes a letter. Same
+                move as the suite's, so the two layouts end the same way. */}
+            <div className="stamp" aria-hidden="true"><Bolt size={26} /></div>
           </section>
           )}
 

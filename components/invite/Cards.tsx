@@ -4,7 +4,7 @@ import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
 import { askLine, signoffMessage } from "@/lib/ask-line";
-import { ICONS, Bubble, Camera, Clock, Gift, Kids, Pin, Plate, Cap, Cake, Towel } from "@/components/art/icons";
+import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Kids, Pin, Plate, Cap, Cake, Towel } from "@/components/art/icons";
 import { goodToKnow, type NoteKind } from "@/lib/good-to-know";
 
 export function mapsLink(e: PublicEvent): string | null {
@@ -129,7 +129,8 @@ export function AskCard({ e }: { e: PublicEvent }) {
   const sms = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
   const line = askLine(e);
   return (
-    <div className="pcard cream" data-section="after">
+    <div className="pcard cream tilt-l" data-section="after">
+      <div className="tape" />
       <div className="label red">{copy.sections.askHeading}</div>
       <div className="lines">
         {/* The same shape as every other line on the invite, a picture and the words. It used to be
@@ -150,12 +151,18 @@ export function AskCard({ e }: { e: PublicEvent }) {
 // The sign-off, and the end of the invite.
 //
 // No label and no picture: a label would make it another section of a document, and this is the
-// bit that stops being a document. Two lines, centred, the way a note ends.
+// bit that stops being a document. The message is in the hand, because this is the one block that
+// is the host talking rather than the event describing itself.
+//
+// The seal at the bottom is the one that was on the envelope, the thing the guest tapped to open
+// all this. Pressed into the paper at the end the way wax closes a letter, it says the note is
+// finished, and it hands the last thing a guest sees back to the first thing they touched.
 export function SignoffCard({ e }: { e: PublicEvent }) {
   return (
-    <div className="pcard cream signoff" data-section="signoff">
-      <div className="para">{signoffMessage(e)}</div>
-      {e.host_line && <div className="small">{e.host_line}</div>}
+    <div className="pcard signoff tilt-r" data-section="signoff">
+      <div className="msg">{signoffMessage(e)}</div>
+      {e.host_line && <div className="sig">{e.host_line}</div>}
+      <div className="stamp" aria-hidden="true"><Bolt size={26} /></div>
     </div>
   );
 }
