@@ -165,6 +165,9 @@ export const copy = {
     guestGroupNew: "New group...",
     guestGroupAsk: "What do you call this group? Family, School, The neighbours",
     offParts: "Not on the invite at the moment. Tap one to see it and switch it back on.",
+    messagePreviewHint: "How your message lands, with a real name and link in it. Tap any part to change the wording.",
+    messageReminder: "And if they haven't replied",
+    sampleGuest: "Gael",
     deleteHeading: "Delete this event",
     deleteBlurb: (guests: number, replies: number) =>
       guests === 0
