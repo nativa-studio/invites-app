@@ -122,6 +122,8 @@ export const copy = {
     noContactsApi: "Your phone does not let a website read contacts. Paste a list instead, or type them in.",
     name: "Who the invite is for (the child, e.g. Oliver, or The Nairs)",
     contactName: "Whose phone you're texting (e.g. their mum, Priya)",
+    group: "Group (optional)",
+    groupHint: "How you know them: family, school, work. Guests can be filtered and texted a group at a time, and guests never see it.",
     phone: "Mobile",
     expected: "How many you expect (optional)",
     expectedHint: "Only a guess, so their reply is one tap. They can change it.",

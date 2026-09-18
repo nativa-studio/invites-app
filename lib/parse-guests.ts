@@ -38,7 +38,10 @@ export function parseGuestList(input: string): ParsedGuest[] {
       .replace(/\s{2,}/g, " ")
       .trim();
     if (!name) continue;
-    const key = (phone || name).toLowerCase();
+    // Two guests can share a first name: a host with two friends called Bruna has two guests, not
+    // one. Only a repeat of the whole line, or of a mobile, is a double paste. Deduping on the name
+    // alone dropped the second one and said nothing about it.
+    const key = (phone || `${name}|${adults ?? ""}|${children ?? ""}`).toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
     out.push({

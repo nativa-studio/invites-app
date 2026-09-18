@@ -30,6 +30,7 @@ function OneForm({ eventId }: { eventId: string }) {
       <div className="field"><label htmlFor="g-name">{copy.host.name}</label><input id="g-name" name="name" type="text" required autoComplete="off" /></div>
       <div className="field"><label htmlFor="g-contact">{copy.host.contactName}</label><input id="g-contact" name="contact_name" type="text" autoComplete="off" /></div>
       <div className="field"><label htmlFor="g-phone">{copy.host.phone}</label><input id="g-phone" name="phone" type="tel" inputMode="tel" placeholder="04xx xxx xxx" /></div>
+      <div className="field"><label htmlFor="g-group">{copy.host.group}</label><input id="g-group" name="group" type="text" autoComplete="off" /><span className="hint">{copy.host.groupHint}</span></div>
       <fieldset style={{ border: 0, padding: 0, margin: 0, display: "grid", gap: 6 }}>
         <legend className="field" style={{ padding: 0 }}><span className="label-ish">{copy.host.expected}</span></legend>
         <div style={{ display: "flex", gap: 10 }}>
@@ -66,12 +67,17 @@ function ManyForm({ eventId, hasPicker }: { eventId: string; hasPicker: boolean 
     <form action={formAction} style={{ display: "grid", gap: 12 }}>
       <input type="hidden" name="event_id" value={eventId} />
       <div className="field">
+        <label htmlFor="g-many-group">{copy.host.group}</label>
+        <input id="g-many-group" name="group" type="text" autoComplete="off" />
+        <span className="hint">{copy.host.groupHint}</span>
+      </div>
+      <div className="field">
         <label htmlFor="g-list">{copy.host.pasteLabel}</label>
         <textarea id="g-list" name="list" ref={box} rows={6} placeholder={copy.host.pasteExample} style={{ minHeight: 140 }} />
         <span className="muted" style={{ fontSize: 13 }}>{copy.host.pasteHint}</span>
       </div>
       {state.error && <p className="notice" role="alert">{state.error}</p>}
-      {state.added ? <p className="muted" aria-live="polite">Added {state.added} {state.added === 1 ? "guest" : "guests"}.</p> : null}
+      {state.added ? <p className="muted" aria-live="polite">Added {state.added} {state.added === 1 ? "guest" : "guests"}.{state.skipped ? ` ${state.skipped} ${state.skipped === 1 ? "line was" : "lines were"} the same as another, so skipped.` : ""}</p> : null}
       <div className="actions">
         <button className="btn primary" type="submit" disabled={pending}>{pending ? "Adding" : copy.host.addAll}</button>
         {hasPicker && <button type="button" className="btn small" onClick={() => void pick()}>{copy.host.pickContacts}</button>}
