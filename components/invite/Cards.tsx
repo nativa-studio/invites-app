@@ -131,18 +131,14 @@ export function AskCard({ e }: { e: PublicEvent }) {
   return (
     <div className="pcard cream tilt-l" data-section="after">
       <div className="tape" />
-      <div className="label red">{copy.sections.askHeading}</div>
-      <div className="lines">
-        {/* The same shape as every other line on the invite, a picture and the words. It used to be
-            a full width button under a heading, which on a phone wrapped to two lines and read as
-            a form rather than as the end of a note.
-            Where there is a number to text, the whole line is the link, picture included. The
-            words alone came to 22px, and this is the one thing on the invite a guest with a
-            question has to be able to hit. */}
-        {sms
-          ? <a className="line" href={sms}><Bubble /><span>{line}</span></a>
-          : <div className="line"><Bubble /><span>{line}</span></div>}
-      </div>
+      {/* The symbol is the heading. A speech bubble says "ask us" without a word, and the word was
+          only saying the same thing twice: it sat in the red heading and then again in the line
+          below it. */}
+      <div className="ask-mark" aria-hidden="true"><Bubble size={44} /></div>
+      <p className="ask">
+        <span className="k">{copy.sections.askLabel}</span>{" "}
+        {sms ? <a href={sms}>{line}</a> : <span>{line}</span>}
+      </p>
     </div>
   );
 }
