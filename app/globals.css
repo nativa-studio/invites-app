@@ -245,3 +245,7 @@ details.drop > summary::after { content: "\203A"; font-size: 22px; line-height: 
 details.drop[open] > summary::after { transform: rotate(-90deg); }
 details.drop > .drop-body { display: grid; gap: 12px; margin-top: 14px; }
 @media (prefers-reduced-motion: reduce) { details.drop > summary::after { transition: none; } }
+
+/* The parts of the invite that are switched off, offered by name under the preview because they
+   are not on the page to be tapped. */
+.off-parts { display: grid; gap: 8px; }
