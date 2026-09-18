@@ -110,6 +110,8 @@ export type GuestRow = {
   phone: string | null;
   token: string;
   status: GuestStatus;
+  /** How the host knows them: family, school, work. Never shown to a guest. */
+  groups: string[];
   party_size: number | null;
   children: number | null;
   adults: number | null;
