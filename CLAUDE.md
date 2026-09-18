@@ -19,3 +19,55 @@ Read `docs/build-brief.md` before doing anything. It is the engineering brief fo
 ## Self-check before publishing any screen or page
 
 Place information by the moment it is needed, not by what it is related to. Before putting anything on a screen, ask when the reader needs it. Deciding whether to come: date, time, place, who is hosting. Replying: the questions and nothing else. Coming: what to bring, parking, facilities, gifts. On the day: access details, timeline. After: thanks and photos. A detail never rides in a block above its moment just because it shares a topic with that block. Run this check over every screen before publishing, and say in the handover where anything borderline was placed and why.
+
+## No guessing
+
+Every expensive hour on this project has been spent on a guess that read like an answer. Six
+rounds of screenshots to find one mis-scoped environment variable, two wrong theories about the
+Vercel deploy, an instruction to run git commands at a terminal Marcia does not have, and a
+settings file sent to a branch no future session would ever read. None of it was hard. All of it
+was answered in one lookup, once the lookup happened.
+
+So:
+
+- **Look it up before answering.** If the question is about a tool, a product, an API or a UI, read
+  the docs, the source or the live response first. One fetch beats three plausible answers. This
+  applies hardest when the answer feels obvious.
+- **Say "I do not know, let me check."** That sentence costs one line. A confident wrong answer
+  costs Marcia a round trip, and she is usually on a phone with one bar.
+- **Never guess twice about the same thing.** A second guess means stop and go and measure.
+- **Measure, do not eyeball.** Bounding boxes, field manifests, HTTP status, the actual row in the
+  database. "It looks right" is not a result.
+- **Verify the capability before asking for access.** Check the call works before sending her to
+  fetch a token. A credential in a transcript that turns out to be unusable is a real cost.
+- **Ask which thing she is looking at.** Which URL, which branch, which environment, which app.
+  Taking "it has not changed" at face value once cost more than any other mistake here.
+
+## What Marcia actually has in front of her
+
+Get this wrong and the instructions are useless however correct they are.
+
+- **She works from a phone, and has no terminal.** Never hand her shell commands as the only path.
+  Give her the web UI route: GitHub in a browser, the Supabase dashboard, claude.ai/code.
+- **The GitHub mobile app cannot create files.** It edits files that already exist and merges pull
+  requests, nothing else. File creation needs github.com in a browser.
+- **Anything a future session must read has to be on `main`.** A new session clones `main`. A
+  settings file on a feature branch does nothing at all.
+- **Write findings into the repo, not into the conversation.** A recipe that lives in a chat is
+  gone by the next session. `SETUP.md` is where operational knowledge goes.
+
+## Facts about this setup, so they are not rediscovered
+
+- There is **one Supabase project, `invites-dev`** (ref `kihsdobmmvnfvokbmmgj`, Sydney). There is no
+  `invites-prod`. The live site runs on the dev database, so a test against it is a test against
+  real guest data.
+- **Migrations**: `scripts/supabase-sql.py check | apply | query`, see `SETUP.md`. It needs a
+  Supabase personal access token, not the secret key, in `SUPABASE_ACCESS_TOKEN`, and a permission
+  rule in `.claude/settings.json` on `main`. Without the rule the session is stopped before it runs.
+- **Environment variables** live behind the cloud icon above the message box at claude.ai/code:
+  hover the environment, click the gear, fill the Environment variables box. There is no settings
+  page and no direct URL. Values are copied once at session start, so a change lands next session.
+- **A browser cannot reach `*.vercel.app` from a session** (certificate not trusted through the
+  proxy). Read the live site with `curl`, and do browser testing against a local production build.
+- **The dev server does not hydrate client components here.** Test interaction against
+  `npm run build` plus `npx next start`, never `npm run dev`.

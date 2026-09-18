@@ -150,8 +150,11 @@ export const copy = {
     groupLink: "Group link for chats",
     groupLinkHint: "Anyone can open it and reply on the spot. They put their name in as they answer.",
     groupLinks: "A link for each group",
-    groupLinksHint: "Paste a different one into each chat and you'll see where every reply came from, without having to ask.",
-    groupLinksNone: "Once your guests have groups, each one gets its own link here.",
+    groupLinksHint: "Name the chat you're about to paste into and you'll get a link of its own. Everyone who replies through it lands in your list already marked, so you know where they're from without asking.",
+    groupLinkName: "Which chat is this for?",
+    groupLinkNameHint: "School, Family, The neighbours",
+    groupLinkNameBlank: "Type a name above and your link appears here.",
+    groupLinksInUse: "Already in use",
     remind: "Remind",
     newLink: "New link",
     trail: {
