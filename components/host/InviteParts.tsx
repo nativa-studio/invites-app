@@ -12,7 +12,7 @@ import { setSectionOrder, setSectionShown } from "@/app/app/events/[id]/actions"
 // do by tapping a part that is switched off or by tapping the gap it should move into.
 //
 // Up and down rather than dragging: a drag inside a phone that is already scrolling is a fight,
-// and there are six parts at most.
+// and there are seven parts at most.
 export function InviteParts({ e, onEdit }: { e: EventRow; onEdit: (part: InvitePart) => void }) {
   const [pending, start] = useTransition();
   const order = orderedParts(e.section_order);

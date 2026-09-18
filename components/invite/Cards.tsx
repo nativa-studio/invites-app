@@ -3,7 +3,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
-import { askLine } from "@/lib/ask-line";
+import { askLine, signoffMessage } from "@/lib/ask-line";
 import { ICONS, Bubble, Camera, Clock, Gift, Kids, Pin, Plate, Cap, Cake, Towel } from "@/components/art/icons";
 import { goodToKnow, type NoteKind } from "@/lib/good-to-know";
 
@@ -146,6 +146,19 @@ export function AskCard({ e }: { e: PublicEvent }) {
   );
 }
 
+
+// The sign-off, and the end of the invite.
+//
+// No label and no picture: a label would make it another section of a document, and this is the
+// bit that stops being a document. Two lines, centred, the way a note ends.
+export function SignoffCard({ e }: { e: PublicEvent }) {
+  return (
+    <div className="pcard cream signoff" data-section="signoff">
+      <div className="para">{signoffMessage(e)}</div>
+      {e.host_line && <div className="small">{e.host_line}</div>}
+    </div>
+  );
+}
 
 export function UpdatesCard({ e }: { e: PublicEvent }) {
   if (!e.updates.length) return null;

@@ -6,7 +6,7 @@ import { copy } from "@/lib/copy";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { mascotFor } from "@/lib/artwork";
 import { orderedParts, type InvitePart } from "@/lib/invite-parts";
-import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
+import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { LineupInvite } from "./LineupInvite";
 
@@ -53,6 +53,9 @@ export function InviteBody({
     day: e.show_runsheet ? <DayCard e={e} /> : null,
     know: e.show_good_to_know ? <KnowCard e={e} /> : null,
     after: e.show_after ? <AskCard e={e} /> : null,
+    // Absent means on: a database without migration 0008 does not send the column, and the
+    // sign-off is a part every event gets rather than one to opt into.
+    signoff: e.show_signoff !== false ? <SignoffCard e={e} /> : null,
   };
   const below = (
     <>

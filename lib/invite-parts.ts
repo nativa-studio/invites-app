@@ -6,7 +6,7 @@
 // The default order is the one the self-check asks for, each thing at the moment it is needed.
 // What changed, then everything needed to decide whether to come, then the reply while the
 // deciding is still in hand. Everything after it is for someone who has already said yes.
-export const INVITE_PARTS = ["updates", "details", "reply", "day", "know", "after"] as const;
+export const INVITE_PARTS = ["updates", "details", "reply", "day", "know", "after", "signoff"] as const;
 export type InvitePart = (typeof INVITE_PARTS)[number];
 
 export const PART_NAMES: Record<InvitePart, string> = {
@@ -16,6 +16,7 @@ export const PART_NAMES: Record<InvitePart, string> = {
   day: "The order of the afternoon",
   know: "Good to know",
   after: "Questions",
+  signoff: "The sign-off",
 };
 
 /** The column that decides whether a part appears at all. The reply and updates have none: the
@@ -25,6 +26,7 @@ export const PART_SWITCH: Partial<Record<InvitePart, string>> = {
   day: "show_runsheet",
   know: "show_good_to_know",
   after: "show_after",
+  signoff: "show_signoff",
 };
 
 // A saved order, made safe to render from.

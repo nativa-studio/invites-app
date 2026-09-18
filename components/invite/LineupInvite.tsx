@@ -3,7 +3,8 @@ import "@/app/lineup.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { goodToKnow } from "@/lib/good-to-know";
-import { formatInviteDate, formatTime, formatTimeRange, hostName } from "@/lib/format";
+import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
+import { askLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
 import { bandFor, mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
@@ -28,7 +29,6 @@ export function LineupInvite({
   addressee: string;
   skipAnimation?: boolean;
 }) {
-  const host = hostName(e.host_line);
   const age = e.title.match(/turning (\d+)/i)?.[1];
   const maps = mapsLink(e);
   const notes = goodToKnow(e);
@@ -112,9 +112,18 @@ export function LineupInvite({
             <p className="label">{copy.sections.askHeading}</p>
             <div style={{ textAlign: "center" }}>
               {e.host_phone
-                ? <a className="maps" href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.askBody(host)}</a>
-                : <p className="note-line"><span>{copy.sections.askBody(host)}</span></p>}
+                ? <a className="maps" href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{askLine(e)}</a>
+                : <p className="note-line"><span>{askLine(e)}</span></p>}
             </div>
+          </section>
+          )}
+
+          {/* Absent means on: a database without migration 0008 does not send the column, and the
+              sign-off is a part every event gets rather than one to opt into. */}
+          {e.show_signoff !== false && (
+          <section data-section="signoff" className="signoff">
+            <p className="msg">{signoffMessage(e)}</p>
+            {e.host_line && <p className="from">{e.host_line}</p>}
           </section>
           )}
 

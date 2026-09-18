@@ -1,6 +1,6 @@
 import type { EventRow } from "@/lib/db/types";
 import { Choice, Field, Switch } from "@/components/host/fields";
-import { askLine } from "@/lib/ask-line";
+import { askLine, signoffMessage } from "@/lib/ask-line";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
 // data-section names the invite carries, so tapping a card on the preview finds its entry here.
@@ -94,6 +94,25 @@ export const SECTIONS: Section[] = [
         value={e.ask_note}
         hint={`Empty means \u201c${askLine({ ask_note: null, host_line: e.host_line })}\u201d`}
       />
+    ),
+  },
+  {
+    id: "signoff",
+    title: "The sign-off",
+    blurb: "The last thing on the invite: you, saying you are looking forward to it. The name under it is the From line from Details, so you do not type it twice.",
+    show: { column: "show_signoff", label: "Show the sign-off" },
+    fields: ["signoff_note", "host_line", "show_signoff"],
+    render: (e) => (
+      <>
+        <Field
+          id="signoff_note"
+          label="The message"
+          value={e.signoff_note}
+          rows={2}
+          hint={`Empty means \u201c${signoffMessage({ signoff_note: null })}\u201d`}
+        />
+        <Field id="host_line" label="Signed" value={e.host_line} hint="e.g. With love Gabe, Tommy and Ma" />
+      </>
     ),
   },
   {
