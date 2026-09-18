@@ -44,11 +44,14 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
           <p className="eyebrow">{age ? "Trainer wanted" : "You're invited"}</p>
           <h1 className="title">{e.title}</h1>
           {e.intro && <p className="sub pad">{e.intro}</p>}
-          <p className="when">
-            {formatInviteDate(e.date)}
-            <br />
-            {formatTimeRange(e.start_time, e.end_time, e.time_note)}
-          </p>
+          {/* The details section repeats these, so the cover only carries them when it is off. */}
+          {!e.show_details && (
+            <p className="when">
+              {formatInviteDate(e.date)}
+              <br />
+              {formatTimeRange(e.start_time, e.end_time, e.time_note)}
+            </p>
+          )}
           {e.host_line && <p className="from">{e.host_line}</p>}
           {artwork
             ? <div className="art"><Image src={artwork.src} alt="" width={artwork.w} height={artwork.h} priority sizes="(max-width: 430px) 100vw, 430px" /></div>
@@ -69,6 +72,8 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
             {maps && <div style={{ textAlign: "center" }}><a className="maps" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a></div>}
           </section>
           )}
+
+          <section>{reply}</section>
 
           {e.show_runsheet && e.runsheet.length > 0 && (
             <section data-section="day">
@@ -100,8 +105,6 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
               </div>
             </section>
           )}
-
-          <section>{reply}</section>
 
           {e.show_after && (
           <section data-section="after">

@@ -45,11 +45,15 @@ function CoverCard({ e, hero, greeting }: { e: PublicEvent; hero?: PeekChar; gre
       <div className="text">
         {eyebrow.toLowerCase() !== greeting.toLowerCase() && <div className="eyebrow">{eyebrow}</div>}
         <div className="title">{e.title}</div>
-        <div className="when">
-          <b>{formatInviteDate(e.date)}</b>
-          {formatTimeRange(e.start_time, e.end_time, e.time_note)}
-          {e.venue && <span className="where">{e.venue}</span>}
-        </div>
+        {/* The details card follows straight after and says all of this, so the card only carries
+            it when that section is switched off. */}
+        {!e.show_details && (
+          <div className="when">
+            <b>{formatInviteDate(e.date)}</b>
+            {formatTimeRange(e.start_time, e.end_time, e.time_note)}
+            {e.venue && <span className="where">{e.venue}</span>}
+          </div>
+        )}
         {e.host_line && <div className="from">{e.host_line}</div>}
       </div>
       {hero && <Image className="hero" src={hero.src} alt={hero.alt} width={hero.w} height={hero.h} priority sizes="200px" />}
@@ -80,9 +84,9 @@ export function PostInvite({
         <div className="strip">
           {e.updates.length > 0 && <Slot side="left" order={0}><UpdatesCard e={e} /></Slot>}
           {e.show_details && <Slot who={cast.details} side="left" order={1}><DetailsCard e={e} /></Slot>}
-          {e.show_runsheet && e.runsheet.length > 0 && <Slot who={cast.day} side="right" order={2}><DayCard e={e} /></Slot>}
-          {e.show_good_to_know && <Slot who={cast.know} side="left" order={3}><KnowCard e={e} /></Slot>}
-          <Slot who={cast.reply} side="right" order={4} lift>{reply}</Slot>
+          <Slot who={cast.reply} side="right" order={2} lift>{reply}</Slot>
+          {e.show_runsheet && e.runsheet.length > 0 && <Slot who={cast.day} side="left" order={3}><DayCard e={e} /></Slot>}
+          {e.show_good_to_know && <Slot who={cast.know} side="right" order={4}><KnowCard e={e} /></Slot>}
           {e.show_after && <Slot side="left" order={5}><AfterCard /></Slot>}
           <div className="foot">{hostMobile ? <a href={hostMobile}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}</div>
         </div>

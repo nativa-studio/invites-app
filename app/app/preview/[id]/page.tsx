@@ -8,6 +8,7 @@ import type { EventRow, RunsheetStop, Update } from "@/lib/db/types";
 import { InviteBody, asLayout } from "@/components/invite/InviteBody";
 import { eventForRender } from "@/lib/db/events";
 import { PickMode } from "@/components/host/PickMode";
+import { PreviewReply } from "@/components/invite/PreviewReply";
 
 // The host's own look at their invite. Reads the event row straight from the table, so it works
 // on a draft and before a single guest exists, and it never touches a guest's opened flag the
@@ -42,12 +43,7 @@ export default async function Preview({
 
   // A guest sees their own name here, so the preview borrows the first one on the list.
   const greeting = guest?.name ? copy.greeting(firstName(guest.name as string)) : copy.greetingGroup;
-  const reply = (
-    <div className="pcard">
-      <div className="label red">{copy.rsvp.heading}</div>
-      <div className="para">{copy.host.previewReply}</div>
-    </div>
-  );
+  const reply = <PreviewReply e={e} who={guest?.name ? firstName(String(guest.name)) : undefined} />;
   // Picking means the host is editing, so the envelope starts open: a section they cannot see is
   // a section they cannot tap.
   return (

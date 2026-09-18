@@ -74,10 +74,13 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
           {eyebrow.toLowerCase() !== greeting.toLowerCase() && <p className="eyebrow">{eyebrow}</p>}
           <Title text={e.title} />
           {e.intro && <p className="sub">{e.intro}</p>}
-          <p className="when">
-            <span className="day">{formatInviteDate(e.date)}</span>
-            <span className="hour">{formatTimeRange(e.start_time, e.end_time, e.time_note)}</span>
-          </p>
+          {/* The details section repeats these, so the cover only carries them when it is off. */}
+          {!e.show_details && (
+            <p className="when">
+              <span className="day">{formatInviteDate(e.date)}</span>
+              <span className="hour">{formatTimeRange(e.start_time, e.end_time, e.time_note)}</span>
+            </p>
+          )}
           {e.host_line && <p className="from">{e.host_line}</p>}
           {cast.hero ? (
             <div className="ground">
@@ -102,6 +105,11 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
           {maps && <div className="mid"><a className="maps" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a></div>}
         </section>
         )}
+
+        <section className="s butter">
+          <Peeker who={cast.reply} side="right" />
+          {reply}
+        </section>
 
         {e.show_runsheet && e.runsheet.length > 0 && (
           <section className="s sand" data-section="day">
@@ -136,11 +144,18 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
           </section>
         )}
 
-        <section className="s butter">
-          <Peeker who={cast.reply} side="right" />
-          {reply}
-        </section>
 
+        {/* Peek had no updates and photos section at all, so its switch on the Layout tab did
+            nothing. Every other look has one. */}
+        {e.show_after && (
+          <section className="s blush" data-section="after">
+            <p className="label">{copy.sections.updates}</p>
+            <div className="notes">
+              <p className="note-line"><span className="dot" style={{ background: "var(--sky)" }} /><span>{copy.sections.updatesBody}</span></p>
+              <p className="note-line"><span className="dot" style={{ background: "var(--red)" }} /><span>{copy.sections.photosBody}</span></p>
+            </div>
+          </section>
+        )}
 
         <p className="foot">
           {e.host_phone ? <a href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}

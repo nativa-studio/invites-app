@@ -30,9 +30,16 @@ export function CoverCard({ e }: { e: PublicEvent }) {
       <div className="eyebrow">{age ? copy.envelope.eyebrowBirthday : copy.greetingGroup}</div>
       <div className="title">{e.title}</div>
       {e.intro && <div className="intro">{e.intro}</div>}
-      <div className="rule" />
-      <div className="para">{formatInviteDate(e.date)}<br />{formatTimeRange(e.start_time, e.end_time, e.time_note)}</div>
-      {e.venue && <div className="where">{e.venue}</div>}
+      {/* When and where belong to the details card, which follows immediately. Printing them on
+          the cover as well just makes a guest read the same two lines twice. If the host has
+          turned the details off, the cover carries them, because nowhere else would. */}
+      {!e.show_details && (
+        <>
+          <div className="rule" />
+          <div className="para">{formatInviteDate(e.date)}<br />{formatTimeRange(e.start_time, e.end_time, e.time_note)}</div>
+          {e.venue && <div className="where">{e.venue}</div>}
+        </>
+      )}
       {e.host_line && <div className="small">{e.host_line}</div>}
     </div>
   );
