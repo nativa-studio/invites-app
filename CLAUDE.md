@@ -67,6 +67,8 @@ Get this wrong and the instructions are useless however correct they are.
 - **Environment variables** live behind the cloud icon above the message box at claude.ai/code:
   hover the environment, click the gear, fill the Environment variables box. There is no settings
   page and no direct URL. Values are copied once at session start, so a change lands next session.
+- **The live site is `https://invites-app-xi.vercel.app`.** Not `invites-app.vercel.app`, which is
+  somebody else's project and answers with a PHP error page. Vercel deploys `main` on push.
 - **A browser cannot reach `*.vercel.app` from a session** (certificate not trusted through the
   proxy). Read the live site with `curl`, and do browser testing against a local production build.
 - **The dev server does not hydrate client components here.** Test interaction against
