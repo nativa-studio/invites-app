@@ -30,6 +30,12 @@ p { margin: 0; }
 
 /* The app. Nothing in here carries the product's colours or its party typefaces. */
 .host { max-width: 720px; margin: 0 auto; padding: 20px 16px 64px; display: grid; gap: 18px; font-family: var(--app-font); color: var(--app-ink); }
+/* Every single column grid in the app gets minmax(0, 1fr) rather than the default auto track.
+   An auto track sizes to its content, so one long label in one field widens its card, which
+   widens the page, and the whole app scrolls sideways on a phone. Capping the track at the
+   container is the fix, and it has to be on each of them: a capped parent does not stop a child
+   grid growing its own track. */
+.host, .card, .field, .panel, .guest, .guest-list, .saved { grid-template-columns: minmax(0, 1fr); }
 .host a { color: var(--app-ink); text-underline-offset: 2px; }
 .host :focus-visible { outline: 2px solid var(--app-ink); outline-offset: 2px; border-radius: 4px; }
 .host header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--app-line); }
@@ -37,6 +43,28 @@ p { margin: 0; }
 .h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
 .h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; color: var(--app-ink); }
 .muted { color: var(--app-mute); font-size: 15px; }
+.hint { color: var(--app-mute); font-size: 13px; line-height: 1.4; }
+/* A state, not a category, so it is a word in a quiet outline rather than a colour. */
+.tag { font-size: 12.5px; font-weight: 600; color: var(--app-mute); border: 1px solid var(--app-line-2); border-radius: 999px; padding: 3px 10px; }
+
+/* The five headers. A row on a phone, scrolling sideways if the names outgrow the screen,
+   because losing one off the edge is worse than a row that moves. */
+/* min-width 0 is load bearing: a grid child sizes to its content by default, so without it the
+   row of headers widens the whole page instead of scrolling inside itself. */
+.evt-nav { display: flex; gap: 2px; min-width: 0; overflow-x: auto; border-bottom: 1px solid var(--app-line); margin: -4px 0 2px; scrollbar-width: none; }
+.evt-nav::-webkit-scrollbar { display: none; }
+.evt-nav a { flex: 0 0 auto; padding: 9px 8px; font-size: 14px; font-weight: 600; color: var(--app-mute); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.evt-nav a:hover { color: var(--app-ink); }
+.evt-nav a.on { color: var(--app-ink); border-bottom-color: var(--app-ink); }
+
+/* A panel and its Save. The button follows you down a long form rather than waiting at the end. */
+.panel { display: grid; gap: 16px; }
+.save-bar { position: sticky; bottom: 0; z-index: 5; display: flex; justify-content: flex-end; gap: 8px; padding: 10px 0; background: linear-gradient(to top, var(--app-bg) 62%, transparent); }
+.save-bar .btn { min-width: 108px; }
+
+.switch { display: flex; gap: 10px; align-items: center; min-height: 40px; font-size: 15px; font-weight: 400; cursor: pointer; }
+.switch input { width: 20px; height: 20px; min-height: 0; padding: 0; accent-color: var(--app-ink); flex: 0 0 auto; }
+.switch span { flex: 1 1 auto; min-width: 0; }
 .card { background: var(--app-bg); border: 1px solid var(--app-line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid var(--app-line-2); background: var(--app-bg); color: var(--app-ink); font-size: 15px; font-weight: 600; text-decoration: none; cursor: pointer; }
@@ -49,8 +77,10 @@ p { margin: 0; }
 
 .field { display: grid; gap: 5px; }
 .field label, .field .label-ish { font-size: 14px; font-weight: 600; color: var(--app-ink); }
-.field input, .field textarea, .field select { min-height: 42px; border: 1px solid var(--app-line-2); border-radius: 8px; padding: 9px 11px; background: var(--app-bg); width: 100%; font-family: var(--app-font); }
-.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--app-ink); }
+/* Text boxes only. A checkbox or a radio is not a box you type in, and giving them a 42px
+   minimum height and a full width made the tick enormous and shoved its label off the screen. */
+.field input:not([type="checkbox"]):not([type="radio"]), .field textarea, .field select { min-height: 42px; border: 1px solid var(--app-line-2); border-radius: 8px; padding: 9px 11px; background: var(--app-bg); width: 100%; font-family: var(--app-font); }
+.field input:not([type="checkbox"]):not([type="radio"]):focus, .field textarea:focus, .field select:focus { border-color: var(--app-ink); }
 .field textarea { min-height: 84px; }
 
 /* Two by two on a phone, so four counts never leave one stranded on its own row. */
@@ -90,6 +120,7 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .layout .b { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; align-self: start; }
 /* The one window in the tool where colour is allowed, because what is in it is an invite. */
 .screen { height: 460px; border: 1px solid var(--app-line-2); border-radius: 10px; overflow: hidden; background: var(--app-sunk); }
+.screen.tall { height: min(74vh, 720px); }
 .screen iframe { width: 100%; height: 100%; border: 0; display: block; }
 
 .saved { display: grid; gap: 8px; justify-items: start; background: var(--app-sunk); border: 1px solid var(--app-line); border-left: 2px solid var(--app-ink); border-radius: 0 8px 8px 0; padding: 14px 16px; }

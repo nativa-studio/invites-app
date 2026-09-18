@@ -77,7 +77,7 @@ export type LayoutOption = { id: string; name: string; line: string };
 
 export function LayoutPicker({ eventId, value, options }: { eventId: string; value: string; options: LayoutOption[] }) {
   const [chosen, setChosen] = useState(value);
-  const src = `/app/events/${eventId}/preview?layout=${chosen}`;
+  const src = `/app/preview/${eventId}?layout=${chosen}`;
   return (
     <div className="field">
       <span className="label-ish">{copy.host.layoutHeading}</span>
