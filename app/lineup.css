@@ -91,13 +91,20 @@
 .lineup header .eyebrow { margin-top: 26px; }
 .lineup header .art { margin-bottom: -2px; }
 
-/* The card is a fixed height, and not an arbitrary one: the slot positions a card by its top edge
-   and turns it about its centre, so a shorter card rides higher and pokes out of the envelope. At
-   this layout's natural 365 the card sat 91px above the pocket; 589 puts it 21px inside, measured.
-   The space it buys is spent the way this layout spends space anyway, with the artwork pushed to
-   the bottom of the cover. */
-.lineup header { height: 589px; display: flex; flex-direction: column; }
-.lineup header .art { margin-top: auto; }
+/* Inside the envelope the card is a fixed height, and not an arbitrary one: the slot positions a
+   card by its top edge and turns it about its centre, so a shorter card rides higher and pokes out
+   of the envelope. At this layout's natural 365 the card sat 91px above the pocket; 589 puts it
+   21px inside, measured. The spare height is spent the way this layout spends space anyway, with
+   the artwork pushed to the bottom of the cover.
+   
+   It is the envelope's number, so it stays in the envelope. On the page the card is whatever
+   height its own words need. Held there too, a short invite drew a band of empty paper between the
+   host line and the artwork, which read as something missing rather than as room to breathe. The
+   two do not have to match: the stage is taken off the screen in the same frame the page copy
+   appears, so nothing is ever seen changing size. */
+.lineup header { display: flex; flex-direction: column; }
+.lineup .card-slot header { height: 589px; }
+.lineup .card-slot header .art { margin-top: auto; }
 
 /* Inside the envelope the card is 340 wide, so the cover type comes down to fit rather than
    being scaled up from a size that only works at full width. */
