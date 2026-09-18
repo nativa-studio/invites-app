@@ -82,9 +82,9 @@ export const SECTIONS: Section[] = [
   },
   {
     id: "after",
-    title: "Updates and photos",
-    blurb: "A short note telling guests you will post updates here and photos afterwards. Nothing to write.",
-    show: { column: "show_after", label: "Show updates and photos" },
+    title: "Questions",
+    blurb: "The last block on the invite: who to ask. It uses your mobile from the details, so there is nothing to write here.",
+    show: { column: "show_after", label: "Show the questions block" },
     fields: ["show_after"],
     render: () => null,
   },

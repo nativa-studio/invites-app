@@ -133,17 +133,16 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
             nothing. Every other look has one. */}
         {e.show_after && (
           <section className="s blush" data-section="after">
-            <p className="label">{copy.sections.updates}</p>
-            <div className="notes">
-              <p className="note-line"><span className="dot" style={{ background: "var(--sky)" }} /><span>{copy.sections.updatesBody}</span></p>
-              <p className="note-line"><span className="dot" style={{ background: "var(--red)" }} /><span>{copy.sections.photosBody}</span></p>
+            <p className="label">{copy.sections.askHeading}</p>
+            <div className="mid">
+              {e.host_phone
+                ? <a className="maps" href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.askBody(host)}</a>
+                : <p className="note-line"><span>{copy.sections.askBody(host)}</span></p>}
             </div>
           </section>
         )}
 
-        <p className="foot">
-          {e.host_phone ? <a href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}
-        </p>
+
       </div>
     </main>
   );

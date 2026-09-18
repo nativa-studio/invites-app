@@ -92,16 +92,16 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
 
           {e.show_after && (
           <section data-section="after">
-            <div className="after">
-              <div><div className="n">{copy.sections.updates}</div><div className="b">{copy.sections.updatesBody}</div></div>
-              <div><div className="n">{copy.sections.photos}</div><div className="b">{copy.sections.photosBody}</div></div>
+            <p className="label">{copy.sections.askHeading}</p>
+            <div style={{ textAlign: "center" }}>
+              {e.host_phone
+                ? <a className="maps" href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.askBody(host)}</a>
+                : <p className="note-line"><span>{copy.sections.askBody(host)}</span></p>}
             </div>
           </section>
           )}
 
-          <p className="foot">
-            {e.host_phone ? <a href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}
-          </p>
+
         </div>
       </div>
     </main>

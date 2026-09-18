@@ -10,7 +10,7 @@ const SECTION_LABELS: [keyof Sections, string, string][] = [
   ["details", "show_details", "The details: when, where, what to wear"],
   ["day", "show_runsheet", "The order of the afternoon"],
   ["know", "show_good_to_know", "Good to know"],
-  ["after", "show_after", "Updates and photos"],
+  ["after", "show_after", "Questions, and how to ask them"],
 ];
 
 export type LookState = { layout: string; sections: Sections };
