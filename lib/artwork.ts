@@ -38,6 +38,11 @@ const BANDS: Record<string, Picture> = {
   [GABRIEL]: { src: GABRIEL, w: 1173, h: 420 },
 };
 
+/** The characters that stand along the envelope. The same band the lineup layout uses. */
+const MASCOTS: Record<string, Picture> = {
+  [GABRIEL]: { src: GABRIEL, w: 1173, h: 420 },
+};
+
 const CASTS: Record<string, PeekCast> = {
   [GABRIEL]: {
     topLeft: g("bulbasaur", 200, 365, ""),
@@ -61,6 +66,10 @@ export function coverFor(artwork: string | null | undefined): Picture | null {
 
 export function bandFor(artwork: string | null | undefined): Picture | null {
   return BANDS[set(artwork)] ?? null;
+}
+
+export function mascotFor(artwork: string | null | undefined): Picture | null {
+  return MASCOTS[set(artwork)] ?? null;
 }
 
 export function castFor(artwork: string | null | undefined): PeekCast {

@@ -1,9 +1,10 @@
 import "@/app/invite.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { hostName } from "@/lib/format";
+
 import { paletteFor, paletteVars } from "@/components/art/palette";
-import { AfterCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
+import { mascotFor } from "@/lib/artwork";
+import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { LineupInvite } from "./LineupInvite";
 import { PeekInvite } from "./PeekInvite";
@@ -32,9 +33,6 @@ export function InviteBody({
   }
 
   const p = paletteFor(e.palette, e.theme_id);
-  const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
-  const host = hostName(e.host_line);
-  const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
   // Everything below the cover, in the order the moment asks for it. What changed, then the
   // details, which is everything needed to decide. Then the reply, while the deciding is still
   // in hand. Everything after it is for someone who has already said yes: the order of the day,
@@ -46,8 +44,7 @@ export function InviteBody({
       {reply}
       {e.show_runsheet && <DayCard e={e} />}
       {e.show_good_to_know && <KnowCard e={e} />}
-      {e.show_after && <AfterCard />}
-      <div className="foot">{hostMobile ? <a href={hostMobile}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}</div>
+      {e.show_after && <AskCard e={e} />}
     </>
   );
 
@@ -59,10 +56,10 @@ export function InviteBody({
           <div className="greet">{greeting}</div>
           <Envelope
             addressee={addressee ?? copy.envelope.toYou}
-            stamp={age}
             cover={<CoverCard e={e} />}
             openLabel={copy.envelope.open}
             skipAnimation={skipAnimation}
+            mascot={mascotFor(e.invite_image_path)}
           >
             {below}
           </Envelope>

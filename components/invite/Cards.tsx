@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
-import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
+import { formatInviteDate, formatTimeRange, formatTime, hostName } from "@/lib/format";
 import { ICONS, Bubble, Camera, Gift, Kids, Plate, Cap, Cake, Towel } from "@/components/art/icons";
 import { goodToKnow, type NoteKind } from "@/lib/good-to-know";
 
@@ -107,12 +107,19 @@ export function KnowCard({ e }: { e: PublicEvent }) {
   );
 }
 
-export function AfterCard() {
+// The last block: who to ask. A guest who has read to the end has a question, not a wish to be
+// told that photos will arrive one day.
+export function AskCard({ e }: { e: PublicEvent }) {
+  const host = hostName(e.host_line);
+  const sms = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
   return (
     <div className="pcard cream" data-section="after">
-      <div className="two">
-        <div><Bubble /><div className="n">{copy.sections.updates}</div><div className="b">{copy.sections.updatesBody}</div></div>
-        <div><Camera /><div className="n">{copy.sections.photos}</div><div className="b">{copy.sections.photosBody}</div></div>
+      <div className="ask">
+        <Bubble />
+        <div className="n">{copy.sections.askHeading}</div>
+        {sms
+          ? <a className="pill-link" href={sms}>{copy.sections.askBody(host)}</a>
+          : <div className="b">{copy.sections.askBody(host)}</div>}
       </div>
     </div>
   );

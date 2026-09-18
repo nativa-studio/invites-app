@@ -182,7 +182,7 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 @media (prefers-reduced-motion: reduce) { .sheet { animation: none; } }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .sheet-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; overflow-y: auto; padding-bottom: 4px; }
-.sheet-foot { position: sticky; bottom: 0; display: flex; justify-content: flex-end; padding: 10px 0; background: linear-gradient(to top, var(--app-bg) 62%, transparent); }
+.sheet-foot { position: sticky; bottom: 0; display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 10px 0; background: linear-gradient(to top, var(--app-bg) 62%, transparent); }
 .sheet-foot .btn { min-width: 108px; }
 .screen iframe { width: 100%; height: 100%; border: 0; display: block; }
 

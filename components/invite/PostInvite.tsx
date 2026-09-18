@@ -3,10 +3,10 @@ import "@/app/invite.css";
 import "@/app/post.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { formatInviteDate, formatTimeRange, hostName } from "@/lib/format";
+import { formatInviteDate, formatTimeRange } from "@/lib/format";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { castFor, type PeekChar } from "@/lib/artwork";
-import { AfterCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
+import { AskCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { PostEnvelope } from "./PostEnvelope";
 
 // In the post: the stationery suite with the peek characters. An envelope that opens, always,
@@ -65,10 +65,7 @@ export function PostInvite({
   event: e, greeting, addressee, reply, skipAnimation,
 }: { event: PublicEvent; greeting: string; addressee: string; reply: React.ReactNode; skipAnimation?: boolean }) {
   const p = paletteFor(e.palette, e.theme_id);
-  const host = hostName(e.host_line);
-  const age = e.title.match(/turning (\d+)/i)?.[1] ?? "";
   const cast = castFor(e.invite_image_path);
-  const hostMobile = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
 
   return (
     <main className="post" style={paletteVars(p)}>
@@ -78,7 +75,7 @@ export function PostInvite({
         <div className={`opening ${cast.topLeft || cast.topRight ? "" : "nobody"}`}>
           <Peeker who={cast.topLeft} side="left" />
           <Peeker who={cast.topRight} side="right" />
-          <PostEnvelope addressee={addressee} stamp={age} card={<CoverCard e={e} hero={cast.hero} greeting={greeting} />} openLabel={copy.envelope.open} skipAnimation={skipAnimation} />
+          <PostEnvelope addressee={addressee} card={<CoverCard e={e} hero={cast.hero} greeting={greeting} />} openLabel={copy.envelope.open} skipAnimation={skipAnimation} />
         </div>
 
         <div className="strip">
@@ -87,8 +84,8 @@ export function PostInvite({
           <Slot who={cast.reply} side="right" order={2} lift>{reply}</Slot>
           {e.show_runsheet && e.runsheet.length > 0 && <Slot who={cast.day} side="left" order={3}><DayCard e={e} /></Slot>}
           {e.show_good_to_know && <Slot who={cast.know} side="right" order={4}><KnowCard e={e} /></Slot>}
-          {e.show_after && <Slot side="left" order={5}><AfterCard /></Slot>}
-          <div className="foot">{hostMobile ? <a href={hostMobile}>{copy.sections.questions(host)}</a> : copy.sections.questions(host)}</div>
+          {e.show_after && <Slot side="left" order={5}><AskCard e={e} /></Slot>}
+
         </div>
       </div>
     </main>

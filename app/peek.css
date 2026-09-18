@@ -2,7 +2,9 @@
    they do on the wallpaper they were cut from. Every section is a soft panel in its own
    character's colour, and the words are coloured too, because a four year old reads colour
    long before words. The page crops the characters, so they read as peeking rather than placed. */
-.peek {
+/* Full-bleed artwork and the envelope's clip box are both wider than the page on purpose. Clip
+   rather than hide: hidden would make this a scroll container and break the sticky pieces. */
+.peek { overflow-x: clip;
   --page: #F9F0DA;
   --panel: #FFFAEC;
   --ink: #2B2119;

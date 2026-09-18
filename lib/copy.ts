@@ -75,6 +75,10 @@ export const copy = {
     updatesBody: "Anything that changes shows here.",
     photos: "Photos",
     photosBody: "A photo for you after the party.",
+    // The block at the end of the invite. It used to promise updates and photos, which is a
+    // promise about later; a guest at the end of an invite wants to know who to ask.
+    askHeading: "Questions",
+    askBody: (host: string) => `Text ${host}`,
     openInMaps: "Open in Maps",
     when: "When",
     where: "Where",

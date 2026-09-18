@@ -1,14 +1,16 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Bolt } from "@/components/art/icons";
 
-type Props = { addressee: string; addresseeLine?: string; stamp: string; cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean };
+type Mascot = { src: string; w: number; h: number };
+type Props = { addressee: string; addresseeLine?: string; cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean; mascot?: Mascot | null };
 
 // The opening: tap (or wait), the flap lifts, the card rises, grows, and the envelope drops away.
 // The cover is drawn once, never twice: the envelope holds it until the opening is over, then
 // hands it to the page. Two copies at once would share one set of SVG pattern ids, and the
 // halftone shading would look up the copy inside the closed envelope and find nothing to paint.
-export function Envelope({ addressee, addresseeLine, stamp, cover, children, openLabel, skipAnimation }: Props) {
+export function Envelope({ addressee, addresseeLine, cover, children, openLabel, skipAnimation, mascot }: Props) {
   const [phase, setPhase] = useState<"" | "open" | "rise" | "out" | "done">(skipAnimation ? "done" : "");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const started = useRef(false);
@@ -49,9 +51,12 @@ export function Envelope({ addressee, addresseeLine, stamp, cover, children, ope
           <div className="pocket">
             <div className="sides" /><div className="edge" />
             <div className="addr">{addressee}{addresseeLine && <><br /><span>{addresseeLine}</span></>}</div>
-            <div className="stamp"><div><Bolt size={26} /><div>{stamp}</div></div></div>
           </div>
           <div className="flap"><div className="face front" /><div className="face backface" /><div className="rim" /></div>
+          {/* The event's characters, standing along the envelope rather than printed on it. They sit
+              outside the pocket on purpose: inside it they would be clipped by the paper's edge,
+              which is what made the last one look badly cut. */}
+          {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="240px" priority />}
           <div className="seal"><Bolt size={30} /></div>
         </div>
         <div className="hint">{openLabel}</div>
