@@ -73,3 +73,39 @@
 .lineup .pbtn { border-width: 2.5px; border-radius: 14px; max-width: 330px; }
 .lineup .q input[type=text], .lineup .q input[type=tel], .lineup .q textarea { border-width: 2px; background: var(--paper); }
 .lineup .chip { border-width: 2px; background: var(--paper); }
+
+/* The envelope.
+   ------------------------------------------------------------------
+   The lineup has no card of its own, so its header becomes one: a paper panel rather than words
+   bare on the page, because an envelope needs something to hand over. The panel is the same in
+   the slot and on the page afterwards, so the card you watch come out is the card you then read.
+   Everything else here is shared with the suite and takes the lineup's own colours through the
+   variables above. */
+.lineup header {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+.lineup header .eyebrow { margin-top: 26px; }
+.lineup header .art { margin-bottom: -2px; }
+
+/* The card is a fixed height, and not an arbitrary one: the slot positions a card by its top edge
+   and turns it about its centre, so a shorter card rides higher and pokes out of the envelope.
+   589 is the suite's card, measured, which is what the shared geometry is built around. The space
+   it buys is spent the way this layout spends space anyway, with the artwork pushed to the
+   bottom of the cover. */
+.lineup header { height: 589px; display: flex; flex-direction: column; }
+.lineup header .art { margin-top: auto; }
+
+/* Inside the envelope the card is 340 wide, so the cover type comes down to fit rather than
+   being scaled up from a size that only works at full width. */
+.lineup .card-slot header h1.title { font-size: 40px; }
+.lineup .card-slot header .sub { font-size: 15px; margin-top: 10px; }
+.lineup .card-slot header .when { font-size: 16px; margin-top: 14px; }
+
+/* The body is the page, not a column of cards, so it stretches rather than centring on its
+   widest child and it keeps the lineup's own spacing. */
+.lineup .suite.lineup-body { align-items: stretch; gap: 0; }
+.lineup .suite.lineup-body > header { margin-bottom: 4px; }
