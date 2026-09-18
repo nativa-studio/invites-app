@@ -160,6 +160,10 @@ export const copy = {
     groupsEmpty: "No groups yet. Add a guest with a group, or hand out a group link, and they show up here.",
     groupsNone: "No group",
     groupsNoneHint: ", added before you started using groups or through the plain link",
+    guestGroup: "Group",
+    guestGroupNone: "No group",
+    guestGroupNew: "New group...",
+    guestGroupAsk: "What do you call this group? Family, School, The neighbours",
     deleteHeading: "Delete this event",
     deleteBlurb: (guests: number, replies: number) =>
       guests === 0
