@@ -24,7 +24,17 @@ export function InviteBody({
   skipAnimation?: boolean;
 }) {
   const id = layout ?? e.layout_id;
-  if (id === "lineup") return <LineupInvite event={e} greeting={greeting} reply={reply} />;
+  if (id === "lineup") {
+    return (
+      <LineupInvite
+        event={e}
+        greeting={greeting}
+        reply={reply}
+        addressee={addressee ?? copy.envelope.toYou}
+        skipAnimation={skipAnimation}
+      />
+    );
+  }
 
   const p = paletteFor(e.palette, e.theme_id);
   // Everything below the cover, in the order the moment asks for it. What changed, then the

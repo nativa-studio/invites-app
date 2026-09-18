@@ -5,16 +5,29 @@ import { copy } from "@/lib/copy";
 import { goodToKnow } from "@/lib/good-to-know";
 import { formatInviteDate, formatTime, formatTimeRange, hostName } from "@/lib/format";
 import { mapsLink, WhenWhere } from "./Cards";
-import { ScrollCue } from "./ScrollCue";
-import { bandFor } from "@/lib/artwork";
+import { bandFor, mascotFor } from "@/lib/artwork";
+import { Envelope } from "./Envelope";
 
 // Colours lifted from the artwork, used for the dots beside each good-to-know line.
 const DOTS = ["#EFB93C", "#7FAF95", "#93C7D6", "#E8763C", "#E0553F", "#3F6B57"];
 
 
-// The layout itself, with the reply passed in: a personal link hands it the RSVP, the group
-// link hands it the "Who's this from?" form. Same page either way.
-export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent; greeting: string; reply: React.ReactNode }) {
+// The layout itself, with the reply passed in: a personal link hands it the RSVP, the group link
+// hands it the reply form. Same page either way.
+//
+// The cover arrives in an envelope, the same one the suite uses. The lineup has no card of its
+// own, so its header is the card: the eyebrow, the title, the line under it and the artwork band,
+// on a panel rather than bare on the page, so there is something for the envelope to hand over.
+// Everything below follows once it has opened.
+export function LineupInvite({
+  event: e, greeting, reply, addressee, skipAnimation,
+}: {
+  event: PublicEvent;
+  greeting: string;
+  reply: React.ReactNode;
+  addressee: string;
+  skipAnimation?: boolean;
+}) {
   const host = hostName(e.host_line);
   const age = e.title.match(/turning (\d+)/i)?.[1];
   const maps = mapsLink(e);
@@ -26,7 +39,14 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
       <div className="page">
         <p className="greet">{greeting}</p>
 
-        <header data-section="cover">
+        <Envelope
+          addressee={addressee}
+          openLabel={copy.envelope.open}
+          skipAnimation={skipAnimation}
+          mascot={mascotFor(e.invite_image_path)}
+          bodyClassName="suite lineup-body"
+          cover={
+            <header data-section="cover">
           <p className="eyebrow">{age ? "Trainer wanted" : "You're invited"}</p>
           <h1 className="title">{e.title}</h1>
           {e.intro && <p className="sub pad">{e.intro}</p>}
@@ -42,8 +62,9 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
           {artwork
             ? <div className="art"><Image src={artwork.src} alt="" width={artwork.w} height={artwork.h} priority sizes="(max-width: 430px) 100vw, 430px" /></div>
             : <div className="artless" />}
-        </header>
-
+            </header>
+          }
+        >
         <div className="pad">
           {e.show_details && (
           <section data-section="details">
@@ -99,8 +120,8 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
 
 
         </div>
+        </Envelope>
       </div>
-      <ScrollCue anchor="header" />
     </main>
   );
 }
