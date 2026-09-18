@@ -112,3 +112,49 @@ That is half of it. The other half is the token: set `SUPABASE_ACCESS_TOKEN` as 
 variable on the Claude Code environment, not in `.env.local`, which is git ignored and so never
 reaches a new session. With the rule but no token the script has no credentials; with the token but
 no rule the session is stopped before it runs. Both, once, and it stops coming up.
+
+## Putting it on your own address
+
+The site answers on `invites-app-xi.vercel.app`. Pointing your own name at it is four steps, all in a browser, and nothing in the code changes.
+
+**Everything below is done from a phone. There is no terminal step.**
+
+### 1. Get the name
+
+Two routes, and the cheaper one to run depends on which ending you want.
+
+- **A `.com`, `.app` or `.party`**: buy it inside Vercel. Open the project, **Settings**, **Domains**, type the name you want, and if it is free Vercel offers to sell it to you. Vercel is then your registrar as well as your host, so it writes the DNS itself and step 2 does not happen at all. This is the least that can go wrong.
+- **A `.com.au` or `.au`**: Vercel does not sell these, and it cannot, because they are country domains that need an Australian business behind them. Buy it from an Australian registrar (VentraIP, Crazy Domains, Netregistry) using the Nativa Studio ABN, then do step 2.
+
+### 2. Point it at Vercel (only if you bought it elsewhere)
+
+In Vercel: project, **Settings**, **Domains**, **Add**, type the domain. Vercel then shows you a card with the exact records to create. **Read the values off that card.** They are specific to this project, and any A record or `cname.vercel-dns.com` value you find written down elsewhere, including in an older note from me, is likely to be the wrong one now.
+
+There will be two:
+
+- the bare name (`bunting.com.au`) as an **A record**, pointing at the address on the card
+- `www` as a **CNAME**, pointing at the value on the card
+
+Add both in your registrar's DNS screen. Then leave it. It is usually live within the hour, though the official answer is up to 48.
+
+Add both `bunting.com.au` and `www.bunting.com.au` to the Vercel project, and set the `www` one to redirect to the bare one, so people who type either land in the same place.
+
+You do not have to do anything about the certificate. Vercel gets one free from Let's Encrypt as soon as the records resolve, renews it by itself, and sends every `http` visitor to `https`.
+
+### 3. Tell the app its own name
+
+Still in Vercel: **Settings**, **Environment Variables**. Set `NEXT_PUBLIC_SITE_URL` to `https://bunting.com.au`, with no slash on the end, then redeploy.
+
+Skipping this does not break the site, but every invite link the app writes into a text message would keep saying `invites-app-xi.vercel.app`, because that is the address the request came in on. The whole point is the link a guest reads.
+
+### 4. Tell Supabase
+
+In the Supabase dashboard: **Authentication**, **URL Configuration**. Set **Site URL** to `https://bunting.com.au` and add `https://bunting.com.au/auth/callback` to the redirect list. Leave the old entries there until you are sure, they cost nothing.
+
+Google needs nothing. Google sends people back to Supabase, not to us, and that address is not changing.
+
+### Worth knowing before you pick a name
+
+Guests read it out of a text message, so it is doing the work a business card does. Short, spellable down the phone, and it wants to sit comfortably in `bunting.com.au/i/k3m9x2` rather than fight it.
+
+The links already sent out keep working. Vercel keeps answering on the old address, so nothing breaks the moment you switch.
