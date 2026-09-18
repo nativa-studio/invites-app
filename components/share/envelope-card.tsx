@@ -138,46 +138,78 @@ function opening({ palette: p, addressee, title, artwork }: CardInput) {
   );
 }
 
-// C. Sealed. No artwork at all, which is what every event gets before a host uploads anything,
-// and what a memorial or a quiet dinner should get regardless.
-// A sealed envelope, front on, filling the frame. This is the picture a text message shows, so it
-// has one job: look like a letter addressed to the person reading it, before they have read a word
-// of the message. The name is the loudest thing on it, and the stamp carries the age the way the
-// invite's own seal does.
-function sealed({ palette: p, addressee, title, age }: CardInput) {
+// C. Sealed. The envelope a guest is about to open, drawn the same way it is drawn in the app.
+//
+// It used to be a flat rectangle with a postmark and a name on it, which meant a guest met one
+// object in the chat and a different one when they tapped it. This is the same envelope: the
+// two-tone flap folded down, the wax seal at its point, the name written across the bottom, and
+// the characters standing in the corner.
+//
+// A postmark and a stamp belong on the front of a letter and a sealed flap belongs on the back.
+// Both are here anyway, because this is one picture doing two jobs: saying it is addressed to the
+// reader, and saying it has not been opened yet. Losing either would cost more than the literalism
+// is worth.
+function sealed({ palette: p, addressee, title, age, artwork }: CardInput) {
   const ink = shade(p.red, -0.45);
+  const body = shade(p.red, -0.18);
+  const rim = shade(p.red, -0.32);
   const name = (addressee ?? title).toUpperCase();
+  const PAD = 26;
+  const EW = W - PAD * 2, EH = H - PAD * 2;
+  const APEX = 300;
   // Fit the name to the space rather than guessing from its length. A guest is called whatever
   // they are called, and the group link puts a whole title here, so a fixed size either wraps a
-  // long one with one word stranded on the second line, or wastes half the envelope on a short
-  // one. 0.62em is close enough to this face's average capital, and the floor and ceiling keep
-  // both extremes readable.
-  const room = W - 260;
-  const track = name.length > 22 ? 8 : 14;
-  const size = Math.max(34, Math.min(82, Math.floor((room / name.length - track) / 0.62)));
+  // long one with a word stranded on the second line, or wastes half the envelope on a short one.
+  // The room stops short of the characters in the corner. 0.62em is close enough to this face's
+  // average capital, and the floor and ceiling keep both extremes readable.
+  const room = 700;
+  const track = name.length > 20 ? 7 : 12;
+  const size = Math.max(30, Math.min(74, Math.floor((room / name.length - track) / 0.62)));
   return (
-    <div style={{ width: W, height: H, display: "flex", background: "#FFFFFF", padding: 26, fontFamily: "Nunito" }}>
-      <div style={{ position: "relative", width: W - 52, height: H - 52, display: "flex", background: p.red, borderRadius: 22 }}>
-        {/* The postmark: a ring and its cancellation lines, up in the corner where one lands. */}
-        <svg width="360" height="150" viewBox="0 0 360 150" style={{ position: "absolute", left: 300, top: 34 }}>
-          <g fill="none" stroke={ink} strokeWidth="3" opacity="0.5">
-            <circle cx="72" cy="72" r="56" />
-            <circle cx="72" cy="72" r="42" />
+    <div style={{ width: W, height: H, display: "flex", background: "#FFFFFF", padding: PAD, fontFamily: "Nunito" }}>
+      <div style={{ position: "relative", width: EW, height: EH, display: "flex", background: body, borderRadius: 22 }}>
+        {/* The flap, folded down, lighter than the body it lies on, exactly as in the app. */}
+        <svg width={EW} height={APEX + 14} viewBox={`0 0 ${EW} ${APEX + 14}`} style={{ position: "absolute", left: 0, top: 0 }}>
+          <path d={`M0 0 L${EW / 2} ${APEX} L${EW} 0 Z`} fill={p.red} />
+          <path d={`M0 0 L${EW / 2} ${APEX} L${EW} 0`} fill="none" stroke={rim} strokeWidth="5" strokeLinejoin="round" />
+        </svg>
+        {/* The postmark, landing across the flap's edge the way one does. */}
+        <svg width="330" height="140" viewBox="0 0 330 140" style={{ position: "absolute", left: 92, top: 64 }}>
+          <g fill="none" stroke={ink} strokeWidth="3" opacity="0.45">
+            <circle cx="66" cy="66" r="52" />
+            <circle cx="66" cy="66" r="39" />
             {[0, 1, 2, 3].map((i) => (
-              <path key={i} d={`M140 ${44 + i * 18} q30 -10 60 0 t60 0 t60 0`} />
+              <path key={i} d={`M128 ${40 + i * 17} q28 -10 56 0 t56 0`} />
             ))}
           </g>
         </svg>
-        {/* The stamp, with the age on it where a denomination would be. */}
+        {/* The stamp, with the age where a denomination goes. */}
         <div style={{ position: "absolute", right: 44, top: 34, width: 132, height: 156, display: "flex", padding: 9, background: "#FFFFFF", borderRadius: 3, transform: "rotate(2deg)" }}>
           <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: shade(p.red, 0.82), border: `3px solid ${ink}` }}>
             <div style={{ display: "flex", fontFamily: DISPLAY, fontSize: age && age.length > 1 ? 66 : 80, color: ink }}>{age ?? ""}</div>
           </div>
         </div>
-        {/* Who it is for. Letterspaced capitals, the way a name is written on an envelope. */}
-        <div style={{ position: "absolute", left: 96, top: 300, width: W - 260, display: "flex" }}>
-          <div style={{ display: "flex", fontSize: size, letterSpacing: track, color: PAPER, lineHeight: 1.1 }}>{name}</div>
+        {/* The wax seal, at the point of the flap, holding it shut. */}
+        <svg width="120" height="120" viewBox="0 0 120 120" style={{ position: "absolute", left: EW / 2 - 60, top: APEX - 60 }}>
+          <circle cx="60" cy="60" r="52" fill={p.yellow} stroke={p.navy} strokeWidth="7" />
+          <path d="M66 24L34 66h24l-10 30 42-46H66l13-26z" fill={p.navy} />
+        </svg>
+        {/* Who it is for. A label, then the name, the way a name is written on an envelope. */}
+        <div style={{ position: "absolute", left: 88, bottom: 92, display: "flex", flexDirection: "column", width: room }}>
+          <div style={{ display: "flex", fontFamily: HAND, fontSize: 30, letterSpacing: 9, color: p.cream, opacity: 0.85 }}>
+            {addressee ? "INVITE FOR" : "YOU'RE INVITED"}
+          </div>
+          {addressee ? (
+            <div style={{ display: "flex", fontSize: size, letterSpacing: track, color: PAPER, lineHeight: 1.1, marginTop: 10 }}>{name}</div>
+          ) : null}
         </div>
+        {/* The characters, standing along the bottom corner, the same band the app stands there. */}
+        {artwork ? (
+          <div style={{ position: "absolute", right: 40, bottom: 26, display: "flex" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={artwork} alt="" height={132} />
+          </div>
+        ) : null}
       </div>
     </div>
   );
