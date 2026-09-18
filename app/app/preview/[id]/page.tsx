@@ -52,7 +52,7 @@ export default async function Preview({
   return (
     <>
       {full === "1" && (
-        <a className="preview-back" href={`/app/events/${id}`}>{copy.host.previewBack}</a>
+        <a className="preview-back" href={`/app/events/${id}`}>{copy.host.backToParty}</a>
       )}
       {pick === "1" && <PickMode />}
       <InviteBody

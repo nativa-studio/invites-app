@@ -170,7 +170,6 @@ export const copy = {
     deleteConfirm: "Delete it",
     deleting: "Deleting",
     deleteCancel: "Keep it",
-    previewBack: "Back to the party",
     remind: "Remind",
     newLink: "New link",
     trail: {
