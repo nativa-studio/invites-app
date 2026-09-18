@@ -3,7 +3,7 @@ import { groupSlug } from "@/lib/groups";
 import type { GuestRow } from "@/lib/db/types";
 import { CopyButton } from "./CopyButton";
 
-// Where everyone is from, at a glance.
+// The groups, at a glance.
 //
 // Groups were only ever visible one guest at a time, buried in the list, so a host could not
 // answer "have the neighbours replied?" without reading fifty rows. This is that answer: every
