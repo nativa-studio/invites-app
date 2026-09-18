@@ -7,7 +7,7 @@ import { copy } from "@/lib/copy";
 export type SaveState = { saved?: boolean; error?: string; note?: string };
 
 // Artwork is stored as a path, and an empty choice clears it.
-const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "gift_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue"] as const;
+const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "gift_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue", "yes_label", "no_label"] as const;
 const DATES = ["date", "rsvp_by"] as const;
 const TIMES = ["start_time", "end_time"] as const;
 const CHOICES = { layout_id: ["suite", "lineup"], parents_mode: ["stay", "drop_off", "either"], photo_sharing: ["none", "kids_off_social", "ask", "share"], gift_stance: ["none", "optional", "wishlist", "books"], ask_party_mode: ["single", "split"], status: ["draft", "live", "thanks", "archived"] } as const;
@@ -54,6 +54,6 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
     note = copy.host.savedWithoutSections;
   }
   if (error) return { error: error.message };
-  for (const p of ["", "/look", "/details", "/guests", "/invite"]) revalidatePath(`/app/events/${id}${p}`);
+  for (const p of ["", "/look", "/details", "/guests", "/rsvp", "/invite"]) revalidatePath(`/app/events/${id}${p}`);
   return { saved: true, note };
 }

@@ -1,6 +1,7 @@
 "use client";
 import type { EventRow } from "@/lib/db/types";
 import { LookStudio } from "@/components/host/LookStudio";
+import { asLayoutId } from "@/lib/layouts";
 import { PanelForm } from "@/components/host/PanelForm";
 
 // What the invite looks like: its shape, and which parts of it show at all. The pictures are no
@@ -13,7 +14,7 @@ export function LookPanel({ e }: { e: EventRow }) {
       <LookStudio
         eventId={e.id}
         saved={{
-          layout: e.layout_id,
+          layout: asLayoutId(e.layout_id),
           sections: {
             details: e.show_details !== false,
             day: e.show_runsheet !== false,
