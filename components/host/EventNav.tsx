@@ -4,12 +4,14 @@ import { usePathname } from "next/navigation";
 
 // The five parts of an event. The first is the event's own address, so it is the one you land on
 // and the one Back from anywhere else returns to.
+//
+// "Invite" rather than "Preview": it is where the invite is made, not just where it is looked at.
 const TABS = [
   { seg: "", label: "Tracking" },
   { seg: "/look", label: "Layout" },
   { seg: "/details", label: "Details" },
   { seg: "/guests", label: "Guests" },
-  { seg: "/invite", label: "Preview" },
+  { seg: "/invite", label: "Invite" },
 ] as const;
 
 export function EventNav({ id }: { id: string }) {

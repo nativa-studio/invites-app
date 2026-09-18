@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
-import { hiddenSections, sectionById, type Section } from "./sections";
+import { sectionById, type Section } from "./sections";
+import { InviteParts } from "./InviteParts";
 import { EditDrawer } from "./EditDrawer";
 
 // The invite, and a way to edit it by pointing at it.
@@ -20,7 +21,6 @@ export function InviteEditor({ e }: { e: EventRow }) {
   const [version, setVersion] = useState(0);
   const router = useRouter();
   const src = `/app/preview/${e.id}?pick=1&v=${version}`;
-  const off = hiddenSections(e);
 
   useEffect(() => {
     function onMessage(ev: MessageEvent) {
@@ -45,21 +45,13 @@ export function InviteEditor({ e }: { e: EventRow }) {
       <div className="screen phone">
         <iframe key={src} src={src} title="Your invite" />
       </div>
-      {/* Tapping the invite reaches every part that is on it. The parts that are off are not on it
-          to be tapped, so they are offered here by name. */}
-      {off.length > 0 && (
-        <div className="off-parts">
-          <span className="hint">{copy.host.offParts}</span>
-          <div className="actions">
-            {off.map((s) => (
-              <button key={s.id} type="button" className="btn small" onClick={() => setOpen(s)}>{s.title}</button>
-            ))}
-          </div>
-        </div>
-      )}
       <div className="actions">
         <a className="btn small" href={`/app/preview/${e.id}?full=1`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
       </div>
+      {/* Tapping the invite reaches every part that is on it, and none of the parts that are not.
+          This list reaches all of them, and is also the only place a part can be moved, since
+          there is no gap on the invite to tap to say "put it here". */}
+      <InviteParts e={e} onEdit={(part) => { const s = sectionById(part); if (s) setOpen(s); }} />
       {/* Keyed by section, so tapping a different part of the invite gets a fresh drawer rather
           than one still holding the last one's unsaved state. */}
       {open && <EditDrawer key={open.id} section={open} e={e} onClose={() => setOpen(null)} onSaved={saved} />}
