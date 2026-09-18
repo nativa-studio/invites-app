@@ -226,3 +226,9 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .card.danger .h2 { color: #9b2c17; }
 .btn.danger { background: #b3311a; border-color: #b3311a; color: #fff; }
 .btn.danger:disabled { opacity: .6; }
+
+/* The group a guest is in, changed where you are already looking at them. Sits on its own line
+   under the trail so a long group name never squeezes the buttons. */
+.guest-group { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+.guest-group > span { font-size: 13px; color: var(--app-muted, #6b7280); }
+.guest-group select { flex: 0 1 auto; max-width: 220px; font-size: 14px; padding: 6px 8px; }

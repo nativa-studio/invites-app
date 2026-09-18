@@ -86,6 +86,22 @@ export async function newLink(eventId: string, guestId: string) {
   revalidatePath(`/app/events/${eventId}`);
 }
 
+// Moving a guest into a group, or out of one.
+//
+// A group could only be set as a guest was added, so a list pasted in one go was stuck with
+// whatever it was given, and anyone who arrived through the plain link was stuck with nothing.
+// One group per guest, the same as adding, because that is what the rest of the app assumes.
+export async function setGuestGroup(eventId: string, guestId: string, group: string) {
+  const { supabase } = await hostClient();
+  const name = group.trim().slice(0, 40);
+  await supabase
+    .from("guests")
+    .update({ groups: name ? [name] : [] })
+    .eq("id", guestId)
+    .eq("event_id", eventId);
+  revalidatePath(`/app/events/${eventId}`);
+}
+
 export type DeleteState = { error?: string };
 
 // Deleting an event, and meaning it.

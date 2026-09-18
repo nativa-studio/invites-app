@@ -4,18 +4,39 @@ import { copy } from "@/lib/copy";
 import { formatDateTime } from "@/lib/format";
 import { inviteText, reminderText, smsLink, whatsappLink, type TemplateEvent } from "@/lib/messages";
 import type { GuestRow } from "@/lib/db/types";
-import { markSent, newLink, removeGuest } from "@/app/app/events/[id]/actions";
+import { markSent, newLink, removeGuest, setGuestGroup } from "@/app/app/events/[id]/actions";
 import { CopyButton } from "./CopyButton";
 import { useHasShare } from "./capabilities";
 
 type Props = { eventId: string; guests: GuestRow[]; event: TemplateEvent; site: string };
 
 export function GuestList({ eventId, guests, event, site }: Props) {
-  const [filter, setFilter] = useState<"all" | "yes" | "no" | "pending" | "unsent">("all");
+  const [filter, setFilter] = useState<"all" | "yes" | "no" | "pending" | "unsent" | "nogroup">("all");
   const canShare = useHasShare();
   const [busy, setBusy] = useState<string | null>(null);
   const [, start] = useTransition();
-  const shown = guests.filter((g) => filter === "all" ? true : filter === "unsent" ? !g.sent_at : g.status === filter);
+  // "No group" is here because finding the unlabelled ones by scrolling is the thing that makes
+  // labelling a long list not worth starting.
+  const shown = guests.filter((g) =>
+    filter === "all" ? true
+      : filter === "unsent" ? !g.sent_at
+      : filter === "nogroup" ? !g.groups?.length
+      : g.status === filter);
+  // The groups already on this list. Offering them by name is what stops "School" and "school"
+  // becoming two groups, which is the whole value of the label.
+  const known = [...new Set(guests.flatMap((g) => g.groups ?? []))].sort((a, b) => a.localeCompare(b));
+
+  // Changing a guest's group. A new name is asked for rather than typed into every row, because
+  // a host names a group once and then uses it forty times.
+  function changeGroup(g: GuestRow, picked: string) {
+    if (picked === "__new") {
+      const name = window.prompt(copy.host.guestGroupAsk, "")?.trim();
+      if (!name) return;
+      start(() => { void setGuestGroup(eventId, g.id, name); });
+      return;
+    }
+    start(() => { void setGuestGroup(eventId, g.id, picked); });
+  }
   const unsent = guests.filter((g) => !g.sent_at);
   const next = unsent[0];
 
@@ -64,9 +85,9 @@ export function GuestList({ eventId, guests, event, site }: Props) {
       ) : guests.length > 0 && <p className="muted">{copy.host.allSent}</p>}
 
       <div className="actions" role="tablist" aria-label="Filter guests">
-        {(["all", "yes", "no", "pending", "unsent"] as const).map((f) => (
+        {(["all", "yes", "no", "pending", "unsent", "nogroup"] as const).map((f) => (
           <button key={f} type="button" className="btn small" aria-pressed={filter === f} onClick={() => setFilter(f)}>
-            {f === "all" ? "All" : f === "yes" ? "Yes" : f === "no" ? "No" : f === "pending" ? "No reply" : "Not sent"}
+            {f === "all" ? "All" : f === "yes" ? "Yes" : f === "no" ? "No" : f === "pending" ? "No reply" : f === "unsent" ? "Not sent" : copy.host.guestGroupNone}
           </button>
         ))}
       </div>
@@ -93,6 +114,21 @@ export function GuestList({ eventId, guests, event, site }: Props) {
               </div>
               {detail && <p style={{ fontSize: 14 }}>{detail}</p>}
               <p className="trail">{trail}{g.phone ? ` · ${g.phone}` : " · no mobile, pick them in Messages"}</p>
+              <label className="guest-group">
+                <span>{copy.host.guestGroup}</span>
+                <select
+                  value={g.groups?.[0] ?? ""}
+                  onChange={(ev) => changeGroup(g, ev.target.value)}
+                  aria-label={`${copy.host.guestGroup} for ${g.name}`}
+                >
+                  <option value="">{copy.host.guestGroupNone}</option>
+                  {known.map((n) => <option key={n} value={n}>{n}</option>)}
+                  {/* A guest may already carry a group nobody else has, so it is never missing
+                      from its own list. */}
+                  {g.groups?.[0] && !known.includes(g.groups[0]) && <option value={g.groups[0]}>{g.groups[0]}</option>}
+                  <option value="__new">{copy.host.guestGroupNew}</option>
+                </select>
+              </label>
               <div className="actions">
                 <button type="button" className="btn small primary" disabled={busy !== null} onClick={() => void sendVia(g, "sms", remind)}>{remind ? copy.host.remind : g.phone ? copy.host.text : copy.host.textPick}</button>
                 {g.phone && <button type="button" className="btn small" disabled={busy !== null} onClick={() => void sendVia(g, "wa", remind)}>{copy.host.whatsapp}</button>}
