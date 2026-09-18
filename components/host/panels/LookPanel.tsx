@@ -1,9 +1,6 @@
 "use client";
-import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
-import { Choice, Switch } from "@/components/host/fields";
-import { LayoutPicker } from "@/components/host/LayoutPicker";
-import { LAYOUTS } from "@/lib/layouts";
+import { LookStudio } from "@/components/host/LookStudio";
 import { PanelForm } from "@/components/host/PanelForm";
 
 // What the invite looks like: its shape, its picture, and which parts of it show at all.
@@ -12,24 +9,19 @@ export const LOOK_FIELDS = ["layout_id", "invite_image_path", "show_details", "s
 export function LookPanel({ e }: { e: EventRow }) {
   return (
     <PanelForm eventId={e.id} fields={LOOK_FIELDS}>
-      <section className="card">
-        <LayoutPicker eventId={e.id} value={e.layout_id} options={LAYOUTS} />
-        <Choice
-          id="invite_image_path"
-          label="Artwork"
-          value={e.invite_image_path}
-          options={[["", "None"], ["/artwork/gabriel-lineup.png", "Gabriel's lineup"]]}
-          hint="Uploading your own is coming. The lineup and peek layouts use the picture above."
-        />
-      </section>
-      <section className="card">
-        <h2 className="h2">{copy.host.sectionsHeading}</h2>
-        <Switch id="show_details" label="The details: when, where, what to wear" value={e.show_details} />
-        <Switch id="show_runsheet" label="The order of the afternoon" value={e.show_runsheet} />
-        <Switch id="show_good_to_know" label="Good to know" value={e.show_good_to_know} />
-        <Switch id="show_after" label="Updates and photos" value={e.show_after} />
-        <span className="hint">{copy.host.sectionsHint}</span>
-      </section>
+      <LookStudio
+        eventId={e.id}
+        saved={{
+          layout: e.layout_id,
+          artwork: e.invite_image_path ?? "",
+          sections: {
+            details: e.show_details !== false,
+            day: e.show_runsheet !== false,
+            know: e.show_good_to_know !== false,
+            after: e.show_after !== false,
+          },
+        }}
+      />
     </PanelForm>
   );
 }
