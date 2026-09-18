@@ -76,6 +76,8 @@ export const copy = {
     // The block at the end of the invite. It used to promise updates and photos, which is a
     // promise about later; a guest at the end of an invite wants to know who to ask.
     askHeading: "Questions",
+    // Reads as part of the line now, not as a heading over it.
+    askLabel: "Questions:",
     // The last thing on the invite. Plural because it is the hosts speaking, and "celebrating
     // with you" rather than "seeing you" because it is a party, not an appointment.
     signoffDefault: "We look forward to celebrating with you",

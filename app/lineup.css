@@ -123,3 +123,12 @@
 .lineup .signoff .msg { font-family: var(--font-display); font-size: 21px; line-height: 1.35; }
 .lineup .signoff .from { margin-top: 10px; }
 .lineup .signoff .stamp { width: 44px; height: 44px; margin: 16px auto 0; border-radius: 50%; background: var(--yel); border: 3px solid var(--ink); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 0 rgba(27,42,74,.25); transform: rotate(-7deg); }
+
+/* Questions: the symbol is the heading, the words below it one plain sentence. The tappable part
+   carries the underline so the sentence says which bit is the action, and enough padding to clear
+   44px without becoming a block. */
+.lineup .ask-block { text-align: center; }
+.lineup .ask-block .ask-mark { display: flex; justify-content: center; }
+.lineup .ask { font-size: 16px; line-height: 1.5; margin-top: 6px; }
+.lineup .ask .k { color: var(--ink-soft); }
+.lineup .ask a { display: inline-block; padding: 11px 0; color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
