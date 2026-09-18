@@ -167,6 +167,8 @@ export const copy = {
     groupsNone: "No group",
     groupsNoneHint: ", added before you started using groups or through the plain link",
     change: "Change",
+    sendInvite: "The invite",
+    sendReminder: "A reminder",
     messagesHeading: "Messages",
     messagesBlurb: "What your text says when you send a link, and how it looks when it lands. Tap any part of it to change the words.",
     basicsHeading: "The basics",
