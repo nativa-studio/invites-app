@@ -13,6 +13,13 @@ async function hostClient() {
 
 export type AddGuestState = { error?: string; added?: string };
 
+// A guest's groups are how a host sorts a long list: family, school, work. One per add is enough,
+// since a host adds a group at a time. Empty means no group rather than a group with no name.
+function groups(fd: FormData): string[] {
+  const g = String(fd.get("group") ?? "").trim();
+  return g ? [g] : [];
+}
+
 // A count the host typed, or nothing. Zero is a real answer, an empty box is not.
 function count(fd: FormData, key: string): number | null {
   const raw = String(fd.get(key) ?? "").trim();
@@ -31,27 +38,32 @@ export async function addGuest(_prev: AddGuestState, fd: FormData): Promise<AddG
   const { error } = await supabase.from("guests").insert({
     event_id: eventId, name, contact_name: contact || null, phone: phone || null, added_by: uid,
     expected_children: count(fd, "expected_children"), expected_adults: count(fd, "expected_adults"),
+    groups: groups(fd),
   });
   if (error) return { error: error.message };
   revalidatePath(`/app/events/${eventId}`);
   return { added: name };
 }
 
-export type AddManyState = { error?: string; added?: number };
+export type AddManyState = { error?: string; added?: number; skipped?: number };
 
 export async function addGuests(_prev: AddManyState, fd: FormData): Promise<AddManyState> {
   const eventId = String(fd.get("event_id") ?? "");
-  const list = parseGuestList(String(fd.get("list") ?? ""));
+  const raw = String(fd.get("list") ?? "");
+  const list = parseGuestList(raw);
   if (!list.length) return { error: "No names found. One guest per line." };
+  // Say so when lines were dropped as repeats, rather than quietly adding fewer than were pasted.
+  const skipped = raw.split(/\r?\n/).filter((l) => l.trim()).length - list.length;
   const { supabase, uid } = await hostClient();
+  const shared = groups(fd);
   const rows = list.map((g) => ({
     event_id: eventId, name: g.name, phone: normalisePhone(g.phone) || null, added_by: uid,
-    expected_children: g.children, expected_adults: g.adults,
+    expected_children: g.children, expected_adults: g.adults, groups: shared,
   }));
   const { error } = await supabase.from("guests").insert(rows);
   if (error) return { error: error.message };
   revalidatePath(`/app/events/${eventId}`);
-  return { added: rows.length };
+  return { added: rows.length, skipped: skipped > 0 ? skipped : undefined };
 }
 
 export async function markSent(eventId: string, guestId: string, kind: "sent" | "reminded") {
