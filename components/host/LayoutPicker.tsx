@@ -31,7 +31,7 @@ export function LayoutPicker({ eventId, value, options }: { eventId: string; val
       <div className="screen">
         <iframe key={chosen} src={src} title={`Preview: ${chosen}`} loading="lazy" />
       </div>
-      <a className="btn small" href={src} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
+      <a className="btn small" href={`${src}&full=1`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
     </div>
   );
 }

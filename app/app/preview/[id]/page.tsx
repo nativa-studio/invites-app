@@ -18,9 +18,9 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function Preview({
   params, searchParams,
-}: { params: Promise<{ id: string }>; searchParams: Promise<{ layout?: string; show?: string; pick?: string }> }) {
+}: { params: Promise<{ id: string }>; searchParams: Promise<{ layout?: string; show?: string; pick?: string; full?: string }> }) {
   const { id } = await params;
-  const { layout, show, pick } = await searchParams;
+  const { layout, show, pick, full } = await searchParams;
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   const supabase = await createClient();
   const { data: event } = await supabase.from("events").select("*").eq("id", id).maybeSingle();
@@ -46,8 +46,14 @@ export default async function Preview({
   const reply = <PreviewReply e={e} who={guest?.name ? firstName(String(guest.name)) : undefined} />;
   // Picking means the host is editing, so the envelope starts open: a section they cannot see is
   // a section they cannot tap.
+  // Opened full size, this is a whole page with no chrome on it, so there was no way out except
+  // the browser's own back, which a phone hides once you scroll. The frames that show this same
+  // route inside the host screens do not ask for it, and must not have it.
   return (
     <>
+      {full === "1" && (
+        <a className="preview-back" href={`/app/events/${id}`}>{copy.host.previewBack}</a>
+      )}
       {pick === "1" && <PickMode />}
       <InviteBody
         e={e}

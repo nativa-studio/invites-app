@@ -41,7 +41,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
           <iframe key={src} src={src} title="Preview of the invite" loading="lazy" />
         </div>
         <div className="actions">
-          <a className="btn small" href={src} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
+          <a className="btn small" href={`${src}&full=1`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
         </div>
       </section>
 

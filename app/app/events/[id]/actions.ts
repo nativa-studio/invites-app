@@ -1,5 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { normalisePhone } from "@/lib/format";
 import { parseGuestList } from "@/lib/parse-guests";
@@ -83,4 +84,56 @@ export async function newLink(eventId: string, guestId: string) {
   const { supabase } = await hostClient();
   await supabase.rpc("regenerate_token", { p_guest: guestId });
   revalidatePath(`/app/events/${eventId}`);
+}
+
+export type DeleteState = { error?: string };
+
+// Deleting an event, and meaning it.
+//
+// This is the privacy promise from the brief: allergy notes, children's names and phone numbers
+// are gone when the host says so. Every dependent row goes with the event by cascade, and the
+// storage objects under the event's prefix are removed too, since a file outliving its row is
+// exactly the leak the promise is about.
+//
+// Only an owner can do it, which row level security enforces rather than this function. A co-host
+// gets the same refusal a stranger would.
+export async function deleteEvent(_prev: DeleteState, fd: FormData): Promise<DeleteState> {
+  const id = String(fd.get("event_id") ?? "");
+  const typed = String(fd.get("confirm") ?? "").trim();
+  const title = String(fd.get("title") ?? "").trim();
+  if (!/^[0-9a-f-]{36}$/.test(id)) return { error: "Something went wrong. Please try again." };
+  // Typing the name is the whole safeguard, so it is checked before anything is touched.
+  if (typed.toLowerCase() !== title.toLowerCase()) {
+    return { error: `Type the event's name exactly, "${title}", and it will be deleted.` };
+  }
+
+  const { supabase } = await hostClient();
+
+  // Files first. If the row went first there would be nothing left to tell us which files belonged
+  // to it. A bucket that refuses is not allowed to stop the deletion: an orphaned file is bad, an
+  // event the host cannot get rid of is worse.
+  const leftBehind: string[] = [];
+  for (const bucket of ["invites", "photos", "share"]) {
+    try {
+      const { data: files } = await supabase.storage.from(bucket).list(id);
+      const paths = (files ?? []).map((f) => `${id}/${f.name}`);
+      if (paths.length) {
+        const { error } = await supabase.storage.from(bucket).remove(paths);
+        if (error) leftBehind.push(bucket);
+      }
+    } catch {
+      leftBehind.push(bucket);
+    }
+  }
+
+  const { error } = await supabase.from("events").delete().eq("id", id);
+  if (error) {
+    return { error: "That did not delete. Only the owner of an event can delete it." };
+  }
+  if (leftBehind.length) {
+    // Said out loud rather than swallowed, because the host was promised the files were gone.
+    console.warn(`event ${id} deleted, but files remain in: ${leftBehind.join(", ")}`);
+  }
+  revalidatePath("/app");
+  redirect("/app");
 }
