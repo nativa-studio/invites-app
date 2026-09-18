@@ -1,5 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { revalidateEvent } from "@/lib/revalidate-event";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { normalisePhone } from "@/lib/format";
@@ -43,7 +44,7 @@ export async function addGuest(_prev: AddGuestState, fd: FormData): Promise<AddG
     groups: groups(fd),
   });
   if (error) return { error: error.message };
-  revalidatePath(`/app/events/${eventId}`);
+  revalidateEvent(eventId);
   return { added: name };
 }
 
@@ -64,7 +65,7 @@ export async function addGuests(_prev: AddManyState, fd: FormData): Promise<AddM
   }));
   const { error } = await supabase.from("guests").insert(rows);
   if (error) return { error: error.message };
-  revalidatePath(`/app/events/${eventId}`);
+  revalidateEvent(eventId);
   return { added: rows.length, skipped: skipped > 0 ? skipped : undefined };
 }
 
@@ -72,19 +73,19 @@ export async function markSent(eventId: string, guestId: string, kind: "sent" | 
   const { supabase, uid } = await hostClient();
   const patch = kind === "sent" ? { sent_at: new Date().toISOString(), sent_by: uid } : { reminded_at: new Date().toISOString() };
   await supabase.from("guests").update(patch).eq("id", guestId).eq("event_id", eventId);
-  revalidatePath(`/app/events/${eventId}`);
+  revalidateEvent(eventId);
 }
 
 export async function removeGuest(eventId: string, guestId: string) {
   const { supabase } = await hostClient();
   await supabase.from("guests").delete().eq("id", guestId).eq("event_id", eventId);
-  revalidatePath(`/app/events/${eventId}`);
+  revalidateEvent(eventId);
 }
 
 export async function newLink(eventId: string, guestId: string) {
   const { supabase } = await hostClient();
   await supabase.rpc("regenerate_token", { p_guest: guestId });
-  revalidatePath(`/app/events/${eventId}`);
+  revalidateEvent(eventId);
 }
 
 // Moving a guest into a group, or out of one.
@@ -100,7 +101,7 @@ export async function setGuestGroup(eventId: string, guestId: string, group: str
     .update({ groups: name ? [name] : [] })
     .eq("id", guestId)
     .eq("event_id", eventId);
-  revalidatePath(`/app/events/${eventId}`);
+  revalidateEvent(eventId);
 }
 
 export type DeleteState = { error?: string };
@@ -164,7 +165,7 @@ export async function setSectionOrder(eventId: string, order: string[]) {
   const { supabase } = await hostClient();
   const clean = orderedParts(order);
   await supabase.from("events").update({ section_order: clean }).eq("id", eventId);
-  revalidatePath(`/app/events/${eventId}`);
+  revalidateEvent(eventId);
 }
 
 // One part on or off, from the same list that reorders them, so a host is not sent to a tab of
@@ -174,5 +175,5 @@ export async function setSectionShown(eventId: string, column: string, shown: bo
   if (!allowed.has(column)) return;
   const { supabase } = await hostClient();
   await supabase.from("events").update({ [column]: shown }).eq("id", eventId);
-  revalidatePath(`/app/events/${eventId}`);
+  revalidateEvent(eventId);
 }

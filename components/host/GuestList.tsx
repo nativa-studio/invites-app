@@ -19,6 +19,18 @@ export function GuestList({ eventId, guests, event, site }: Props) {
   const [sharing, setSharing] = useState<string | null>(null);
   // The guest waiting on a group name, which is what the New group sheet is for.
   const [naming, setNaming] = useState<GuestRow | null>(null);
+  // Which message the open panel will send. Guessed from where the guest is up to, then the host
+  // decides: the guess was the whole of it before, and it was unsayable and invisible.
+  const [mode, setMode] = useState<"invite" | "remind">("invite");
+
+  // A guest is marked as sent the moment the Text button is tapped, because opening Messages
+  // leaves the page and there is no way back to find out whether anything was actually sent. So
+  // "already sent" is a guess, and a wrong one every time a host taps Text and then thinks better
+  // of it, or the message does not go. Sending the invite again has to stay possible.
+  function openShare(g: GuestRow) {
+    setMode(g.status === "pending" && g.sent_at ? "remind" : "invite");
+    setSharing(g.id);
+  }
   const [, start] = useTransition();
   // "No group" is here because finding the unlabelled ones by scrolling is the thing that makes
   // labelling a long list not worth starting.
@@ -119,6 +131,9 @@ export function GuestList({ eventId, guests, event, site }: Props) {
             g.reminded_at ? `${copy.host.trail.reminded} ${formatDateTime(g.reminded_at)}` : null,
           ].filter(Boolean).join(" · ");
           const remind = g.status === "pending" && Boolean(g.sent_at);
+          // Only the open panel's switch decides what goes out. A guest with nothing sent yet has
+          // no switch, so it can only be the invite.
+          const sendAsRemind = Boolean(g.sent_at) && mode === "remind";
           const expecting = copy.host.expecting(g.expected_children, g.expected_adults);
           const detail = g.status === "yes"
             ? [g.party_size ? `${g.party_size} coming` : null, g.party_names.length ? g.party_names.join(", ") : null, g.dietary.length ? g.dietary.join(", ") : null, g.dietary_note, g.accessibility_note ? `Access: ${g.accessibility_note}` : null, g.note ? `"${g.note}"` : null].filter(Boolean).join(" · ")
@@ -154,16 +169,26 @@ export function GuestList({ eventId, guests, event, site }: Props) {
                   that matter, Text and WhatsApp, sat in a crowd with New link and Remove, and a
                   destructive button was one row away from the one you tap fifty times. */}
               {sharing === g.id ? (
-                <div className="actions">
-                  <button type="button" className="btn small primary" disabled={busy !== null} onClick={() => void sendVia(g, "sms", remind)}>{g.phone ? copy.host.text : copy.host.textPick}</button>
-                  {g.phone && <button type="button" className="btn small" disabled={busy !== null} onClick={() => void sendVia(g, "wa", remind)}>{copy.host.whatsapp}</button>}
-                  {canShare && <button type="button" className="btn small" onClick={() => void shareVia(g, remind)}>{copy.host.shareMore}</button>}
-                  <CopyButton text={link} label={copy.host.copy} />
-                  <button type="button" className="btn small" onClick={() => setSharing(null)}>{copy.host.shareClose}</button>
-                </div>
+                <>
+                  {/* Which of the two messages, shown only where both make sense. A guest who has
+                      never been sent anything has nothing to be reminded about. */}
+                  {g.sent_at && (
+                    <div className="actions" role="group" aria-label={`What to send ${g.name}`}>
+                      <button type="button" className="btn small" aria-pressed={mode === "invite"} onClick={() => setMode("invite")}>{copy.host.sendInvite}</button>
+                      <button type="button" className="btn small" aria-pressed={mode === "remind"} onClick={() => setMode("remind")}>{copy.host.sendReminder}</button>
+                    </div>
+                  )}
+                  <div className="actions">
+                    <button type="button" className="btn small primary" disabled={busy !== null} onClick={() => void sendVia(g, "sms", sendAsRemind)}>{g.phone ? copy.host.text : copy.host.textPick}</button>
+                    {g.phone && <button type="button" className="btn small" disabled={busy !== null} onClick={() => void sendVia(g, "wa", sendAsRemind)}>{copy.host.whatsapp}</button>}
+                    {canShare && <button type="button" className="btn small" onClick={() => void shareVia(g, sendAsRemind)}>{copy.host.shareMore}</button>}
+                    <CopyButton text={link} label={copy.host.copy} />
+                    <button type="button" className="btn small" onClick={() => setSharing(null)}>{copy.host.shareClose}</button>
+                  </div>
+                </>
               ) : (
                 <div className="actions">
-                  <button type="button" className="btn small primary" onClick={() => setSharing(g.id)}>{remind ? copy.host.remind : copy.host.share}</button>
+                  <button type="button" className="btn small primary" onClick={() => openShare(g)}>{remind ? copy.host.remind : copy.host.share}</button>
                   <button type="button" className="btn small" onClick={() => { if (confirm("Make a new link? The old one stops working.")) start(() => { void newLink(eventId, g.id); }); }}>{copy.host.newLink}</button>
                   <button type="button" className="btn small" onClick={() => { if (confirm(`Remove ${g.name}?`)) start(() => { void removeGuest(eventId, g.id); }); }}>Remove</button>
                 </div>

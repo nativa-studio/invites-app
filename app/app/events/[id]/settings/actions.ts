@@ -1,6 +1,6 @@
 "use server";
-import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { revalidateEvent } from "@/lib/revalidate-event";
 import { normalisePhone } from "@/lib/format";
 import { copy } from "@/lib/copy";
 
@@ -72,6 +72,6 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
   }
   if (error) return { error: error.message };
   const note = missed.length ? copy.host.savedWithout(missed) : undefined;
-  for (const p of ["", "/look", "/details", "/guests", "/rsvp", "/invite"]) revalidatePath(`/app/events/${id}${p}`);
+  revalidateEvent(id);
   return { saved: true, note };
 }
