@@ -149,6 +149,9 @@ p { margin: 0; }
 .pill.yes::before { background: currentColor; }
 .pill.no::before { background: transparent; }
 .pill.pending { border-style: dashed; }
+/* Not sent yet. Dotted rather than dashed, so a list shows at a glance which guests are waiting
+   on the host and which are waiting on the guest. */
+.pill.unsent { border-style: dotted; }
 
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .notice { background: var(--app-sunk); border: 1px solid var(--app-line); border-left: 2px solid var(--app-ink); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 14px; color: var(--app-mute); }
