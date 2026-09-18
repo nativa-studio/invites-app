@@ -22,7 +22,6 @@ export function CoverCard({ e }: { e: PublicEvent }) {
   const art = coverFor(e.invite_image_path);
   return (
     <div className="pcard tilt-l" data-section="cover">
-      <div className="tape" />
       {art && (
         <div className="art">
           <Image src={art.src} alt="" width={art.w} height={art.h} priority sizes="(max-width: 430px) 100vw, 340px" />
@@ -68,6 +67,7 @@ export function DetailsCard({ e }: { e: PublicEvent }) {
   const maps = mapsLink(e);
   return (
     <div className="pcard white tilt-r" data-section="details">
+      <div className="tape" />
       <div className="label red">{copy.sections.details}</div>
       <WhenWhere e={e} />
       {maps && <a className="pill-link" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a>}
