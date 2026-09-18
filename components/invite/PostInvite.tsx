@@ -41,7 +41,7 @@ function CoverCard({ e, hero, greeting }: { e: PublicEvent; hero?: PeekChar; gre
   // The group link's greeting is already "You're invited", so the eyebrow would say it twice.
   const eyebrow = age ? copy.envelope.eyebrowBirthday : copy.greetingGroup;
   return (
-    <div className={`post-card ${hero ? "with-hero" : ""}`}>
+    <div className={`post-card ${hero ? "with-hero" : ""}`} data-section="cover">
       <div className="text">
         {eyebrow.toLowerCase() !== greeting.toLowerCase() && <div className="eyebrow">{eyebrow}</div>}
         <div className="title">{e.title}</div>

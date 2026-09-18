@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { EventRow, RunsheetStop, Update } from "@/lib/db/types";
 import { InviteBody, asLayout } from "@/components/invite/InviteBody";
 import { eventForRender } from "@/lib/db/events";
+import { PickMode } from "@/components/host/PickMode";
 
 // The host's own look at their invite. Reads the event row straight from the table, so it works
 // on a draft and before a single guest exists, and it never touches a guest's opened flag the
@@ -16,9 +17,9 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function Preview({
   params, searchParams,
-}: { params: Promise<{ id: string }>; searchParams: Promise<{ layout?: string; show?: string }> }) {
+}: { params: Promise<{ id: string }>; searchParams: Promise<{ layout?: string; show?: string; pick?: string }> }) {
   const { id } = await params;
-  const { layout, show } = await searchParams;
+  const { layout, show, pick } = await searchParams;
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   const supabase = await createClient();
   const { data: event } = await supabase.from("events").select("*").eq("id", id).maybeSingle();
@@ -47,7 +48,21 @@ export default async function Preview({
       <div className="para">{copy.host.previewReply}</div>
     </div>
   );
-  return <InviteBody e={e} greeting={greeting} reply={reply} layout={asLayout(layout)} addressee={guest?.name ? String(guest.name) : undefined} />;
+  // Picking means the host is editing, so the envelope starts open: a section they cannot see is
+  // a section they cannot tap.
+  return (
+    <>
+      {pick === "1" && <PickMode />}
+      <InviteBody
+        e={e}
+        greeting={greeting}
+        reply={reply}
+        layout={asLayout(layout)}
+        addressee={guest?.name ? String(guest.name) : undefined}
+        skipAnimation={pick === "1" || undefined}
+      />
+    </>
+  );
 }
 
 // `show` is the list of sections that are on, so an empty string means all four are off and an

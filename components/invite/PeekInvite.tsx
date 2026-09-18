@@ -68,7 +68,7 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
       <div className="page">
         <p className="greet">{greeting}</p>
 
-        <header className="cover">
+        <header className="cover" data-section="cover">
           <Peeker who={cast.topLeft} side="left" />
           <Peeker who={cast.topRight} side="right" />
           {eyebrow.toLowerCase() !== greeting.toLowerCase() && <p className="eyebrow">{eyebrow}</p>}
@@ -89,7 +89,7 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
         </header>
 
         {e.show_details && (
-        <section className="s sky">
+        <section className="s sky" data-section="details">
           <Peeker who={cast.details} side="left" />
           <p className="label">{copy.sections.details}</p>
           <div className="kv">
@@ -104,7 +104,7 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
         )}
 
         {e.show_runsheet && e.runsheet.length > 0 && (
-          <section className="s sand">
+          <section className="s sand" data-section="day">
             <Peeker who={cast.day} side="right" />
             <p className="label">{copy.sections.afternoon}</p>
             <div className="stops">
@@ -122,7 +122,7 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
         )}
 
         {e.show_good_to_know && notes.length > 0 && (
-          <section className="s blush">
+          <section className="s blush" data-section="know">
             <Peeker who={cast.know} side="left" />
             <p className="label">{copy.sections.goodToKnow}</p>
             <div className="notes">

@@ -40,7 +40,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
       <div className="page">
         <p className="greet">{greeting}</p>
 
-        <header>
+        <header data-section="cover">
           <p className="eyebrow">{age ? "Trainer wanted" : "You're invited"}</p>
           <h1 className="title">{e.title}</h1>
           {e.intro && <p className="sub pad">{e.intro}</p>}
@@ -57,7 +57,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
 
         <div className="pad">
           {e.show_details && (
-          <section>
+          <section data-section="details">
             <p className="label">{copy.sections.details}</p>
             <div className="kv">
               <div className="k">{copy.sections.when}</div>
@@ -71,7 +71,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
           )}
 
           {e.show_runsheet && e.runsheet.length > 0 && (
-            <section>
+            <section data-section="day">
               <p className="label">{copy.sections.afternoon}</p>
               <div className="stops">
                 {e.runsheet.map((s, i) => (
@@ -88,7 +88,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
           )}
 
           {e.show_good_to_know && notes.length > 0 && (
-            <section>
+            <section data-section="know">
               <p className="label">{copy.sections.goodToKnow}</p>
               <div className="notes">
                 {notes.map((line, i) => (
@@ -104,7 +104,7 @@ export function LineupInvite({ event: e, greeting, reply }: { event: PublicEvent
           <section>{reply}</section>
 
           {e.show_after && (
-          <section>
+          <section data-section="after">
             <div className="after">
               <div><div className="n">{copy.sections.updates}</div><div className="b">{copy.sections.updatesBody}</div></div>
               <div><div className="n">{copy.sections.photos}</div><div className="b">{copy.sections.photosBody}</div></div>
