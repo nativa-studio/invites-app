@@ -208,6 +208,27 @@ export const copy = {
     guestGroupNewTitle: "New group",
     guestGroupFor: (name: string) => `${name} goes in it, and you can put others in it after.`,
     guestGroupSave: "Save",
+    headsHeading: "How many",
+    headsOpen: "The numbers",
+    headsBlurb: "Two counts that will not agree until everyone has replied. What you pencilled in when you added each household, and what your guests have actually said.",
+    headsExpected: "From your guest list",
+    headsExpectedShort: "Guest list",
+    headsRepliedShort: "Replies",
+    headsReplied: "From the replies",
+    headsKids: "kids",
+    headsAdults: "adults",
+    headsAll: "people",
+    headsExpectedHint: (from: number, all: number) =>
+      all === 0
+        ? "No guests yet."
+        : from === 0
+          ? `Nothing pencilled in yet. Open a guest and put their numbers in, and this is what you are catering for before anyone replies.`
+          : `Pencilled in for ${from} of ${all} ${all === 1 ? "household" : "households"}.`,
+    headsRepliedHint: (from: number, waiting: number) =>
+      from === 0
+        ? "Nobody has said yes yet."
+        : `${from} ${from === 1 ? "household has" : "households have"} said yes${waiting ? `, ${waiting} still to reply` : ""}.`,
+    headsNoSplit: "Kids and adults are not counted separately because the reply asks for one number. Change that under RSVP.",
     partsHeading: "Invite sections",
     partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first.",
     partSwitch: (name: string) => `${name}, on the invite`,
