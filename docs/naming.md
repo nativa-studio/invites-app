@@ -176,6 +176,16 @@ A `.app` has none of these requirements.
 | Crazy Domains | Large, well known, cheap introductory pricing. | Aggressive upselling and a renewal step-up to around $24.50. More care needed at checkout than the others. |
 | GoDaddy AU | auDA accredited, large, familiar. Renewal around $23.95. | Heavy upselling throughout checkout. |
 
+### Registrars not to bother with
+
+**Google Domains no longer exists.** Squarespace bought it in September 2023 and the migration
+finished in mid-2024. Google Cloud Domains, the enterprise leftover, is deprecated and redirects
+new registrations to Squarespace. Google does still operate the `.app` registry wholesale, which is
+where the mandatory HTTPS rule comes from, but `.app` is bought from a retail registrar.
+
+**Squarespace Domains** is the successor and it is skippable here: no Australian endings, pricier
+than Cloudflare at renewal, and it pushes Squarespace hosting the app does not need.
+
 ### The plan
 
 1. Register **Bunting** as a business name with ASIC under the Nativa Studio ABN, so the `.com.au`
