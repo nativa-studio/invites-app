@@ -83,38 +83,27 @@ p { margin: 0; }
    one drawing serves a tile on the event list and a smaller one elsewhere. The two sit side by
    side with only a little overlap, so the open flap is never cut in half: a clipped flap reads as
    a stray triangle rather than an envelope. */
-/* The card in front, the envelope open behind it, the way a stationery shop photographs a set.
-   Percentages throughout, so one drawing serves a tile on the event list and a square on Design.
+/* The invite's own cover standing in front of its own open envelope. Both are the real markup
+   under the real guest stylesheet, so this does not style them, it only places them and shrinks
+   the result.
 
-   The card is the taller of the two and stands in front of the envelope's left half, its foot
-   below the envelope's. Hung from the top it read as two objects at different depths, a card in
-   mid air and an envelope on the table behind it. Standing in it, it is one thing being taken out
-   of another, which is the whole of what this picture has to say. */
-.ithumb { position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; }
-.ithumb-env { position: absolute; right: 0; top: 4%; width: 60%; height: 82%; }
-.ithumb-env svg { width: 100%; height: 100%; display: block; }
-.ithumb-card {
-  position: absolute; left: 0; top: 11%; width: 65%; aspect-ratio: 5 / 7;
-  display: flex; flex-direction: column; overflow: hidden;
-  background: #FFFDF6; border-radius: 2px;
-  /* Two shadows: a tight one that is the card's own edge, and a long soft one that is the card
-     standing off the envelope behind it. One shadow alone reads as a sticker. */
-  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.22), 0 12px 20px -9px rgba(28, 25, 23, 0.5);
-}
-.ithumb-card.lineup { background: #FDF6E4; }
-.ithumb-art { flex: 1 1 auto; min-height: 0; display: block; overflow: hidden; }
-.ithumb-art img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-/* The lineup stands its artwork along the bottom of its cover, so its card is cropped to the
-   bottom of the picture rather than the top. */
-.ithumb-card.lineup .ithumb-art img { object-position: bottom; }
-/* The title, in the invite's own display face, so the card reads as that invite rather than as a
-   photograph of something. It takes two lines and stops: a thumbnail is a reminder of a thing you
-   already know the name of. */
-.ithumb-title {
-  flex: 0 0 auto; padding: 5% 7% 7%; text-align: center; color: #1B2A4A;
-  font-family: var(--font-display); font-size: 11px; line-height: 1.1;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
+   The scene is laid out at the invite's own size, 388 across for the card and 358 for the
+   envelope, and scaled at the end. Laid out small and then not scaled, the card kept its 50px
+   title on a 250px card and the words swallowed the picture: type does not shrink with a box
+   unless the box is scaled, and every length inside the guest stylesheet is in pixels. */
+.ithumb { --thumb: 0.22; position: relative; display: block; width: calc(680px * var(--thumb)); height: calc(740px * var(--thumb)); }
+.ithumb-scene { position: absolute; left: 0; top: 0; width: 680px; height: 740px; transform: scale(var(--thumb)); transform-origin: top left; }
+/* The envelope, behind and to the right, with the 120px its flap needs above it to stand open. */
+.ithumb-envbox { position: absolute; left: 276px; top: 330px; width: 404px; height: 226px; z-index: 1; }
+.ithumb-envbox .env { position: absolute; inset: 0; top: 0; height: 100%; }
+/* The card, in front and to the left, finishing below the envelope's foot. In front is the whole
+   point: the first version let the envelope paint straight over the middle of it. */
+.ithumb-cardbox { position: absolute; left: 0; top: 14px; width: 388px; z-index: 2; }
+/* Held to a height so a long title cannot push the picture out of the frame. The artwork gives up
+   the difference, which is the same bargain the card makes inside the envelope during the
+   opening. */
+.ithumb-cardbox .pcard { box-sizing: border-box; height: 689px; max-width: none; }
+.ithumb-cardbox .pcard .art { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .evt-when { font-size: 12.5px; color: var(--app-mute); }

@@ -21,6 +21,7 @@ export type LookState = {
   layout: string;
   sections: Sections;
   title: string;
+  intro: string | null;
   artwork: string | null;
   palette: Palette | null;
   themeId: string | null;
@@ -95,7 +96,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
               onClick={() => setOpen(d)}
             >
               <span className="design-art">
-                <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} palette={saved.palette} themeId={saved.themeId} />
+                <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} />
               </span>
               <span className="n">{d.name}</span>
               <span className="b">{d.line}</span>

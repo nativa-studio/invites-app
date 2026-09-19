@@ -135,7 +135,9 @@
 .stage { position: relative; width: 100%; max-width: 390px; height: 500px; margin-top: -150px; }
 .env { position: absolute; left: 0; right: 0; top: 180px; height: 200px; }
 .env .back { position: absolute; inset: 0; border-radius: 10px; background-color: #fff; background-image: linear-gradient(90deg, color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%); background-size: 22px 22px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
-.env .back::after { content: ""; position: absolute; inset: 0; border-radius: 10px; box-shadow: inset 0 0 0 3px var(--red); }
+/* The liner used to carry a red ring, and once the flap swung open its top edge became a red
+   line straight across the middle of the envelope. Closed, the flap covered it, so it had never
+   been seen. Removing it changes nothing shut, which was checked shot against shot. */
 .env .clip { position: absolute; left: -40px; right: -40px; top: -700px; bottom: 6px; overflow: hidden; z-index: 2; }
 /* The card lies on its side while it is in the envelope, because that is the only way a portrait
    card fits a landscape one, and it turns upright as it comes out. */
@@ -186,6 +188,24 @@
 @keyframes frontoff { 0%,49.9% { opacity: 1 } 50%,100% { opacity: 0 } }
 @keyframes backon { 0%,49.9% { opacity: 0 } 50%,100% { opacity: 1 } }
 .open .seal, .open .hint { opacity: 0; transform: scale(.6); pointer-events: none; }
+/* The beige envelope, for the designs cut from that paper.
+   It used to live in lineup.css as ".lineup .env ...", keyed off the page the envelope happened
+   to be on. That is fine until something else wants one: the thumbnail is not a lineup page and
+   would have shown a red envelope for a beige design. Keyed off the envelope instead, both get
+   it from the one place. */
+.env.beige .pocket .sides { background: #E9DCC1; }
+.env.beige .pocket .edge { background: #F4EAD6; opacity: 1; }
+.env.beige .flap .front { background: #F4EAD6; }
+.env.beige .flap .rim { background: #DFD0AF; }
+
+/* Open and still: the state the animation leaves the envelope in, held, with nothing running.
+   The opening itself swings the flap and cross-fades its two faces over nine tenths of a second,
+   which is right when a guest taps it and wrong in a thumbnail that simply is a picture of an
+   open envelope. */
+.env.still .flap { transform: perspective(900px) rotateX(180deg); transition: none; }
+.env.still .flap .front { opacity: 0; animation: none; }
+.env.still .flap .backface { opacity: 1; animation: none; }
+
 .rise .env .flap { z-index: 1; }
 .rise .env .card-slot { top: 408px; transform: rotate(-90deg) scale(.52); }
 .out .env .clip { overflow: visible; z-index: 7; }

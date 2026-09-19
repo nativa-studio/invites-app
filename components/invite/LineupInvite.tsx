@@ -40,6 +40,7 @@ export function LineupInvite({
         <p className="greet">{greeting}</p>
 
         <Envelope
+          stock="beige"
           openLabel={copy.envelope.open}
           skipAnimation={skipAnimation}
           mascot={mascotFor(e.invite_image_path)}

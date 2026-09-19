@@ -139,16 +139,6 @@
 .lineup .ask .k { color: var(--ink-soft); }
 .lineup .ask a { display: inline-block; padding: 11px 0; color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
-/* The envelope on a cream page.
-   The shared one in invite.css is cut from --red, which on this page is the orange accent and
-   fought the paper: a colour dropped on top rather than an envelope lying on a sheet. Here it is
-   the same beige as the card in a chat, so the picture that brought a guest here and the thing
-   they tap are one object. Beige paper takes dark writing, so the seal's outline goes to ink. */
-.lineup .env .pocket .sides { background: #E9DCC1; }
-.lineup .env .pocket .edge { background: #F4EAD6; opacity: 1; }
-.lineup .env .flap .front { background: #F4EAD6; }
-.lineup .env .flap .rim { background: #DFD0AF; }
-.lineup .env .back:after { box-shadow: inset 0 0 0 3px #CDBB98; }
 
 /* "Tap to open" was --crm on a --crm page: the same colour as the paper, contrast 1.00 to 1, so a
    guest saw the pulsing dot and no words at all. It inherits a colour that works on the suite's

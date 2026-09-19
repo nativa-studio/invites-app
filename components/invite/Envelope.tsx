@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Bolt } from "@/components/art/icons";
 
 type Mascot = { src: string; w: number; h: number };
-type Props = { cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean; mascot?: Mascot | null; bodyClassName?: string };
+type Props = { cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean; mascot?: Mascot | null; bodyClassName?: string; stock?: "red" | "beige" };
 
 // The opening: tap (or wait), the flap lifts, the card rises, grows, and the envelope drops away.
 // The cover is drawn once, never twice: the envelope holds it until the opening is over, then
@@ -15,7 +15,7 @@ type Props = { cover: React.ReactNode; children: React.ReactNode; openLabel: str
 // on it, and a name belongs on the front. The guest has been greeted by name directly above this,
 // and the picture that brought them here carries their name on its front, so writing it a third
 // time on the thing they are about to open added nothing.
-export function Envelope({ cover, children, openLabel, skipAnimation, mascot, bodyClassName = "suite" }: Props) {
+export function Envelope({ cover, children, openLabel, skipAnimation, mascot, bodyClassName = "suite", stock }: Props) {
   const [phase, setPhase] = useState<"" | "open" | "rise" | "out" | "done">(skipAnimation ? "done" : "");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const started = useRef(false);
@@ -52,7 +52,7 @@ export function Envelope({ cover, children, openLabel, skipAnimation, mascot, bo
   return (
     <div className={cls} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 30 }}>
       <div className="stage" aria-hidden={phase === "done"}>
-        <div className="env">
+        <div className={stock === "beige" ? "env beige" : "env"}>
           <div className="back" />
           <div className="clip"><div className="card-slot">{phase !== "done" && cover}</div></div>
           <div className="pocket">
