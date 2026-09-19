@@ -58,18 +58,31 @@ export async function addGuest(_prev: AddGuestState, fd: FormData): Promise<AddG
 // So it is stamped as the host's. The trail is the one part of this a host has to be able to
 // trust, and a list that says "replied at 11:37" about a reply nobody made is worse than a list
 // that says nothing.
-export type GuestAnswer = "yes" | "no" | "pending" | "unsent";
+export type GuestAnswer = "yes" | "no" | "sent" | "pending" | "unsent";
 
 export async function setGuestAnswer(eventId: string, guestId: string, next: GuestAnswer) {
-  const { supabase } = await hostClient();
+  const { supabase, uid } = await hostClient();
   const now = new Date().toISOString();
+  // Sent by hand. The app marks a guest as sent when its own Text button is tapped, which misses
+  // every guest texted from the host's own Messages, told at the school gate, or handed the link
+  // on a bit of paper. Those guests read "Not sent" for ever, which is wrong on the row and wrong
+  // in the count of who is still to be sent to.
+  //
+  // An existing stamp is kept rather than replaced, so tapping this on a guest who was already
+  // sent to does not rewrite when it happened.
+  let sent: Record<string, unknown> = {};
+  if (next === "sent") {
+    const { data } = await supabase.from("guests").select("sent_at").eq("id", guestId).eq("event_id", eventId).maybeSingle();
+    sent = data?.sent_at ? {} : { sent_at: now, sent_by: uid };
+  }
+
   const patch: Record<string, unknown> =
     next === "yes" || next === "no"
       ? { status: next, replied_at: now, answered_by_host: true }
       // Back to waiting keeps the record of sending. Back to not sent clears the lot, so the guest
       // reads exactly as they did the moment they were added.
-      : next === "pending"
-        ? { status: "pending", replied_at: null, answered_by_host: false }
+      : next === "pending" || next === "sent"
+        ? { status: "pending", replied_at: null, answered_by_host: false, ...sent }
         : { status: "pending", replied_at: null, answered_by_host: false, sent_at: null, sent_by: null, reminded_at: null, opened_at: null };
 
   let { error } = await supabase.from("guests").update(patch).eq("id", guestId).eq("event_id", eventId);

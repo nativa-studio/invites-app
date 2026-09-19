@@ -234,6 +234,8 @@ export const copy = {
     answerYesWhy: "Counts them in. The trail will say you marked it, not them.",
     answerNo: "Not coming",
     answerNoWhy: "Counts them out, and stops them being reminded.",
+    answerSent: "I've sent it myself",
+    answerSentWhy: "For a guest you texted from your own Messages, or told in person. Marks it as sent so they drop off the not sent list.",
     answerPending: "Still waiting on them",
     answerPendingWhy: "Clears the answer. Keeps the record of what you sent.",
     answerUnsent: "Back to not sent",

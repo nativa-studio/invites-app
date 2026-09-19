@@ -24,7 +24,12 @@ export function SetAnswer({ eventId, guest, onClose }: {
   const options: { key: GuestAnswer; label: string; why: string; on: boolean }[] = [
     { key: "yes", label: copy.host.answerYes, why: copy.host.answerYesWhy, on: guest.status === "yes" },
     { key: "no", label: copy.host.answerNo, why: copy.host.answerNoWhy, on: guest.status === "no" },
-    { key: "pending", label: copy.host.answerPending, why: copy.host.answerPendingWhy, on: guest.status === "pending" && Boolean(guest.sent_at) },
+    // One row, two jobs, because which one you want is decided by whether anything has gone out.
+    // A guest with nothing sent needs to be marked as sent; a guest who has been sent to needs
+    // their answer cleared without losing the record of it.
+    guest.sent_at
+      ? { key: "pending", label: copy.host.answerPending, why: copy.host.answerPendingWhy, on: guest.status === "pending" }
+      : { key: "sent", label: copy.host.answerSent, why: copy.host.answerSentWhy, on: false },
     { key: "unsent", label: copy.host.answerUnsent, why: copy.host.answerUnsentWhy, on: guest.status === "pending" && !guest.sent_at },
   ];
 
