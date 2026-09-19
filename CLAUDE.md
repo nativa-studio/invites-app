@@ -79,5 +79,10 @@ Get this wrong and the instructions are useless however correct they are.
   somebody else's project and answers with a PHP error page. Vercel deploys `main` on push.
 - **A browser cannot reach `*.vercel.app` from a session** (certificate not trusted through the
   proxy). Read the live site with `curl`, and do browser testing against a local production build.
+- **Link shape is not frozen yet.** As of 19 September 2026 three of 27 guests have a `sent_at`
+  stamp, and Marcia can resend to all of them. So a change that invalidates existing links, a shorter token, a different path, a
+  regenerated set, is allowed and does not need designing around. **This stops being true the
+  moment a real guest list goes out.** Check the `sent_at` column before relying on it: more than
+  a handful of rows with a timestamp means the links are out in the world and are now permanent.
 - **The dev server does not hydrate client components here.** Test interaction against
   `npm run build` plus `npx next start`, never `npm run dev`.
