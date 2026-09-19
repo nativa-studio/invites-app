@@ -258,6 +258,16 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .reorder .grip { flex: 0 0 auto; width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 8px; background: transparent; color: var(--app-mute); font-size: 20px; line-height: 1; cursor: grab; touch-action: none; }
 .reorder .grip:active { cursor: grabbing; }
 .reorder .grip:disabled { opacity: 0.4; }
+/* The name beside a row of send buttons, when a guest has two people to text and "0403..."
+   twice would not say which is which. */
+.who { flex: 0 0 auto; min-width: 5ch; font-size: 14px; color: var(--app-mute); }
+/* A group of fields under one legend, inside a sheet. */
+fieldset.stack { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+fieldset.stack > legend { padding: 0; }
+/* New link and Remove, under the Save rather than in the run of the form: one is for a link that
+   went to the wrong person, the other cannot be undone, and neither is part of filling this in. */
+.guest-danger { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; justify-items: start; padding-top: 14px; border-top: 1px solid var(--app-line); }
+.btn.small.danger { color: #9b2c17; border-color: #d4b3ad; }
 .card.danger { border-color: #d4b3ad; }
 .card.danger .h2 { color: #9b2c17; }
 .btn.danger { background: #b3311a; border-color: #b3311a; color: #fff; }
@@ -267,7 +277,9 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
    under the trail so a long group name never squeezes the buttons. */
 .guest-group { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
 .guest-group > span { font-size: 13px; color: var(--app-muted, #6b7280); }
-.guest-group select { flex: 0 1 auto; max-width: 220px; font-size: 14px; padding: 6px 8px; }
+/* 44px like everything else you have to hit. It was 32, which is a small thing to land a thumb on
+   for a control that is on every row. */
+.guest-group select { flex: 0 1 auto; max-width: 220px; min-height: 44px; font-size: 14px; padding: 6px 8px; }
 
 /* The parts of the invite that are switched off, offered by name under the preview because they
    are not on the page to be tapped. */
