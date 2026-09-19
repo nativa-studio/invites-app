@@ -49,7 +49,7 @@ export default async function Guests({
       <FoodNote guests={list} />
       <AddGuest eventId={e.id} none={all.length === 0} groups={groupNames} preset={chosen === UNGROUPED ? "" : chosen} />
       <GroupsPanel guests={all} base={groupLink} event={e} />
-      <GuestList eventId={e.id} guests={list} event={{ title: e.title, date: e.date, text_template: e.text_template, reminder_template: e.reminder_template }} site={site} />
+      <GuestList eventId={e.id} guests={list} everyone={all} base={here} event={{ title: e.title, date: e.date, text_template: e.text_template, reminder_template: e.reminder_template }} site={site} />
     </>
   );
 }

@@ -311,6 +311,12 @@ export const copy = {
     filterHeading: "Which group",
     filterEveryone: "Everyone",
     filterNoGroup: "No group",
+    searchLabel: "Find a guest",
+    searchPlaceholder: "Search by name",
+    searchClear: "Clear",
+    searchNone: (typed: string) => `Nobody here matches "${typed}".`,
+    searchElsewhere: (n: number, where: string) =>
+      `${n === 1 ? "1 match" : `${n} matches`} in ${where}.`,
     filterShowing: (name: string) => `Showing ${name}. The numbers, the food line and the list below are all for this group.`,
     potluckHeading: "Potluck",
     potluckList: "The list",

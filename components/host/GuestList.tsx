@@ -1,9 +1,12 @@
 "use client";
 import { useEffect, useRef, useState, useTransition } from "react";
+import Link from "next/link";
 import { copy } from "@/lib/copy";
 import { formatDateTime } from "@/lib/format";
 import { inviteText, reminderText, smsLink, whatsappLink, type TemplateEvent } from "@/lib/messages";
 import type { GuestRow } from "@/lib/db/types";
+import { matches } from "@/lib/search";
+import { UNGROUPED } from "@/lib/groups";
 import { markSent, setGuestGroup } from "@/app/app/events/[id]/actions";
 import { CopyButton } from "./CopyButton";
 import { Sheet } from "./Sheet";
@@ -11,10 +14,13 @@ import { EditGuest } from "./EditGuest";
 import { SetAnswer } from "./SetAnswer";
 import { useHasShare } from "./capabilities";
 
-type Props = { eventId: string; guests: GuestRow[]; event: TemplateEvent; site: string };
+type Props = { eventId: string; guests: GuestRow[]; everyone: GuestRow[]; base: string; event: TemplateEvent; site: string };
 
-export function GuestList({ eventId, guests, event, site }: Props) {
+export function GuestList({ eventId, guests, everyone, base, event, site }: Props) {
   const [filter, setFilter] = useState<"all" | "yes" | "no" | "pending" | "unsent" | "nogroup">("all");
+  // What the host has typed into Find a guest. Held here rather than in the address, because a
+  // search is typing and a round trip per keystroke on one bar is not typing, it is waiting.
+  const [typed, setTyped] = useState("");
   const canShare = useHasShare();
   const [busy, setBusy] = useState<string | null>(null);
   // Which guest has their ways-to-share open. One at a time, so the list stays a list.
@@ -40,8 +46,15 @@ export function GuestList({ eventId, guests, event, site }: Props) {
   const [, start] = useTransition();
   // "No group" is here because finding the unlabelled ones by scrolling is the thing that makes
   // labelling a long list not worth starting.
+  //
+  // Typing searches the whole group rather than the slice, and puts the chips back on All to say
+  // so. A host who left the chips on Yes, searched a name, and got an empty list would read it as
+  // the guest being gone rather than as two filters agreeing to hide them.
+  const searching = typed.trim().length > 0;
   const shown = guests.filter((g) =>
-    filter === "all" ? true
+    !matches(g, typed) ? false
+      : searching ? true
+      : filter === "all" ? true
       : filter === "unsent" ? !g.sent_at
       : filter === "nogroup" ? !g.groups?.length
       : g.status === filter);
@@ -106,6 +119,22 @@ export function GuestList({ eventId, guests, event, site }: Props) {
     window.location.href = href;
   }
 
+  // Where the person they are looking for actually is.
+  //
+  // The group filter lives in the address bar, a screen above this, and a host who picked
+  // Neighbours an hour ago and now searches for somebody in Family gets nothing back. Nothing
+  // back reads as "this guest has been deleted", so the search says which group holds them and
+  // offers the tap. Only worth computing when the search found nobody here.
+  const here = new Set(guests.map((g) => g.id));
+  const elsewhere = !searching || shown.length > 0 ? [] : (() => {
+    const found = everyone.filter((g) => !here.has(g.id) && matches(g, typed));
+    const by = new Map<string, number>();
+    for (const g of found) {
+      for (const name of g.groups?.length ? g.groups : [UNGROUPED]) by.set(name, (by.get(name) ?? 0) + 1);
+    }
+    return [...by].sort((a, b) => b[1] - a[1]);
+  })();
+
   return (
     <section style={{ display: "grid", gap: 12 }}>
       {next ? (
@@ -120,13 +149,55 @@ export function GuestList({ eventId, guests, event, site }: Props) {
         </div>
       ) : guests.length > 0 && <p className="muted">{copy.host.allSent}</p>}
 
+      {/* Search first, then the chips. Finding one person you have in mind is a different job
+          from looking at a slice of everybody, and it is the more common one once a list is long
+          enough to scroll. type="search" so the phone keyboard offers a search key and iOS draws
+          its own clear cross inside the field. */}
+      {everyone.length > 4 && (
+        <div className="gsearch">
+          <input
+            id="guest-search"
+            type="search"
+            aria-label={copy.host.searchLabel}
+            value={typed}
+            onChange={(ev) => setTyped(ev.target.value)}
+            placeholder={copy.host.searchPlaceholder}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="none"
+            spellCheck={false}
+            enterKeyHint="search"
+          />
+          {/* Our own clear, inside the field, because every browser draws a different one: a blue
+              cross in Chrome, a grey circle on iOS, nothing at all in Firefox. The native one is
+              hidden in the CSS, and this one is a real tap target rather than a 14px glyph. */}
+          {searching && (
+            <button type="button" className="gsearch-x" onClick={() => setTyped("")} aria-label={copy.host.searchClear}>×</button>
+          )}
+        </div>
+      )}
+
       <div className="actions" role="tablist" aria-label="Filter guests">
         {(["all", "yes", "no", "pending", "unsent", "nogroup"] as const).map((f) => (
-          <button key={f} type="button" className="btn small" aria-pressed={filter === f} onClick={() => setFilter(f)}>
+          <button key={f} type="button" className="btn small" aria-pressed={searching ? f === "all" : filter === f} onClick={() => { setTyped(""); setFilter(f); }}>
             {f === "all" ? "All" : f === "yes" ? "Yes" : f === "no" ? "No" : f === "pending" ? "No reply" : f === "unsent" ? "Not sent" : copy.host.guestGroupNone}
           </button>
         ))}
       </div>
+
+      {searching && shown.length === 0 && (
+        <p className="hint">
+          {copy.host.searchNone(typed.trim())}
+          {elsewhere.map(([name, n]) => (
+            <span key={name}>
+              {" "}
+              <Link href={name === UNGROUPED ? `${base}?group=${encodeURIComponent(UNGROUPED)}` : `${base}?group=${encodeURIComponent(name)}`} scroll={false}>
+                {copy.host.searchElsewhere(n, name === UNGROUPED ? copy.host.filterNoGroup : name)}
+              </Link>
+            </span>
+          ))}
+        </p>
+      )}
 
       <div className="guest-list">
         {shown.map((g) => {

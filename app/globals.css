@@ -445,3 +445,25 @@ fieldset.stack > legend { padding: 0; }
 .sw:disabled { opacity: .45; }
 .sw:focus-visible { outline: 2px solid var(--app-ink); outline-offset: 2px; border-radius: 999px; }
 @media (prefers-reduced-motion: reduce) { .sw .track, .sw .knob { transition: none; } }
+
+/* Find a guest. A row, so the field takes the width it can and Clear sits beside it rather than
+   under it, which on a 390px screen is the difference between one line and two. */
+.gsearch { position: relative; }
+.gsearch input[type="search"] {
+  width: 100%; min-height: 44px; border: 1px solid var(--app-line-2); border-radius: 8px;
+  padding: 10px 46px 10px 12px; background: var(--app-bg); font-family: var(--app-font);
+  /* 16px exactly: anything smaller and iOS zooms the whole page in when the field is focused. */
+  font-size: 16px; -webkit-appearance: none; appearance: none;
+}
+.gsearch input[type="search"]:focus { border-color: var(--app-ink); outline: none; }
+.gsearch input[type="search"]::-webkit-search-cancel-button,
+.gsearch input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+.gsearch-x {
+  position: absolute; top: 0; right: 0; width: 44px; height: 100%; border: 0; background: none;
+  color: var(--app-mute); font-size: 22px; line-height: 1; cursor: pointer; padding: 0;
+  font-family: var(--app-font);
+}
+.gsearch-x:hover { color: var(--app-ink); }
+/* The "they are in Family" link. Left as browser blue it was the only blue on the screen, and
+   read as something gone wrong rather than as the way to the guest. */
+.hint a { color: var(--app-ink); text-underline-offset: 3px; }
