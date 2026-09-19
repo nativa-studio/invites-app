@@ -6,6 +6,8 @@ import type { EventRow } from "@/lib/db/types";
 import { sectionById, type Section } from "./sections";
 import { InviteParts } from "./InviteParts";
 import { EditDrawer } from "./EditDrawer";
+import { EditCard, Sum } from "./EditCard";
+import { Choice } from "./fields";
 
 // The invite, and a way to edit it by pointing at it.
 //
@@ -52,6 +54,23 @@ export function InviteEditor({ e }: { e: EventRow }) {
           This list reaches all of them, and is also the only place a part can be moved, since
           there is no gap on the invite to tap to say "put it here". */}
       <InviteParts e={e} onEdit={(part) => { const s = sectionById(part); if (s) setOpen(s); }} />
+      {/* Whether the thing above is a draft or is out in the world. It lived on the Details tab,
+          which is gone, and it is the one setting on this screen that is about the invite as a
+          whole rather than about a part of it. */}
+      <EditCard
+        eventId={e.id}
+        title={copy.host.statusHeading}
+        blurb={copy.host.statusBlurb}
+        fields={["status"]}
+        summary={<Sum label="Right now" value={copy.host.statusNames[e.status] ?? e.status} />}
+      >
+        <Choice
+          id="status"
+          label="This event is"
+          value={e.status}
+          options={[["draft", "A draft"], ["live", "Live"], ["thanks", "Saying thanks"], ["archived", "Archived"]]}
+        />
+      </EditCard>
       {/* Keyed by section, so tapping a different part of the invite gets a fresh drawer rather
           than one still holding the last one's unsaved state. */}
       {open && <EditDrawer key={open.id} section={open} e={e} onClose={() => setOpen(null)} onSaved={saved} />}

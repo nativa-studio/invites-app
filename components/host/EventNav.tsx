@@ -12,15 +12,17 @@ import { usePathname } from "next/navigation";
 // change it, which turned out to be true only in the week before the party and false in all the
 // weeks of making it.
 //
-// Guests comes next, then RSVP beside it: the two halves of one question, who is asked and what
-// they said. Then the two set-up screens.
+// Three, because there were six and four of them were the same two questions asked in different
+// rooms. Tracking counted the replies and RSVP counted them again; Details held wording that the
+// invite itself now opens when you tap it; RSVP held the questions a guest is asked, which are
+// part of the invite and now sit in it.
+//
+// So: the invite, the people it goes to, and what it looks like. Everything that was on the other
+// three is still reachable, in the one place it belongs to.
 const TABS = [
   { seg: "", label: "Invite" },
   { seg: "/guests", label: "Guests" },
-  { seg: "/rsvp", label: "RSVP" },
-  { seg: "/tracking", label: "Tracking" },
   { seg: "/look", label: "Design" },
-  { seg: "/details", label: "Details" },
 ] as const;
 
 export function EventNav({ id }: { id: string }) {
@@ -28,9 +30,8 @@ export function EventNav({ id }: { id: string }) {
   const base = `/app/events/${id}`;
   const bar = useRef<HTMLElement>(null);
 
-  // Six of these do not fit across a phone, so the bar scrolls. Landing on one of the last tabs
-  // with it scrolled to the start would put the tab you are on off the side of the screen, which
-  // reads as the tab having no highlight at all.
+  // Three fit across a phone, so this does nothing today. It is kept because the bar is built to
+  // scroll and a fourth tab would put the one you are on off the side of the screen again.
   useEffect(() => {
     const on = bar.current?.querySelector<HTMLElement>("a.on");
     on?.scrollIntoView({ block: "nearest", inline: "center" });

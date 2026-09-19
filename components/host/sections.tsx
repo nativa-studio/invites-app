@@ -1,5 +1,6 @@
 import type { EventRow } from "@/lib/db/types";
-import { Field, Switch } from "@/components/host/fields";
+import { Choice, Field, Switch } from "@/components/host/fields";
+import { copy } from "@/lib/copy";
 import { askLine, signoffMessage } from "@/lib/ask-line";
 import { hostName } from "@/lib/format";
 import { KnowEditor, KNOW_FIELDS } from "@/components/host/KnowEditor";
@@ -40,7 +41,7 @@ export const SECTIONS: Section[] = [
     title: "The details",
     blurb: "When and where, and a link to the map. Switch this off and the cover carries the date and place instead, so they are never lost.",
     show: { column: "show_details", label: "Show the details on the invite" },
-    fields: ["date", "start_time", "end_time", "time_note", "venue", "address", "show_details"],
+    fields: ["date", "start_time", "end_time", "time_note", "venue", "address", "parking", "accessibility_venue", "access_info", "host_phone", "show_details"],
     render: (e) => (
       <>
         <div className="counts">
@@ -51,6 +52,34 @@ export const SECTIONS: Section[] = [
         <Field id="time_note" label="Time, in your words (optional)" value={e.time_note} hint='Replaces the times, e.g. "From 2pm, come when you can"' />
         <Field id="venue" label="Venue" value={e.venue} hint="e.g. Our place, or the park's name" />
         <Field id="address" label="Address" value={e.address} hint="Used for Open in Maps and the calendar file" />
+        <Field id="parking" label="Parking" value={e.parking} hint="e.g. Street parking, or the car park off Ashford Road" />
+        <Field id="accessibility_venue" label="Getting around the place" value={e.accessibility_venue} hint="Steps, ramps, whether a pram fits" />
+        {/* Only the guests who have said yes see this, so it holds the gate code rather than the
+            street. It lives with the address because that is the question it answers. */}
+        <Field id="access_info" label="How to get in (yes guests only)" value={e.access_info} rows={2} hint="Gate codes, which door, where the key is. Nobody sees this until they have said yes." />
+        <Field id="host_phone" label="Your mobile" value={e.host_phone} type="tel" hint="The number the Questions block falls back to when you have not given it one of its own." />
+      </>
+    ),
+  },
+  {
+    // The reply was a tab of its own. It is a part of the invite like any other, and it was the
+    // one part you could tap on the preview and have nothing happen, because the list of parts
+    // knew about it and this list did not.
+    id: "reply",
+    title: "The reply",
+    blurb: "What a guest is asked when they say yes, and what the two buttons say. Changing a question after somebody has answered it cannot be undone for that guest, so it is worth settling before the links go out.",
+    fields: ["rsvp_by", "ask_party_mode", "ask_names", "ask_dietary", "ask_accessibility", "ask_emergency", "custom_question", "yes_label", "no_label"],
+    render: (e) => (
+      <>
+        <Field id="rsvp_by" label="Reply by" value={e.rsvp_by} type="date" />
+        <Choice id="ask_party_mode" label="How many" value={e.ask_party_mode} options={[["split", "Children and adults separately"], ["single", "One number"]]} />
+        <Switch id="ask_names" label="Names of everyone coming" value={e.ask_names} />
+        <Switch id="ask_dietary" label="Food needs and allergies" value={e.ask_dietary} />
+        <Switch id="ask_accessibility" label="Access needs (free text)" value={e.ask_accessibility} />
+        <Switch id="ask_emergency" label="Emergency contact (drop-off parties)" value={e.ask_emergency} />
+        <Field id="custom_question" label="One extra question (optional)" value={e.custom_question} />
+        <Field id="yes_label" label="The yes button" value={e.yes_label} hint={`Leave it empty for \u201c${copy.rsvp.yes}\u201d`} />
+        <Field id="no_label" label="The no button" value={e.no_label} hint={`Leave it empty for \u201c${copy.rsvp.no}\u201d`} />
       </>
     ),
   },

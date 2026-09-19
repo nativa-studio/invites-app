@@ -249,6 +249,9 @@ export const copy = {
         ? "Nobody has said yes yet."
         : `${from} ${from === 1 ? "household has" : "households have"} said yes${waiting ? `, ${waiting} still to reply` : ""}.`,
     headsNoSplit: "Kids and adults are not counted separately because the reply asks for one number. Change that under RSVP.",
+    statusHeading: "Draft or live",
+    statusBlurb: "A draft is yours alone to look at. Live means the links work and guests can reply. Nothing is sent either way: you send the links yourself, from Guests.",
+    statusNames: { draft: "A draft", live: "Live", thanks: "Saying thanks", archived: "Archived" } as Record<string, string>,
     partsHeading: "Invite sections",
     partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first.",
     partSwitch: (name: string) => `${name}, on the invite`,
