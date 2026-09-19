@@ -40,6 +40,27 @@ select '0005 claim_group_link',
        coalesce(string_agg(pg_get_function_identity_arguments(p.oid), ' | '), 'NOT APPLIED')
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
  where n.nspname = 'public' and p.proname = 'claim_group_link'
+union all
+-- 0006 to 0009 each add one column and re-create event_public_json to carry it. The column alone
+-- is not enough: without the function the host side saves happily and the guest page never sees
+-- it. So both halves are checked, and a row reads OK only when both are there.
+select m.name,
+       case
+         when not exists (select 1 from information_schema.columns c
+                           where c.table_schema = 'public' and c.table_name = 'events'
+                             and c.column_name = m.col) then 'NOT APPLIED, no column ' || m.col
+         when not exists (select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+                           where n.nspname = 'public' and p.proname = 'event_public_json'
+                             and p.prosrc like '%' || m.col || '%')
+           then 'HALF APPLIED, column is there but event_public_json does not send it'
+         else 'ok, column and event_public_json'
+       end
+  from (values
+    ('0006 section_order', 'section_order'),
+    ('0007 ask_note', 'ask_note'),
+    ('0008 signoff', 'signoff_note'),
+    ('0009 know_order', 'know_order')
+  ) as m(name, col)
 """
 
 
