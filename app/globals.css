@@ -83,38 +83,40 @@ p { margin: 0; }
    one drawing serves a tile on the event list and a smaller one elsewhere. The two sit side by
    side with only a little overlap, so the open flap is never cut in half: a clipped flap reads as
    a stray triangle rather than an envelope. */
-/* The card in front, the envelope open behind it, the way a stationery shop photographs a set.
-   Percentages throughout, so one drawing serves a tile on the event list and a square on Design.
+/* The invite's own cover standing in front of its own open envelope. Both are the real markup
+   under the real guest stylesheet, so this does not style them. It places them and shrinks the
+   result, and that is all it is allowed to do.
 
-   The card is the taller of the two and stands in front of the envelope's left half, its foot
-   below the envelope's. Hung from the top it read as two objects at different depths, a card in
-   mid air and an envelope on the table behind it. Standing in it, it is one thing being taken out
-   of another, which is the whole of what this picture has to say. */
-.ithumb { position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; }
-.ithumb-env { position: absolute; right: 0; top: 4%; width: 60%; height: 82%; }
-.ithumb-env svg { width: 100%; height: 100%; display: block; }
-.ithumb-card {
-  position: absolute; left: 0; top: 11%; width: 65%; aspect-ratio: 5 / 7;
-  display: flex; flex-direction: column; overflow: hidden;
-  background: #FFFDF6; border-radius: 2px;
-  /* Two shadows: a tight one that is the card's own edge, and a long soft one that is the card
-     standing off the envelope behind it. One shadow alone reads as a sticker. */
-  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.22), 0 12px 20px -9px rgba(28, 25, 23, 0.5);
-}
-.ithumb-card.lineup { background: #FDF6E4; }
-.ithumb-art { flex: 1 1 auto; min-height: 0; display: block; overflow: hidden; }
-.ithumb-art img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-/* The lineup stands its artwork along the bottom of its cover, so its card is cropped to the
-   bottom of the picture rather than the top. */
-.ithumb-card.lineup .ithumb-art img { object-position: bottom; }
-/* The title, in the invite's own display face, so the card reads as that invite rather than as a
-   photograph of something. It takes two lines and stops: a thumbnail is a reminder of a thing you
-   already know the name of. */
-.ithumb-title {
-  flex: 0 0 auto; padding: 5% 7% 7%; text-align: center; color: #1B2A4A;
-  font-family: var(--font-display); font-size: 11px; line-height: 1.1;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
+   The scene carries the invite class as well, because that is where the guest page keeps what its
+   pieces inherit rather than declare: the ink the words are set in, and the paper shadow the
+   cards are cut with. Without it the card had no shadow at all and its unstyled lines came out in
+   the host app's near black rather than the invite's navy. Neither shows at tile size and both
+   are wrong. Copying those two declarations across would work today and rot the first time a
+   third is added, so the class comes over whole and only what belongs to a page rather than to a
+   picture of one is turned off.
+
+   Every size is the size the piece has at its full width, 390 across for both, which is the
+   card's own max-width and the stage's. Nothing is stretched to fit the tile and nothing is held
+   to a height, so the card and the envelope in here are the card and the envelope on the invite,
+   element for element and property for property. That is checked rather than claimed, and
+   changing a number below is what would stop it being true.
+
+   The scene is laid out at those sizes and scaled at the end, because type does not shrink with a
+   box unless the box is scaled, and every length in the guest stylesheet is a pixel count. */
+.ithumb { --thumb: 0.221; position: relative; display: block; width: calc(680px * var(--thumb)); height: calc(730px * var(--thumb)); }
+.ithumb-scene { position: absolute; left: 0; top: 0; width: 680px; height: 730px; transform: scale(var(--thumb)); transform-origin: top left; }
+.ithumb-scene.invite { min-height: 0; padding: 0; background: none; overflow: visible; }
+/* The envelope, behind and to the right, with the 120px its flap needs above it to stand open. */
+.ithumb-envbox { position: absolute; left: 290px; top: 360px; width: 390px; height: 200px; z-index: 1; }
+.ithumb-envbox .env { position: absolute; inset: 0; top: 0; height: 100%; }
+/* The card, in front and to the left, finishing below the envelope's foot. In front is the point:
+   the first build of this let the envelope paint over the middle of it.
+
+   Hung from its foot rather than its head, because a card is as tall as its contents and an
+   event with no artwork yet has a short one. Held at the top, that short card floated up and away
+   and left the envelope sitting on its own with nothing coming out of it. Held at the foot, the
+   two always meet. */
+.ithumb-cardbox { position: absolute; left: 0; bottom: 20px; width: 390px; z-index: 2; }
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .evt-when { font-size: 12.5px; color: var(--app-mute); }

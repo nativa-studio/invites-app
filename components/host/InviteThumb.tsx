@@ -1,116 +1,72 @@
-import Image from "next/image";
-import { bandFor, coverFor } from "@/lib/artwork";
-import { paletteFor } from "@/components/art/palette";
+import "@/app/invite.css";
+import type { PublicEvent, Palette } from "@/lib/db/types";
+import { paletteFor, paletteVars } from "@/components/art/palette";
+import { CoverCard } from "@/components/invite/Cards";
 import { stockFor } from "@/lib/layouts";
-import type { Palette } from "@/lib/db/types";
+import { mascotFor } from "@/lib/artwork";
+import Image from "next/image";
 
-// One invite, small: the card standing in front of its own envelope, flap open behind it.
+// One invite, small: its own cover card standing in front of its own envelope, open.
 //
-// This is the picture a stationery shop puts on a product page, and for the same reason. You do
-// not recognise an invite by its name. You recognise it by the card, and the envelope behind it
-// is what says this is an invitation rather than a poster.
+// Both halves are the real thing, not a drawing of one. The card is the CoverCard component the
+// guest page renders, and the envelope is the markup and stylesheet the opening animation uses,
+// both shrunk. Three attempts at drawing a likeness of them produced three wrong pictures: an
+// envelope of the wrong shape with a lining that does not exist, and a card that was a crop of
+// the artwork with the title stuck underneath in the wrong order. Nothing here is a likeness, so
+// nothing here can be wrong about the thing it stands for. When the invite changes, this changes.
 //
-// So both halves are the real thing rather than a diagram of it: the envelope is the one the
-// guest taps open, in the paper that design is cut from, and the card is the actual cover with
-// the actual artwork on it. The drawing it replaced was a stack of grey boxes, which told you
-// nothing except that something rectangular was involved.
-//
-// The envelope is drawn rather than built from boxes because a rectangle with a triangle on top
-// reads as a house. What makes it an envelope is the open flap showing its lining, the seams
-// where its own flaps fold in behind the card, and a shadow under the card sitting in front.
+// invite.css is the guest side's stylesheet and this is the one place the host app loads it. The
+// two share no class names at all, checked rather than assumed, so it cannot reach anything else.
 
-type Stock = { body: string; flapBack: string; rim: string; liner: string; linerInk: string };
-
-function stock(p: Palette, layout: string | undefined): Stock {
-  // The same two papers the share card and the page are cut from, in miniature. The flap is seen
-  // from behind here, since it is standing open towards you, so it carries the lining rather than
-  // the outside colour.
-  return stockFor(layout) === "beige"
-    ? { body: "#E9DCC1", flapBack: "#F4EAD6", rim: "#CDBB98", liner: "#FFFDF6", linerInk: "#CDBB98" }
-    : { body: shade(p.red, -0.14), flapBack: shade(p.red, 0.04), rim: shade(p.red, -0.3), liner: "#FFFFFF", linerInk: p.sky };
-}
-
-function shade(hex: string, amount: number): string {
-  const n = parseInt(hex.replace("#", ""), 16);
-  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) =>
-    Math.max(0, Math.min(255, Math.round(amount < 0 ? v * (1 + amount) : v + (255 - v) * amount))),
-  );
-  return `#${ch.map((v) => v.toString(16).padStart(2, "0")).join("")}`;
-}
-
-// The envelope, open, seen from behind: the flap standing up and towards you, its lining showing,
-// the body in front of it, and the two seams where the side flaps fold in.
-//
-// The id on the lining pattern has to be unique per envelope drawn. Two of these sit side by side
-// on the Design tab, and an SVG pattern id is global to the document: the second copy would look
-// up the first one's pattern, which is the same bug the cover art hit inside the closed envelope.
-function EnvelopeOpen({ s, uid }: { s: Stock; uid: string }) {
-  const liner = `liner-${uid}`;
-  const inside = `inside-${uid}`;
-  return (
-    <svg viewBox="0 0 100 122" aria-hidden="true">
-      <defs>
-        {/* The lining, printed rather than plain. A real one is patterned paper, and it is the
-            thing that makes an envelope look like stationery instead of packaging. */}
-        <pattern id={liner} width="10" height="10" patternUnits="userSpaceOnUse">
-          <rect width="10" height="10" fill={s.liner} />
-          <circle cx="3" cy="3" r="1.5" fill={s.linerInk} opacity="0.55" />
-          <circle cx="8" cy="8" r="1.5" fill={s.linerInk} opacity="0.55" />
-          <path d="M0 6h3M7 1h3" stroke={s.linerInk} strokeWidth="1" opacity="0.35" />
-        </pattern>
-        <linearGradient id={inside} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#000" stopOpacity="0.16" />
-          <stop offset="0.5" stopColor="#000" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {/* The flap, folded back and standing above the envelope's own top edge. */}
-      <path d="M2 24 L50 2 L98 24 Z" fill={s.flapBack} stroke={s.rim} strokeWidth="1.4" strokeLinejoin="round" />
-      {/* The body. */}
-      <rect x="2" y="22" width="96" height="98" rx="4" fill={s.body} stroke={s.rim} strokeWidth="1.4" />
-      {/* The mouth, open: the lining seen down inside it, and the shadow the flap casts across it. */}
-      <path d="M7 27 L93 27 L50 82 Z" fill={`url(#${liner})`} stroke={s.rim} strokeWidth="1.2" strokeLinejoin="round" />
-      <path d="M7 27 L93 27 L50 82 Z" fill={`url(#${inside})`} />
-      {/* The seams where its own side flaps fold in behind the card. */}
-      <path d="M2 118 L50 76 L98 118" fill="none" stroke={s.rim} strokeWidth="1" opacity="0.55" />
-    </svg>
-  );
-}
+/** The scene is laid out at this size and scaled down, so the numbers below are readable. */
+const W = 400;
+const H = 470;
 
 export function InviteThumb({
-  artwork, title, palette, themeId, layout,
+  artwork, title, intro, palette, themeId, layout,
 }: {
   artwork: string | null;
   title: string;
+  intro?: string | null;
   palette?: Palette | null;
   themeId?: string | null;
-  /** Which design, so the envelope is the right paper and the card is cropped the right way. */
+  /** Which design. Only the envelope's paper depends on it; the card is the card. */
   layout?: string;
 }) {
   const p = paletteFor(palette, themeId ?? "");
-  const s = stock(p, layout);
-  // The lineup's cover stands its artwork along the bottom and its words above; the suite's is a
-  // picture with the title under it. Cropping each from the piece that layout actually leads with
-  // is what makes the two squares look like two different invites rather than one invite twice.
-  const lineup = layout === "lineup";
-  const art = lineup ? bandFor(artwork) : coverFor(artwork);
-  const uid = `${layout ?? "suite"}-${(artwork ?? "none").replace(/[^a-z0-9]/gi, "")}`;
+  const mascot = mascotFor(artwork);
+  // CoverCard reads a whole event row, and a thumbnail knows four things about one. The rest are
+  // the values that make it draw the cover and nothing else: with the details and the sign-off
+  // both on, their cards carry them, so the cover is the picture, the eyebrow, the title and the
+  // line under it, which is exactly what it is on the invite.
+  const e = {
+    title, intro: intro ?? null, invite_image_path: artwork,
+    show_details: true, show_signoff: true, host_line: null,
+    date: null, start_time: null, end_time: null, time_note: null, venue: null,
+  } as unknown as PublicEvent;
 
   return (
-    <span className="ithumb">
-      <span className="ithumb-env">
-        <EnvelopeOpen s={s} uid={uid} />
-      </span>
-      {/* The card is the invite's own face, not a crop of its picture: the artwork and the title
-          under it, which is what a guest is holding and what a host recognises from across the
-          list. A photograph with no words on it could be any event. */}
-      <span className={`ithumb-card${lineup ? " lineup" : ""}`}>
-        {art ? (
-          <span className="ithumb-art">
-            <Image src={art.src} alt="" width={art.w} height={art.h} sizes="160px" />
+    <span className="ithumb" style={paletteVars(p)}>
+      <span className="ithumb-scene invite">
+        <span className="ithumb-envbox">
+          {/* The envelope of the animation, in the state a tap leaves it: flap swung up and back
+              on its hinge, its lining showing. `still` is that state without the swing. */}
+          <span className={`env still${stockFor(layout) === "beige" ? " beige" : ""}`}>
+            <span className="back" />
+            <span className="pocket"><span className="sides" /><span className="edge" /></span>
+            <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
           </span>
-        ) : null}
-        <span className="ithumb-title">{title}</span>
+          {/* The characters stand on the envelope, the same band the invite page stands there.
+              They were left off the first build of this, which took the most recognisable thing
+              on the envelope off the picture whose whole job is recognising it. */}
+          {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="120px" />}
+        </span>
+        <span className="ithumb-cardbox">
+          <CoverCard e={e} />
+        </span>
       </span>
     </span>
   );
 }
+
+export { W as THUMB_W, H as THUMB_H };
