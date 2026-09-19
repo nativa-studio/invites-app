@@ -36,9 +36,17 @@ export function Shower({ size = 48 }: P) {
 export function Towel({ size = 48 }: P) {
   return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><rect x="14" y="10" width="36" height="44" rx="3" fill={S.fill} {...kl} /><rect x="14" y="22" width="36" height="6" fill="#fff" /><rect x="14" y="36" width="36" height="6" fill="#fff" /></svg>);
 }
-// The food line's picture. It was a plate, which is the symbol for a restaurant rather than for
-// an afternoon at somebody's house. A kettle barbecue is what is actually happening, and it is
-// read at a glance at 44px, which a plate of something is not.
+// Bring a plate: a plate, carried, with something on it. Two lines on the invite are about food
+// and they are two different requests. What the host is cooking is the barbecue below. What a
+// guest is asked to bring is this, and it kept the plate because a plate is literally what the
+// line asks for.
+export function Plate({ size = 48 }: P) {
+  return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="38" rx="26" ry="12" fill="#fff" {...kl} /><ellipse cx="32" cy="36" rx="16" ry="7" fill={S.yel} {...kl} /><path d="M22 34c4-8 16-8 20 0" fill={S.red} {...kl} /></svg>);
+}
+
+// What the host is serving. It was the plate above, which said the same thing twice and said
+// neither of them clearly: a plate is the symbol for a restaurant rather than for an afternoon
+// at somebody's house. A kettle barbecue is what is actually happening, and it reads at 44px.
 export function Bbq({ size = 48 }: P) {
   return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M20 12c3-4 9-4 12 0" fill="none" stroke={S.navy} strokeWidth="3" strokeLinecap="round" /><path d="M12 30a20 20 0 0 1 40 0z" fill={S.red} {...kl} /><path d="M9 30h46" stroke={S.navy} strokeWidth="4" strokeLinecap="round" /><path d="M14 33h36l-5 13H19z" fill={S.crm} {...kl} /><g stroke={S.navy} strokeWidth="3" strokeLinecap="round"><path d="M21 46l-7 11M43 46l7 11M32 46v11" /></g></svg>);
 }
@@ -57,4 +65,4 @@ export function Clock({ size = 48 }: P) {
 export function Pin({ size = 48 }: P) {
   return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58S12 39 12 26a20 20 0 0 1 40 0c0 13-20 32-20 32z" fill={S.red} {...kl} /><circle cx="32" cy="25" r="8" fill={S.crm} {...kl} /></svg>);
 }
-export const ICONS: Record<string, (p: P) => React.ReactElement> = { cap: Cap, ball: Ball, ring: Ring, cake: Cake, car: Car, gift: Gift, camera: Camera, kids: Kids, towel: Towel, plate: Bbq, bbq: Bbq, gate: Gate, bolt: Bolt, clock: Clock, pin: Pin };
+export const ICONS: Record<string, (p: P) => React.ReactElement> = { cap: Cap, ball: Ball, ring: Ring, cake: Cake, car: Car, gift: Gift, camera: Camera, kids: Kids, towel: Towel, plate: Plate, bbq: Bbq, gate: Gate, bolt: Bolt, clock: Clock, pin: Pin };
