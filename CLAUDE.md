@@ -55,6 +55,14 @@ Get this wrong and the instructions are useless however correct they are.
   settings file on a feature branch does nothing at all.
 - **Write findings into the repo, not into the conversation.** A recipe that lives in a chat is
   gone by the next session. `SETUP.md` is where operational knowledge goes.
+- **Lead with the fastest route, every time.** She is on a phone, often one handed, often with one
+  bar. A direct URL she can paste into the address bar beats a tap-through path, and a tap-through
+  path beats a description of where the thing lives. Give the fast way first and the fallback
+  underneath it, not the other way round. Where a dashboard has stable URLs, work them out and
+  hand them over: Supabase is
+  `supabase.com/dashboard/project/kihsdobmmvnfvokbmmgj/<section>`, and Vercel is the project's own
+  address with `/settings/environment-variables` on the end. Never send her hunting through a
+  menu for something that has an address.
 
 ## Facts about this setup, so they are not rediscovered
 
