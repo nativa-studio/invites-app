@@ -246,6 +246,11 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .reorder .row { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 4px 10px 4px 4px; border: 1px solid var(--app-line); border-radius: 10px; background: var(--app-bg); }
 .reorder .row.held { position: relative; z-index: 2; border-color: var(--app-ink); box-shadow: 0 8px 18px -8px rgba(28, 25, 23, 0.4); }
 .reorder .row .n { flex: 1 1 auto; min-width: 0; font-size: 15px; text-align: left; }
+/* A row that is a whole little editor rather than a name. The handle stays at the top of it, so a
+   row with three controls in it is still grabbed where every other row is grabbed. */
+.reorder .row:has(.note-edit) { align-items: flex-start; padding: 10px 10px 10px 4px; }
+.reorder .row:has(.note-edit) .grip { position: sticky; top: 8px; }
+.note-edit { flex: 1 1 auto; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
 /* A name that is also the way in to editing that part. It reads as the row's label and behaves as
    a button, so it carries no button chrome, only the underline that says it does something. */
 .reorder .row .n.as-link { min-height: 44px; display: flex; align-items: center; gap: 8px; border: 0; background: transparent; color: var(--app-ink); font: inherit; font-size: 15px; cursor: pointer; text-decoration: underline; text-decoration-color: var(--app-line-2); text-underline-offset: 3px; }

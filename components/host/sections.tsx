@@ -1,7 +1,7 @@
 import type { EventRow } from "@/lib/db/types";
-import { Choice, Field, Switch } from "@/components/host/fields";
+import { Field, Switch } from "@/components/host/fields";
 import { askLine, signoffMessage } from "@/lib/ask-line";
-import { KnowOrder } from "@/components/host/KnowOrder";
+import { KnowEditor, KNOW_FIELDS } from "@/components/host/KnowEditor";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
 // data-section names the invite carries, so tapping a card on the preview finds its entry here.
@@ -65,23 +65,10 @@ export const SECTIONS: Section[] = [
   {
     id: "know",
     title: "Good to know",
-    blurb: "What to bring, food, gifts, parents, photos. Each line only appears when you have said something about it.",
+    blurb: "What to bring, food, gifts, photos. Each line only appears when you have said something about it, and they come in the order you put them in.",
     show: { column: "show_good_to_know", label: "Show good to know" },
-    fields: ["what_to_bring", "serve_text", "gift_stance", "gift_note", "parents_mode", "siblings_welcome", "photo_sharing", "good_to_know", "plate_host_note", "show_good_to_know"],
-    render: (e) => (
-      <>
-        <Field id="what_to_bring" label="What to bring or wear" value={e.what_to_bring} hint='e.g. "Swimmers, a towel and a hat"' />
-        <Field id="serve_text" label="What you'll serve" value={e.serve_text} />
-        <Choice id="gift_stance" label="Gifts" value={e.gift_stance} options={[["none", "No gifts please"], ["optional", "Gifts optional"], ["books", "Books only"], ["wishlist", "Wish list link"]]} />
-        <Field id="gift_note" label="Gift note (optional)" value={e.gift_note} />
-        <Choice id="parents_mode" label="Parents" value={e.parents_mode} options={[["stay", "Parents and family welcome to stay"], ["drop_off", "Drop-off party"], ["either", "Either, say nothing"]]} />
-        <Switch id="siblings_welcome" label="Little brothers and sisters welcome" value={e.siblings_welcome} />
-        <Choice id="photo_sharing" label="Photos" value={e.photo_sharing} options={[["none", "Say nothing"], ["kids_off_social", "Please keep photos of the kids off social media"], ["ask", "Please ask before posting anyone's photos"], ["share", "Share away"]]} />
-        <KnowOrder e={e} />
-        <Field id="plate_host_note" label="Bring a plate wording" value={e.plate_host_note} hint="Only appears when bring a plate is switched on." />
-        <Field id="good_to_know" label="Anything else" value={e.good_to_know} rows={2} />
-      </>
-    ),
+    fields: [...KNOW_FIELDS, "show_good_to_know"],
+    render: (e) => <KnowEditor e={e} />,
   },
   {
     id: "after",

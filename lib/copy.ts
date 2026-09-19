@@ -89,9 +89,6 @@ export const copy = {
     questions: (host: string) => `Questions? Text ${host}`,
   },
   lines: {
-    parentsStay: "Parents and family welcome to stay.",
-    dropOff: "This is a drop-off party. We'll take good care of them.",
-    siblingsWelcome: "Little brothers and sisters are welcome, just count them in your reply.",
     siblingsNo: "We're keeping it to invited kids only. Sorry, siblings!",
     giftsNone: "No gifts please, your company is the present.",
     giftsOptional: "Gifts are entirely optional.",

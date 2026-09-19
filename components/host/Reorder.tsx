@@ -29,13 +29,67 @@ export function Reorder<T extends string>({
   const rows = useRef<(HTMLLIElement | null)[]>([]);
   const geom = useRef<{ top: number; h: number }[]>([]);
   const startY = useRef(0);
+  const lastY = useRef(0);
+  const from = useRef(0);
+  // The thing the list sits inside, when that thing scrolls. In a sheet it is the sheet's body,
+  // which is usually shorter than the list, so without this a row could only ever be dropped
+  // somewhere already on screen.
+  const scroller = useRef<HTMLElement | null>(null);
+  const startScroll = useRef(0);
+  const raf = useRef<number | null>(null);
 
-  function commit(from: number, to: number) {
-    if (to === from || to < 0 || to >= items.length) return;
+  function commit(a: number, b: number) {
+    if (b === a || b < 0 || b >= items.length) return;
     const next = [...items];
-    const [moved] = next.splice(from, 1);
-    next.splice(to, 0, moved);
+    const [moved] = next.splice(a, 1);
+    next.splice(b, 0, moved);
     onReorder(next);
+  }
+
+  function scrollableAncestor(el: HTMLElement | null): HTMLElement | null {
+    for (let n = el?.parentElement ?? null; n; n = n.parentElement) {
+      const o = getComputedStyle(n).overflowY;
+      if ((o === "auto" || o === "scroll") && n.scrollHeight > n.clientHeight) return n;
+    }
+    return null;
+  }
+
+  // Where the row has got to, and which slot that puts it in.
+  //
+  // The scroll delta is in here because the rows were measured against the window, and scrolling
+  // moves every one of them, the dragged one included. Without it the row slides out from under
+  // the finger the moment the list scrolls.
+  function recompute() {
+    const g = geom.current;
+    const i = from.current;
+    if (!g[i]) return;
+    const scrolled = (scroller.current?.scrollTop ?? 0) - startScroll.current;
+    const dy = lastY.current - startY.current + scrolled;
+    const centre = g[i].top + g[i].h / 2 + dy;
+    let to = i;
+    for (let j = 0; j < g.length; j++) {
+      const mid = g[j].top + g[j].h / 2;
+      if (j > i && centre > mid) to = j;
+      if (j < i && centre < mid) { to = j; break; }
+    }
+    setDrag({ from: i, to, dy, h: g[i].h });
+  }
+
+  // Held near the top or bottom of the scrolling box, the list creeps that way, faster the closer
+  // to the edge. This is what makes a long list draggable at all on a short screen.
+  function step() {
+    const el = scroller.current;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      const EDGE = 60;
+      const MAX = 16;
+      let v = 0;
+      if (lastY.current < r.top + EDGE) v = -MAX * Math.min(1, (r.top + EDGE - lastY.current) / EDGE);
+      else if (lastY.current > r.bottom - EDGE) v = MAX * Math.min(1, (lastY.current - (r.bottom - EDGE)) / EDGE);
+      if (v) el.scrollTop += v;
+    }
+    recompute();
+    raf.current = requestAnimationFrame(step);
   }
 
   function down(ev: React.PointerEvent<HTMLButtonElement>, i: number) {
@@ -45,26 +99,23 @@ export function Reorder<T extends string>({
       const r = el!.getBoundingClientRect();
       return { top: r.top, h: r.height };
     });
+    scroller.current = scrollableAncestor(rows.current[i]);
+    startScroll.current = scroller.current?.scrollTop ?? 0;
     startY.current = ev.clientY;
+    lastY.current = ev.clientY;
+    from.current = i;
     setDrag({ from: i, to: i, dy: 0, h: geom.current[i].h });
+    raf.current = requestAnimationFrame(step);
   }
 
   function move(ev: React.PointerEvent<HTMLButtonElement>) {
     if (!drag) return;
-    const g = geom.current;
-    const dy = ev.clientY - startY.current;
-    // Where the middle of the row being dragged has got to, against where the others started.
-    const centre = g[drag.from].top + g[drag.from].h / 2 + dy;
-    let to = drag.from;
-    for (let i = 0; i < g.length; i++) {
-      const mid = g[i].top + g[i].h / 2;
-      if (i > drag.from && centre > mid) to = i;
-      if (i < drag.from && centre < mid) { to = i; break; }
-    }
-    setDrag({ from: drag.from, to, dy, h: drag.h });
+    lastY.current = ev.clientY;
+    recompute();
   }
 
   function up() {
+    if (raf.current !== null) { cancelAnimationFrame(raf.current); raf.current = null; }
     if (!drag) return;
     commit(drag.from, drag.to);
     setDrag(null);
