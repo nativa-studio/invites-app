@@ -41,7 +41,10 @@ export function CoverCard({ e }: { e: PublicEvent }) {
           {e.venue && <div className="where">{e.venue}</div>}
         </>
       )}
-      {e.host_line && <div className="small">{e.host_line}</div>}
+      {/* Who it is from is signed at the end now, the way a card is. It was on the cover as well,
+          which said it twice. It comes back here only when the sign-off is switched off, because
+          then nowhere else would carry it. Same rule as the date and place above. */}
+      {e.show_signoff === false && e.host_line && <div className="small">{e.host_line}</div>}
     </div>
   );
 }

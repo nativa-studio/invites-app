@@ -25,12 +25,11 @@ export const SECTIONS: Section[] = [
   {
     id: "cover",
     title: "The cover",
-    blurb: "The title, the line under it, and who it is from. When and where live on the details card below, so they are not said twice.",
-    fields: ["title", "host_line", "intro"],
+    blurb: "The title and the line under it. When and where live on the details card below, and who it is from is signed at the end, so none of it is said twice.",
+    fields: ["title", "intro"],
     render: (e) => (
       <>
         <Field id="title" label="Title" value={e.title} hint='For a birthday, keep the form "Name is turning N" and the age lands on the seal.' />
-        <Field id="host_line" label="From" value={e.host_line} hint="Shown under the title, e.g. With love from Gabriel's mum and dad" />
         <Field id="intro" label="A line or two" value={e.intro} rows={3} />
       </>
     ),

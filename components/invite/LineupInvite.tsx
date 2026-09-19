@@ -59,7 +59,9 @@ export function LineupInvite({
               {formatTimeRange(e.start_time, e.end_time, e.time_note)}
             </p>
           )}
-          {e.host_line && <p className="from">{e.host_line}</p>}
+          {/* Signed at the end now, the way a card is. Back on the cover only when the
+              sign-off is switched off, because then nowhere else would carry it. */}
+          {e.show_signoff === false && e.host_line && <p className="from">{e.host_line}</p>}
           {artwork
             ? <div className="art"><Image src={artwork.src} alt="" width={artwork.w} height={artwork.h} priority sizes="(max-width: 430px) 100vw, 430px" /></div>
             : <div className="artless" />}
