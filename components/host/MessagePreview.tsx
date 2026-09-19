@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { EventRow } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { formatInviteDate } from "@/lib/format";
+import { shareDescription } from "@/lib/share-meta";
 import { inviteText, reminderText } from "@/lib/messages";
 import type { Section } from "./sections";
 import { MESSAGE_SECTIONS, previewTitle } from "./message-sections";
@@ -25,8 +25,9 @@ export function MessagePreview({ e, site, sample }: { e: EventRow; site: string;
   const link = sample ? `${site}/i/${sample}` : `${site}/e/${e.slug}`;
   const guest = { name: copy.host.sampleGuest };
   const card = `/s/${e.slug}/card.png?v=${encodeURIComponent(e.date ?? "")}`;
-  const description = e.share_description?.trim()
-    || [formatInviteDate(e.date), e.intro].filter(Boolean).join(". ");
+  // Through the same helper the real pages use, so the card drawn here is the card that lands.
+  // These were two copies of one rule and they had drifted.
+  const description = shareDescription(e);
   const host = site.replace(/^https?:\/\//, "").replace(/\/.*$/, "");
 
   const part = (id: string) => MESSAGE_SECTIONS.find((s) => s.id === id)!;
