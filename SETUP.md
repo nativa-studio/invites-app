@@ -119,17 +119,21 @@ The site answers on `invites-app-xi.vercel.app`. Pointing your own name at it is
 
 **Everything below is done from a phone. There is no terminal step.**
 
-### The name we picked: `bunting.day`
+### The domain: `bunting.cloud`, bought
 
-Checked on 19 September 2026 and unregistered. `bunting.com`, `bunting.com.au`, `bunting.au`,
-`bunting.app`, `bunting.net.au`, `bunting.io` and `bunting.co` are all taken, which is why it is
-not one of those. `bunting.party`, `bunting.cards`, `bunting.events` and `bunting.rsvp` were free
-at the same time, if `.day` has gone by the time anyone reads this.
+Bought on 19 September 2026. The app is called Bunting and the site is `bunting.cloud`.
 
-`bunting.day` is 11 characters, so a personal link reads `https://bunting.day/i/7ym7kq5wwb`: 32
-characters against the 46 of the Vercel address, and the line a chat app prints under the preview
-card drops from 25 characters to 11. It also reads as a phrase rather than an address, which none
-of the alternatives did: "bunting day" sounds like the day itself.
+`bunting.com`, `bunting.com.au`, `bunting.au`, `bunting.app`, `bunting.net.au`, `bunting.io` and
+`bunting.co` were all taken, which is why it is none of those. `bunting.day`, `bunting.party`,
+`bunting.cards`, `bunting.events` and `bunting.rsvp` were all free at the time and were the
+shortlist before `.cloud` was bought.
+
+A personal link reads `https://bunting.cloud/i/7ym7kq5wwb`: 34 characters against the 46 of the
+Vercel address, and the line a chat app prints under the preview card drops from 25 characters to
+13.
+
+`.cloud` is run by Aruba, not by Vercel, so step 1 does not apply and the DNS records in step 2
+have to be added at whichever registrar sold it.
 
 The name was re-opened once and settled. Around forty alternatives were checked, and the test that
 decided it is whether a guest who hears the name once can type it correctly. Bunting passes: one
@@ -142,55 +146,57 @@ for a fourth birthday, wrong for the memorial this app also supports), `plate.au
 app), and `trestle`, `verandah`, `garland` and `shindig`, all of which have both `.au` and
 `.com.au` already gone.
 
-Availability is not clearance. Nothing here has been checked against IP Australia's trade mark
-register, and that is worth ten minutes before any money is spent.
+Availability is not clearance. Marcia checked the trade mark register and found Bunting clear.
+Nothing in this file has been checked against IP Australia by anyone else, so treat the list above
+as availability only.
 
-### 1. Get the name
+### 1. Get the name (done)
 
-Two routes, and which one you are on depends on whether Vercel sells the ending.
+Kept for the next event, or the next product. Two routes, and which one you are on depends on
+whether Vercel sells the ending.
 
-- **Try Vercel first.** Open the project, **Settings**, **Domains**, type `bunting.day`. If Vercel
+- **Try Vercel first.** Open the project, **Settings**, **Domains**, type `bunting.cloud`. If Vercel
   can sell it, it offers, and it is then your registrar as well as your host: it writes the DNS
   itself and step 2 does not happen at all. This is the least that can go wrong, and it is worth
   the thirty seconds of typing it in to find out. Vercel definitely sells `.com`, `.app` and
   `.party`; whether it carries `.day` is a question its own box answers faster than anyone can
   look it up.
-- **If it does not offer**, buy `bunting.day` from any registrar that carries it and do step 2.
+- **If it does not offer**, buy `bunting.cloud` from any registrar that carries it and do step 2.
   `.day` is run by Google's registry, the same family as `.app` and `.dev`, so a big registrar
   (Cloudflare, Namecheap, Porkbun) is a safer bet than a small one.
 - **A `.com.au` or `.au`**: Vercel does not sell these, and it cannot, because they are country
   domains that need an Australian business behind them. Buy it from an Australian registrar
   (VentraIP, Crazy Domains, Netregistry) using the Nativa Studio ABN, then do step 2.
 
-### 2. Point it at Vercel (only if you bought it elsewhere)
+### 2. Point it at Vercel (this is where `bunting.cloud` starts)
 
 In Vercel: project, **Settings**, **Domains**, **Add**, type the domain. Vercel then shows you a card with the exact records to create. **Read the values off that card.** They are specific to this project, and any A record or `cname.vercel-dns.com` value you find written down elsewhere, including in an older note from me, is likely to be the wrong one now.
 
 There will be two:
 
-- the bare name (`bunting.day`) as an **A record**, pointing at the address on the card
+- the bare name (`bunting.cloud`) as an **A record**, pointing at the address on the card
 - `www` as a **CNAME**, pointing at the value on the card
 
 Add both in your registrar's DNS screen. Then leave it. It is usually live within the hour, though the official answer is up to 48.
 
-Add both `bunting.day` and `www.bunting.day` to the Vercel project, and set the `www` one to redirect to the bare one, so people who type either land in the same place.
+Add both `bunting.cloud` and `www.bunting.cloud` to the Vercel project, and set the `www` one to redirect to the bare one, so people who type either land in the same place.
 
 You do not have to do anything about the certificate. Vercel gets one free from Let's Encrypt as soon as the records resolve, renews it by itself, and sends every `http` visitor to `https`.
 
 ### 3. Tell the app its own name
 
-Still in Vercel: **Settings**, **Environment Variables**. Set `NEXT_PUBLIC_SITE_URL` to `https://bunting.day`, with no slash on the end, then redeploy.
+Still in Vercel: **Settings**, **Environment Variables**. Set `NEXT_PUBLIC_SITE_URL` to `https://bunting.cloud`, with no slash on the end, then redeploy.
 
 Skipping this does not break the site, but every invite link the app writes into a text message would keep saying `invites-app-xi.vercel.app`, because that is the address the request came in on. The whole point is the link a guest reads.
 
 ### 4. Tell Supabase
 
-In the Supabase dashboard: **Authentication**, **URL Configuration**. Set **Site URL** to `https://bunting.day` and add `https://bunting.day/auth/callback` to the redirect list. Leave the old entries there until you are sure, they cost nothing.
+In the Supabase dashboard: **Authentication**, **URL Configuration**. Set **Site URL** to `https://bunting.cloud` and add `https://bunting.cloud/auth/callback` to the redirect list. Leave the old entries there until you are sure, they cost nothing.
 
 Google needs nothing. Google sends people back to Supabase, not to us, and that address is not changing.
 
 ### Worth knowing before you pick a name
 
-Guests read it out of a text message, so it is doing the work a business card does. Short, spellable down the phone, and it wants to sit comfortably in `bunting.day/i/k3m9x2` rather than fight it.
+Guests read it out of a text message, so it is doing the work a business card does. Short, spellable down the phone, and it wants to sit comfortably in `bunting.cloud/i/k3m9x2` rather than fight it.
 
 The links already sent out keep working. Vercel keeps answering on the old address, so nothing breaks the moment you switch.
