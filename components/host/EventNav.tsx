@@ -7,17 +7,20 @@ import { usePathname } from "next/navigation";
 // the one Back from anywhere else returns to.
 //
 // "Invite" rather than "Preview": it is where the invite is made, not just where it is looked at.
+// It is first, and it is the address, because it is the thing a host opens their event to work
+// on. Tracking used to hold that spot on the argument that you check an event more often than you
+// change it, which turned out to be true only in the week before the party and false in all the
+// weeks of making it.
 //
-// The order follows the job: how it is going, then the four things you set up, then the invite
-// itself. RSVP sits next to Guests because they are the two halves of the same question, who is
-// asked and what they said.
+// Guests comes next, then RSVP beside it: the two halves of one question, who is asked and what
+// they said. Then the two set-up screens.
 const TABS = [
-  { seg: "", label: "Tracking" },
-  { seg: "/look", label: "Layout" },
-  { seg: "/details", label: "Details" },
+  { seg: "", label: "Invite" },
   { seg: "/guests", label: "Guests" },
   { seg: "/rsvp", label: "RSVP" },
-  { seg: "/invite", label: "Invite" },
+  { seg: "/tracking", label: "Tracking" },
+  { seg: "/look", label: "Design" },
+  { seg: "/details", label: "Details" },
 ] as const;
 
 export function EventNav({ id }: { id: string }) {
