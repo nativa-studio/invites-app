@@ -4,11 +4,39 @@ import { firstName, formatShortDate, normalisePhone } from "@/lib/format";
 export type TemplateEvent = { title: string; date: string | null; text_template?: string | null; reminder_template?: string | null };
 export type TemplateGuest = { name: string; contact_name?: string | null };
 
+// A placeholder, in whichever brackets the host reached for.
+//
+// The hint above the box says {name}, and a host writing their own wording types (name) about as
+// often. A message went out reading "Hi (name), we'd love to know if you can celebrate Gabe's
+// birthday with us", to a real guest, because a round bracket is not a curly one. Round, square
+// and doubled brackets all mean the same thing here, and the spaces inside them are allowed too.
+const TOKEN = /[{([]{1,2}\s*(name|title|date|link)\s*[})\]]{1,2}/gi;
+
 // {name} is the guest the invite is for, never the person whose phone it lands on.
 export function fillTemplate(template: string, e: TemplateEvent, g: TemplateGuest, link: string): string {
-  const date = e.date ? ` on ${formatShortDate(e.date)}` : "";
-  const name = firstName(g.name) || "there";
-  return template.replaceAll("{name}", name).replaceAll("{title}", e.title).replaceAll("{date}", date).replaceAll("{link}", link);
+  const values: Record<string, string> = {
+    name: firstName(g.name) || "there",
+    title: e.title,
+    date: e.date ? ` on ${formatShortDate(e.date)}` : "",
+    link,
+  };
+  // {date} carries its own " on ", so that "{title}{date}" reads as one sentence. Write
+  // "{title} is {date}" instead and that space is doubled, so runs of spaces within a line are
+  // collapsed. Line breaks are left exactly as the host typed them.
+  const filled = template.replace(TOKEN, (_, key: string) => values[key.toLowerCase()]).replace(/[^\S\n]{2,}/g, " ");
+  return withLink(filled, link);
+}
+
+// The link is the whole message. Without it a guest has a sentence about a party and no way to
+// see it or reply, and the host has no idea, because the app did exactly what the template said.
+//
+// So the link is not left to the template. A template that asks for it gets it where it asked;
+// one that does not gets it on the end. This is what a host means either way: nobody writes an
+// invite text meaning to leave out the invite.
+function withLink(text: string, link: string): string {
+  if (!link || text.includes(link)) return text;
+  const body = text.trimEnd();
+  return body ? `${body} ${link}` : link;
 }
 
 export function inviteText(e: TemplateEvent, g: TemplateGuest, link: string): string {
