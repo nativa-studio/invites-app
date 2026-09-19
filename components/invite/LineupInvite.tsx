@@ -3,12 +3,12 @@ import "@/app/lineup.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { orderedNotes } from "@/lib/good-to-know";
-import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
-import { askLine, signoffMessage } from "@/lib/ask-line";
+import { formatInviteDate, formatMobile, formatTime, formatTimeRange } from "@/lib/format";
+import { askLine, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
 import { bandFor, mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
-import { Bolt, Bubble } from "@/components/art/icons";
+import { Bolt, Bubble, Camera } from "@/components/art/icons";
 
 // Colours lifted from the artwork, used for the dots beside each good-to-know line.
 const DOTS = ["#EFB93C", "#7FAF95", "#93C7D6", "#E8763C", "#E0553F", "#3F6B57"];
@@ -108,17 +108,27 @@ export function LineupInvite({
             </section>
           )}
 
-          {/* The symbol is the heading, and the words below it are one plain sentence. Same as the
-              suite's, so the two layouts ask the same way. */}
+          {/* Who to ask, and the one thing to remember on the way out. Two cells, a symbol over a
+              name over a line, the same pair the suite ends on, so the two layouts ask the same
+              way and read the same way. */}
           {e.show_after && (
           <section data-section="after" className="ask-block">
-            <div className="ask-mark" aria-hidden="true"><Bubble size={44} /></div>
-            <p className="ask">
-              <span className="k">{copy.sections.askLabel}</span>{" "}
-              {e.host_phone
-                ? <a href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{askLine(e)}</a>
-                : <span>{askLine(e)}</span>}
-            </p>
+            <div className={photoLine(e) ? "after" : "after one"}>
+              <div>
+                <Bubble size={44} />
+                <div className="n">{copy.sections.askHeading}</div>
+                {e.host_phone
+                  ? <a className="b" href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{askLine(e)}{formatMobile(e.host_phone) ? ` ${formatMobile(e.host_phone)}` : ""}</a>
+                  : <div className="b">{askLine(e)}</div>}
+              </div>
+              {photoLine(e) && (
+                <div>
+                  <Camera size={44} />
+                  <div className="n">{copy.sections.photos}</div>
+                  <div className="b">{photoLine(e)}</div>
+                </div>
+              )}
+            </div>
           </section>
           )}
 

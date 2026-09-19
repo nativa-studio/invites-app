@@ -74,9 +74,15 @@
 .pcard .ask .k { opacity: 0.7; }
 .pcard .ask a { display: inline-block; padding: 11px 0; color: inherit; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--sky); }
 .pcard .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; }
+/* With photo sharing off there is only the question, and half a card of nothing beside it. */
+.pcard .two.one { grid-template-columns: 1fr; }
 .pcard .two > div { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
 .pcard .two .n { font-family: var(--font-display); font-size: 19px; }
 .pcard .two .b { font-size: 13px; opacity: 0.72; }
+/* The number is a link a guest taps to text the host, so it gets a thumb's worth of height. It
+   was the ink alone, 19px tall, which is a target you aim at rather than hit. */
+.pcard .two .b { min-height: 44px; padding: 12px 6px; display: inline-block; }
+.pcard .two a.b { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 2px; text-decoration-color: var(--sky); }
 .pbtn { display: flex; align-items: center; justify-content: center; min-height: 56px; width: 100%; max-width: 300px; border-radius: 16px; border: 3px solid var(--navy); background: transparent; color: var(--navy); font-family: var(--font-display); font-size: 20px; text-decoration: none; cursor: pointer; }
 .pbtn.primary { background: var(--red); color: #fff; }
 .pbtn.small { min-height: 44px; font-size: 16px; max-width: none; width: auto; padding: 0 18px; border-radius: 999px; }

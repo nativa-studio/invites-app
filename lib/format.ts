@@ -117,6 +117,15 @@ export function formatInviteDate(ymd: string | null | undefined): string {
 // Every part of the opener is optional and independent. The old pattern required the word "from",
 // so "With love Gabe, Tommy and Ma" matched nothing and the invite's last line read "Text With
 // love Gabe, Tommy and Ma".
+// 0403692420 becomes "0403 692 420". A number is read aloud in threes, and a run of ten digits
+// on a phone screen is something a guest has to count through with a finger.
+export function formatMobile(raw: string | null | undefined): string {
+  const digits = (raw ?? "").replace(/\D/g, "");
+  const local = digits.startsWith("61") ? `0${digits.slice(2)}` : digits;
+  if (local.length !== 10 || !local.startsWith("0")) return (raw ?? "").trim();
+  return `${local.slice(0, 4)} ${local.slice(4, 7)} ${local.slice(7)}`;
+}
+
 export function hostName(hostLine: string | null | undefined, fallback = "the host"): string {
   const trimmed = (hostLine ?? "").trim().replace(/^((with\s+)?(love|thanks)\s+)?(from\s+)?/i, "").trim();
   return trimmed || fallback;

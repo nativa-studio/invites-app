@@ -2,8 +2,8 @@ import Image from "next/image";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
-import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
-import { askLine, signoffMessage } from "@/lib/ask-line";
+import { formatInviteDate, formatMobile, formatTimeRange, formatTime } from "@/lib/format";
+import { askLine, photoLine, signoffMessage } from "@/lib/ask-line";
 import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Pin, Plate, Cap, Cake, Shower, Sun, Towel } from "@/components/art/icons";
 import { orderedNotes, type NoteKind } from "@/lib/good-to-know";
 
@@ -132,22 +132,39 @@ export function KnowCard({ e }: { e: PublicEvent }) {
   );
 }
 
-// The last block: who to ask. A guest who has read to the end has a question, not a wish to be
-// told that photos will arrive one day.
+// The last block: who to ask, and the one thing to remember on the way out.
+//
+// Two cells side by side, a symbol over a name over a line, which is the shape this block had
+// when it promised updates and photos. The shape was right and the content was not: a guest who
+// has read to the end has a question now, not a wish to be told that photos will arrive one day.
+// So the left cell is the question, with the host's number under it, spaced and tappable.
+//
+// The right cell is the photo request, in four words. Its full wording lives in Good to know,
+// where a guest reads it while deciding what the day will be like. This is the parting reminder,
+// for the guest already holding a camera, and four words is all a reminder is.
 export function AskCard({ e }: { e: PublicEvent }) {
   const sms = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
-  const line = askLine(e);
+  const phone = formatMobile(e.host_phone);
+  const photos = photoLine(e);
   return (
     <div className="pcard cream tilt-l" data-section="after">
       <div className="tape" />
-      {/* The symbol is the heading. A speech bubble says "ask us" without a word, and the word was
-          only saying the same thing twice: it sat in the red heading and then again in the line
-          below it. */}
-      <div className="ask-mark" aria-hidden="true"><Bubble size={44} /></div>
-      <p className="ask">
-        <span className="k">{copy.sections.askLabel}</span>{" "}
-        {sms ? <a href={sms}>{line}</a> : <span>{line}</span>}
-      </p>
+      <div className={photos ? "two" : "two one"}>
+        <div>
+          <Bubble size={44} />
+          <span className="n">{copy.sections.askHeading}</span>
+          {sms
+            ? <a className="b" href={sms}>{askLine(e)}{phone ? ` ${phone}` : ""}</a>
+            : <span className="b">{askLine(e)}</span>}
+        </div>
+        {photos && (
+          <div>
+            <Camera size={44} />
+            <span className="n">{copy.sections.photos}</span>
+            <span className="b">{photos}</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

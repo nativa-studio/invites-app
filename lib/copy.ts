@@ -72,6 +72,11 @@ export const copy = {
     updatesBody: "Anything that changes shows here.",
     photos: "Photos",
     photosBody: "A photo for you after the party.",
+    /* The parting reminder, beside Questions at the end. The long version of this lives in Good
+       to know; this is the one a guest sees on their way out with a camera in their hand. */
+    photosNoSocial: "Please no social media",
+    photosAsk: "Please ask before posting",
+    photosShare: "Share away",
     // The block at the end of the invite. It used to promise updates and photos, which is a
     // promise about later; a guest at the end of an invite wants to know who to ask.
     askHeading: "Questions",
