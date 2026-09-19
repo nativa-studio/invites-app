@@ -133,33 +133,53 @@
   100% { transform: scale(1) rotate(0deg); }
 }
 
-/* One flag: a triangle, the shape the product is named after. Thrown up, turned over, and then
-   dropped the whole height of the screen.
+/* One flag. A triangle, the shape the product is named after, with a few narrow strips mixed in
+   so it reads as a party popper going off rather than as one shape repeated eighty times.
 
    Fixed to the viewport rather than to the card, so the fall is a fall rather than a flutter
    inside a box. The container has to live outside the card for that to work at all: the card is
    tilted, and a transformed element is a containing block for anything fixed within it. */
 .cheer { position: fixed; inset: 0; z-index: 60; pointer-events: none; overflow: hidden; }
 .cheer .flag {
-  position: absolute; top: 46%; width: var(--size); height: calc(var(--size) * 1.3);
+  position: absolute; width: var(--size); height: calc(var(--size) * 1.3);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-  animation: cheer-flag 2.9s cubic-bezier(.22, .55, .3, 1) var(--wait) forwards;
+  animation-duration: var(--dur); animation-delay: var(--wait); animation-fill-mode: forwards;
+}
+/* A streamer: no point on the end, and narrow enough to flash as it turns over. */
+.cheer .flag.strip {
+  width: calc(var(--size) * .42); height: calc(var(--size) * 1.7); clip-path: none; border-radius: 1px;
 }
 .cheer .flag.c0 { background: var(--red); }
 .cheer .flag.c1 { background: var(--yel); }
 .cheer .flag.c2 { background: var(--sky-ink); }
 .cheer .flag.c3 { background: var(--forest); }
 .cheer .flag.c4 { background: var(--crm); }
-@keyframes cheer-flag {
-  0%   { opacity: 0; transform: translate3d(0, 10px, 0) rotate(0deg); }
-  7%   { opacity: 1; }
-  26%  { transform: translate3d(calc(var(--drift) * .45), calc(var(--lift) * -1), 0) rotate(var(--spin)); }
-  /* Still solid on the way out. They leave by going off the bottom, not by fading in mid air. */
-  100% { opacity: 1; transform: translate3d(var(--drift), var(--fall), 0) rotate(calc(var(--spin) * 2.4)); }
+
+/* The burst. Starts under the bottom edge and is thrown up and out, so it crosses the whole
+   screen on the way up: that is what puts bunting at the top of the screen in the first half
+   second. Eased hard out of the launch and then let go, which is roughly what a popper does. */
+.cheer .flag.pop { top: 102%; animation-name: cheer-pop-up; animation-timing-function: cubic-bezier(.12, .62, .3, 1); }
+@keyframes cheer-pop-up {
+  0%   { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); }
+  6%   { opacity: 1; }
+  44%  { transform: translate3d(calc(var(--x) * .55), calc(var(--up) * -1), 0) rotate(var(--spin)); }
+  /* Ends below where it started, so every one of them leaves by the bottom of the screen. */
+  100% { opacity: 1; transform: translate3d(var(--x), 26vh, 0) rotate(calc(var(--spin) * 2.3)); }
 }
 
-/* Belt and braces. The component does not mount at all under reduced motion, and this makes sure
-   that if it ever does, it sits still rather than flying. */
+/* The fall. Starts above the top edge and keeps arriving for another second and a bit after the
+   burst, so the screen does not empty from the top down. The sway is two waypoints rather than a
+   straight drop, which is the difference between falling and being dropped. */
+.cheer .flag.rain { top: -14%; animation-name: cheer-rain; animation-timing-function: linear; }
+@keyframes cheer-rain {
+  0%   { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); }
+  5%   { opacity: 1; }
+  34%  { transform: translate3d(var(--x), 42vh, 0) rotate(var(--spin)); }
+  67%  { transform: translate3d(calc(var(--x) * -.8), 84vh, 0) rotate(calc(var(--spin) * 2)); }
+  /* Still solid on the way out. They leave by going off the bottom, not by fading in mid air. */
+  100% { opacity: 1; transform: translate3d(calc(var(--x) * .3), 132vh, 0) rotate(calc(var(--spin) * 3)); }
+}
+
 @media (prefers-reduced-motion: reduce) { .cheer { display: none; } }
 
 /* Bring a plate. A list to read down, not a form to fill in: a picture, what it is, who has it,
