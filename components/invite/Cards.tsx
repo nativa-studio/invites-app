@@ -4,7 +4,7 @@ import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
 import { askLine, askPhoneSuffix, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
-import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Pin, Plate, Cap, Cake, Shower, Sun, Towel } from "@/components/art/icons";
+import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Pin, Bbq, Cap, Cake, Kids, Shower, Sun, Towel } from "@/components/art/icons";
 import { orderedNotes, type NoteKind } from "@/lib/good-to-know";
 
 export function mapsLink(e: PublicEvent): string | null {
@@ -106,9 +106,13 @@ export function DayCard({ e }: { e: PublicEvent }) {
 // host has already told us so in their own words. Same reasoning as the cake, which was here
 // first: read what they wrote rather than make them pick from a list of pictures.
 function noteIcon(kind: NoteKind, text: string): React.ReactNode {
+  if (kind === "siblings") return <Kids />;
   if (kind === "bring") return /sun|hat|sunscreen|burn|shade/i.test(text) ? <Sun /> : <Towel />;
-  if (kind === "serve") return /cake/i.test(text) ? <Cake /> : <Plate />;
-  if (kind === "plate") return <Plate />;
+  // A barbecue beats a cake when the line says both, because "sausages on the barbecue, and cake
+  // at 4ish" is a line about the barbecue with the cake as an aside. Cake on its own still gets
+  // the cake, which is how this rule started.
+  if (kind === "serve") return /bbq|barbecue|barbeque|sausage|grill|spit/i.test(text) ? <Bbq /> : /cake/i.test(text) ? <Cake /> : <Bbq />;
+  if (kind === "plate") return <Bbq />;
   if (kind === "gifts") return <Gift />;
   if (kind === "photos") return <Camera />;
   // Anything else the host has written. The speech bubble is the fallback, but a note about

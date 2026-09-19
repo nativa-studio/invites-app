@@ -295,6 +295,28 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 }
 .preview-back::before { content: "\2039"; font-size: 18px; line-height: 1; }
 
+/* The other way into the same page, opposite the way out. Full size is the one place a host has
+   the invite to themselves, so it is the place they are most likely to want to press their own
+   yes button, and the button that gets them there has to be on the page rather than back on the
+   screen they came from. */
+.preview-mode {
+  position: fixed; top: 12px; right: 12px; z-index: 80;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 999px; text-decoration: none;
+  background: #1c1917; color: #fff; border: 2px solid #1c1917;
+  font-size: 14px; font-weight: 600; line-height: 1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .2);
+}
+
+/* Change it, or try it. Two settings for one frame, as a pair of buttons rather than a switch,
+   because a switch would have to be labelled with the thing it is not doing. */
+.modes { display: flex; gap: 6px; padding: 4px; border: 1px solid var(--app-line-2); border-radius: 999px; }
+.mode {
+  flex: 1; padding: 9px 12px; border: 0; border-radius: 999px; background: none;
+  font: inherit; font-size: 14px; font-weight: 600; color: var(--app-mute); cursor: pointer; line-height: 1.2;
+}
+.mode.on { background: var(--app-ink); color: var(--app-bg); }
+
 /* Where everyone is from. One row per group: the name, how it is going, and the link that
    brought them in. */
 .grouprow { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px; padding: 12px 0; border-top: 1px solid var(--app-line); }

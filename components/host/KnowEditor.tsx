@@ -19,11 +19,16 @@ import { Reorder } from "./Reorder";
 //
 // Every kind is listed, not only the ones with something in them: the invite shows the filled ones
 // and this is where you fill them.
-const GIFTS: [string, string][] = [["none", "No gifts please"], ["optional", "Gifts optional"], ["books", "Books only"], ["wishlist", "Wish list link"]];
+
+// Say nothing first, the same as Photos, because leaving a subject off the invite is a choice a
+// host makes as often as any of the others and there was no way to make it: every setting on the
+// list printed a line. The stored value is its own word rather than "none", which this column
+// has meant "no gifts please" since the first migration.
+const GIFTS: [string, string][] = [["quiet", "Say nothing"], ["none", "No gifts please"], ["optional", "Gifts optional"], ["books", "Books only"], ["wishlist", "Wish list link"]];
 const PHOTOS: [string, string][] = [["none", "Say nothing"], ["kids_off_social", "Please keep photos of the kids off social media"], ["ask", "Please ask before posting anyone's photos"], ["share", "Share away"]];
 
 export const KNOW_FIELDS = [
-  "what_to_bring", "serve_text", "plate_enabled", "plate_host_note",
+  "siblings_welcome", "what_to_bring", "serve_text", "plate_enabled", "plate_host_note",
   "gift_stance", "gift_note", "photo_sharing", "good_to_know",
 ] as const;
 
@@ -36,6 +41,8 @@ export function KnowEditor({ e }: { e: EventRow }) {
   // anything. The row's name is the first control's label, so it is said once and said properly.
   function fieldsFor(k: NoteKind) {
     switch (k) {
+      case "siblings":
+        return <Switch id="siblings_welcome" label={NOTE_NAMES.siblings} value={e.siblings_welcome} hint="On, the invite says brothers and sisters are welcome. Off, it says nothing either way." />;
       case "bring":
         return <Field id="what_to_bring" label={NOTE_NAMES.bring} value={e.what_to_bring} hint='e.g. "Swimmers, a towel and a hat"' />;
       case "serve":
@@ -50,8 +57,8 @@ export function KnowEditor({ e }: { e: EventRow }) {
       case "gifts":
         return (
           <>
-            <Choice id="gift_stance" label={NOTE_NAMES.gifts} value={e.gift_stance} options={GIFTS} />
-            <Field id="gift_note" label="Gift note (optional)" value={e.gift_note} />
+            <Choice id="gift_stance" label={NOTE_NAMES.gifts} value={e.gift_stance} options={GIFTS} hint="Say nothing leaves gifts off the invite altogether." />
+            <Field id="gift_note" label="Gift note (optional)" value={e.gift_note} hint="Added to the end of the line above. Wish list needs it, and prints nothing without it: put the link here." />
           </>
         );
       case "photos":

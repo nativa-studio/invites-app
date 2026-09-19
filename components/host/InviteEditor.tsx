@@ -18,11 +18,21 @@ import { Choice } from "./fields";
 //
 // Editing by pointing beats a tab of forty fields because the question answers itself: you do not
 // have to know that "what to bring" is the line that reads Wear, you tap the line that reads Wear.
+//
+// The same frame has a second setting: as a guest. Pick mode swallows every tap, which is right
+// while you are editing and wrong the moment you want to know what the thing you have built
+// actually does. As a guest nothing is tappable for editing, the envelope opens the way theirs
+// does, and the reply is the guest's own form: press yes, answer the questions, read the thank
+// you. Only the saving is held back, because a host is not a guest on their own list.
 export function InviteEditor({ e }: { e: EventRow }) {
   const [open, setOpen] = useState<Section | null>(null);
   const [version, setVersion] = useState(0);
+  const [asGuest, setAsGuest] = useState(false);
   const router = useRouter();
-  const src = `/app/preview/${e.id}?pick=1&v=${version}`;
+  const src = asGuest
+    ? `/app/preview/${e.id}?as=guest&v=${version}`
+    : `/app/preview/${e.id}?pick=1&v=${version}`;
+  const full = asGuest ? `/app/preview/${e.id}?full=1&as=guest` : `/app/preview/${e.id}?full=1`;
 
   useEffect(() => {
     function onMessage(ev: MessageEvent) {
@@ -43,12 +53,24 @@ export function InviteEditor({ e }: { e: EventRow }) {
 
   return (
     <>
-      <p className="hint">Tap any part of the invite to change it.</p>
+      {/* Two ways to look at the same page, side by side, because the difference between them is
+          the difference between changing the invite and finding out what it does. Switching
+          remounts the frame, which is what makes the envelope open again on the way in. */}
+      <div className="modes" role="group" aria-label={copy.host.modeLabel}>
+        <button type="button" className={`mode ${asGuest ? "" : "on"}`} aria-pressed={!asGuest} onClick={() => setAsGuest(false)}>
+          {copy.host.modeEdit}
+        </button>
+        <button type="button" className={`mode ${asGuest ? "on" : ""}`} aria-pressed={asGuest} onClick={() => setAsGuest(true)}>
+          {copy.host.modeGuest}
+        </button>
+      </div>
+      <p className="hint">{asGuest ? copy.host.modeGuestHint : copy.host.modeEditHint}</p>
       <div className="screen phone">
         <iframe key={src} src={src} title="Your invite" />
       </div>
       <div className="actions">
-        <a className="btn small" href={`/app/preview/${e.id}?full=1`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
+        <a className="btn small" href={full} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
+        {asGuest && <button type="button" className="btn small" onClick={() => setVersion((v) => v + 1)}>{copy.host.modeAgain}</button>}
       </div>
       {/* Tapping the invite reaches every part that is on it, and none of the parts that are not.
           This list reaches all of them, and is also the only place a part can be moved, since

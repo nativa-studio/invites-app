@@ -12,7 +12,7 @@ export function ThanksCard({
   host: string;
   dated: boolean;
   googleLink: string | null;
-  icsLink: string;
+  icsLink: string | null;
   onChange: () => void;
 }) {
   return (
@@ -23,7 +23,7 @@ export function ThanksCard({
         <div className="cal">
           <div className="label sky">{copy.thanks.addToCalendar}</div>
           {googleLink && <a className="pbtn small" href={googleLink} target="_blank" rel="noreferrer">{copy.thanks.google}</a>}
-          <a className="pbtn small" href={icsLink}>{copy.thanks.apple}</a>
+          {icsLink && <a className="pbtn small" href={icsLink}>{copy.thanks.apple}</a>}
         </div>
       )}
       <button type="button" className="pbtn small" onClick={onChange}>{copy.rsvp.change}</button>

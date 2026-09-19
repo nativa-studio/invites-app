@@ -7,20 +7,33 @@ import type { PublicEvent } from "@/lib/db/types";
 // third from its own version with icons attached. Adding a line meant remembering all three.
 // Each line now carries what kind of thing it is, and a layout decides whether to draw a picture
 // beside it.
-export const NOTE_KINDS = ["bring", "serve", "plate", "gifts", "photos", "other"] as const;
+export const NOTE_KINDS = ["siblings", "bring", "serve", "plate", "gifts", "photos", "other"] as const;
 export type NoteKind = (typeof NOTE_KINDS)[number];
 export type Note = { kind: NoteKind; text: string };
 
 export function goodToKnow(e: PublicEvent): Note[] {
   const lines: Note[] = [];
-  // What to bring or wear comes first: it is the one line a guest has to act on before they leave
+  // Whether the other children can come is the first thing a parent works out, before what to
+  // pack and long before what to buy: a no means arranging somebody to have them, and the answer
+  // used to be nowhere on the invite at all although the event has carried the switch since the
+  // first migration. It only ever says yes. A silent invite is not a no, it is a question the
+  // parent has to ask, which is the thing this line exists to save them.
+  if (e.siblings_welcome) lines.push({ kind: "siblings", text: copy.lines.siblings });
+  // What to bring or wear comes next: it is the one line a guest has to act on before they leave
   // the house. It used to sit on the details card, next to when and where, which is the moment for
   // deciding whether to come rather than the moment for getting ready.
   if (e.what_to_bring) lines.push({ kind: "bring", text: e.what_to_bring });
   if (e.serve_text) lines.push({ kind: "serve", text: e.serve_text });
   if (e.plate_enabled && e.plate_host_note) lines.push({ kind: "plate", text: e.plate_host_note });
+  // Gifts: every stance except quiet says something, and quiet is the point of having a stance
+  // called quiet. Books and the wish list used to be offered in the editor and print nothing at
+  // all, so a host picking one got silence and no way to tell it apart from a bug. A wish list
+  // with no link is still silence, because the line would be an announcement with nothing behind
+  // it, and the editor says so under the box.
   if (e.gift_stance === "none") lines.push({ kind: "gifts", text: copy.lines.giftsNone });
   if (e.gift_stance === "optional") lines.push({ kind: "gifts", text: e.gift_note ? `${copy.lines.giftsOptional} ${e.gift_note}` : copy.lines.giftsOptional });
+  if (e.gift_stance === "books") lines.push({ kind: "gifts", text: e.gift_note ? `${copy.lines.giftsBooks} ${e.gift_note}` : copy.lines.giftsBooks });
+  if (e.gift_stance === "wishlist" && e.gift_note) lines.push({ kind: "gifts", text: `${copy.lines.giftsWishlist} ${e.gift_note}` });
   if (e.photo_sharing === "kids_off_social") lines.push({ kind: "photos", text: copy.lines.photosKidsOff });
   if (e.photo_sharing === "ask") lines.push({ kind: "photos", text: copy.lines.photosAsk });
   if (e.photo_sharing === "share") lines.push({ kind: "photos", text: copy.lines.photosShare });
@@ -29,6 +42,7 @@ export function goodToKnow(e: PublicEvent): Note[] {
 }
 
 export const NOTE_NAMES: Record<NoteKind, string> = {
+  siblings: "Brothers and sisters",
   bring: "What to bring or wear",
   serve: "What you'll serve",
   plate: "Bring a plate",
