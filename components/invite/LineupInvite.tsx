@@ -4,7 +4,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { orderedNotes } from "@/lib/good-to-know";
 import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
-import { askLine, askPhoneText, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
+import { askLine, askPhoneSuffix, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
 import { bandFor, mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
@@ -118,7 +118,7 @@ export function LineupInvite({
                 <Bubble size={44} />
                 <div className="n">{copy.sections.askHeading}</div>
                 {askSms(e)
-                  ? <a className="b" href={askSms(e)!}>{askLine(e)}{askPhoneText(e) ? ` ${askPhoneText(e)}` : ""}</a>
+                  ? <a className="b" href={askSms(e)!}>{askLine(e)}{askPhoneSuffix(e) ? ` ${askPhoneSuffix(e)}` : ""}</a>
                   : <div className="b">{askLine(e)}</div>}
               </div>
               {photoLine(e) && (

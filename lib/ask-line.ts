@@ -39,10 +39,17 @@ export function askSms(e: Pick<PublicEvent, "ask_phone" | "host_phone" | "ask_na
   return `sms:${normalisePhone(phone)}?&body=${encodeURIComponent(copy.sections.askSmsBody(e.title))}`;
 }
 
-/** The number as it is written, in threes. */
-export function askPhoneText(e: Pick<PublicEvent, "ask_phone" | "host_phone">): string {
+// The number to print after the line, or nothing when the line already has it.
+//
+// "What the line says" replaces the whole line, and a host filling that box in before there was a
+// number box wrote the number into it: "Text Marcia 0403 692 420". The block then printed its own
+// number after that and the invite read "Text Marcia 0403 692 420 0403 692 420". Comparing digits
+// rather than characters, because the two are almost never spaced the same way.
+export function askPhoneSuffix(e: Pick<PublicEvent, "ask_phone" | "host_phone" | "ask_note" | "ask_name" | "host_line">): string {
   const phone = askPhone(e);
-  return phone ? formatMobile(phone) : "";
+  if (!phone) return "";
+  const digits = (v: string) => v.replace(/\D/g, "");
+  return digits(askLine(e)).includes(digits(phone)) ? "" : formatMobile(phone);
 }
 
 // The four words beside Questions at the end: what a guest holding a camera needs reminding of.
