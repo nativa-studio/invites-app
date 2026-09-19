@@ -6,7 +6,7 @@ import { INVITE_PARTS, orderedParts, PART_NAMES, PART_SWITCH, type InvitePart } 
 import { setSectionOrder, setSectionShown } from "@/app/app/events/[id]/actions";
 import { Reorder } from "./Reorder";
 
-// What the invite is made of, in the order it comes in.
+// The invite's sections, in the order they come in.
 //
 // This is the other half of editing by pointing. Tapping the invite changes what a part says;
 // this changes whether it is there at all and where it sits, which are the two things you cannot
