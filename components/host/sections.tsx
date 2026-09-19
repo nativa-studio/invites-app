@@ -1,6 +1,7 @@
 import type { EventRow } from "@/lib/db/types";
 import { Choice, Field, Switch } from "@/components/host/fields";
 import { askLine, signoffMessage } from "@/lib/ask-line";
+import { KnowOrder } from "@/components/host/KnowOrder";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
 // data-section names the invite carries, so tapping a card on the preview finds its entry here.
@@ -76,6 +77,7 @@ export const SECTIONS: Section[] = [
         <Choice id="parents_mode" label="Parents" value={e.parents_mode} options={[["stay", "Parents and family welcome to stay"], ["drop_off", "Drop-off party"], ["either", "Either, say nothing"]]} />
         <Switch id="siblings_welcome" label="Little brothers and sisters welcome" value={e.siblings_welcome} />
         <Choice id="photo_sharing" label="Photos" value={e.photo_sharing} options={[["none", "Say nothing"], ["kids_off_social", "Please keep photos of the kids off social media"], ["ask", "Please ask before posting anyone's photos"], ["share", "Share away"]]} />
+        <KnowOrder e={e} />
         <Field id="plate_host_note" label="Bring a plate wording" value={e.plate_host_note} hint="Only appears when bring a plate is switched on." />
         <Field id="good_to_know" label="Anything else" value={e.good_to_know} rows={2} />
       </>

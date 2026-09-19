@@ -169,6 +169,8 @@ export const copy = {
     groupsNone: "No group",
     groupsNoneHint: ", added before you started using groups or through the plain link",
     change: "Change",
+    knowOrderHeading: "The order they come in",
+    knowOrderHint: "Drag a line by its handle, or focus one and use the arrow keys.",
     sendInvite: "The invite",
     sendReminder: "A reminder",
     messagesHeading: "Messages",

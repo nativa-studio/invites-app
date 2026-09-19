@@ -27,6 +27,12 @@ export function Camera({ size = 48 }: P) {
 export function Kids({ size = 48 }: P) {
   return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><circle cx="22" cy="18" r="8" fill={S.yel} {...kl} /><circle cx="44" cy="24" r="6" fill={S.crm} {...kl} /><path d="M8 56v-8a14 14 0 0 1 28 0v8z" fill={S.red} {...kl} /><path d="M36 56v-5a9 9 0 0 1 18 0v5z" fill={S.fill} {...kl} /></svg>);
 }
+export function Sun({ size = 48 }: P) {
+  return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><g stroke={S.navy} strokeWidth="4" strokeLinecap="round"><path d="M32 4v8M32 52v8M4 32h8M52 32h8M12 12l6 6M46 46l6 6M52 12l-6 6M18 46l-6 6" /></g><circle cx="32" cy="32" r="14" fill={S.yel} {...kl} /></svg>);
+}
+export function Shower({ size = 48 }: P) {
+  return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M10 8h14a8 8 0 0 1 8 8v2" fill="none" stroke={S.navy} strokeWidth="4" strokeLinecap="round" /><path d="M14 34a18 18 0 0 1 36 0z" fill={S.fill} {...kl} /><g stroke={S.fill} strokeWidth="4" strokeLinecap="round"><path d="M22 42v6M32 42v10M42 42v6M27 54v4M37 56v2" /></g></svg>);
+}
 export function Towel({ size = 48 }: P) {
   return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><rect x="14" y="10" width="36" height="44" rx="3" fill={S.fill} {...kl} /><rect x="14" y="22" width="36" height="6" fill="#fff" /><rect x="14" y="36" width="36" height="6" fill="#fff" /></svg>);
 }

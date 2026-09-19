@@ -4,8 +4,8 @@ import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
 import { askLine, signoffMessage } from "@/lib/ask-line";
-import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Kids, Pin, Plate, Cap, Cake, Towel } from "@/components/art/icons";
-import { goodToKnow, type NoteKind } from "@/lib/good-to-know";
+import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Kids, Pin, Plate, Cap, Cake, Shower, Sun, Towel } from "@/components/art/icons";
+import { orderedNotes, type NoteKind } from "@/lib/good-to-know";
 
 export function mapsLink(e: PublicEvent): string | null {
   const q = [e.venue, e.address].filter(Boolean).join(", ");
@@ -97,20 +97,27 @@ export function DayCard({ e }: { e: PublicEvent }) {
   );
 }
 
-// One picture per kind of line. Serving gets a cake when the wording mentions one, which is the
-// only place the text itself decides.
+// One picture per kind of line, and for three of them the wording decides which one.
+//
+// A line that says "come pool ready and sun smart" is about the sun, not about a towel, and the
+// host has already told us so in their own words. Same reasoning as the cake, which was here
+// first: read what they wrote rather than make them pick from a list of pictures.
 function noteIcon(kind: NoteKind, text: string): React.ReactNode {
-  if (kind === "bring") return <Towel />;
+  if (kind === "bring") return /sun|hat|sunscreen|burn|shade/i.test(text) ? <Sun /> : <Towel />;
   if (kind === "serve") return /cake/i.test(text) ? <Cake /> : <Plate />;
   if (kind === "plate") return <Plate />;
   if (kind === "parents") return <Kids />;
   if (kind === "gifts") return <Gift />;
   if (kind === "photos") return <Camera />;
+  // Anything else the host has written. The speech bubble is the fallback, but a note about
+  // showers gets a shower: it is the commonest thing to end up in this box after a pool party,
+  // and a speech bubble on it says nothing at all.
+  if (/shower/i.test(text)) return <Shower />;
   return <Bubble />;
 }
 
 export function KnowCard({ e }: { e: PublicEvent }) {
-  const lines = goodToKnow(e);
+  const lines = orderedNotes(e);
   if (!lines.length) return null;
   return (
     <div className="pcard white tilt-r" data-section="know">

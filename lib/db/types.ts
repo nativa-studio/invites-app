@@ -69,6 +69,9 @@ export type PublicEvent = {
   // and an absent show_signoff means on, the same way the other switches read.
   signoff_note?: string | null;
   show_signoff?: boolean | null;
+  // The order the good to know lines are in. Optional: a database without migration 0009 does
+  // not send it, and an empty list means the default order.
+  know_order?: string[] | null;
   status: "draft" | "live" | "thanks" | "archived";
   /** Which parts of the invite the host wants shown. A section with nothing in it hides anyway. */
   show_details: boolean;
