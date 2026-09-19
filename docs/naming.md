@@ -137,3 +137,68 @@ Sprig: https://sprig.com/
 Muster: https://www.getapp.com.au/software/128931/muster
 Trestle uses: https://www.crunchbase.com/organization/trestle-54d3
 Arvo, ruled out before the shortlist, already an events discovery app: https://apps.apple.com/gb/app/arvo/id6780616378
+
+## The domain: where to buy, and which endings
+
+Researched 19 September 2026. Prices are indicative, in AUD, and worth re-checking at the time.
+
+### The rule that catches people
+
+`.com.au` and `.net.au` are not open registrations. auDA's licensing rules require two things at
+once:
+
+1. **Australian presence.** A current ABN, ACN or ARBN, or an exact-match Australian trade mark.
+   The Nativa Studio ABN covers this. Lose the ABN and the licence is suspended.
+2. **A match or a synonym.** The domain must be identical to words in the registrant's legal name,
+   business name or Australian trade mark, or a synonym for a good, service, event, activity or
+   premises the registrant deals with.
+
+"Bunting" is not part of "Nativa Studio", so the match does not come for free. The clean fix is to
+register **Bunting as a business name with ASIC** under the Nativa Studio ABN before buying the
+`.com.au`. That is a few minutes online and it also strengthens any later trade mark application.
+A `.app` has none of these requirements.
+
+### Which endings
+
+| Ending | For | Against |
+| --- | --- | --- |
+| `.app` | HTTPS is mandatory across the whole TLD (Google Registry preloaded `.app` into the browser HSTS list, and it cannot be removed), so the link can never silently downgrade. Reads modern, short, no eligibility paperwork. Vercel issues the certificate automatically, so the requirement costs nothing. | Less familiar to a guest over 50 than `.com.au`. Needs testing that phones auto-link it in a text. |
+| `.com.au` | The most trusted ending for an Australian audience, which matters when the link arrives from a number rather than from a brand. Signals an Australian business. | Needs the ABN and the match or synonym above. Longer. Around $20 to $25 a year at renewal. |
+| `.au` | Shortest possible. | Same eligibility rules as `.com.au`, and still the least familiar of the three. Defensive hold only. |
+
+### Where to buy
+
+| Registrar | For | Against |
+| --- | --- | --- |
+| VentraIP | Australia's largest independent auDA accredited registrar. Bills in AUD, Melbourne support, and staff who actually know the auDA rules, which is the whole reason to use them for the `.au` endings. Renewal around $22.95, first year around $9.95. | Does not sell every generic ending. Australian endings are the reason to be here. |
+| Cloudflare Registrar | Sells at cost with no markup and no renewal step-up, which over ten years is the cheapest path. Over 430 endings including `.app`. No upsell screens at all. | Requires the domain's DNS to sit on Cloudflare, which is one more system to learn. Australian endings do not appear on their supported list, so treat `.com.au` as unavailable there until checked. |
+| Vercel | The site is already on Vercel, so buying the domain there makes the connection one step with no DNS records to copy across. Fewest moving parts. | A smaller list of endings, and no Australian endings. Also ties the domain to the host, which is worth avoiding for the name the business depends on. |
+| Crazy Domains | Large, well known, cheap introductory pricing. | Aggressive upselling and a renewal step-up to around $24.50. More care needed at checkout than the others. |
+| GoDaddy AU | auDA accredited, large, familiar. Renewal around $23.95. | Heavy upselling throughout checkout. |
+
+### The plan
+
+1. Register **Bunting** as a business name with ASIC under the Nativa Studio ABN, so the `.com.au`
+   match is clean and unarguable.
+2. Buy **bunting.com.au at VentraIP**. They know the rules and they bill in AUD.
+3. Buy **bunting.app** at Cloudflare Registrar for at-cost renewals, or at Vercel if fewer moving
+   parts matters more than price.
+4. Point the product at one of them and 301 the other to it. Do not run the app on two domains:
+   every link already sent keeps working only if the old domain redirects forever.
+5. Skip `bunting.au` unless it is cheap enough to hold defensively.
+
+### Before committing, a one-minute test
+
+The link's whole job is to be tapped in a text message. Send yourself two texts, one with
+`bunting.app/i/abc` and one with `bunting.com.au/i/abc`, on both an iPhone and an Android. Check
+that each one auto-links and is tappable. Whichever ending the phones treat better is the one the
+product should use, whatever this table says. Write the result here.
+
+### Sources
+
+.com.au eligibility: https://www.auda.org.au/au-domain-names/au-rules-and-policies/au-domain-administration-rules-licensing-2/
+Rule change explained: https://www.minterellison.com/articles/the-new-au-domain-licensing-rules-what-has-changed
+.app and HSTS: https://en.wikipedia.org/wiki/.app_(top-level_domain) and https://hstspreload.org/
+VentraIP .com.au: https://ventraip.com.au/domain-names/extensions/com-au/
+Registrar pricing comparison: https://comkeyconsulting.com.au/best-domain-name-registrar-australia/
+Cloudflare supported endings: https://developers.cloudflare.com/registrar/top-level-domains/
