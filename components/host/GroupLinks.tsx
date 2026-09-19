@@ -3,6 +3,7 @@ import { useState } from "react";
 import { copy } from "@/lib/copy";
 import { groupSlug } from "@/lib/groups";
 import { CopyButton } from "./CopyButton";
+import { groupInviteText, type TemplateEvent } from "@/lib/messages";
 
 // A link per group, made by naming the group.
 //
@@ -12,7 +13,12 @@ import { CopyButton } from "./CopyButton";
 // host with no guests saw an empty box telling them to come back later.
 //
 // Nothing is stored. The group travels in the link, so naming one is enough to have it.
-export function GroupLinks({ base, inUse }: { base: string; inUse: string[] }) {
+//
+// Two ways to take a link away: the link on its own, for a poster or a QR code, and the whole
+// message with the link inside it, for pasting into the chat the group link exists for. The
+// second is what a host wants nine times out of ten, and it used to be the one they could not
+// have without typing the words out again.
+export function GroupLinks({ base, inUse, event }: { base: string; inUse: string[]; event: TemplateEvent }) {
   const [name, setName] = useState("");
   const slug = groupSlug(name);
   const link = slug ? `${base}/${slug}` : "";
@@ -38,7 +44,10 @@ export function GroupLinks({ base, inUse }: { base: string; inUse: string[] }) {
         <div className="grouplink">
           <b>{name.trim()}</b>
           <code>{link}</code>
-          <CopyButton text={link} label={copy.host.copy} />
+          <div className="actions">
+            <CopyButton text={groupInviteText(event, link)} label={copy.host.copyMessage} what="message" />
+            <CopyButton text={link} label={copy.host.copy} />
+          </div>
         </div>
       ) : (
         <p className="hint">{copy.host.groupLinkNameBlank}</p>
@@ -52,7 +61,10 @@ export function GroupLinks({ base, inUse }: { base: string; inUse: string[] }) {
               <div className="grouplink" key={g}>
                 <b>{g}</b>
                 <code>{`${base}/${groupSlug(g)}`}</code>
-                <CopyButton text={`${base}/${groupSlug(g)}`} label={copy.host.copy} />
+                <div className="actions">
+                  <CopyButton text={groupInviteText(event, `${base}/${groupSlug(g)}`)} label={copy.host.copyMessage} what="message" />
+                  <CopyButton text={`${base}/${groupSlug(g)}`} label={copy.host.copy} />
+                </div>
               </div>
             ))}
           </div>

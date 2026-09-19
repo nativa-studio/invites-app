@@ -43,6 +43,15 @@ export function inviteText(e: TemplateEvent, g: TemplateGuest, link: string): st
   return fillTemplate(e.text_template?.trim() || copy.templates.text, e, g, link);
 }
 
+// The same invite wording for a group link, which is not addressed to anybody.
+//
+// A group link goes into a chat that already has people in it, so {name} has nobody to resolve
+// to. It greets the room instead. Everything else is the host's own template, so the group link
+// and the personal ones say the same thing.
+export function groupInviteText(e: TemplateEvent, link: string): string {
+  return fillTemplate(e.text_template?.trim() || copy.templates.text, e, { name: copy.templates.groupGreeting }, link);
+}
+
 export function reminderText(e: TemplateEvent, g: TemplateGuest, link: string): string {
   return fillTemplate(e.reminder_template?.trim() || copy.templates.reminder, e, g, link);
 }

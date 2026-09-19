@@ -249,6 +249,8 @@ export const copy = {
     text: "Hi {name}! You're invited to {title}{date}. Everything is here, and you can reply with one tap: {link}",
     reminder: "Hi {name}, just checking you saw this one. {title}{date}. Can you make it? {link}",
     seeYouSoon: "See you tomorrow! {address}. Everything you need: {link}",
+    /* Where {name} goes on a group link, which is addressed to a chat rather than to a person. */
+    groupGreeting: "everyone",
   },
   closed: {
     title: "This link is closed",
