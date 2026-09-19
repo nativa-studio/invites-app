@@ -17,7 +17,7 @@ export function ThanksCard({
 }) {
   return (
     <div className="pcard tilt-l" aria-live="polite">
-      <div className="rsvp-h"><Bolt /> {yes ? copy.thanks.yesTitle : copy.thanks.noTitle} <Bolt /></div>
+      <div className="rsvp-h"><Bolt size={24} /> {yes ? copy.thanks.yesTitle : copy.thanks.noTitle} <Bolt size={24} /></div>
       <div className="para">{yes ? copy.thanks.yesBody(count, host) : copy.thanks.noBody(host)}</div>
       {yes && dated && (
         <div className="cal">

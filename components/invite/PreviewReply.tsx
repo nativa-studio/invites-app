@@ -12,7 +12,7 @@ import { Bolt } from "@/components/art/icons";
 export function PreviewReply({ e, who }: { e: PublicEvent; who?: string }) {
   return (
     <div className="pcard tilt-l reply">
-      <div className="rsvp-h"><Bolt /> {copy.rsvp.heading} <Bolt /></div>
+      <div className="rsvp-h"><Bolt size={24} /> {copy.rsvp.heading} <Bolt size={24} /></div>
       <div className="rsvp-q">Can <u>{who ?? "your guest"}</u> make it?</div>
       {e.rsvp_by && <div className="para" style={{ fontSize: 15 }}>{copy.rsvp.replyBy(formatShortDate(e.rsvp_by))}</div>}
       <span className="pbtn primary" aria-hidden="true">{e.yes_label ?? copy.rsvp.yes}</span>
