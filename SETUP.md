@@ -121,10 +121,29 @@ The site answers on `invites-app-xi.vercel.app`. Pointing your own name at it is
 
 ### 1. Get the name
 
-Two routes, and the cheaper one to run depends on which ending you want.
+Three endings are worth thinking about, and the rules behind them are not the same.
 
-- **A `.com`, `.app` or `.party`**: buy it inside Vercel. Open the project, **Settings**, **Domains**, type the name you want, and if it is free Vercel offers to sell it to you. Vercel is then your registrar as well as your host, so it writes the DNS itself and step 2 does not happen at all. This is the least that can go wrong.
-- **A `.com.au` or `.au`**: Vercel does not sell these, and it cannot, because they are country domains that need an Australian business behind them. Buy it from an Australian registrar (VentraIP, Crazy Domains, Netregistry) using the Nativa Studio ABN, then do step 2.
+- **`.au` on its own, like `bunting.au`. This is the recommendation.** It is the shortest, it reads
+  as Australian, and it is the only Australian ending with no rule about what the name has to be.
+  auDA asks one thing, an Australian presence, and an ABN satisfies it, as does being an Australian
+  citizen or permanent resident. Nothing has to match a business name or a trade mark. Buy it from
+  an Australian registrar (VentraIP, Crazy Domains, Netregistry), then do step 2.
+- **`.com.au`, like `bunting.com.au`.** More familiar, and still the ending an Australian business
+  is expected to have. The catch is eligibility. A `.com.au` must be a match or acronym of your
+  registered name, or a match of your Australian trade mark, or, for now, a synonym of a good or
+  service you provide. That last path is the one "Bunting is a thing Nativa Studio sells" would
+  lean on, and auDA's board approved removing it in principle in August 2026. Eligibility is
+  checked at renewal as well as at registration, so a name held on that basis may not survive its
+  first renewal. If you want `.com.au`, register **Bunting** as a business name with ASIC under the
+  Nativa Studio ABN first, about $44 for three years. The domain is then a match of your business
+  name, and the rule change does not touch it.
+- **`.com`, `.app` or `.party`**: buy it inside Vercel. Open the project, **Settings**, **Domains**,
+  type the name you want, and if it is free Vercel offers to sell it to you. Vercel is then your
+  registrar as well as your host, so it writes the DNS itself and step 2 does not happen at all.
+  This is the least that can go wrong, and the trade is that nothing in the address says Australia.
+
+Vercel does not sell `.au` or `.com.au`. Any domain can be pointed at the project whoever sold it
+to you, which is what step 2 is for.
 
 ### 2. Point it at Vercel (only if you bought it elsewhere)
 
@@ -132,29 +151,39 @@ In Vercel: project, **Settings**, **Domains**, **Add**, type the domain. Vercel 
 
 There will be two:
 
-- the bare name (`bunting.com.au`) as an **A record**, pointing at the address on the card
+- the bare name (`bunting.au`) as an **A record**, pointing at the address on the card
 - `www` as a **CNAME**, pointing at the value on the card
 
 Add both in your registrar's DNS screen. Then leave it. It is usually live within the hour, though the official answer is up to 48.
 
-Add both `bunting.com.au` and `www.bunting.com.au` to the Vercel project, and set the `www` one to redirect to the bare one, so people who type either land in the same place.
+Add both `bunting.au` and `www.bunting.au` to the Vercel project, and set the `www` one to redirect to the bare one, so people who type either land in the same place.
 
 You do not have to do anything about the certificate. Vercel gets one free from Let's Encrypt as soon as the records resolve, renews it by itself, and sends every `http` visitor to `https`.
 
 ### 3. Tell the app its own name
 
-Still in Vercel: **Settings**, **Environment Variables**. Set `NEXT_PUBLIC_SITE_URL` to `https://bunting.com.au`, with no slash on the end, then redeploy.
+Still in Vercel: **Settings**, **Environment Variables**. Set `NEXT_PUBLIC_SITE_URL` to `https://bunting.au`, with no slash on the end, then redeploy.
 
 Skipping this does not break the site, but every invite link the app writes into a text message would keep saying `invites-app-xi.vercel.app`, because that is the address the request came in on. The whole point is the link a guest reads.
 
 ### 4. Tell Supabase
 
-In the Supabase dashboard: **Authentication**, **URL Configuration**. Set **Site URL** to `https://bunting.com.au` and add `https://bunting.com.au/auth/callback` to the redirect list. Leave the old entries there until you are sure, they cost nothing.
+In the Supabase dashboard: **Authentication**, **URL Configuration**. Set **Site URL** to `https://bunting.au` and add `https://bunting.au/auth/callback` to the redirect list. Leave the old entries there until you are sure, they cost nothing.
 
 Google needs nothing. Google sends people back to Supabase, not to us, and that address is not changing.
 
 ### Worth knowing before you pick a name
 
-Guests read it out of a text message, so it is doing the work a business card does. Short, spellable down the phone, and it wants to sit comfortably in `bunting.com.au/i/k3m9x2` rather than fight it.
+Guests read it out of a text message, so it is doing the work a business card does. Short,
+spellable down the phone, and it wants to sit comfortably in `bunting.au/i/k3m9xq7wp2` rather than
+fight it.
 
-The links already sent out keep working. Vercel keeps answering on the old address, so nothing breaks the moment you switch.
+Length is not only taste. A text message holds 160 characters before the phone splits it in two.
+The default invite wording, with a short name and a short title, measures 153 characters on
+`invites-app-xi.vercel.app` and 138 on `bunting.au`. The address we are on today is seven
+characters away from turning every invite into two messages. A short one buys back about fifteen.
+
+The links already sent out keep working. Vercel keeps answering on the old address, so nothing
+breaks the moment you switch, and that holds for every address the project has ever had as long as
+you leave it attached. It is still the reason to pick once rather than move twice: those links sit
+in guests' messages for months.
