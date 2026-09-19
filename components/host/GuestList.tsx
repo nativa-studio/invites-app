@@ -8,6 +8,7 @@ import { markSent, setGuestGroup } from "@/app/app/events/[id]/actions";
 import { CopyButton } from "./CopyButton";
 import { Sheet } from "./Sheet";
 import { EditGuest } from "./EditGuest";
+import { SetAnswer } from "./SetAnswer";
 import { useHasShare } from "./capabilities";
 
 type Props = { eventId: string; guests: GuestRow[]; event: TemplateEvent; site: string };
@@ -22,6 +23,8 @@ export function GuestList({ eventId, guests, event, site }: Props) {
   const [naming, setNaming] = useState<GuestRow | null>(null);
   // The guest open in the edit sheet.
   const [editing, setEditing] = useState<GuestRow | null>(null);
+  // The guest whose answer the host is setting.
+  const [answering, setAnswering] = useState<GuestRow | null>(null);
   // Which message the open panel will send. Guessed from where the guest is up to, then the host
   // decides: the guess was the whole of it before, and it was unsayable and invisible.
   const [mode, setMode] = useState<"invite" | "remind">("invite");
@@ -131,7 +134,9 @@ export function GuestList({ eventId, guests, event, site }: Props) {
           const trail = [
             g.sent_at ? `${copy.host.trail.sent} ${formatDateTime(g.sent_at)}` : g.source === "group_link" ? "came in via the group link" : copy.host.trail.added,
             g.opened_at ? `${copy.host.trail.opened} ${formatDateTime(g.opened_at)}` : null,
-            g.replied_at ? `${copy.host.trail.replied} ${formatDateTime(g.replied_at)}` : null,
+            g.replied_at
+              ? `${g.answered_by_host ? (g.status === "no" ? copy.host.trail.markedNo : copy.host.trail.markedYes) : copy.host.trail.replied} ${formatDateTime(g.replied_at)}`
+              : null,
             g.reminded_at ? `${copy.host.trail.reminded} ${formatDateTime(g.reminded_at)}` : null,
           ].filter(Boolean).join(" · ");
           // Only the open panel's switch decides what goes out. A guest with nothing sent yet has
@@ -154,9 +159,17 @@ export function GuestList({ eventId, guests, event, site }: Props) {
                 <span className="name">{g.name}{g.contact_name && g.contact_name !== g.name ? <span className="muted"> · {g.contact_name}</span> : null}</span>
                 {/* "No reply" on a guest who has never been sent their link reads as their fault.
                     Until it goes out, the thing that has not happened is the sending. */}
-                <span className={`pill ${g.status === "pending" && !g.sent_at ? "unsent" : g.status}`}>
+                {/* The state is also the way to change it. A host who can see "No reply" on a guest
+                    who told them yes at the school gate should be able to tap the thing that is
+                    wrong, rather than hunt for where that lives. */}
+                <button
+                  type="button"
+                  className={`pill as-button ${g.status === "pending" && !g.sent_at ? "unsent" : g.status}`}
+                  onClick={() => setAnswering(g)}
+                  aria-label={`Where ${g.name} is up to. Change it.`}
+                >
                   {g.status === "yes" ? "Yes" : g.status === "no" ? "No" : g.sent_at ? copy.host.noReply : copy.host.notSent}
-                </span>
+                </button>
               </div>
               {detail && <p style={{ fontSize: 14 }}>{detail}</p>}
               <p className="trail">{trail}{g.phone ? ` · ${g.phone}` : " · no mobile, pick them in Messages"}</p>
@@ -217,6 +230,15 @@ export function GuestList({ eventId, guests, event, site }: Props) {
           );
         })}
       </div>
+
+      {answering && (
+        <SetAnswer
+          key={answering.id}
+          eventId={eventId}
+          guest={guests.find((g) => g.id === answering.id) ?? answering}
+          onClose={() => setAnswering(null)}
+        />
+      )}
 
       {/* Keyed by guest, so opening one never holds the last one's typing. */}
       {editing && (

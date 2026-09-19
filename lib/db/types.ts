@@ -142,6 +142,9 @@ export type GuestRow = {
   sent_at: string | null;
   opened_at: string | null;
   replied_at: string | null;
+  /** The host answered for them, rather than the guest replying. Optional because a
+   *  database without migration 0011 does not send it. */
+  answered_by_host?: boolean | null;
   reminded_at: string | null;
   created_at: string;
 };

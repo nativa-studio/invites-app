@@ -49,6 +49,40 @@ export async function addGuest(_prev: AddGuestState, fd: FormData): Promise<AddG
   return { added: name };
 }
 
+// Setting a guest's answer for them, or putting them back to the start.
+//
+// People say yes in the playground, by text, or at the school gate. The host is the only one who
+// will ever put that in, and before this the only way was to open the guest's own link and answer
+// as them, which stamps it as their reply.
+//
+// So it is stamped as the host's. The trail is the one part of this a host has to be able to
+// trust, and a list that says "replied at 11:37" about a reply nobody made is worse than a list
+// that says nothing.
+export type GuestAnswer = "yes" | "no" | "pending" | "unsent";
+
+export async function setGuestAnswer(eventId: string, guestId: string, next: GuestAnswer) {
+  const { supabase } = await hostClient();
+  const now = new Date().toISOString();
+  const patch: Record<string, unknown> =
+    next === "yes" || next === "no"
+      ? { status: next, replied_at: now, answered_by_host: true }
+      // Back to waiting keeps the record of sending. Back to not sent clears the lot, so the guest
+      // reads exactly as they did the moment they were added.
+      : next === "pending"
+        ? { status: "pending", replied_at: null, answered_by_host: false }
+        : { status: "pending", replied_at: null, answered_by_host: false, sent_at: null, sent_by: null, reminded_at: null, opened_at: null };
+
+  let { error } = await supabase.from("guests").update(patch).eq("id", guestId).eq("event_id", eventId);
+  // A database without migration 0011 has no column to stamp. Everything else still lands; the
+  // trail just cannot say who answered.
+  if (error && /answered_by_host/.test(error.message)) {
+    delete patch.answered_by_host;
+    ({ error } = await supabase.from("guests").update(patch).eq("id", guestId).eq("event_id", eventId));
+  }
+  if (error) throw new Error(error.message);
+  revalidateEvent(eventId);
+}
+
 export type EditGuestState = { error?: string; saved?: boolean };
 
 // Everything about a guest a host can change after adding them.
