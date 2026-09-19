@@ -34,7 +34,9 @@ export function Envelope({ cover, children, openLabel, skipAnimation, mascot, bo
         setTimeout(() => {
           setPhase("done");
           window.scrollTo({ top: 0 });
-        }, wait(800));
+          // 900 rather than 800: the slide itself takes 850ms, so the stage used to be pulled
+          // out from under a card that was still moving.
+        }, wait(900));
       }, wait(750));
     }, wait(900));
   }

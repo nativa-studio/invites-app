@@ -5,7 +5,7 @@
 .invite { overflow-x: clip; --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding: 0 16px 56px; }
 .invite .wrap { max-width: 390px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 30px; }
 .invite .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--crm); margin-top: 28px; text-align: center; }
-.pcard { position: relative; width: 100%; max-width: 340px; background: var(--paper); border-radius: 8px; border: 3px solid var(--navy); padding: 24px 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.pcard { box-sizing: border-box; position: relative; width: 100%; max-width: 390px; background: var(--paper); border-radius: 8px; border: 3px solid var(--navy); padding: 24px 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .pcard.white { background: #fff; }
 .pcard.cream { background: var(--crm); }
 .pcard.tilt-l { transform: rotate(-1.2deg); }
@@ -132,14 +132,14 @@
 
    -150 is the most that can be taken. At the top of the rise the card then stands 29px below the
    top of the screen; past about -160 it starts to run off it. Measured. */
-.stage { position: relative; width: 346px; max-width: 100%; height: 500px; margin-top: -150px; }
+.stage { position: relative; width: 100%; max-width: 390px; height: 500px; margin-top: -150px; }
 .env { position: absolute; left: 0; right: 0; top: 180px; height: 200px; }
 .env .back { position: absolute; inset: 0; border-radius: 10px; background-color: #fff; background-image: linear-gradient(90deg, color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--sky) 35%, transparent) 50%, transparent 50%); background-size: 22px 22px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
 .env .back::after { content: ""; position: absolute; inset: 0; border-radius: 10px; box-shadow: inset 0 0 0 3px var(--red); }
 .env .clip { position: absolute; left: -40px; right: -40px; top: -700px; bottom: 6px; overflow: hidden; z-index: 2; }
 /* The card lies on its side while it is in the envelope, because that is the only way a portrait
    card fits a landscape one, and it turns upright as it comes out. */
-.env .card-slot { position: absolute; left: 50%; top: 512px; width: 340px; margin-left: -170px; transform: rotate(-90deg) scale(.50); transform-origin: center center; transition: transform .85s cubic-bezier(.4,0,.2,1), top .85s cubic-bezier(.4,0,.2,1); }
+.env .card-slot { position: absolute; left: 40px; right: 40px; top: 512px; transform: rotate(-90deg) scale(.50); transform-origin: center center; transition: transform .85s cubic-bezier(.4,0,.2,1), top .85s cubic-bezier(.4,0,.2,1); }
 /* The card has to fit the envelope, and the sum is not obvious: the slot turns it a quarter turn
    about its centre and halves it, so the card's HEIGHT becomes its width on screen. At 719 tall
    the cover came to 364 across in a 342 envelope and stuck out 11px each side.
@@ -154,8 +154,8 @@
    box-sizing is spelled out because this stylesheet has no reset: the one in globals.css is the
    host app's and never reaches a guest's page. Without it the 640 was the content box and the
    card came out at 694, padding and border on top. */
-.card-slot .pcard { box-sizing: border-box; height: 640px; }
-.card-slot .pcard .art { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
+.env-root:not(.out) .card-slot .pcard { height: 640px; }
+.env-root:not(.out) .card-slot .pcard .art { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
 
 .env .pocket { position: absolute; inset: 0; z-index: 3; border-radius: 0 0 10px 10px; filter: drop-shadow(0 12px 12px rgba(27,42,74,0.3)); }
 /* Anything printed on the paper is clipped by the paper. Without this the character hangs off the
@@ -189,11 +189,26 @@
 .rise .env .flap { z-index: 1; }
 .rise .env .card-slot { top: 408px; transform: rotate(-90deg) scale(.52); }
 .out .env .clip { overflow: visible; z-index: 7; }
-.out .env .card-slot { top: 300px; transform: rotate(0deg) scale(1); }
+/* Where the card stops is where the page will put it, so the swap at the end has nothing to
+   move. It used to stop at 300, which is 370px above its resting place and far enough up that
+   only the bottom third of the card was still on screen: it rose, turned upright, ran off the
+   top, and then appeared 370px lower the instant the stage was removed. That last leap is the
+   jump, and it was never the animation. It was the handoff.
+
+   670 is measured, not guessed. The clip box starts 700 above the envelope and the stage is
+   pulled up 150, so a card's top on screen is its top value less 580; the suite lands its first
+   card 90 below where the stage began. 670 puts the two within a pixel of each other, which is
+   what the harness reports. Every length in that sum is fixed in this file, so it holds whatever
+   the host writes. */
+.out .env .card-slot { top: 670px; transform: rotate(0deg) scale(1); }
 .out .env .cast, .out .env .back, .out .env .pocket { transform: translateY(120px) scale(.9); opacity: 0; }
 .out .env .flap { opacity: 0; }
 .done .stage { display: none; }
 .suite { display: none; flex-direction: column; align-items: center; gap: 30px; width: 100%; opacity: 0; transition: opacity .5s; }
-.done .suite, .no-envelope .suite { display: flex; opacity: 1; }
+/* No fade on the handoff. The card is already in that exact spot, drawn by the stage, so fading
+   the real one up over half a second only makes the one you were looking at go pale and come
+   back. The fade is still there for a page that never had an envelope. */
+.done .suite { display: flex; opacity: 1; transition: none; }
+.no-envelope .suite { display: flex; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .open .env .flap .front { animation: none; opacity: 0; } .open .env .flap .backface { animation: none; opacity: 1; } }
 
