@@ -1,6 +1,7 @@
 "use client";
 import { useActionState, useState } from "react";
 import { copy } from "@/lib/copy";
+import { buzz } from "@/lib/haptic";
 import { formatShortDate, firstName, hostName } from "@/lib/format";
 import type { PublicEvent, PublicGuest } from "@/lib/db/types";
 import { rsvpAction, type RsvpState } from "@/app/i/[token]/actions";
@@ -68,7 +69,7 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
       {choice !== "" && (
         <>
           {!state.ok && state.error && <div className="err" role="alert">{state.error}</div>}
-          <button type="submit" className="pbtn primary" disabled={pending}>{pending ? "Sending" : copy.questions.send}</button>
+          <button type="submit" className="pbtn primary" disabled={pending} onClick={() => { if (choice === "yes") buzz(); }}>{pending ? "Sending" : copy.questions.send}</button>
           <button type="button" className="pbtn small" onClick={() => setChoice("")}>Back</button>
         </>
       )}

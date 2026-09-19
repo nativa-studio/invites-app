@@ -33,10 +33,13 @@ export function ThanksCard({
   }, [landed]);
 
   return (
-    <div className={`pcard tilt-l${yes && landed ? " cheering" : ""}`} aria-live="polite" ref={card}>
+    <>
       {/* Only on a yes, and only when the answer has just landed. Coming back to an invite you
-          answered last week is not a moment. */}
+          answered last week is not a moment. Outside the card, because the card is tilted and a
+          transformed element is a containing block for anything fixed inside it, which would pin
+          the flags to the card instead of letting them fall down the screen. */}
       {yes && landed && <Celebrate />}
+    <div className={`pcard tilt-l${yes && landed ? " cheering" : ""}`} aria-live="polite" ref={card}>
       <div className="rsvp-h"><Bolt size={24} /> {yes ? copy.thanks.yesTitle : copy.thanks.noTitle} <Bolt size={24} /></div>
       <div className="para">{yes ? copy.thanks.yesBody(count, host) : copy.thanks.noBody(host)}</div>
       {yes && dated && (
@@ -49,5 +52,6 @@ export function ThanksCard({
       {/* The way back, not a third thing to do. See .pbtn.quiet. */}
       <button type="button" className="pbtn small quiet" onClick={onChange}>{copy.rsvp.change}</button>
     </div>
+    </>
   );
 }

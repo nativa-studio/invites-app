@@ -1,6 +1,7 @@
 "use client";
 import { useActionState, useState } from "react";
 import { copy } from "@/lib/copy";
+import { buzz } from "@/lib/haptic";
 import { formatShortDate, hostName } from "@/lib/format";
 import type { PublicEvent } from "@/lib/db/types";
 import { groupRsvpAction, type GroupState } from "@/app/e/[slug]/actions";
@@ -68,7 +69,7 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
             ? <YesQuestions e={e} had={replied ?? undefined} />
             : <NoteQuestion had={replied ?? undefined} placeholder="Have a wonderful day, sorry to miss it" />}
           {!state.ok && state.error && <div className="err" role="alert">{state.error}</div>}
-          <button type="submit" className="pbtn primary" disabled={pending}>{pending ? "Sending" : copy.questions.send}</button>
+          <button type="submit" className="pbtn primary" disabled={pending} onClick={() => { if (choice === "yes") buzz(); }}>{pending ? "Sending" : copy.questions.send}</button>
           <button type="button" className="pbtn small" onClick={() => setChoice("")}>Back</button>
         </>
       )}

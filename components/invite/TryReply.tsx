@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { copy } from "@/lib/copy";
+import { buzz } from "@/lib/haptic";
 import { formatShortDate, hostName } from "@/lib/format";
 import type { PublicEvent } from "@/lib/db/types";
 import { Bolt } from "@/components/art/icons";
@@ -69,7 +70,7 @@ export function TryReply({ e, who, googleLink, icsLink }: {
 
       {choice !== "" && (
         <>
-          <button type="submit" className="pbtn primary">{copy.questions.send}</button>
+          <button type="submit" className="pbtn primary" onClick={() => { if (choice === "yes") buzz(); }}>{copy.questions.send}</button>
           <button type="button" className="pbtn small" onClick={() => setChoice("")}>Back</button>
         </>
       )}
