@@ -1,6 +1,7 @@
 import type { EventRow } from "@/lib/db/types";
 import { Field, Switch } from "@/components/host/fields";
 import { askLine, signoffMessage } from "@/lib/ask-line";
+import { hostName } from "@/lib/format";
 import { KnowEditor, KNOW_FIELDS } from "@/components/host/KnowEditor";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
@@ -72,22 +73,33 @@ export const SECTIONS: Section[] = [
   {
     id: "after",
     title: "Questions",
-    blurb: "The last block on the invite: how to reach you. Leave it empty and it reads \u201cText\u201d and your name from the sign-off. The line is tappable when you have put your mobile in the details.",
+    blurb: "The last block on the invite: who a guest rings when they have a question. Your mobile from Details is on the line and tappable, so nobody has to go looking for it.",
     show: { column: "show_after", label: "Show the questions block" },
-    fields: ["ask_note", "show_after"],
+    fields: ["ask_note", "ask_name", "show_after"],
     render: (e) => (
-      <Field
-        id="ask_note"
-        label="What the last line says"
-        value={e.ask_note}
-        hint={`Empty means \u201c${askLine({ ask_note: null, host_line: e.host_line })}\u201d`}
-      />
+      <>
+        {/* Two boxes, because they were one and it was wrong. Who answers the phone is not always
+            who signs the invite: a sign-off of "With love Gabe, Tommy and Ma" made the last line
+            read "Text Gabe, Tommy and Ma" when the number belongs to one person. */}
+        <Field
+          id="ask_name"
+          label="Who to text"
+          value={e.ask_name}
+          hint={`Empty means \u201c${hostName(e.host_line)}\u201d, the name from your sign-off.`}
+        />
+        <Field
+          id="ask_note"
+          label="What the line says"
+          value={e.ask_note}
+          hint={`Empty means \u201c${askLine({ ask_note: null, ask_name: e.ask_name, host_line: e.host_line })}\u201d. Write your own and it replaces the whole line, so put the name in it yourself.`}
+        />
+      </>
     ),
   },
   {
     id: "signoff",
     title: "The sign-off",
-    blurb: "The last thing on the invite: you, saying you are looking forward to it. The name under it is the From line from Details, so you do not type it twice.",
+    blurb: "The last thing on the invite: you, saying you are looking forward to it. Signed is who the invite is from. Who a guest rings about it is set under Questions, because those are two different people often enough to be worth asking twice.",
     show: { column: "show_signoff", label: "Show the sign-off" },
     fields: ["signoff_note", "host_line", "show_signoff"],
     render: (e) => (

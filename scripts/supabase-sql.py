@@ -59,7 +59,8 @@ select m.name,
     ('0006 section_order', 'section_order'),
     ('0007 ask_note', 'ask_note'),
     ('0008 signoff', 'signoff_note'),
-    ('0009 know_order', 'know_order')
+    ('0009 know_order', 'know_order'),
+    ('0013 ask_name', 'ask_name')
   ) as m(name, col)
 """
 

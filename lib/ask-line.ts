@@ -7,8 +7,16 @@ import type { PublicEvent } from "./db/types";
 // The host's own words when they have written any, otherwise the one built from their sign-off.
 // It lives here rather than in the card because the host side needs it too, to show what an empty
 // box will fall back to, and importing the card would drag the whole invite into that bundle.
-export function askLine(e: Pick<PublicEvent, "ask_note" | "host_line">): string {
-  return e.ask_note?.trim() || copy.sections.askBody(hostName(e.host_line));
+export function askLine(e: Pick<PublicEvent, "ask_note" | "ask_name" | "host_line">): string {
+  return e.ask_note?.trim() || copy.sections.askBody(askName(e));
+}
+
+// Who to text. Their own box first, then the sign-off, which is where this used to come from and
+// is right for most events: the people throwing the party are usually the people to ring about
+// it. It stopped being right the moment the sign-off read "With love Gabe, Tommy and Ma" while
+// the phone belongs to Marcia, and the invite told guests to text Gabe, Tommy and Ma.
+export function askName(e: Pick<PublicEvent, "ask_name" | "host_line">): string {
+  return e.ask_name?.trim() || hostName(e.host_line);
 }
 
 // The four words beside Questions at the end: what a guest holding a camera needs reminding of.
