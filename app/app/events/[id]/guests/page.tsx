@@ -7,9 +7,7 @@ import { AddGuest } from "@/components/host/AddGuest";
 import { GuestList } from "@/components/host/GuestList";
 import { GroupsPanel } from "@/components/host/GroupsPanel";
 import { HeadCount } from "@/components/host/HeadCount";
-import { FoodNote, foodSummary } from "@/components/host/replies";
-import { PlateBoard } from "@/components/host/PlateBoard";
-import { loadPlate } from "@/lib/db/plate";
+import { FoodNote } from "@/components/host/replies";
 import { EditCard, Sum } from "@/components/host/EditCard";
 import { Switch } from "@/components/host/fields";
 
@@ -27,8 +25,6 @@ import { Switch } from "@/components/host/fields";
 export default async function Guests({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [e, list] = await Promise.all([loadEvent(id), loadGuests(id)]);
-  // Only fetched when the host has switched it on, so an event without a plate does no work for it.
-  const plate = e.plate_enabled ? await loadPlate(id) : [];
   const site = await getSiteUrl();
   const groupLink = `${site}/e/${e.slug}`;
   const open = e.group_link_enabled !== false;
@@ -39,14 +35,6 @@ export default async function Guests({ params }: { params: Promise<{ id: string 
       <HeadCount guests={list} splitParty={e.ask_party_mode === "split"} />
       {/* After the numbers, because it is what you do with them rather than what they are. */}
       <FoodNote guests={list} />
-      <PlateBoard
-        eventId={e.id}
-        items={plate}
-        enabled={e.plate_enabled}
-        mode={e.plate_mode}
-        hostNote={e.plate_host_note}
-        allergies={foodSummary(list).counts}
-      />
       <AddGuest eventId={e.id} none={list.length === 0} />
       {/* The switch that closes this link belongs next to the link, not on another screen. */}
       <EditCard

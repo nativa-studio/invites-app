@@ -46,7 +46,7 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
   return (
     <section className="card">
       <div className="card-head">
-        <h2 className="h2">{copy.plate.heading}</h2>
+        <h2 className="h2">{copy.host.potluckList}</h2>
         <button type="button" className="btn small" onClick={() => setOpen(true)}>{copy.host.plateAsk}</button>
       </div>
       <p className="hint">{copy.host.plateBlurb(mode, items.length, unclaimed)}</p>
