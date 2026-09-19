@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { EventRow } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { shareDescription } from "@/lib/share-meta";
+import { cardUrl, shareDescription } from "@/lib/share-meta";
 import { inviteText, reminderText } from "@/lib/messages";
 import type { Section } from "./sections";
 import { MESSAGE_SECTIONS, previewTitle } from "./message-sections";
@@ -24,7 +24,7 @@ export function MessagePreview({ e, site, sample }: { e: EventRow; site: string;
 
   const link = sample ? `${site}/i/${sample}` : `${site}/e/${e.slug}`;
   const guest = { name: copy.host.sampleGuest };
-  const card = `/s/${e.slug}/card.png?v=${encodeURIComponent(e.date ?? "")}`;
+  const card = cardUrl(`/s/${e.slug}/card.png`, e.date);
   // Through the same helper the real pages use, so the card drawn here is the card that lands.
   // These were two copies of one rule and they had drifted.
   const description = shareDescription(e);

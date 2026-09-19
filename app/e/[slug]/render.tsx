@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import "@/app/invite.css";
 import { getEventBySlug } from "@/lib/guest/invite";
 import { getSiteUrl } from "@/lib/site-url";
-import { shareMetadata } from "@/lib/share-meta";
+import { cardUrl, shareMetadata } from "@/lib/share-meta";
 import { copy } from "@/lib/copy";
 import { GroupRsvp } from "@/components/invite/GroupRsvp";
 import { InviteBody, asLayout } from "@/components/invite/InviteBody";
@@ -14,7 +14,7 @@ export async function groupLinkMetadata(slug: string): Promise<Metadata> {
   const e = await getEventBySlug(slug);
   if (!e) return { title: "Invite" };
   const site = await getSiteUrl();
-  const image = `${site}/s/${e.slug}/card.png?v=${encodeURIComponent(e.date ?? "")}`;
+  const image = cardUrl(`${site}/s/${e.slug}/card.png`, e.date);
   return shareMetadata(e, image);
 }
 

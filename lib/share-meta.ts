@@ -19,6 +19,19 @@ export function shareDescription(e: ShareFields): string {
   return (e.share_description ?? "").trim();
 }
 
+// The version on the card's own URL. A chat app caches the picture against that URL, so the only
+// way to replace a preview it has already drawn is to ask for a different one.
+//
+// It used to be the event date on its own, which changes when the party moves and never when the
+// drawing does. So when the stamp and the postmark came off the envelope, every chat that had
+// already shown somebody the stamped one went on showing it. Bump CARD_REV whenever the card is
+// redrawn, and every preview in every chat is fetched again.
+const CARD_REV = 2;
+
+export function cardUrl(path: string, date: string | null | undefined): string {
+  return `${path}?v=${CARD_REV}-${encodeURIComponent(date ?? "")}`;
+}
+
 export function shareMetadata(e: ShareFields, image: string): Metadata {
   const title = shareTitle(e);
   const description = shareDescription(e);

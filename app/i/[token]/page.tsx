@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getInvite, getInviteCard } from "@/lib/guest/invite";
 import { getSiteUrl, inviteLink } from "@/lib/site-url";
-import { shareMetadata } from "@/lib/share-meta";
+import { cardUrl, shareMetadata } from "@/lib/share-meta";
 import { InvitePage } from "@/components/invite/InvitePage";
 import { asLayout } from "@/components/invite/InviteBody";
 
@@ -17,8 +17,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   // The personal card reads through a function that arrived in migration 0003. Until a database
   // carries it, the preview falls back to the event's own card rather than showing nothing.
   const personal = await getInviteCard(token).then((c) => c !== null).catch(() => false);
-  const v = encodeURIComponent(e.date ?? "");
-  const image = personal ? `${site}/s/i/${token}/card.png?v=${v}` : `${site}/s/${e.slug}/card.png?v=${v}`;
+  const image = cardUrl(personal ? `${site}/s/i/${token}/card.png` : `${site}/s/${e.slug}/card.png`, e.date);
   return shareMetadata(e, image);
 }
 
