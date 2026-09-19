@@ -65,18 +65,18 @@ export function InviteEditor({ e }: { e: EventRow }) {
         </button>
       </div>
       <p className="hint">{asGuest ? copy.host.modeGuestHint : copy.host.modeEditHint}</p>
-      {/* Above the invite rather than below it. The list is how you switch a part off and how you
-          move one, and both are things you do while looking at the invite, so reaching them used
-          to mean scrolling the whole invite out of the way first. */}
+      {/* Everything you can do to the invite is above the invite. The sections list and full size
+          both used to sit under the frame, which is a whole phone screen of scrolling away, and
+          both are things you reach for while looking at the thing they act on.
+          Sections while changing it, Start again while previewing, full size in both. */}
       <div className="actions">
-        <button type="button" className="btn small" onClick={() => setParts(true)}>{copy.host.partsOpen}</button>
+        {asGuest
+          ? <button type="button" className="btn small" onClick={() => setVersion((v) => v + 1)}>{copy.host.modeAgain}</button>
+          : <button type="button" className="btn small" onClick={() => setParts(true)}>{copy.host.partsOpen}</button>}
+        <a className="btn small" href={full} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
       </div>
       <div className="screen phone">
         <iframe key={src} src={src} title="Your invite" />
-      </div>
-      <div className="actions">
-        <a className="btn small" href={full} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
-        {asGuest && <button type="button" className="btn small" onClick={() => setVersion((v) => v + 1)}>{copy.host.modeAgain}</button>}
       </div>
       {/* Tapping the invite reaches every part that is on it, and none of the parts that are not.
           This list reaches all of them, and is also the only place a part can be moved, since
