@@ -35,7 +35,6 @@ export function MessagePreview({ e, site, sample }: { e: EventRow; site: string;
 
   return (
     <>
-      <p className="hint">{copy.host.messagePreviewHint}</p>
       <div className="chat">
         <button type="button" className="bubble-card" onClick={() => setOpen(part("card"))} aria-label="Change the link preview">
           <span className="art">

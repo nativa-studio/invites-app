@@ -12,16 +12,19 @@ import { usePathname } from "next/navigation";
 // change it, which turned out to be true only in the week before the party and false in all the
 // weeks of making it.
 //
-// Three, because there were six and four of them were the same two questions asked in different
+// Four, because there were six and three of them were the same two questions asked in different
 // rooms. Tracking counted the replies and RSVP counted them again; Details held wording that the
 // invite itself now opens when you tap it; RSVP held the questions a guest is asked, which are
 // part of the invite and now sit in it.
 //
-// So: the invite, the people it goes to, and what it looks like. Everything that was on the other
-// three is still reachable, in the one place it belongs to.
+// So: the invite, the people it goes to, the message that reaches them, and what it all looks
+// like. Message earns its own place rather than folding into Guests, because it is the one part
+// of the product whose result a host cannot see anywhere else: the card a chat app draws is built
+// from the event and does not exist until a message has been sent.
 const TABS = [
   { seg: "", label: "Invite" },
   { seg: "/guests", label: "Guests" },
+  { seg: "/message", label: "Message" },
   { seg: "/look", label: "Design" },
 ] as const;
 
