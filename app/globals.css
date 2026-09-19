@@ -84,26 +84,39 @@ p { margin: 0; }
    side with only a little overlap, so the open flap is never cut in half: a clipped flap reads as
    a stray triangle rather than an envelope. */
 /* The invite's own cover standing in front of its own open envelope. Both are the real markup
-   under the real guest stylesheet, so this does not style them, it only places them and shrinks
-   the result.
+   under the real guest stylesheet, so this does not style them. It places them and shrinks the
+   result, and that is all it is allowed to do.
 
-   The scene is laid out at the invite's own size, 388 across for the card and 358 for the
-   envelope, and scaled at the end. Laid out small and then not scaled, the card kept its 50px
-   title on a 250px card and the words swallowed the picture: type does not shrink with a box
-   unless the box is scaled, and every length inside the guest stylesheet is in pixels. */
-.ithumb { --thumb: 0.22; position: relative; display: block; width: calc(680px * var(--thumb)); height: calc(740px * var(--thumb)); }
-.ithumb-scene { position: absolute; left: 0; top: 0; width: 680px; height: 740px; transform: scale(var(--thumb)); transform-origin: top left; }
+   The scene carries the invite class as well, because that is where the guest page keeps what its
+   pieces inherit rather than declare: the ink the words are set in, and the paper shadow the
+   cards are cut with. Without it the card had no shadow at all and its unstyled lines came out in
+   the host app's near black rather than the invite's navy. Neither shows at tile size and both
+   are wrong. Copying those two declarations across would work today and rot the first time a
+   third is added, so the class comes over whole and only what belongs to a page rather than to a
+   picture of one is turned off.
+
+   Every size is the size the piece has at its full width, 390 across for both, which is the
+   card's own max-width and the stage's. Nothing is stretched to fit the tile and nothing is held
+   to a height, so the card and the envelope in here are the card and the envelope on the invite,
+   element for element and property for property. That is checked rather than claimed, and
+   changing a number below is what would stop it being true.
+
+   The scene is laid out at those sizes and scaled at the end, because type does not shrink with a
+   box unless the box is scaled, and every length in the guest stylesheet is a pixel count. */
+.ithumb { --thumb: 0.221; position: relative; display: block; width: calc(680px * var(--thumb)); height: calc(730px * var(--thumb)); }
+.ithumb-scene { position: absolute; left: 0; top: 0; width: 680px; height: 730px; transform: scale(var(--thumb)); transform-origin: top left; }
+.ithumb-scene.invite { min-height: 0; padding: 0; background: none; overflow: visible; }
 /* The envelope, behind and to the right, with the 120px its flap needs above it to stand open. */
-.ithumb-envbox { position: absolute; left: 276px; top: 330px; width: 404px; height: 226px; z-index: 1; }
+.ithumb-envbox { position: absolute; left: 290px; top: 360px; width: 390px; height: 200px; z-index: 1; }
 .ithumb-envbox .env { position: absolute; inset: 0; top: 0; height: 100%; }
-/* The card, in front and to the left, finishing below the envelope's foot. In front is the whole
-   point: the first version let the envelope paint straight over the middle of it. */
-.ithumb-cardbox { position: absolute; left: 0; top: 14px; width: 388px; z-index: 2; }
-/* Held to a height so a long title cannot push the picture out of the frame. The artwork gives up
-   the difference, which is the same bargain the card makes inside the envelope during the
-   opening. */
-.ithumb-cardbox .pcard { box-sizing: border-box; height: 689px; max-width: none; }
-.ithumb-cardbox .pcard .art { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
+/* The card, in front and to the left, finishing below the envelope's foot. In front is the point:
+   the first build of this let the envelope paint over the middle of it.
+
+   Hung from its foot rather than its head, because a card is as tall as its contents and an
+   event with no artwork yet has a short one. Held at the top, that short card floated up and away
+   and left the envelope sitting on its own with nothing coming out of it. Held at the foot, the
+   two always meet. */
+.ithumb-cardbox { position: absolute; left: 0; bottom: 20px; width: 390px; z-index: 2; }
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .evt-when { font-size: 12.5px; color: var(--app-mute); }

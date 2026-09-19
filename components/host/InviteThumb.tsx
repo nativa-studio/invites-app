@@ -3,6 +3,8 @@ import type { PublicEvent, Palette } from "@/lib/db/types";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { CoverCard } from "@/components/invite/Cards";
 import { stockFor } from "@/lib/layouts";
+import { mascotFor } from "@/lib/artwork";
+import Image from "next/image";
 
 // One invite, small: its own cover card standing in front of its own envelope, open.
 //
@@ -32,6 +34,7 @@ export function InviteThumb({
   layout?: string;
 }) {
   const p = paletteFor(palette, themeId ?? "");
+  const mascot = mascotFor(artwork);
   // CoverCard reads a whole event row, and a thumbnail knows four things about one. The rest are
   // the values that make it draw the cover and nothing else: with the details and the sign-off
   // both on, their cards carry them, so the cover is the picture, the eyebrow, the title and the
@@ -44,7 +47,7 @@ export function InviteThumb({
 
   return (
     <span className="ithumb" style={paletteVars(p)}>
-      <span className="ithumb-scene">
+      <span className="ithumb-scene invite">
         <span className="ithumb-envbox">
           {/* The envelope of the animation, in the state a tap leaves it: flap swung up and back
               on its hinge, its lining showing. `still` is that state without the swing. */}
@@ -53,6 +56,10 @@ export function InviteThumb({
             <span className="pocket"><span className="sides" /><span className="edge" /></span>
             <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
           </span>
+          {/* The characters stand on the envelope, the same band the invite page stands there.
+              They were left off the first build of this, which took the most recognisable thing
+              on the envelope off the picture whose whole job is recognising it. */}
+          {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="120px" />}
         </span>
         <span className="ithumb-cardbox">
           <CoverCard e={e} />
