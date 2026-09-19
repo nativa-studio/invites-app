@@ -7,7 +7,7 @@ import type { PublicEvent } from "@/lib/db/types";
 // third from its own version with icons attached. Adding a line meant remembering all three.
 // Each line now carries what kind of thing it is, and a layout decides whether to draw a picture
 // beside it.
-export const NOTE_KINDS = ["bring", "serve", "plate", "parents", "gifts", "photos", "other"] as const;
+export const NOTE_KINDS = ["bring", "serve", "plate", "gifts", "photos", "other"] as const;
 export type NoteKind = (typeof NOTE_KINDS)[number];
 export type Note = { kind: NoteKind; text: string };
 
@@ -19,10 +19,6 @@ export function goodToKnow(e: PublicEvent): Note[] {
   if (e.what_to_bring) lines.push({ kind: "bring", text: e.what_to_bring });
   if (e.serve_text) lines.push({ kind: "serve", text: e.serve_text });
   if (e.plate_enabled && e.plate_host_note) lines.push({ kind: "plate", text: e.plate_host_note });
-  if (e.type === "kids_party" && e.parents_mode === "stay") {
-    lines.push({ kind: "parents", text: e.siblings_welcome ? `${copy.lines.parentsStay} ${copy.lines.siblingsWelcome}` : copy.lines.parentsStay });
-  }
-  if (e.type === "kids_party" && e.parents_mode === "drop_off") lines.push({ kind: "parents", text: copy.lines.dropOff });
   if (e.gift_stance === "none") lines.push({ kind: "gifts", text: copy.lines.giftsNone });
   if (e.gift_stance === "optional") lines.push({ kind: "gifts", text: e.gift_note ? `${copy.lines.giftsOptional} ${e.gift_note}` : copy.lines.giftsOptional });
   if (e.photo_sharing === "kids_off_social") lines.push({ kind: "photos", text: copy.lines.photosKidsOff });
@@ -36,10 +32,9 @@ export const NOTE_NAMES: Record<NoteKind, string> = {
   bring: "What to bring or wear",
   serve: "What you'll serve",
   plate: "Bring a plate",
-  parents: "Parents and siblings",
   gifts: "Gifts",
   photos: "Photos",
-  other: "Anything else",
+  other: "Other notes",
 };
 
 // The lines a host has, in the order they have put them in.
@@ -63,4 +58,19 @@ export function orderedNotes(e: PublicEvent): Note[] {
     if (byKind.has(k) && !out.includes(k)) out.splice(Math.min(i, out.length), 0, k);
   });
   return out.map((k) => byKind.get(k)!);
+}
+
+// Every kind, in the host's order. The editor needs this: the invite shows only the lines that
+// have something in them, but the place you write them has to show all of them or there is no way
+// to fill an empty one in.
+export function orderedKinds(saved: readonly string[] | null | undefined): NoteKind[] {
+  const known = new Set<string>(NOTE_KINDS);
+  const out: NoteKind[] = [];
+  for (const k of saved ?? []) {
+    if (known.has(k) && !out.includes(k as NoteKind)) out.push(k as NoteKind);
+  }
+  NOTE_KINDS.forEach((k, i) => {
+    if (!out.includes(k)) out.splice(Math.min(i, out.length), 0, k);
+  });
+  return out;
 }

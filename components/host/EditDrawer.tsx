@@ -32,8 +32,10 @@ export function EditDrawer({
       <form action={action} className="sheet-body" onInput={() => setDirty(true)} onChange={() => setDirty(true)}>
         <input type="hidden" name="event_id" value={e.id} />
         <input type="hidden" name="_fields" value={[...new Set(fields)].join(",")} />
-        {section.render(e)}
+        {/* Whether this part appears at all comes first. It was under the wording, which put the
+            question "is this even on?" below every answer that only matters once it is. */}
         <ShowSwitch section={section} e={e} />
+        {section.render(e)}
         {state.error && <p className="notice" role="alert">{state.error}</p>}
         {fields.length > 0 ? (
           <div className="sheet-foot">

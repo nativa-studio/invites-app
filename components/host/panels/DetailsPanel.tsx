@@ -16,16 +16,15 @@ export const DETAILS_FIELDS = [
   "title", "host_line", "intro", "date", "start_time", "end_time", "time_note", "status",
   "venue", "address", "parking", "access_info", "accessibility_venue", "host_phone",
   "serve_text", "what_to_bring", "plate_enabled", "plate_host_note", "gift_stance", "gift_note",
-  "parents_mode", "siblings_welcome", "photo_sharing", "good_to_know",
+  "photo_sharing", "good_to_know",
 ] as const;
 
 const BASICS = ["title", "host_line", "intro", "date", "start_time", "end_time", "time_note", "status"] as const;
 const PLACE = ["venue", "address", "parking", "access_info", "accessibility_venue", "host_phone"] as const;
-const KNOW = ["serve_text", "what_to_bring", "plate_enabled", "plate_host_note", "gift_stance", "gift_note", "parents_mode", "siblings_welcome", "photo_sharing", "good_to_know"] as const;
+const KNOW = ["serve_text", "what_to_bring", "plate_enabled", "plate_host_note", "gift_stance", "gift_note", "photo_sharing", "good_to_know"] as const;
 
 const STATUS: [string, string][] = [["draft", "Draft (links show a holding page)"], ["live", "Live"], ["thanks", "Say thanks (after the party)"], ["archived", "Archived"]];
 const GIFTS: [string, string][] = [["none", "No gifts please"], ["optional", "Gifts optional"], ["books", "Books only"], ["wishlist", "Wish list link"]];
-const PARENTS: [string, string][] = [["stay", "Parents and family welcome to stay"], ["drop_off", "Drop-off party"], ["either", "Either, say nothing"]];
 const PHOTOS: [string, string][] = [["none", "Say nothing"], ["kids_off_social", "Please keep photos of the kids off social media"], ["ask", "Please ask before posting anyone's photos"], ["share", "Share away"]];
 
 const label = (options: [string, string][], value: unknown) => options.find(([v]) => v === value)?.[1] ?? null;
@@ -94,7 +93,6 @@ export function DetailsPanel({ e }: { e: EventRow }) {
             <Sum label="Bring or wear" value={e.what_to_bring} />
             <Sum label="Bring a plate" value={e.plate_enabled ? "On" : null} />
             <Sum label="Gifts" value={label(GIFTS, e.gift_stance)} />
-            <Sum label="Parents" value={label(PARENTS, e.parents_mode)} />
             <Sum label="Photos" value={label(PHOTOS, e.photo_sharing)} />
           </>
         }
@@ -105,8 +103,6 @@ export function DetailsPanel({ e }: { e: EventRow }) {
         <Field id="plate_host_note" label="Bring a plate wording" value={e.plate_host_note} />
         <Choice id="gift_stance" label="Gifts" value={e.gift_stance} options={GIFTS} />
         <Field id="gift_note" label="Gift note (optional)" value={e.gift_note} />
-        <Choice id="parents_mode" label="Parents" value={e.parents_mode} options={PARENTS} />
-        <Switch id="siblings_welcome" label="Little brothers and sisters welcome" value={e.siblings_welcome} />
         <Choice id="photo_sharing" label="Photos" value={e.photo_sharing} options={PHOTOS} />
         <Field id="good_to_know" label="Anything else (optional)" value={e.good_to_know} rows={2} />
       </EditCard>
