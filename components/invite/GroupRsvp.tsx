@@ -38,7 +38,7 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
       {group && <input type="hidden" name="group" value={group} />}
       {/* Once they have replied once, the second answer goes to the row they already have. */}
       {state.ok && <input type="hidden" name="token" value={state.token} />}
-      <div className="rsvp-h"><Bolt /> {copy.rsvp.heading} <Bolt /></div>
+      <div className="rsvp-h"><Bolt size={24} /> {copy.rsvp.heading} <Bolt size={24} /></div>
       <div className="rsvp-q">{copy.rsvp.questionGroup}</div>
       {e.rsvp_by && <div className="para" style={{ fontSize: 15 }}>{copy.rsvp.replyBy(formatShortDate(e.rsvp_by))}</div>}
 
