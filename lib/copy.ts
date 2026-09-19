@@ -86,6 +86,9 @@ export const copy = {
     // with you" rather than "seeing you" because it is a party, not an appointment.
     signoffDefault: "We look forward to celebrating with you",
     askBody: (host: string) => `Text ${host}`,
+    /* What a tap on the number starts the guest off with. They write the question; this says
+       which party it is about, so a host running three at once knows before they read it. */
+    askSmsBody: (title: string) => `Hi, about ${title}: `,
     openInMaps: "Open in Maps",
     when: "When",
     where: "Where",

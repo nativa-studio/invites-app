@@ -73,9 +73,9 @@ export const SECTIONS: Section[] = [
   {
     id: "after",
     title: "Questions",
-    blurb: "The last block on the invite: who a guest rings when they have a question. Your mobile from Details is on the line and tappable, so nobody has to go looking for it.",
+    blurb: "The last block on the invite: who a guest texts when they have a question. The name and the number are printed together, and tapping the number opens their messages with the party already named.",
     show: { column: "show_after", label: "Show the questions block" },
-    fields: ["ask_note", "ask_name", "show_after"],
+    fields: ["ask_note", "ask_name", "ask_phone", "show_after"],
     render: (e) => (
       <>
         {/* Two boxes, because they were one and it was wrong. Who answers the phone is not always
@@ -86,6 +86,13 @@ export const SECTIONS: Section[] = [
           label="Who to text"
           value={e.ask_name}
           hint={`Empty means \u201c${hostName(e.host_line)}\u201d, the name from your sign-off.`}
+        />
+        <Field
+          id="ask_phone"
+          label="Their number"
+          value={e.ask_phone}
+          type="tel"
+          hint={e.host_phone ? `Empty means ${e.host_phone}, your mobile from Details.` : "Empty means your mobile from Details, which you have not set yet."}
         />
         <Field
           id="ask_note"

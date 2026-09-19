@@ -2,8 +2,8 @@ import Image from "next/image";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
-import { formatInviteDate, formatMobile, formatTimeRange, formatTime } from "@/lib/format";
-import { askLine, photoLine, signoffMessage } from "@/lib/ask-line";
+import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
+import { askLine, askPhoneText, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
 import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Pin, Plate, Cap, Cake, Shower, Sun, Towel } from "@/components/art/icons";
 import { orderedNotes, type NoteKind } from "@/lib/good-to-know";
 
@@ -143,8 +143,8 @@ export function KnowCard({ e }: { e: PublicEvent }) {
 // where a guest reads it while deciding what the day will be like. This is the parting reminder,
 // for the guest already holding a camera, and four words is all a reminder is.
 export function AskCard({ e }: { e: PublicEvent }) {
-  const sms = e.host_phone ? `sms:${e.host_phone.replace(/[^\d+]/g, "")}` : null;
-  const phone = formatMobile(e.host_phone);
+  const sms = askSms(e);
+  const phone = askPhoneText(e);
   const photos = photoLine(e);
   return (
     <div className="pcard cream tilt-l" data-section="after">

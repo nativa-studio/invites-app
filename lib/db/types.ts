@@ -67,6 +67,8 @@ export type PublicEvent = {
   ask_note?: string | null;
   /** Who a guest texts, when that is not whoever signs the invite. Migration 0013. */
   ask_name?: string | null;
+  /** The number that goes with that name. Null means the host's own mobile. Migration 0014. */
+  ask_phone?: string | null;
   // The sign-off. Both optional because a database without migration 0008 does not send them,
   // and an absent show_signoff means on, the same way the other switches read.
   signoff_note?: string | null;

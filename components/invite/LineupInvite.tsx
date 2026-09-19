@@ -3,8 +3,8 @@ import "@/app/lineup.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { orderedNotes } from "@/lib/good-to-know";
-import { formatInviteDate, formatMobile, formatTime, formatTimeRange } from "@/lib/format";
-import { askLine, photoLine, signoffMessage } from "@/lib/ask-line";
+import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
+import { askLine, askPhoneText, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
 import { bandFor, mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
@@ -117,8 +117,8 @@ export function LineupInvite({
               <div>
                 <Bubble size={44} />
                 <div className="n">{copy.sections.askHeading}</div>
-                {e.host_phone
-                  ? <a className="b" href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{askLine(e)}{formatMobile(e.host_phone) ? ` ${formatMobile(e.host_phone)}` : ""}</a>
+                {askSms(e)
+                  ? <a className="b" href={askSms(e)!}>{askLine(e)}{askPhoneText(e) ? ` ${askPhoneText(e)}` : ""}</a>
                   : <div className="b">{askLine(e)}</div>}
               </div>
               {photoLine(e) && (

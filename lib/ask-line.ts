@@ -1,5 +1,5 @@
 import { copy } from "./copy";
-import { hostName } from "./format";
+import { formatMobile, hostName, normalisePhone } from "./format";
 import type { PublicEvent } from "./db/types";
 
 // What the last line of the invite says: how to reach the host.
@@ -17,6 +17,32 @@ export function askLine(e: Pick<PublicEvent, "ask_note" | "ask_name" | "host_lin
 // the phone belongs to Marcia, and the invite told guests to text Gabe, Tommy and Ma.
 export function askName(e: Pick<PublicEvent, "ask_name" | "host_line">): string {
   return e.ask_name?.trim() || hostName(e.host_line);
+}
+
+// The number that goes with that name. Its own box first, then the host's mobile from Details,
+// which is where this used to come from and is the same number most of the time. A party thrown
+// by three people has one of them fielding the questions, and it is not always whoever set the
+// event up.
+export function askPhone(e: Pick<PublicEvent, "ask_phone" | "host_phone">): string | null {
+  const raw = e.ask_phone?.trim() || e.host_phone?.trim() || "";
+  return raw ? raw : null;
+}
+
+// What a tap on the number opens: the messaging app, with the message already started.
+//
+// "?&body=" rather than "?body=" or "&body=", because iOS wants the ampersand and Android wants
+// the question mark, and that form is the one both read. The opener names the event, so a host
+// fielding questions about three things at once knows which one this is before they read a word.
+export function askSms(e: Pick<PublicEvent, "ask_phone" | "host_phone" | "ask_name" | "host_line" | "title">): string | null {
+  const phone = askPhone(e);
+  if (!phone) return null;
+  return `sms:${normalisePhone(phone)}?&body=${encodeURIComponent(copy.sections.askSmsBody(e.title))}`;
+}
+
+/** The number as it is written, in threes. */
+export function askPhoneText(e: Pick<PublicEvent, "ask_phone" | "host_phone">): string {
+  const phone = askPhone(e);
+  return phone ? formatMobile(phone) : "";
 }
 
 // The four words beside Questions at the end: what a guest holding a camera needs reminding of.
