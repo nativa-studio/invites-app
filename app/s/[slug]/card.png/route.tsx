@@ -5,6 +5,7 @@ import { mascotFor } from "@/lib/artwork";
 import { CARD_SIZE, envelopeCard, type CardVariant } from "@/components/share/envelope-card";
 import { cardFonts } from "@/lib/fonts";
 import { getSiteUrl } from "@/lib/site-url";
+import { stockFor } from "@/lib/layouts";
 
 // The picture a chat app shows under the group link: a sealed envelope, addressed to nobody
 // in particular because anyone may open this one.
@@ -21,6 +22,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
       title: e.share_title ?? e.title,
       artwork: cardArtwork(site, e.invite_image_path),
       age: e.title.match(/turning (\d+)/i)?.[1] ?? null,
+      stock: stockFor(e.layout_id),
       variant,
     }),
     { ...CARD_SIZE, fonts: cardFonts(), headers: { "cache-control": "public, max-age=3600, s-maxage=86400" } },

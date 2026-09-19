@@ -5,6 +5,7 @@ import { mascotFor } from "@/lib/artwork";
 import { CARD_SIZE, envelopeCard, type CardVariant } from "@/components/share/envelope-card";
 import { cardFonts } from "@/lib/fonts";
 import { getSiteUrl } from "@/lib/site-url";
+import { stockFor } from "@/lib/layouts";
 
 // The picture under a personal link: the same envelope, addressed to the guest it belongs to.
 // Reads through a function that leaves no trace, because chat apps fetch this themselves and
@@ -23,6 +24,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ toke
       title: card.share_title ?? card.title,
       artwork: cardArtwork(site, card.invite_image_path),
       age: card.title.match(/turning (\d+)/i)?.[1] ?? null,
+      stock: stockFor(card.layout_id),
       variant,
     }),
     { ...CARD_SIZE, fonts: cardFonts(), headers: { "cache-control": "public, max-age=3600, s-maxage=86400" } },

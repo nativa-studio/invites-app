@@ -26,7 +26,7 @@ export function shareDescription(e: ShareFields): string {
 // drawing does. So when the stamp and the postmark came off the envelope, every chat that had
 // already shown somebody the stamped one went on showing it. Bump CARD_REV whenever the card is
 // redrawn, and every preview in every chat is fetched again.
-const CARD_REV = 3;
+const CARD_REV = 4;
 
 export function cardUrl(path: string, date: string | null | undefined): string {
   return `${path}?v=${CARD_REV}-${encodeURIComponent(date ?? "")}`;

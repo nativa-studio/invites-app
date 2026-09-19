@@ -25,6 +25,15 @@ export const LAYOUTS: LayoutOption[] = [
   },
 ];
 
+// The paper each design's envelope is cut from. It is a property of the design rather than of the
+// event's palette, because it is the stationery: the suite is a red envelope on white, the lineup
+// is a cream page and takes a warmer, deeper shade of the same paper.
+const STOCK: Record<string, "red" | "beige"> = { suite: "red", lineup: "beige" };
+
+export function stockFor(layout: string | null | undefined): "red" | "beige" {
+  return STOCK[layout ?? ""] ?? "red";
+}
+
 /** The designs that suit a kind of party, and the ones that do not, kept apart rather than lost. */
 export function designsFor(type: string | null | undefined): { fits: LayoutOption[]; rest: LayoutOption[] } {
   if (!type) return { fits: LAYOUTS, rest: [] };

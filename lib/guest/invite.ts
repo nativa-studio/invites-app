@@ -28,6 +28,9 @@ export type InviteCard = {
   time_note: string | null;
   theme_id: string;
   palette: Palette | null;
+  /** Which design, so the card knows which paper its envelope is cut from. Added in 0012, so an
+   *  older database sends nothing and the card falls back to the suite's red. */
+  layout_id: string | null;
   invite_image_path: string | null;
 };
 
