@@ -128,7 +128,22 @@ at the same time, if `.day` has gone by the time anyone reads this.
 
 `bunting.day` is 11 characters, so a personal link reads `https://bunting.day/i/7ym7kq5wwb`: 32
 characters against the 46 of the Vercel address, and the line a chat app prints under the preview
-card drops from 25 characters to 11.
+card drops from 25 characters to 11. It also reads as a phrase rather than an address, which none
+of the alternatives did: "bunting day" sounds like the day itself.
+
+The name was re-opened once and settled. Around forty alternatives were checked, and the test that
+decided it is whether a guest who hears the name once can type it correctly. Bunting passes: one
+spelling, one meaning, unmistakably a party. The only real contender was **Hurrah**, free on `.au`,
+`.com.au`, `.net.au`, `.day`, `.party` and `.cards`, and it fails that same test, because hurrah,
+hurray, hoorah and hooray are four spellings of one noise. Also checked and rejected:
+`confetti.au` (generic, and likely somebody's trade mark in event services), `backyard.au` (warm,
+says nothing about invitations), `comeover.au` (two words jammed together), `littleday.au` (right
+for a fourth birthday, wrong for the memorial this app also supports), `plate.au` (reads as a food
+app), and `trestle`, `verandah`, `garland` and `shindig`, all of which have both `.au` and
+`.com.au` already gone.
+
+Availability is not clearance. Nothing here has been checked against IP Australia's trade mark
+register, and that is worth ten minutes before any money is spent.
 
 ### 1. Get the name
 
