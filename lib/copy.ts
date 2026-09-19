@@ -98,8 +98,20 @@ export const copy = {
   },
   host: {
     previewReply: "Your guests answer here. This is your own preview, so nothing you tap is counted.",
-    layoutHeading: "Layout",
-    layoutHint: "Pick one to see it. Your guests see whatever is selected when you save.",
+    partyTypeHeading: "Kind of party",
+    partyTypeBlurb: "It decides which designs are offered first, and it set the reply's questions when you started. Changing it now only changes what is offered: every setting you have touched stays as you left it.",
+    designHeading: "Design",
+    designChosen: "Chosen",
+    designSaved: (name: string) => `Guests see ${name}.`,
+    designUnsaved: (name: string) => `Guests still see ${name}. Save to change it.`,
+    designShowRest: (n: number) => (n === 1 ? "Show the other design" : `Show the other ${n} designs`),
+    designRestHint: "The ones below the line suit a different kind of party. Nothing stops you using one.",
+    designPlay: "Play the opening",
+    designPlayHint: "The envelope opens once when the preview loads. Play runs it again.",
+    designUse: "Use this design",
+    designAlready: "This is the one you have.",
+    designInstead: (name: string) => `You have ${name} at the moment.`,
+    designFrameTitle: (name: string) => `${name}, as a guest sees it`,
     newEventNext: "Your invite exists. Pick how it looks, then fill in the details and add your guests.",
     previewHint: "Exactly what a guest opens, on their phone. Nothing you tap here is counted.",
     openFull: "Open full size",
@@ -208,6 +220,27 @@ export const copy = {
     guestGroupNewTitle: "New group",
     guestGroupFor: (name: string) => `${name} goes in it, and you can put others in it after.`,
     guestGroupSave: "Save",
+    headsHeading: "How many",
+    headsOpen: "The numbers",
+    headsBlurb: "Two counts that will not agree until everyone has replied. What you pencilled in when you added each household, and what your guests have actually said.",
+    headsExpected: "From your guest list",
+    headsExpectedShort: "Guest list",
+    headsRepliedShort: "Replies",
+    headsReplied: "From the replies",
+    headsKids: "kids",
+    headsAdults: "adults",
+    headsAll: "people",
+    headsExpectedHint: (from: number, all: number) =>
+      all === 0
+        ? "No guests yet."
+        : from === 0
+          ? `Nothing pencilled in yet. Open a guest and put their numbers in, and this is what you are catering for before anyone replies.`
+          : `Pencilled in for ${from} of ${all} ${all === 1 ? "household" : "households"}.`,
+    headsRepliedHint: (from: number, waiting: number) =>
+      from === 0
+        ? "Nobody has said yes yet."
+        : `${from} ${from === 1 ? "household has" : "households have"} said yes${waiting ? `, ${waiting} still to reply` : ""}.`,
+    headsNoSplit: "Kids and adults are not counted separately because the reply asks for one number. Change that under RSVP.",
     partsHeading: "Invite sections",
     partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first.",
     partSwitch: (name: string) => `${name}, on the invite`,

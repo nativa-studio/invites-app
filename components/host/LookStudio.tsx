@@ -1,8 +1,11 @@
 "use client";
 import { useState } from "react";
 import { copy } from "@/lib/copy";
-import { LAYOUTS } from "@/lib/layouts";
-import { LayoutThumb } from "./LayoutThumb";
+import { designsFor, LAYOUTS, type LayoutOption } from "@/lib/layouts";
+import { EVENT_TYPES } from "@/lib/event-types";
+import { DesignThumb } from "./DesignThumb";
+import { Sheet } from "./Sheet";
+import type { Palette } from "@/lib/db/types";
 
 type Sections = { details: boolean; day: boolean; know: boolean; after: boolean };
 
@@ -13,50 +16,97 @@ const SECTION_LABELS: [keyof Sections, string, string][] = [
   ["after", "show_after", "Questions, and how to ask them"],
 ];
 
-export type LookState = { layout: string; sections: Sections };
+export type LookState = {
+  type: string;
+  layout: string;
+  sections: Sections;
+  palette: Palette | null;
+  themeId: string | null;
+};
 
-// Everything that decides what the invite looks like, with one preview that answers for all of
-// it. Previously the preview only knew about the layout, so flicking a section switch or changing
-// the picture changed nothing on screen and you found out after saving. Now every control here
-// feeds the same address, so what you are looking at is what you are about to save.
+// Design: what kind of party it is, then what the invite looks like.
+//
+// The two are one screen because the first narrows the second. A memorial should not be offered
+// tape, tilted cards and cartoon characters, and a fourth birthday should not have to scroll past
+// the quiet one to find them. The type filters rather than forbids: anything left out is one tap
+// away, counted and offered by name, because a host wanting the wrong thing on purpose is allowed.
+//
+// A design is picked by looking at it, not by reading its name off a radio button. Each one is a
+// square with the invite standing in front of its envelope, and tapping it opens the real thing
+// at phone size, with a button that plays the envelope opening, which is the part of this product
+// that does not survive being described.
 //
 // The controls carry their own form names, so the panel's field manifest saves them as before.
 export function LookStudio({ eventId, saved }: { eventId: string; saved: LookState }) {
+  const [type, setType] = useState(saved.type);
   const [layout, setLayout] = useState(saved.layout);
   const [sections, setSections] = useState(saved.sections);
+  const [showAll, setShowAll] = useState(false);
+  const [open, setOpen] = useState<LayoutOption | null>(null);
+
+  const { fits, rest } = designsFor(type);
+  const offered = showAll ? [...fits, ...rest] : fits;
+  const savedName = LAYOUTS.find((l) => l.id === saved.layout)?.name ?? saved.layout;
+  const chosenName = LAYOUTS.find((l) => l.id === layout)?.name ?? layout;
+  const changed = layout !== saved.layout || type !== saved.type || SECTION_LABELS.some(([k]) => sections[k] !== saved.sections[k]);
 
   const on = SECTION_LABELS.filter(([k]) => sections[k]).map(([k]) => k).join(",");
-  const src = `/app/preview/${eventId}?layout=${layout}&show=${on}`;
-  const savedName = LAYOUTS.find((l) => l.id === saved.layout)?.name ?? saved.layout;
-  const changed = layout !== saved.layout || SECTION_LABELS.some(([k]) => sections[k] !== saved.sections[k]);
+  const previewSrc = (id: string) => `/app/preview/${eventId}?layout=${id}&show=${on}`;
 
   return (
     <>
+      {/* The chosen values travel as hidden inputs: the choosing happens in a sheet and on tiles,
+          neither of which is a form control the panel could read. */}
+      <input type="hidden" name="type" value={type} />
+      <input type="hidden" name="layout_id" value={layout} />
+
       <section className="card">
-        <div className="look-head">
-          <h2 className="h2">{copy.host.layoutHeading}</h2>
-          <span className="hint">{changed ? `Guests still see ${savedName}. Save to change it.` : `Guests see ${savedName}.`}</span>
-        </div>
-        <div className="screen phone">
-          <iframe key={src} src={src} title="Preview of the invite" loading="lazy" />
-        </div>
-        <div className="actions">
-          <a className="btn small" href={`${src}&full=1`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
+        <h2 className="h2">{copy.host.partyTypeHeading}</h2>
+        <p className="hint">{copy.host.partyTypeBlurb}</p>
+        <div className="tiles">
+          {EVENT_TYPES.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={`tile ${type === t.id ? "on" : ""}`}
+              aria-pressed={type === t.id}
+              onClick={() => setType(t.id)}
+            >
+              <span className="tile-name">{t.label}</span>
+              <span className="tile-line">{t.blurb}</span>
+            </button>
+          ))}
         </div>
       </section>
 
       <section className="card">
-        <span className="label-ish">Shape</span>
-        <div className="layouts">
-          {LAYOUTS.map((o) => (
-            <label key={o.id} className={`layout ${layout === o.id ? "on" : ""}`}>
-              <input type="radio" name="layout_id" value={o.id} checked={layout === o.id} onChange={() => setLayout(o.id)} />
-              <LayoutThumb id={o.id} />
-              <span className="n">{o.name}</span>
-              <span className="b">{o.line}</span>
-            </label>
+        <div className="look-head">
+          <h2 className="h2">{copy.host.designHeading}</h2>
+          <span className="hint">{changed ? copy.host.designUnsaved(savedName) : copy.host.designSaved(savedName)}</span>
+        </div>
+        <div className="designs">
+          {offered.map((d) => (
+            <button
+              key={d.id}
+              type="button"
+              className={`design ${layout === d.id ? "on" : ""}`}
+              onClick={() => setOpen(d)}
+            >
+              <span className="design-art">
+                <DesignThumb id={d.id} palette={saved.palette} themeId={saved.themeId} />
+              </span>
+              <span className="n">{d.name}</span>
+              <span className="b">{d.line}</span>
+              {layout === d.id && <span className="tag">{copy.host.designChosen}</span>}
+            </button>
           ))}
         </div>
+        {rest.length > 0 && !showAll && (
+          <button type="button" className="btn small" onClick={() => setShowAll(true)}>
+            {copy.host.designShowRest(rest.length)}
+          </button>
+        )}
+        {rest.length > 0 && showAll && <p className="hint">{copy.host.designRestHint}</p>}
       </section>
 
       <section className="card">
@@ -77,6 +127,53 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
         ))}
         <span className="hint">{copy.host.sectionsHint}</span>
       </section>
+
+      {open && (
+        <DesignSheet
+          design={open}
+          src={previewSrc(open.id)}
+          chosen={layout === open.id}
+          chosenName={chosenName}
+          onUse={() => { setLayout(open.id); setOpen(null); }}
+          onClose={() => setOpen(null)}
+        />
+      )}
     </>
+  );
+}
+
+// One design, at the size a guest sees it, with the opening on a button.
+//
+// The frame is keyed by a counter rather than reloaded, because the envelope opens once per mount
+// and then the card is out of it. Bumping the key mounts a fresh one, which is the only honest way
+// to watch it again.
+function DesignSheet({ design, src, chosen, chosenName, onUse, onClose }: {
+  design: LayoutOption;
+  src: string;
+  chosen: boolean;
+  chosenName: string;
+  onUse: () => void;
+  onClose: () => void;
+}) {
+  const [run, setRun] = useState(0);
+  return (
+    <Sheet title={design.name} blurb={design.line} onClose={onClose}>
+      <div className="sheet-body">
+        <div className="screen phone">
+          <iframe key={run} src={src} title={copy.host.designFrameTitle(design.name)} loading="lazy" />
+        </div>
+        <div className="actions">
+          <button type="button" className="btn small" onClick={() => setRun(run + 1)}>{copy.host.designPlay}</button>
+          <a className="btn small" href={`${src}&full=1`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
+        </div>
+        <p className="hint">{copy.host.designPlayHint}</p>
+        <div className="sheet-foot">
+          {chosen
+            ? <span className="hint">{copy.host.designAlready}</span>
+            : <span className="hint">{copy.host.designInstead(chosenName)}</span>}
+          <button type="button" className="btn primary" onClick={onUse} disabled={chosen}>{copy.host.designUse}</button>
+        </div>
+      </div>
+    </Sheet>
   );
 }

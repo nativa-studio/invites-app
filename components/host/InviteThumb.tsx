@@ -12,7 +12,7 @@ import type { Palette } from "@/lib/db/types";
 // The envelope is drawn rather than built from boxes because a rectangle with a triangle on top
 // reads as a house. What makes it an envelope is the seams up its back and an edge on the open
 // flap, and those want real lines.
-function EnvelopeBack({ body, liner }: { body: string; liner: string }) {
+export function EnvelopeBack({ body, liner }: { body: string; liner: string }) {
   return (
     <svg viewBox="0 0 100 78" aria-hidden="true" preserveAspectRatio="none">
       {/* The flap, standing open, showing the inside. */}
