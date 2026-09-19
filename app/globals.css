@@ -11,6 +11,10 @@
   --app-line-2: #d6d3d1;
   --app-ink: #1c1917;
   --app-mute: #78716c;
+  /* The only two colours in the host app. A switch is the one control where the state matters
+     more than the tap, so it is allowed to say so in colour. */
+  --app-on: #15803d;
+  --app-off: #b3261e;
   --app-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* The invites. Per-event colours arrive as inline variables; these are the faces. */
@@ -317,4 +321,14 @@ fieldset.stack > legend { padding: 0; }
 .chat .bubble-card .u { padding: 2px 12px 12px; font-size: 13px; color: var(--app-muted, #6b7280); }
 .chat .bubble { font-size: 15px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
 
-.tag-off { margin-left: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--app-muted, #6b7280); }
+/* On or off, as a switch. Green or red for the state, and the knob's side for anyone who does not
+   see the difference between the two. The button is 44px tall and the track is 32, so the thumb
+   gets the whole row height while the drawing stays the size of a switch. */
+.sw { flex: 0 0 auto; width: 56px; min-height: 44px; display: flex; align-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.sw .track { width: 56px; height: 32px; padding: 3px; border-radius: 999px; background: var(--app-off); display: flex; align-items: center; transition: background .18s; }
+.sw[aria-checked="true"] .track { background: var(--app-on); }
+.sw .knob { width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(28, 25, 23, .35); transition: transform .18s; }
+.sw[aria-checked="true"] .knob { transform: translateX(24px); }
+.sw:disabled { opacity: .45; }
+.sw:focus-visible { outline: 2px solid var(--app-ink); outline-offset: 2px; border-radius: 999px; }
+@media (prefers-reduced-motion: reduce) { .sw .track, .sw .knob { transition: none; } }

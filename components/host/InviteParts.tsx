@@ -16,6 +16,11 @@ import { Reorder } from "./Reorder";
 // row, which is a fine fallback and a poor first choice: arrows make you tap once per position,
 // and with seven parts moving the last one to the top is six taps. The arrow keys still do exactly
 // that for anyone on a keyboard, from the handle itself.
+//
+// On or off is a switch, green or red. It was a button reading "Take off" or "Put back", which
+// named the state the tap would produce rather than the state the part is in, so reading down
+// seven rows meant inverting every one of them. A switch is the state, and its side says so as
+// well as its colour.
 export function InviteParts({ e, onEdit }: { e: EventRow; onEdit: (part: InvitePart) => void }) {
   const [pending, start] = useTransition();
   const order = orderedParts(e.section_order);
@@ -43,17 +48,18 @@ export function InviteParts({ e, onEdit }: { e: EventRow; onEdit: (part: InviteP
             <>
               <button type="button" className={`n as-link${on ? "" : " off"}`} onClick={() => onEdit(p)}>
                 {PART_NAMES[p]}
-                {!on && <span className="tag-off">{copy.host.partOff}</span>}
               </button>
               {col && (
                 <button
                   type="button"
-                  className="btn small"
+                  className="sw"
+                  role="switch"
+                  aria-checked={on}
+                  aria-label={copy.host.partSwitch(PART_NAMES[p])}
                   disabled={pending}
-                  aria-pressed={on}
                   onClick={() => start(() => { void setSectionShown(e.id, col, !on); })}
                 >
-                  {on ? copy.host.partHide : copy.host.partShow}
+                  <span className="track"><span className="knob" /></span>
                 </button>
               )}
             </>
