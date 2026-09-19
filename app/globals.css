@@ -105,7 +105,16 @@ p { margin: 0; }
    box unless the box is scaled, and every length in the guest stylesheet is a pixel count. */
 .ithumb { --thumb: 0.221; position: relative; display: block; width: calc(680px * var(--thumb)); height: calc(730px * var(--thumb)); }
 .ithumb-scene { position: absolute; left: 0; top: 0; width: 680px; height: 730px; transform: scale(var(--thumb)); transform-origin: top left; }
-.ithumb-scene.invite { min-height: 0; padding: 0; background: none; overflow: visible; }
+.ithumb-scene.invite { min-height: 0; padding: 0; overflow: visible; }
+/* The page the invite is on comes with it: the suite's blue with its dots, which the invite class
+   already carries, and the lineup's cream, which its own page sets and which is named here rather
+   than inherited because the lineup class brings a whole page's worth of rules with it. The card
+   and the envelope both cast shadows, and a shadow on white is a shadow on nothing. */
+.ithumb-scene.beige { background-color: #FDF6E4; background-image: none; }
+/* The tile is a window onto that page, so it has the page's corner rather than a hard rectangle,
+   and nothing leans out of it. Everything in the scene is inside its box, the standing flap
+   included, so there is nothing for this to cut. */
+.ithumb { border-radius: 8px; overflow: hidden; }
 /* The envelope, behind and to the right, with the 120px its flap needs above it to stand open. */
 .ithumb-envbox { position: absolute; left: 290px; top: 360px; width: 390px; height: 200px; z-index: 1; }
 .ithumb-envbox .env { position: absolute; inset: 0; top: 0; height: 100%; }

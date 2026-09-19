@@ -35,6 +35,7 @@ export function InviteThumb({
 }) {
   const p = paletteFor(palette, themeId ?? "");
   const mascot = mascotFor(artwork);
+  const beige = stockFor(layout) === "beige";
   // CoverCard reads a whole event row, and a thumbnail knows four things about one. The rest are
   // the values that make it draw the cover and nothing else: with the details and the sign-off
   // both on, their cards carry them, so the cover is the picture, the eyebrow, the title and the
@@ -47,11 +48,11 @@ export function InviteThumb({
 
   return (
     <span className="ithumb" style={paletteVars(p)}>
-      <span className="ithumb-scene invite">
+      <span className={`ithumb-scene invite${beige ? " beige" : ""}`}>
         <span className="ithumb-envbox">
           {/* The envelope of the animation, in the state a tap leaves it: flap swung up and back
               on its hinge, its lining showing. `still` is that state without the swing. */}
-          <span className={`env still${stockFor(layout) === "beige" ? " beige" : ""}`}>
+          <span className={`env still${beige ? " beige" : ""}`}>
             <span className="back" />
             <span className="pocket"><span className="sides" /><span className="edge" /></span>
             <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
