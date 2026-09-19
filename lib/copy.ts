@@ -191,12 +191,15 @@ export const copy = {
     expectedHint: "Only a guess, so their reply is one tap. They can change it.",
     expectedChildren: "Children",
     expectedAdults: "Adults",
+    // Adults first, kids second, and no sentence around them. A host scanning fifty rows is
+    // reading two numbers, and "expecting 1 child and 2 adults" makes them read eight words to
+    // find them. The dot is the separator every other pair on that row already uses.
     expecting: (children: number | null, adults: number | null) => {
       const parts = [
-        children ? `${children} ${children === 1 ? "child" : "children"}` : null,
         adults ? `${adults} ${adults === 1 ? "adult" : "adults"}` : null,
+        children ? `${children} ${children === 1 ? "kid" : "kids"}` : null,
       ].filter(Boolean);
-      return parts.length ? `expecting ${parts.join(" and ")}` : "";
+      return parts.join(" \u00b7 ");
     },
     add: "Add",
     text: "Text",
