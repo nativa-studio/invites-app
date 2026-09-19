@@ -89,6 +89,10 @@ p { margin: 0; }
 .ithumb-card { position: absolute; left: 1%; top: 20%; width: 52%; aspect-ratio: 5 / 7; overflow: hidden; border-radius: 2px; background: #fff; box-shadow: 0 2px 8px rgba(28, 25, 23, 0.28); display: flex; align-items: center; justify-content: center; }
 .ithumb-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 /* Without artwork the card carries the title, which is still the thing you are looking for. */
+/* The design squares put a drawing of the shape on the card rather than a photograph, so it is
+   sized to fit rather than cropped to fill. */
+.ithumb-card.plain { background: transparent; box-shadow: none; overflow: visible; }
+.ithumb-card.plain svg { width: 100%; height: 100%; }
 .ithumb-title { padding: 8%; font-size: 10.5px; font-weight: 600; line-height: 1.2; text-align: center; color: var(--app-ink); overflow-wrap: anywhere; }
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
@@ -204,6 +208,19 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
    width and centres rather than stretching into a shape no guest will ever see. */
 .screen.phone { height: min(70vh, 640px); max-width: 390px; margin: 0 auto; width: 100%; }
 .look-head { display: grid; gap: 2px; }
+
+/* The designs, as squares you look at rather than names you read. Two across on a phone, more as
+   the screen allows, with the picture on top and the name under it, which is the shape of every
+   other thing you pick by eye in this app. */
+.designs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.design { display: grid; gap: 3px; justify-items: start; text-align: left; padding: 11px; border: 1px solid var(--app-line-2); border-radius: 10px; background: var(--app-bg); cursor: pointer; font: inherit; color: inherit; min-width: 0; }
+.design:hover { border-color: var(--app-mute); }
+/* Chosen is a heavier outline, not a fill: the picture is the colour on this card. */
+.design.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
+.design-art { display: block; width: 100%; margin-bottom: 5px; }
+.design .n { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+.design .b { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; }
+.design .tag { margin-top: 4px; }
 
 /* The drawer. It slides up from the bottom on a phone, which is where a hand is, and it never
    takes the whole screen: the invite stays visible above it so you can see what you are editing. */
