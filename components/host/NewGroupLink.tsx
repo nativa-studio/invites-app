@@ -31,18 +31,17 @@ export function NewGroupLink({ base, event }: { base: string; event: TemplateEve
           autoComplete="off"
         />
       </div>
-      {link ? (
-        <div className="grouplink">
-          <b>{name.trim()}</b>
-          <code>{link}</code>
-          <div className="actions">
-            <CopyButton text={groupInviteText(event, link)} label={copy.host.copyMessage} what="message" />
-            <CopyButton text={link} label={copy.host.copy} />
-          </div>
+      {/* With nothing typed this is the plain link, the one with no group on it, which had a card
+          of its own on this screen printing the same url. An empty box used to say come back when
+          you have typed something, which is a worse answer than the link itself. */}
+      <div className="grouplink">
+        <b>{link ? name.trim() : copy.host.groupLinkPlain}</b>
+        <code>{link || base}</code>
+        <div className="actions">
+          <CopyButton text={groupInviteText(event, link || base)} label={copy.host.copyMessage} what="message" />
+          <CopyButton text={link || base} label={copy.host.copy} />
         </div>
-      ) : (
-        <p className="hint">{copy.host.groupLinkNameBlank}</p>
-      )}
+      </div>
     </div>
   );
 }

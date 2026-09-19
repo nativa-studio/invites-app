@@ -1,7 +1,7 @@
 "use client";
 import { useState, useTransition } from "react";
 import { copy } from "@/lib/copy";
-import { setEventStatus } from "@/app/app/events/[id]/actions";
+import { setEventStatus, setGroupLink } from "@/app/app/events/[id]/actions";
 import { DeleteEvent } from "./DeleteEvent";
 import { Sheet } from "./Sheet";
 
@@ -14,11 +14,15 @@ import { Sheet } from "./Sheet";
 // changes it.
 //
 // Deleting is last, behind its own shut door, and still asks for the event's name.
-export function EventStatus({ id, title, status, counts }: {
+export function EventStatus({ id, title, status, counts, groupLinkOpen }: {
   id: string;
   title: string;
   status: string;
   counts: { guests: number; replies: number };
+  /** Whether the link anyone can reply through is working. Same kind of fact as the status: it is
+   *  about the event rather than about any one guest, and it had a card on Guests repeating the
+   *  link the Groups card already carries. */
+  groupLinkOpen: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
@@ -45,6 +49,19 @@ export function EventStatus({ id, title, status, counts }: {
                   <span className="tile-name">{label}</span>
                 </button>
               ))}
+            </div>
+            <div className="field">
+              <label className="switch" htmlFor="group_link_open">
+                <input
+                  id="group_link_open"
+                  type="checkbox"
+                  checked={groupLinkOpen}
+                  disabled={pending}
+                  onChange={(ev) => { const on = ev.target.checked; start(() => { void setGroupLink(id, on); }); }}
+                />
+                <span>{copy.host.groupLinkSwitch}</span>
+              </label>
+              <span className="hint">{copy.host.groupLinkBlurb}</span>
             </div>
             <DeleteEvent id={id} title={title} counts={counts} />
           </div>

@@ -262,6 +262,14 @@ export async function setKnowOrder(eventId: string, order: string[]) {
   revalidateEvent(eventId);
 }
 
+// The group link, open or closed. It is a fact about the event rather than about any one guest,
+// so it lives with the status behind the badge in the header.
+export async function setGroupLink(eventId: string, open: boolean) {
+  const { supabase } = await hostClient();
+  await supabase.from("events").update({ group_link_enabled: open }).eq("id", eventId);
+  revalidateEvent(eventId);
+}
+
 // Bring a plate, from the host's side.
 //
 // A host adds an item to ask for it, so it goes on unclaimed: "somebody bring a salad" is the

@@ -20,6 +20,7 @@ export default async function EventLayout({ children, params }: { children: Reac
           id={id}
           title={e.title}
           status={e.status}
+          groupLinkOpen={e.group_link_enabled !== false}
           counts={{ guests: guests.length, replies: guests.filter((g) => g.status !== "pending").length }}
         />
       </header>

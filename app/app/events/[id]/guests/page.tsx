@@ -1,8 +1,5 @@
-import { copy } from "@/lib/copy";
 import { loadEvent, loadGuests } from "@/lib/db/host";
 import { getSiteUrl } from "@/lib/site-url";
-import { CopyButton } from "@/components/host/CopyButton";
-import { groupInviteText } from "@/lib/messages";
 import { AddGuest } from "@/components/host/AddGuest";
 import { GuestList } from "@/components/host/GuestList";
 import { GroupsPanel } from "@/components/host/GroupsPanel";
@@ -10,8 +7,6 @@ import { HeadCount } from "@/components/host/HeadCount";
 import { FoodNote } from "@/components/host/replies";
 import { GroupFilter } from "@/components/host/GroupFilter";
 import { inGroup } from "@/lib/groups";
-import { EditCard, Sum } from "@/components/host/EditCard";
-import { Switch } from "@/components/host/fields";
 
 // Guests: everyone you are asking, how they are replying, and the links that reach them.
 //
@@ -26,8 +21,12 @@ import { Switch } from "@/components/host/fields";
 // same thing twice before it said anything else.
 //
 // The group filter is above all of it, and everything that counts people answers for the group
-// that is picked: the numbers, the food line and the list. The two cards about links do not,
-// because they are about the groups rather than about the people in one of them.
+// that is picked: the numbers, the food line and the list. The Groups card does not, because it
+// is about the groups rather than about the people in one of them.
+//
+// The group link had a card of its own here, saying the same link the Groups card already
+// carries. Its one unique part was the switch that closes it, which is a fact about the event
+// rather than about the guest list, so it went behind the badge in the header with the rest.
 export default async function Guests({
   params, searchParams,
 }: { params: Promise<{ id: string }>; searchParams: Promise<{ group?: string }> }) {
@@ -36,7 +35,6 @@ export default async function Guests({
   const [e, all] = await Promise.all([loadEvent(id), loadGuests(id)]);
   const site = await getSiteUrl();
   const groupLink = `${site}/e/${e.slug}`;
-  const open = e.group_link_enabled !== false;
   const chosen = group ?? "";
   const list = inGroup(all, chosen);
   const here = `/app/events/${id}/guests`;
@@ -49,26 +47,6 @@ export default async function Guests({
       {/* After the numbers, because it is what you do with them rather than what they are. */}
       <FoodNote guests={list} />
       <AddGuest eventId={e.id} none={all.length === 0} />
-      {/* The switch that closes this link belongs next to the link, not on another screen. */}
-      <EditCard
-        eventId={e.id}
-        title={copy.host.groupLink}
-        blurb={copy.host.groupLinkBlurb}
-        fields={["group_link_enabled"]}
-        summary={<Sum label="Right now" value={open ? copy.host.groupLinkOpen : copy.host.groupLinkClosed} />}
-        extra={
-          <>
-            <p className="hint">{copy.host.groupLinkHint}</p>
-            <code>{groupLink}</code>
-            <div className="actions">
-              <CopyButton text={groupInviteText(e, groupLink)} label={copy.host.copyMessage} what="message" />
-              <CopyButton text={groupLink} label={copy.host.copy} />
-            </div>
-          </>
-        }
-      >
-        <Switch id="group_link_enabled" label="Group link open (for chats)" value={open} />
-      </EditCard>
       <GroupsPanel guests={all} base={groupLink} event={e} />
       <GuestList eventId={e.id} guests={list} event={{ title: e.title, date: e.date, text_template: e.text_template, reminder_template: e.reminder_template }} site={site} />
     </>
