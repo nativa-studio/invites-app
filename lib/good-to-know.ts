@@ -24,7 +24,13 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // deciding whether to come rather than the moment for getting ready.
   if (e.what_to_bring) lines.push({ kind: "bring", text: e.what_to_bring });
   if (e.serve_text) lines.push({ kind: "serve", text: e.serve_text });
-  if (e.plate_enabled && e.plate_host_note) lines.push({ kind: "plate", text: e.plate_host_note });
+  // The invite's plate line and the board's own heading say different things on purpose. Here a
+  // guest is deciding whether to come, so the line is what is being asked of them. The board says
+  // claim something or add your own, and it is only on the page once they have said yes, which is
+  // the moment that sentence means anything.
+  if (e.plate_enabled) {
+    lines.push({ kind: "plate", text: e.plate_host_note || (e.plate_mode === "everyone" ? copy.lines.plateEveryone : copy.lines.plateFree) });
+  }
   // Gifts: every stance except quiet says something, and quiet is the point of having a stance
   // called quiet. Books and the wish list used to be offered in the editor and print nothing at
   // all, so a host picking one got silence and no way to tell it apart from a bug. A wish list
@@ -60,6 +66,13 @@ export const PHOTO_OPTIONS: [string, string][] = [
   ["kids_off_social", "Please keep photos of the kids off social media"],
   ["ask", "Please ask before posting anyone's photos"],
   ["share", "Share away"],
+];
+
+// How much a host is asking for. The wording each one gives a guest lives in copy.plate, since
+// the board and the invite both print it.
+export const PLATE_MODES: [string, string][] = [
+  ["free", "Optional, bring something if you like"],
+  ["everyone", "Everyone brings something"],
 ];
 
 export const optionValues = (options: [string, string][]): string[] => options.map(([v]) => v);

@@ -2,7 +2,7 @@
 import { useTransition } from "react";
 import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
-import { GIFT_OPTIONS, NOTE_NAMES, PHOTO_OPTIONS, orderedKinds, type NoteKind } from "@/lib/good-to-know";
+import { GIFT_OPTIONS, NOTE_NAMES, PHOTO_OPTIONS, PLATE_MODES, orderedKinds, type NoteKind } from "@/lib/good-to-know";
 import { setKnowOrder } from "@/app/app/events/[id]/actions";
 import { Choice, Field, Switch } from "@/components/host/fields";
 import { Reorder } from "./Reorder";
@@ -22,7 +22,7 @@ import { Reorder } from "./Reorder";
 
 
 export const KNOW_FIELDS = [
-  "siblings_welcome", "what_to_bring", "serve_text", "plate_enabled", "plate_host_note",
+  "siblings_welcome", "what_to_bring", "serve_text", "plate_enabled", "plate_mode", "plate_host_note",
   "gift_stance", "gift_note", "photo_sharing", "good_to_know",
 ] as const;
 
@@ -45,7 +45,8 @@ export function KnowEditor({ e }: { e: EventRow }) {
         return (
           <>
             <Switch id="plate_enabled" label={NOTE_NAMES.plate} value={e.plate_enabled} />
-            <Field id="plate_host_note" label="Bring a plate wording" value={e.plate_host_note} hint="Only appears when the switch above is on." />
+            <Choice id="plate_mode" label="How much you're asking" value={e.plate_mode} options={PLATE_MODES} hint="It sets the default wording, and it is what the board says at the top when a guest opens it." />
+            <Field id="plate_host_note" label="Bring a plate wording" value={e.plate_host_note} hint="Only appears when the switch above is on. Empty uses the wording for the setting above." />
           </>
         );
       case "gifts":

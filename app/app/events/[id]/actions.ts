@@ -262,6 +262,34 @@ export async function setKnowOrder(eventId: string, order: string[]) {
   revalidateEvent(eventId);
 }
 
+// Bring a plate, from the host's side.
+//
+// A host adds an item to ask for it, so it goes on unclaimed: "somebody bring a salad" is the
+// point of putting it there. A guest adds one already carrying it. Removing is the host's for any
+// item, and releasing hands a dish back to the list when the guest who had it drops out.
+//
+// These go through the host's own session, so row level security is the whole check: the policy
+// on plate_items is the same members test every host table has.
+export async function addPlateItem(eventId: string, label: string, tags: string[]) {
+  const clean = label.trim().slice(0, 80);
+  if (!clean) return;
+  const { supabase, uid } = await hostClient();
+  await supabase.from("plate_items").insert({ event_id: eventId, label: clean, tags, added_by_profile_id: uid });
+  revalidateEvent(eventId);
+}
+
+export async function removePlateItem(eventId: string, itemId: string) {
+  const { supabase } = await hostClient();
+  await supabase.from("plate_items").delete().eq("id", itemId).eq("event_id", eventId);
+  revalidateEvent(eventId);
+}
+
+export async function releasePlateItem(eventId: string, itemId: string) {
+  const { supabase } = await hostClient();
+  await supabase.from("plate_items").update({ claimed_by_guest_id: null }).eq("id", itemId).eq("event_id", eventId);
+  revalidateEvent(eventId);
+}
+
 // Draft, live, saying thanks, put away. One tap from the badge in the header, which is where a
 // host reads the state, so the place that tells you is the place that changes it.
 const STATUSES = ["draft", "live", "thanks", "archived"];

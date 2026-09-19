@@ -63,6 +63,17 @@ select m.name,
     ('0013 ask_name', 'ask_name'),
     ('0014 ask_phone', 'ask_phone')
   ) as m(name, col)
+ union all
+-- 0015 adds no column, it adds the four functions a guest reaches the plate board through, so it
+-- is checked by name rather than by column.
+select '0015 plate',
+       case when (select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+                   where n.nspname = 'public'
+                     and p.proname in ('get_plate','plate_claim','plate_unclaim','plate_add','plate_json')) = 5
+            then 'ok, all five functions'
+            else 'NOT APPLIED, the plate functions are missing'
+       end
+ order by 1
 """
 
 

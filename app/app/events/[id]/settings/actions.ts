@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidateEvent } from "@/lib/revalidate-event";
 import { normalisePhone } from "@/lib/format";
 import { copy } from "@/lib/copy";
-import { GIFT_OPTIONS, PHOTO_OPTIONS, optionValues } from "@/lib/good-to-know";
+import { GIFT_OPTIONS, PHOTO_OPTIONS, PLATE_MODES, optionValues } from "@/lib/good-to-know";
 
 export type SaveState = { saved?: boolean; error?: string; note?: string };
 
@@ -20,6 +20,7 @@ const CHOICES: Record<string, readonly string[]> = {
   parents_mode: ["stay", "drop_off", "either"],
   photo_sharing: optionValues(PHOTO_OPTIONS),
   gift_stance: optionValues(GIFT_OPTIONS),
+  plate_mode: optionValues(PLATE_MODES),
   ask_party_mode: ["single", "split"],
   status: ["draft", "live", "thanks", "archived"],
 };

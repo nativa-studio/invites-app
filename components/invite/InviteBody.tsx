@@ -14,11 +14,15 @@ import { LineupInvite } from "./LineupInvite";
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e, greeting, reply, layout, skipAnimation,
+  e, greeting, reply, plate, layout, skipAnimation,
 }: {
   e: PublicEvent;
   greeting: string;
   reply: React.ReactNode;
+  /** The bring a plate board, which follows the reply rather than taking a place of its own.
+   *  A guest only sees it once they have said yes, so where it sits is decided by the answer
+   *  rather than by the host's order. */
+  plate?: React.ReactNode;
   layout?: PublicEvent["layout_id"];
   skipAnimation?: boolean;
 }) {
@@ -28,7 +32,7 @@ export function InviteBody({
       <LineupInvite
         event={e}
         greeting={greeting}
-        reply={reply}
+        reply={<>{reply}{plate}</>}
         skipAnimation={skipAnimation}
       />
     );
@@ -45,7 +49,7 @@ export function InviteBody({
   const draw: Record<InvitePart, React.ReactNode> = {
     updates: <UpdatesCard e={e} />,
     details: e.show_details ? <DetailsCard e={e} /> : null,
-    reply,
+    reply: <>{reply}{plate}</>,
     day: e.show_runsheet ? <DayCard e={e} /> : null,
     know: e.show_good_to_know ? <KnowCard e={e} /> : null,
     after: e.show_after ? <AskCard e={e} /> : null,

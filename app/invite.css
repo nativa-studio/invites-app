@@ -120,6 +120,32 @@
 .chip:has(input:checked) { background: var(--navy); color: var(--paper); }
 .chip:has(input:focus-visible) { outline: 3px solid var(--yel); outline-offset: 3px; }
 .cal { display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: center; }
+
+/* Bring a plate. A list to read down, not a form to fill in: a picture, what it is, who has it,
+   and the one button that changes that. The button is on the right of its own row rather than
+   under the dish, so the column of them reads as the thing to tap. */
+.plate .dishes { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: 2px; }
+.plate .dish { display: grid; grid-template-columns: 32px 1fr auto; align-items: center; gap: 12px; padding: 12px 0; border-top: 2px dotted color-mix(in srgb, var(--navy) 25%, transparent); }
+.plate .dish:first-child { border-top: 0; }
+.plate .dish .what { display: grid; gap: 2px; min-width: 0; }
+.plate .dish .n { font-family: var(--font-display); font-size: 17px; line-height: 1.2; overflow-wrap: anywhere; }
+.plate .dish .b { font-size: 13.5px; opacity: 0.75; overflow-wrap: anywhere; }
+.plate .dish .tags { white-space: nowrap; }
+/* Taken by somebody stays perfectly readable. It is greyed nowhere, because the point of the
+   board is reading who has what, not spotting the gaps. */
+.plate .dish.taken .n { text-decoration: none; }
+/* The dish gets the width, the button gets what it needs. A long name and a 150px button in the
+   same row left "Sausage rolls, the good ones" three lines tall with "nut free" broken across
+   two of them. */
+.plate .dish .pbtn { min-height: 40px; font-size: 13.5px; padding: 0 12px; white-space: nowrap; }
+.plate .addplate { display: grid; gap: 12px; width: 100%; }
+
+/* What the kitchen needs to know, counted. Never a name and never anybody's note. */
+.allergy {
+  width: 100%; margin: 0; padding: 10px 14px; border-radius: 10px;
+  background: color-mix(in srgb, var(--yel) 35%, var(--paper));
+  border: 2px solid var(--navy); font-size: 14.5px; line-height: 1.4;
+}
 .err { background: #fff; border: 2px solid var(--red); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--red); }
 .foot { font-size: 13px; color: var(--crm); text-align: center; }
 .foot a { color: var(--crm); }

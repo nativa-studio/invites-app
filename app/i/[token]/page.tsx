@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getInvite, getInviteCard } from "@/lib/guest/invite";
+import { getPlate } from "@/lib/guest/plate";
 import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import { cardUrl, shareMetadata } from "@/lib/share-meta";
 import { InvitePage } from "@/components/invite/InvitePage";
@@ -27,7 +28,10 @@ export default async function Page({ params, searchParams }: Params) {
   const invite = await getInvite(token);
   if (!invite) notFound();
   const link = inviteLink(await getSiteUrl(), token);
+  // Only fetched for a guest who is coming, since that is the only one who sees it. A host who
+  // has never switched bring a plate on gets null back and no card.
+  const plate = invite.guest.status === "yes" ? await getPlate(token) : null;
   // ?layout= lets a host hold their own phone and flick through the designs before choosing one
   // in Settings. It changes nothing: the saved layout is whatever Settings says.
-  return <InvitePage invite={invite} token={token} link={link} layout={asLayout(layout)} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
+  return <InvitePage invite={invite} token={token} link={link} plate={plate} layout={asLayout(layout)} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
 }

@@ -62,6 +62,32 @@ export const copy = {
     apple: "Apple or Outlook",
     changed: "Reply updated",
   },
+  // Bring a plate, as a guest reads it. The board is only ever seen by somebody who has said
+  // yes, so none of this has to talk them into coming.
+  plate: {
+    heading: "Bring a plate",
+    everyone: "It's a bring a plate afternoon. Claim something below, or add your own.",
+    free: "Bring something for the table if you like. Claim an item below or add your own, so we don't end up with five pavlovas.",
+    empty: "Nothing on the list yet. Add what you're bringing and everyone else can see it.",
+    nobody: "Nobody yet",
+    claim: "I'll bring this",
+    mine: "You're bringing this",
+    unclaim: "Put it back",
+    bringing: (who: string) => `${who} is bringing this`,
+    addHeading: "Bringing something else?",
+    addLabel: "What is it?",
+    addPlaceholder: "Pavlova, garden salad, a bag of ice",
+    addTags: "Is it free of anything? (optional)",
+    add: "Add it to the list",
+    // Counts, never names and never anybody's note. The same promise the host's screen makes.
+    allergies: (parts: string) => `Please keep in mind: ${parts}.`,
+    allergy: (n: number, chip: string) => `${n} ${n === 1 ? "guest needs" : "guests need"} ${chip}`,
+    needsName: "Give it a name and it'll go on the list.",
+    tooMany: "That's plenty from one household. Take something off the list first.",
+    notComing: "Say yes on your invite first, and the list opens up.",
+    wrongLink: "This link doesn't look right. Ask the host to send it again.",
+    failed: "That didn't go through. Please try again.",
+  },
   sections: {
     details: "The details",
     day: "The day",
@@ -106,6 +132,7 @@ export const copy = {
     photosAsk: "Snap away, and please check with people before posting them online.",
     photosShare: "Take all the photos you like and share them with us after.",
     plateFree: "Bring something for the table if you feel inspired. No pressure at all.",
+    plateEveryone: "It's a bring a plate afternoon, so please bring something for the table.",
   },
   host: {
     previewReply: "Tap to change what this asks, including the reply by date. To answer it the way a guest does, switch to Preview.",
@@ -263,6 +290,21 @@ export const copy = {
     statusHeading: "This event",
     statusOpen: (name: string) => `${name}. Change it, or delete this event.`,
     partsOpen: "Invite sections",
+    plateAsk: "Ask for something",
+    plateAskBlurb: "It goes on the list with nobody against it, so a guest can claim it. Guests add their own the same way, already carrying it.",
+    plateAddIt: "Put it on the list",
+    plateBlurb: (mode: string, total: number, unclaimed: number) => {
+      const who = mode === "everyone" ? "Everyone is asked to bring something." : "Bringing something is optional.";
+      if (total === 0) return `${who} Nothing on the list yet.`;
+      const left = unclaimed === 0 ? "everything has somebody" : `${unclaimed} still with nobody`;
+      return `${who} ${total} ${total === 1 ? "thing" : "things"} on the list, ${left}.`;
+    },
+    plateNote: (note: string) => `Your guests read: ${note}`,
+    plateEmpty: "Ask for the things you actually need and guests can claim them. They can add their own too.",
+    plateNobody: "Nobody yet",
+    plateAsked: "You asked for this, nobody yet",
+    plateRelease: "Free it up",
+    plateRemove: "Remove",
     statusBlurb: "A draft is yours alone to look at. Live means the links work and guests can reply. Nothing is sent either way: you send the links yourself, from Guests.",
     statusNames: { draft: "A draft", live: "Live", thanks: "Saying thanks", archived: "Archived" } as Record<string, string>,
     partsHeading: "Invite sections",
