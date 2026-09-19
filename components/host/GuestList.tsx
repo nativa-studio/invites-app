@@ -4,9 +4,10 @@ import { copy } from "@/lib/copy";
 import { formatDateTime } from "@/lib/format";
 import { inviteText, reminderText, smsLink, whatsappLink, type TemplateEvent } from "@/lib/messages";
 import type { GuestRow } from "@/lib/db/types";
-import { markSent, newLink, removeGuest, setGuestGroup } from "@/app/app/events/[id]/actions";
+import { markSent, setGuestGroup } from "@/app/app/events/[id]/actions";
 import { CopyButton } from "./CopyButton";
 import { Sheet } from "./Sheet";
+import { EditGuest } from "./EditGuest";
 import { useHasShare } from "./capabilities";
 
 type Props = { eventId: string; guests: GuestRow[]; event: TemplateEvent; site: string };
@@ -19,6 +20,8 @@ export function GuestList({ eventId, guests, event, site }: Props) {
   const [sharing, setSharing] = useState<string | null>(null);
   // The guest waiting on a group name, which is what the New group sheet is for.
   const [naming, setNaming] = useState<GuestRow | null>(null);
+  // The guest open in the edit sheet.
+  const [editing, setEditing] = useState<GuestRow | null>(null);
   // Which message the open panel will send. Guessed from where the guest is up to, then the host
   // decides: the guess was the whole of it before, and it was unsayable and invisible.
   const [mode, setMode] = useState<"invite" | "remind">("invite");
@@ -84,12 +87,13 @@ export function GuestList({ eventId, guests, event, site }: Props) {
   // Opening WhatsApp leaves this page, which would cancel a request still in flight, so the
   // guest is marked as sent before anything navigates. Messages does not unload the page, but
   // the same order keeps both routes honest.
-  async function sendVia(g: GuestRow, kind: "sms" | "wa", remind = false) {
+  async function sendVia(g: GuestRow, kind: "sms" | "wa", remind = false, to?: string | null) {
     if (busy) return;
     setBusy(g.id);
     const link = `${site}/i/${g.token}`;
     const body = remind ? reminderText(event, g, link) : inviteText(event, g, link);
-    const href = kind === "sms" ? smsLink(g.phone ?? "", body) : whatsappLink(g.phone ?? "", body);
+    const number = to ?? g.phone ?? "";
+    const href = kind === "sms" ? smsLink(number, body) : whatsappLink(number, body);
     try {
       await markSent(eventId, g.id, remind ? "reminded" : "sent");
     } catch {
@@ -130,10 +134,16 @@ export function GuestList({ eventId, guests, event, site }: Props) {
             g.replied_at ? `${copy.host.trail.replied} ${formatDateTime(g.replied_at)}` : null,
             g.reminded_at ? `${copy.host.trail.reminded} ${formatDateTime(g.reminded_at)}` : null,
           ].filter(Boolean).join(" · ");
-          const remind = g.status === "pending" && Boolean(g.sent_at);
           // Only the open panel's switch decides what goes out. A guest with nothing sent yet has
           // no switch, so it can only be the invite.
           const sendAsRemind = Boolean(g.sent_at) && mode === "remind";
+          // Who there is to text. One row unless the guest carries a second person, and the
+          // fallback name is the guest's own, because "Text" with no name under it is fine when
+          // there is only one of them.
+          const people = [
+            { key: "1", who: g.contact_name || g.name, phone: g.phone },
+            ...(g.phone_2 || g.contact_name_2 ? [{ key: "2", who: g.contact_name_2 || "Also", phone: g.phone_2 ?? null }] : []),
+          ];
           const expecting = copy.host.expecting(g.expected_children, g.expected_adults);
           const detail = g.status === "yes"
             ? [g.party_size ? `${g.party_size} coming` : null, g.party_names.length ? g.party_names.join(", ") : null, g.dietary.length ? g.dietary.join(", ") : null, g.dietary_note, g.accessibility_note ? `Access: ${g.accessibility_note}` : null, g.note ? `"${g.note}"` : null].filter(Boolean).join(" · ")
@@ -178,9 +188,16 @@ export function GuestList({ eventId, guests, event, site }: Props) {
                       <button type="button" className="btn small" aria-pressed={mode === "remind"} onClick={() => setMode("remind")}>{copy.host.sendReminder}</button>
                     </div>
                   )}
+                  {/* One row per person to text, when the guest has two. The name is on the
+                      button, because "0403..." twice tells a host nothing about who is who. */}
+                  {people.map((p) => (
+                    <div className="actions" key={p.key}>
+                      {people.length > 1 && <span className="who">{p.who}</span>}
+                      <button type="button" className="btn small primary" disabled={busy !== null} onClick={() => void sendVia(g, "sms", sendAsRemind, p.phone)}>{p.phone ? copy.host.text : copy.host.textPick}</button>
+                      {p.phone && <button type="button" className="btn small" disabled={busy !== null} onClick={() => void sendVia(g, "wa", sendAsRemind, p.phone)}>{copy.host.whatsapp}</button>}
+                    </div>
+                  ))}
                   <div className="actions">
-                    <button type="button" className="btn small primary" disabled={busy !== null} onClick={() => void sendVia(g, "sms", sendAsRemind)}>{g.phone ? copy.host.text : copy.host.textPick}</button>
-                    {g.phone && <button type="button" className="btn small" disabled={busy !== null} onClick={() => void sendVia(g, "wa", sendAsRemind)}>{copy.host.whatsapp}</button>}
                     {canShare && <button type="button" className="btn small" onClick={() => void shareVia(g, sendAsRemind)}>{copy.host.shareMore}</button>}
                     <CopyButton text={link} label={copy.host.copy} />
                     <button type="button" className="btn small" onClick={() => setSharing(null)}>{copy.host.shareClose}</button>
@@ -188,15 +205,29 @@ export function GuestList({ eventId, guests, event, site }: Props) {
                 </>
               ) : (
                 <div className="actions">
-                  <button type="button" className="btn small primary" onClick={() => openShare(g)}>{remind ? copy.host.remind : copy.host.share}</button>
-                  <button type="button" className="btn small" onClick={() => { if (confirm("Make a new link? The old one stops working.")) start(() => { void newLink(eventId, g.id); }); }}>{copy.host.newLink}</button>
-                  <button type="button" className="btn small" onClick={() => { if (confirm(`Remove ${g.name}?`)) start(() => { void removeGuest(eventId, g.id); }); }}>Remove</button>
+                  {/* Always Share, never only Remind. The button used to become Remind the moment
+                      a guest had been sent anything, which took sending the invite off the row
+                      altogether: a message that did not go, or went to the wrong number, left no
+                      way back to it. Which of the two goes out is chosen inside. */}
+                  <button type="button" className="btn small primary" onClick={() => openShare(g)}>{copy.host.share}</button>
+                  <button type="button" className="btn small" onClick={() => setEditing(g)}>{copy.host.edit}</button>
                 </div>
               )}
             </article>
           );
         })}
       </div>
+
+      {/* Keyed by guest, so opening one never holds the last one's typing. */}
+      {editing && (
+        <EditGuest
+          key={editing.id}
+          eventId={eventId}
+          guest={guests.find((g) => g.id === editing.id) ?? editing}
+          known={known}
+          onClose={() => setEditing(null)}
+        />
+      )}
 
       {/* Keyed by guest, so naming a group for one guest never opens holding the last one's typing. */}
       {naming && (

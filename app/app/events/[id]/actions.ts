@@ -49,6 +49,49 @@ export async function addGuest(_prev: AddGuestState, fd: FormData): Promise<AddG
   return { added: name };
 }
 
+export type EditGuestState = { error?: string; saved?: boolean };
+
+// Everything about a guest a host can change after adding them.
+//
+// A guest could not be edited at all before: a mistyped number meant removing them and starting
+// again, which threw away their link, and anything they had already replied.
+//
+// The second contact is written only when the database has the columns. A host on a database
+// without migration 0010 keeps every other change and is told which one did not land, rather than
+// losing the lot to one unknown name.
+export async function editGuest(_prev: EditGuestState, fd: FormData): Promise<EditGuestState> {
+  const eventId = String(fd.get("event_id") ?? "");
+  const guestId = String(fd.get("guest_id") ?? "");
+  const name = String(fd.get("name") ?? "").trim();
+  if (!name) return { error: "A name is needed." };
+  const { supabase } = await hostClient();
+
+  const patch: Record<string, unknown> = {
+    name,
+    contact_name: String(fd.get("contact_name") ?? "").trim() || null,
+    phone: normalisePhone(String(fd.get("phone") ?? "")) || null,
+    contact_name_2: String(fd.get("contact_name_2") ?? "").trim() || null,
+    phone_2: normalisePhone(String(fd.get("phone_2") ?? "")) || null,
+    expected_children: count(fd, "expected_children"),
+    expected_adults: count(fd, "expected_adults"),
+    groups: groups(fd),
+  };
+
+  let { error } = await supabase.from("guests").update(patch).eq("id", guestId).eq("event_id", eventId);
+  if (error && /contact_name_2|phone_2/.test(error.message)) {
+    delete patch.contact_name_2;
+    delete patch.phone_2;
+    ({ error } = await supabase.from("guests").update(patch).eq("id", guestId).eq("event_id", eventId));
+    if (!error) {
+      revalidateEvent(eventId);
+      return { error: "Saved, except the second person to text: the database needs migration 0010 first." };
+    }
+  }
+  if (error) return { error: error.message };
+  revalidateEvent(eventId);
+  return { saved: true };
+}
+
 export type AddManyState = { error?: string; added?: number; skipped?: number };
 
 export async function addGuests(_prev: AddManyState, fd: FormData): Promise<AddManyState> {

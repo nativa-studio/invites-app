@@ -120,6 +120,10 @@ export type GuestRow = {
   name: string;
   contact_name: string | null;
   phone: string | null;
+  /** A second person to text about the same guest, a mum and a dad. Optional on the type because
+   *  a database without migration 0010 does not send them. */
+  contact_name_2?: string | null;
+  phone_2?: string | null;
   token: string;
   status: GuestStatus;
   /** How the host knows them: family, school, work. Never shown to a guest. */

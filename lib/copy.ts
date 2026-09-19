@@ -219,6 +219,13 @@ export const copy = {
     deleteCancel: "Keep it",
     remind: "Remind",
     newLink: "New link",
+    newLinkAsk: "Make a new link? The one you have already sent stops working.",
+    newLinkWhy: "Only if the link went to the wrong person. It kills the one you already sent.",
+    remove: "Remove",
+    edit: "Edit",
+    editGuestBlurb: "Their name, who you text about them, and how many you are expecting.",
+    secondContact: "Someone else to text",
+    secondContactHint: "A second parent, say. You pick which one when you send.",
     trail: {
       added: "added",
       sent: "sent",
