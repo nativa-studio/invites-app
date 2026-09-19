@@ -132,8 +132,9 @@ A personal link reads `https://bunting.cloud/i/7ym7kq5wwb`: 34 characters agains
 Vercel address, and the line a chat app prints under the preview card drops from 25 characters to
 13.
 
-`.cloud` is run by Aruba, not by Vercel, so step 1 does not apply and the DNS records in step 2
-have to be added at whichever registrar sold it.
+Bought **inside Vercel**, so Vercel is the registrar as well as the host and writes the DNS
+itself. Step 2 does not happen: there are no records to copy anywhere. An earlier version of this
+note said Vercel does not sell `.cloud`. It does.
 
 The name was re-opened once and settled. Around forty alternatives were checked, and the test that
 decided it is whether a guest who hears the name once can type it correctly. Bunting passes: one
@@ -168,7 +169,7 @@ whether Vercel sells the ending.
   domains that need an Australian business behind them. Buy it from an Australian registrar
   (VentraIP, Crazy Domains, Netregistry) using the Nativa Studio ABN, then do step 2.
 
-### 2. Point it at Vercel (this is where `bunting.cloud` starts)
+### 2. Point it at Vercel (skipped for `bunting.cloud`, since Vercel sold it)
 
 In Vercel: project, **Settings**, **Domains**, **Add**, type the domain. Vercel then shows you a card with the exact records to create. **Read the values off that card.** They are specific to this project, and any A record or `cname.vercel-dns.com` value you find written down elsewhere, including in an older note from me, is likely to be the wrong one now.
 
@@ -182,6 +183,20 @@ Add both in your registrar's DNS screen. Then leave it. It is usually live withi
 Add both `bunting.cloud` and `www.bunting.cloud` to the Vercel project, and set the `www` one to redirect to the bare one, so people who type either land in the same place.
 
 You do not have to do anything about the certificate. Vercel gets one free from Let's Encrypt as soon as the records resolve, renews it by itself, and sends every `http` visitor to `https`.
+
+### 2b. Attach it to this project
+
+Buying the domain puts it on the account, not on the project. Vercel then offers "Deploy
+something", "Proxy an existing site", "Redirect this domain" and "Set up email". **Take none of
+them**: the first makes a second project, and this one already exists.
+
+Instead open the **invites-app** project, **Settings**, **Domains**, **Add**, and type
+`bunting.cloud`. Because Vercel is the registrar it attaches with nothing to copy and no records
+to add. Add `www.bunting.cloud` the same way and set it to redirect to the bare name, so whichever
+one a guest types lands in the same place.
+
+The certificate looks after itself. Vercel gets one free from Let's Encrypt as soon as the
+nameservers finish propagating, renews it, and sends every `http` visitor to `https`.
 
 ### 3. Tell the app its own name
 
