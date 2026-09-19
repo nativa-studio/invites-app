@@ -15,6 +15,8 @@ export function LookPanel({ e }: { e: EventRow }) {
         eventId={e.id}
         saved={{
           type: e.type,
+          title: e.title,
+          artwork: e.invite_image_path,
           layout: asLayoutId(e.layout_id),
           palette: e.palette,
           themeId: e.theme_id,

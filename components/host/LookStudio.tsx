@@ -3,7 +3,7 @@ import { useState } from "react";
 import { copy } from "@/lib/copy";
 import { designsFor, LAYOUTS, type LayoutOption } from "@/lib/layouts";
 import { EVENT_TYPES } from "@/lib/event-types";
-import { DesignThumb } from "./DesignThumb";
+import { InviteThumb } from "./InviteThumb";
 import { Sheet } from "./Sheet";
 import type { Palette } from "@/lib/db/types";
 
@@ -20,6 +20,8 @@ export type LookState = {
   type: string;
   layout: string;
   sections: Sections;
+  title: string;
+  artwork: string | null;
   palette: Palette | null;
   themeId: string | null;
 };
@@ -93,7 +95,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
               onClick={() => setOpen(d)}
             >
               <span className="design-art">
-                <DesignThumb id={d.id} palette={saved.palette} themeId={saved.themeId} />
+                <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} palette={saved.palette} themeId={saved.themeId} />
               </span>
               <span className="n">{d.name}</span>
               <span className="b">{d.line}</span>

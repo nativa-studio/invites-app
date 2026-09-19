@@ -10,6 +10,7 @@ export type EventSummary = {
   layout_id: string | null;
   invite_image_path: string | null;
   theme_id: string | null;
+  palette: import("@/lib/db/types").Palette | null;
   yes: number;
   pending: number;
   people: number;
@@ -29,7 +30,7 @@ export function EventCard({ e }: { e: EventSummary }) {
   return (
     <Link href={`/app/events/${e.id}`} className="evt-card">
       <span className="evt-art">
-        <InviteThumb artwork={e.invite_image_path} title={e.title} themeId={e.theme_id} />
+        <InviteThumb artwork={e.invite_image_path} title={e.title} themeId={e.theme_id} palette={e.palette} layout={e.layout_id ?? undefined} />
       </span>
       <span className="evt-body">
         <span className="evt-title">{e.title}</span>
