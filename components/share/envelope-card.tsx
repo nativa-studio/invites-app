@@ -14,6 +14,23 @@ function shade(hex: string, amount: number): string {
 
 export type CardVariant = "front" | "back" | "posted" | "opening" | "sealed";
 
+export type StockName = "red" | "beige";
+
+// The envelope's own colours, kept apart from the event's palette because they are the stationery
+// rather than the artwork. The suite is a red envelope on white. The lineup is a cream page, and a
+// red envelope on it fought the page, so its envelope is cut from a warmer, deeper shade of the
+// same paper: it reads as an envelope lying on a sheet rather than as a colour dropped on top.
+//
+// Beige paper takes dark writing, red paper takes pale, so the ink travels with the stock.
+type Stock = { ground: string; body: string; flap: string; rim: string; ink: string; label: string; mark: string };
+
+function stockFor(p: Palette, name: StockName | undefined): Stock {
+  if (name === "beige") {
+    return { ground: "#FDF6E4", body: "#E9DCC1", flap: "#F4EAD6", rim: "#CDBB98", ink: "#2B2119", label: "#8B7A61", mark: "#B6A17B" };
+  }
+  return { ground: "#FFFFFF", body: shade(p.red, -0.18), flap: p.red, rim: shade(p.red, -0.32), ink: PAPER, label: p.cream, mark: shade(p.red, -0.38) };
+}
+
 export type CardInput = {
   palette: Palette;
   /** Who the invite is for. Absent on the group link, which is addressed to nobody in particular. */
@@ -24,6 +41,8 @@ export type CardInput = {
   artwork?: string | null;
   /** Two digits at most, for the stamp. */
   age?: string | null;
+  /** The paper the envelope is cut from. The suite's is red, the lineup's is beige. */
+  stock?: StockName;
   variant?: CardVariant;
 };
 
@@ -144,26 +163,25 @@ function opening({ palette: p, addressee, title, artwork }: CardInput) {
 //
 // This is the face that goes in a message, because it is the face the guest then taps open: the
 // picture in the chat and the thing on the page are one object.
-function back({ palette: p, addressee, title, artwork }: CardInput) {
-  const body = shade(p.red, -0.18);
-  const rim = shade(p.red, -0.32);
+function back({ palette: p, addressee, title, artwork, stock }: CardInput) {
+  const st = stockFor(p, stock);
   const PAD = 26;
   const EW = W - PAD * 2, EH = H - PAD * 2;
   const APEX = 300;
   return (
-    <div style={{ width: W, height: H, display: "flex", background: "#FFFFFF", padding: PAD, fontFamily: "Nunito" }}>
-      <div style={{ position: "relative", width: EW, height: EH, display: "flex", background: body, borderRadius: 22 }}>
+    <div style={{ width: W, height: H, display: "flex", background: st.ground, padding: PAD, fontFamily: "Nunito" }}>
+      <div style={{ position: "relative", width: EW, height: EH, display: "flex", background: st.body, borderRadius: 22 }}>
         {/* The flap, folded down, lighter than the body it lies on, exactly as in the app. */}
         <svg width={EW} height={APEX + 14} viewBox={`0 0 ${EW} ${APEX + 14}`} style={{ position: "absolute", left: 0, top: 0 }}>
-          <path d={`M0 0 L${EW / 2} ${APEX} L${EW} 0 Z`} fill={p.red} />
-          <path d={`M0 0 L${EW / 2} ${APEX} L${EW} 0`} fill="none" stroke={rim} strokeWidth="5" strokeLinejoin="round" />
+          <path d={`M0 0 L${EW / 2} ${APEX} L${EW} 0 Z`} fill={st.flap} />
+          <path d={`M0 0 L${EW / 2} ${APEX} L${EW} 0`} fill="none" stroke={st.rim} strokeWidth="5" strokeLinejoin="round" />
         </svg>
         {/* The wax seal, at the point of the flap, holding it shut. */}
         <svg width="120" height="120" viewBox="0 0 120 120" style={{ position: "absolute", left: EW / 2 - 60, top: APEX - 60 }}>
           <circle cx="60" cy="60" r="52" fill={p.yellow} stroke={p.navy} strokeWidth="7" />
           <path d="M66 24L34 66h24l-10 30 42-46H66l13-26z" fill={p.navy} />
         </svg>
-        {nameBlock(p, addressee, title, false)}
+        {nameBlock(st, addressee, title, false)}
         {characters(artwork)}
       </div>
     </div>
@@ -186,7 +204,7 @@ function back({ palette: p, addressee, title, artwork }: CardInput) {
 // that, and wrapped. Sizing a shade small never shows. A stranded word does.
 const ROOM = 624;
 
-function nameBlock(p: Palette, addressee: string | null | undefined, title: string, fallback: boolean) {
+function nameBlock(st: Stock, addressee: string | null | undefined, title: string, fallback: boolean) {
   // The group link is addressed to nobody, so there is no name to write. On the back that line
   // is simply left out: a chat app prints the title as text directly under the picture, and
   // saying it twice in two type sizes looks like a mistake. The front is not in a chat, it is on
@@ -198,11 +216,11 @@ function nameBlock(p: Palette, addressee: string | null | undefined, title: stri
   const size = Math.max(26, Math.min(74, Math.floor((ROOM / Math.max(1, name.length) - track) / 0.72)));
   return (
     <div style={{ position: "absolute", left: 88, bottom: 92, display: "flex", flexDirection: "column", width: ROOM }}>
-      <div style={{ display: "flex", fontFamily: HAND, fontSize: 30, letterSpacing: 9, color: p.cream, opacity: 0.85 }}>
+      <div style={{ display: "flex", fontFamily: HAND, fontSize: 30, letterSpacing: 9, color: st.label }}>
         {addressee ? "INVITE FOR" : "YOU'RE INVITED"}
       </div>
       {big ? (
-        <div style={{ display: "flex", fontSize: size, letterSpacing: track, color: PAPER, lineHeight: 1.1, marginTop: 10 }}>{name}</div>
+        <div style={{ display: "flex", fontSize: size, letterSpacing: track, color: st.ink, lineHeight: 1.1, marginTop: 10 }}>{name}</div>
       ) : null}
     </div>
   );
@@ -226,22 +244,21 @@ function characters(artwork: string | null | undefined) {
 // Everything it shares with the back is drawn from the same numbers: the body colour, the corner
 // radius, where the name sits and how it is fitted, and the band of characters. The two should
 // look like one envelope turned over, not like two envelopes.
-function front({ palette: p, addressee, title, age, artwork }: CardInput) {
-  const body = shade(p.red, -0.18);
-  const mark = shade(p.red, -0.38);
+function front({ palette: p, addressee, title, age, artwork, stock }: CardInput) {
+  const st = stockFor(p, stock);
   const PAD = 26;
   const EW = W - PAD * 2, EH = H - PAD * 2;
   return (
-    <div style={{ width: W, height: H, display: "flex", background: "#FFFFFF", padding: PAD, fontFamily: "Nunito" }}>
-      <div style={{ position: "relative", width: EW, height: EH, display: "flex", background: body, borderRadius: 22 }}>
+    <div style={{ width: W, height: H, display: "flex", background: st.ground, padding: PAD, fontFamily: "Nunito" }}>
+      <div style={{ position: "relative", width: EW, height: EH, display: "flex", background: st.body, borderRadius: 22 }}>
         {/* The seam along the top, where the flap folds over from behind. The only sign from this
             side that there is a flap at all. */}
         <svg width={EW} height="10" viewBox={`0 0 ${EW} 10`} style={{ position: "absolute", left: 0, top: 0 }}>
-          <path d={`M22 6 L${EW - 22} 6`} stroke={mark} strokeWidth="4" opacity="0.5" strokeLinecap="round" />
+          <path d={`M22 6 L${EW - 22} 6`} stroke={st.rim} strokeWidth="4" strokeLinecap="round" />
         </svg>
         {/* The postmark, struck beside the stamp the way one is. */}
         <svg width="300" height="150" viewBox="0 0 300 150" style={{ position: "absolute", right: 210, top: 44 }}>
-          <g fill="none" stroke={mark} strokeWidth="4" opacity="0.55" strokeLinecap="round">
+          <g fill="none" stroke={st.mark} strokeWidth="4" strokeLinecap="round">
             <circle cx="70" cy="72" r="56" />
             <circle cx="70" cy="72" r="42" />
             {[0, 1, 2, 3].map((i) => (
@@ -258,7 +275,7 @@ function front({ palette: p, addressee, title, age, artwork }: CardInput) {
             {age ? <div style={{ display: "flex", fontFamily: DISPLAY, fontSize: 44, color: "#FFFFFF", lineHeight: 1 }}>{age}</div> : null}
           </div>
         </div>
-        {nameBlock(p, addressee, title, true)}
+        {nameBlock(st, addressee, title, true)}
         {characters(artwork)}
       </div>
     </div>
