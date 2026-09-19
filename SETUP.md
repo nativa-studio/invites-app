@@ -121,7 +121,13 @@ The site answers on `invites-app-xi.vercel.app`. Pointing your own name at it is
 
 ### The domain: `bunting.cloud`, bought
 
-Bought on 19 September 2026. The app is called Bunting and the site is `bunting.cloud`.
+Bought on 19 September 2026, and **live the same day**: `bunting.cloud` and `www.bunting.cloud`
+are both on the project with certificates, served from Vercel's own nameservers. The app is called
+Bunting and the site is `bunting.cloud`.
+
+**Do Supabase before signing in on a new domain.** Supabase only returns people to addresses on
+its redirect list, so Continue with Google bounces on a domain it has not been told about. Step 4
+before step 3 if you are impatient to log in.
 
 `bunting.com`, `bunting.com.au`, `bunting.au`, `bunting.app`, `bunting.net.au`, `bunting.io` and
 `bunting.co` were all taken, which is why it is none of those. `bunting.day`, `bunting.party`,
