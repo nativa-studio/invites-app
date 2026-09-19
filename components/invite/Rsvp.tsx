@@ -31,6 +31,7 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
         googleLink={googleLink}
         icsLink={icsLink}
         onChange={() => { setEditingFrom(state); setChoice(""); }}
+        landed={state.ok}
       />
     );
   }

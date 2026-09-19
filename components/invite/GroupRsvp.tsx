@@ -28,6 +28,7 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
         googleLink={state.ok ? state.googleLink : null}
         icsLink={state.ok ? state.icsLink : "#"}
         onChange={() => { setEditingFrom(state); setChoice(""); }}
+        landed={state.ok}
       />
     );
   }

@@ -86,6 +86,11 @@
 .pbtn { display: flex; align-items: center; justify-content: center; min-height: 56px; width: 100%; max-width: 300px; border-radius: 16px; border: 3px solid var(--navy); background: transparent; color: var(--navy); font-family: var(--font-display); font-size: 20px; text-decoration: none; cursor: pointer; }
 .pbtn.primary { background: var(--red); color: #fff; }
 .pbtn.small { min-height: 44px; font-size: 16px; max-width: none; width: auto; padding: 0 18px; border-radius: 999px; }
+/* The way back. It sat between the two calendar buttons wearing the same outline as both, so
+   "Change my answer" read as a third step in replying rather than as the undo for one. No box,
+   softer ink, underlined: a way back is a link, not a button to press next. The ink is mixed far
+   enough towards the navy to stay above 4.5 to 1 on the paper, measured rather than judged. */
+.pbtn.quiet { border-color: transparent; background: transparent; color: color-mix(in srgb, var(--navy) 80%, var(--paper)); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
 .pbtn:disabled { opacity: 0.6; cursor: default; }
 .pill-link { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--sky-ink); color: #fff; border: 3px solid var(--navy); font-family: var(--font-display); font-size: 17px; text-decoration: none; }
 /* The heading on the card a guest lands on once they have replied.

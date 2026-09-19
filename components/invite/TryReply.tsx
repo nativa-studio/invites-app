@@ -38,6 +38,7 @@ export function TryReply({ e, who, googleLink, icsLink }: {
         googleLink={googleLink}
         icsLink={icsLink}
         onChange={() => { setSent(null); setChoice(""); }}
+        landed
       />
     );
   }
