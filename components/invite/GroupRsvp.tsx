@@ -7,6 +7,7 @@ import { groupRsvpAction, type GroupState } from "@/app/e/[slug]/actions";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, WhoQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
+import { PlateCard } from "./PlateCard";
 
 // The reply on a group link. The same card a guest with their own link answers on, asking the
 // one extra thing this link cannot know: who you are.
@@ -19,17 +20,23 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
   const replied = state.ok ? state.guest : null;
 
   if (replied && !editing) {
+    const plate = state.ok ? state.plate : null;
     return (
-      <ThanksCard
-        yes={replied.status === "yes"}
-        count={replied.party_size ?? 0}
-        host={host}
-        dated={Boolean(e.date)}
-        googleLink={state.ok ? state.googleLink : null}
-        icsLink={state.ok ? state.icsLink : "#"}
-        onChange={() => { setEditingFrom(state); setChoice(""); }}
-        landed={state.ok}
-      />
+      <>
+        <ThanksCard
+          yes={replied.status === "yes"}
+          count={replied.party_size ?? 0}
+          host={host}
+          dated={Boolean(e.date)}
+          googleLink={state.ok ? state.googleLink : null}
+          icsLink={state.ok ? state.icsLink : "#"}
+          onChange={() => { setEditingFrom(state); setChoice(""); }}
+          landed={state.ok}
+        />
+        {/* The board, for somebody who has just said yes on a group link. They have a token now,
+            which is the thing that was missing: it is made by the reply, not before it. */}
+        {plate?.enabled && state.ok && replied.status === "yes" && <PlateCard token={state.token} plate={plate} />}
+      </>
     );
   }
 

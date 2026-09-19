@@ -299,6 +299,17 @@ export async function addPlateItem(eventId: string, label: string, tags: string[
   revalidateEvent(eventId);
 }
 
+// Renaming. A host who asked for "salad" and then learns somebody is bringing a whole spread
+// should be able to say so without taking the item off a guest who has claimed it, which is what
+// remove and re-ask would do.
+export async function renamePlateItem(eventId: string, itemId: string, label: string) {
+  const clean = label.trim().slice(0, 80);
+  if (!clean) return;
+  const { supabase } = await hostClient();
+  await supabase.from("plate_items").update({ label: clean }).eq("id", itemId).eq("event_id", eventId);
+  revalidateEvent(eventId);
+}
+
 export async function removePlateItem(eventId: string, itemId: string) {
   const { supabase } = await hostClient();
   await supabase.from("plate_items").delete().eq("id", itemId).eq("event_id", eventId);

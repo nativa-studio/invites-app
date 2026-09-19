@@ -2,7 +2,7 @@
 import { useState, useTransition } from "react";
 import { copy } from "@/lib/copy";
 import type { HostPlateItem } from "@/lib/db/plate";
-import { addPlateItem, releasePlateItem, removePlateItem } from "@/app/app/events/[id]/actions";
+import { addPlateItem, releasePlateItem, removePlateItem, renamePlateItem } from "@/app/app/events/[id]/actions";
 import { Sheet } from "./Sheet";
 
 // The bring a plate board, from the host's side.
@@ -25,6 +25,9 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
 }) {
   const [pending, start] = useTransition();
   const [open, setOpen] = useState(false);
+  // The item being renamed, and what it is being renamed to.
+  const [editing, setEditing] = useState<HostPlateItem | null>(null);
+  const [newLabel, setNewLabel] = useState("");
   const [label, setLabel] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const unclaimed = items.filter((i) => !i.bringing).length;
@@ -59,7 +62,15 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
 
       {items.map((i) => (
         <div className="grouprow" key={i.id}>
-          <div className="n">{i.label}</div>
+          {/* The name is the way to change the name, the same as the invite's own parts list. A
+              third button on the row would have been the fourth thing to read on it. */}
+          <button
+            type="button"
+            className="n as-link"
+            onClick={() => { setEditing(i); setNewLabel(i.label); }}
+          >
+            {i.label}
+          </button>
           <div className="b">
             {i.bringing ?? (i.fromGuest ? copy.host.plateNobody : copy.host.plateAsked)}
             {i.tags.length > 0 && ` · ${i.tags.join(", ")}`}
@@ -76,6 +87,32 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
           </div>
         </div>
       ))}
+
+      {editing && (
+        <Sheet
+          title={copy.host.plateRename}
+          blurb={copy.host.plateRenameBlurb}
+          dirty={newLabel.trim() !== editing.label}
+          onClose={() => setEditing(null)}
+        >
+          <div className="sheet-body">
+            <div className="field">
+              <label htmlFor="plate_rename">{copy.plate.addLabel}</label>
+              <input id="plate_rename" type="text" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} autoComplete="off" />
+            </div>
+            <div className="actions">
+              <button
+                type="button"
+                className="btn primary"
+                disabled={pending || !newLabel.trim()}
+                onClick={() => { const id = editing.id; start(async () => { await renamePlateItem(eventId, id, newLabel); setEditing(null); }); }}
+              >
+                {copy.host.plateRenameSave}
+              </button>
+            </div>
+          </div>
+        </Sheet>
+      )}
 
       {open && (
         <Sheet title={copy.host.plateAsk} blurb={copy.host.plateAskBlurb} dirty={Boolean(label.trim())} onClose={() => setOpen(false)}>

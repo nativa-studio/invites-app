@@ -344,6 +344,11 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
    on the left and one button on the right, which worked while there was one button. Two of them
    in that column leave a phone about 150px for the name and the counts. */
 .grouprow { display: grid; gap: 4px; padding: 14px 0; border-top: 1px solid var(--app-line); }
+/* A name that is also the way to change it: the invite's parts list, and the potluck board. It
+   is a button, so without a reset the browser draws its own grey box with the name centred in it,
+   which is what happened the first time this was used outside the list it was written for. */
+.as-link { display: inline-flex; align-items: center; min-height: 44px; border: 0; padding: 0; background: transparent; color: var(--app-ink); font: inherit; text-align: left; cursor: pointer; text-decoration: underline; text-decoration-color: var(--app-line-2); text-underline-offset: 3px; }
+
 .grouprow .n { font-weight: 650; font-size: 16px; }
 .grouprow .b { font-size: 14px; color: var(--app-muted, #6b7280); }
 .grouprow .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
