@@ -266,10 +266,11 @@ function front({ palette: p, addressee, title, age, artwork }: CardInput) {
 }
 
 export function envelopeCard(input: CardInput) {
-  // The back is what a message shows, because it is the face the guest taps open. The front is
-  // the other side of the same envelope and is what the invite page opens. The two older
-  // drawings, the cream letter and the half-open one, stay reachable with ?style= for comparing.
-  const variant: CardVariant = input.variant ?? "back";
+  // The front is what a message shows: a letter coming towards you, addressed, stamped, franked.
+  // The back is what the invite page itself opens, flap and seal, so between the chat and the
+  // page a guest sees the envelope turned over and then opened. The two older drawings, the
+  // cream letter and the half-open one, stay reachable with ?style= for comparing.
+  const variant: CardVariant = input.variant ?? "front";
   if (variant === "front") return front(input);
   if (variant === "opening") return opening(input);
   if (variant === "posted") return posted(input);
