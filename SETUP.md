@@ -125,6 +125,15 @@ Bought on 19 September 2026, and **live the same day**: `bunting.cloud` and `www
 are both on the project with certificates, served from Vercel's own nameservers. The app is called
 Bunting and the site is `bunting.cloud`.
 
+**The switch is finished.** Site URL and the callback are set in Supabase, `NEXT_PUBLIC_SITE_URL`
+is set in Vercel, and the build that carries it is live: the app writes `bunting.cloud` into every
+link and every share card. The Vercel address goes on answering, so links already texted keep
+working.
+
+**`NEXT_PUBLIC_SITE_URL` is baked in at build time, not read at page load.** Saving it changes
+nothing until a build runs afterwards. If it ever looks like it has not taken, check the top of
+the Deployments list for a build newer than the save before touching anything else.
+
 **Do Supabase before signing in on a new domain.** Supabase only returns people to addresses on
 its redirect list, so Continue with Google bounces on a domain it has not been told about. Step 4
 before step 3 if you are impatient to log in.
