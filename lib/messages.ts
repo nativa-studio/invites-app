@@ -36,7 +36,11 @@ export function fillTemplate(template: string, e: TemplateEvent, g: TemplateGues
 function withLink(text: string, link: string): string {
   if (!link || text.includes(link)) return text;
   const body = text.trimEnd();
-  return body ? `${body} ${link}` : link;
+  // On its own line. A template that ends in a full stop and then runs straight into a url reads
+  // as one long sentence with an address stuck on the end of it, and the url wraps over three
+  // lines of the bubble anyway. A break makes it a sentence, then a link. A template that places
+  // {link} itself is untouched: this only ever appends one that was not written in.
+  return body ? `${body}\n${link}` : link;
 }
 
 export function inviteText(e: TemplateEvent, g: TemplateGuest, link: string): string {
