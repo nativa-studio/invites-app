@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidateEvent } from "@/lib/revalidate-event";
 import { normalisePhone } from "@/lib/format";
 import { copy } from "@/lib/copy";
+import { GIFT_OPTIONS, PHOTO_OPTIONS, optionValues } from "@/lib/good-to-know";
 
 export type SaveState = { saved?: boolean; error?: string; note?: string };
 
@@ -10,7 +11,18 @@ export type SaveState = { saved?: boolean; error?: string; note?: string };
 const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "gift_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue", "yes_label", "no_label", "ask_note", "ask_name", "ask_phone", "signoff_note"] as const;
 const DATES = ["date", "rsvp_by"] as const;
 const TIMES = ["start_time", "end_time"] as const;
-const CHOICES = { type: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"], layout_id: ["suite", "lineup"], parents_mode: ["stay", "drop_off", "either"], photo_sharing: ["none", "kids_off_social", "ask", "share"], gift_stance: ["none", "optional", "wishlist", "books"], ask_party_mode: ["single", "split"], status: ["draft", "live", "thanks", "archived"] } as const;
+// Gifts and photos take their allowed values from the list the editor offers, rather than from a
+// second copy written out here. The copies had already drifted once: Say nothing was added to the
+// editor and not to this line, so choosing it saved nothing at all and said it had saved.
+const CHOICES: Record<string, readonly string[]> = {
+  type: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
+  layout_id: ["suite", "lineup"],
+  parents_mode: ["stay", "drop_off", "either"],
+  photo_sharing: optionValues(PHOTO_OPTIONS),
+  gift_stance: optionValues(GIFT_OPTIONS),
+  ask_party_mode: ["single", "split"],
+  status: ["draft", "live", "thanks", "archived"],
+};
 const SWITCHES = ["siblings_welcome", "ask_names", "ask_dietary", "ask_accessibility", "ask_emergency", "plate_enabled", "group_link_enabled", "save_the_date", "group_gift_enabled", "show_details", "show_runsheet", "show_good_to_know", "show_after", "show_signoff"] as const;
 
 // Every form says which fields it owns, in a hidden `_fields` input, and only those are written.

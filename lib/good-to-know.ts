@@ -41,6 +41,29 @@ export function goodToKnow(e: PublicEvent): Note[] {
   return lines;
 }
 
+// What a host can say about gifts and about photos, in one place, because it was in two.
+//
+// The editor offered Say nothing and the save action kept a separate list of the values it would
+// accept. Adding the setting to one and not the other meant the choice was dropped on the way in
+// without a word: the screen said saved, the row kept what it had, and the line stayed on the
+// invite. One list, read by both, so a setting that can be picked is a setting that can be saved.
+export const GIFT_OPTIONS: [string, string][] = [
+  ["quiet", "Say nothing"],
+  ["none", "No gifts please"],
+  ["optional", "Gifts optional"],
+  ["books", "Books only"],
+  ["wishlist", "Wish list link"],
+];
+
+export const PHOTO_OPTIONS: [string, string][] = [
+  ["none", "Say nothing"],
+  ["kids_off_social", "Please keep photos of the kids off social media"],
+  ["ask", "Please ask before posting anyone's photos"],
+  ["share", "Share away"],
+];
+
+export const optionValues = (options: [string, string][]): string[] => options.map(([v]) => v);
+
 export const NOTE_NAMES: Record<NoteKind, string> = {
   siblings: "Brothers and sisters",
   bring: "What to bring or wear",

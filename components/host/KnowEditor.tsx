@@ -2,7 +2,7 @@
 import { useTransition } from "react";
 import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
-import { NOTE_NAMES, orderedKinds, type NoteKind } from "@/lib/good-to-know";
+import { GIFT_OPTIONS, NOTE_NAMES, PHOTO_OPTIONS, orderedKinds, type NoteKind } from "@/lib/good-to-know";
 import { setKnowOrder } from "@/app/app/events/[id]/actions";
 import { Choice, Field, Switch } from "@/components/host/fields";
 import { Reorder } from "./Reorder";
@@ -20,12 +20,6 @@ import { Reorder } from "./Reorder";
 // Every kind is listed, not only the ones with something in them: the invite shows the filled ones
 // and this is where you fill them.
 
-// Say nothing first, the same as Photos, because leaving a subject off the invite is a choice a
-// host makes as often as any of the others and there was no way to make it: every setting on the
-// list printed a line. The stored value is its own word rather than "none", which this column
-// has meant "no gifts please" since the first migration.
-const GIFTS: [string, string][] = [["quiet", "Say nothing"], ["none", "No gifts please"], ["optional", "Gifts optional"], ["books", "Books only"], ["wishlist", "Wish list link"]];
-const PHOTOS: [string, string][] = [["none", "Say nothing"], ["kids_off_social", "Please keep photos of the kids off social media"], ["ask", "Please ask before posting anyone's photos"], ["share", "Share away"]];
 
 export const KNOW_FIELDS = [
   "siblings_welcome", "what_to_bring", "serve_text", "plate_enabled", "plate_host_note",
@@ -57,12 +51,12 @@ export function KnowEditor({ e }: { e: EventRow }) {
       case "gifts":
         return (
           <>
-            <Choice id="gift_stance" label={NOTE_NAMES.gifts} value={e.gift_stance} options={GIFTS} hint="Say nothing leaves gifts off the invite altogether." />
+            <Choice id="gift_stance" label={NOTE_NAMES.gifts} value={e.gift_stance} options={GIFT_OPTIONS} hint="Say nothing leaves gifts off the invite altogether." />
             <Field id="gift_note" label="Gift note (optional)" value={e.gift_note} hint="Added to the end of the line above. Wish list needs it, and prints nothing without it: put the link here." />
           </>
         );
       case "photos":
-        return <Choice id="photo_sharing" label={NOTE_NAMES.photos} value={e.photo_sharing} options={PHOTOS} />;
+        return <Choice id="photo_sharing" label={NOTE_NAMES.photos} value={e.photo_sharing} options={PHOTO_OPTIONS} />;
       case "other":
         return <Field id="good_to_know" label={NOTE_NAMES.other} value={e.good_to_know} rows={2} hint="Anything the lines above do not cover." />;
     }
