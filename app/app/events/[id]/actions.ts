@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { normalisePhone } from "@/lib/format";
 import { parseGuestList } from "@/lib/parse-guests";
 import { orderedParts, PART_SWITCH } from "@/lib/invite-parts";
+import { NOTE_KINDS } from "@/lib/good-to-know";
 
 async function hostClient() {
   const supabase = await createClient();
@@ -165,6 +166,22 @@ export async function setSectionOrder(eventId: string, order: string[]) {
   const { supabase } = await hostClient();
   const clean = orderedParts(order);
   await supabase.from("events").update({ section_order: clean }).eq("id", eventId);
+  revalidateEvent(eventId);
+}
+
+// The order of the good to know lines. Same shape as the one above, and cleaned the same way.
+//
+// Only the kinds the event has anything to say about are ever sent, so an unknown one is a stale
+// tab or a renamed kind rather than anything a host chose. Dropping it is right either way: the
+// reader puts a missing kind back at its default position.
+export async function setKnowOrder(eventId: string, order: string[]) {
+  const { supabase } = await hostClient();
+  const known = new Set<string>(NOTE_KINDS);
+  const clean = [...new Set(order.filter((k) => known.has(k)))];
+  const { error } = await supabase.from("events").update({ know_order: clean }).eq("id", eventId);
+  // A database without migration 0009 has no column to write to. The order is the one thing lost,
+  // and the invite still reads in its default order, so this is not worth throwing over.
+  if (error && !/know_order/.test(error.message)) throw new Error(error.message);
   revalidateEvent(eventId);
 }
 

@@ -2,7 +2,7 @@ import Image from "next/image";
 import "@/app/lineup.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { goodToKnow } from "@/lib/good-to-know";
+import { orderedNotes } from "@/lib/good-to-know";
 import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
 import { askLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
@@ -32,7 +32,7 @@ export function LineupInvite({
 }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
   const maps = mapsLink(e);
-  const notes = goodToKnow(e);
+  const notes = orderedNotes(e);
   const artwork = bandFor(e.invite_image_path);
 
   return (

@@ -4,6 +4,7 @@ import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
 import { INVITE_PARTS, orderedParts, PART_NAMES, PART_SWITCH, type InvitePart } from "@/lib/invite-parts";
 import { setSectionOrder, setSectionShown } from "@/app/app/events/[id]/actions";
+import { Reorder } from "./Reorder";
 
 // What the invite is made of, in the order it comes in.
 //
@@ -11,8 +12,10 @@ import { setSectionOrder, setSectionShown } from "@/app/app/events/[id]/actions"
 // this changes whether it is there at all and where it sits, which are the two things you cannot
 // do by tapping a part that is switched off or by tapping the gap it should move into.
 //
-// Up and down rather than dragging: a drag inside a phone that is already scrolling is a fight,
-// and there are seven parts at most.
+// Dragged, by the same handle the good to know lines use. This was a pair of little arrows per
+// row, which is a fine fallback and a poor first choice: arrows make you tap once per position,
+// and with seven parts moving the last one to the top is six taps. The arrow keys still do exactly
+// that for anyone on a keyboard, from the handle itself.
 export function InviteParts({ e, onEdit }: { e: EventRow; onEdit: (part: InvitePart) => void }) {
   const [pending, start] = useTransition();
   const order = orderedParts(e.section_order);
@@ -23,47 +26,40 @@ export function InviteParts({ e, onEdit }: { e: EventRow; onEdit: (part: InviteP
     return (e as unknown as Record<string, unknown>)[col] !== false;
   };
 
-  function move(from: number, by: number) {
-    const to = from + by;
-    if (to < 0 || to >= order.length) return;
-    const next = [...order];
-    [next[from], next[to]] = [next[to], next[from]];
-    start(() => { void setSectionOrder(e.id, next); });
-  }
-
   return (
     <section className="card">
       <h2 className="h2">{copy.host.partsHeading}</h2>
       <p className="hint">{copy.host.partsBlurb}</p>
-      <ol className="parts">
-        {order.map((p, i) => {
+      <Reorder<InvitePart>
+        items={order}
+        label={(p) => PART_NAMES[p]}
+        disabled={pending}
+        onReorder={(next) => start(() => { void setSectionOrder(e.id, next); })}
+      >
+        {(p) => {
           const col = PART_SWITCH[p];
           const on = shown(p);
           return (
-            <li className={`part ${on ? "" : "off"}`} key={p}>
-              <button type="button" className="n" onClick={() => onEdit(p)}>
+            <>
+              <button type="button" className={`n as-link${on ? "" : " off"}`} onClick={() => onEdit(p)}>
                 {PART_NAMES[p]}
                 {!on && <span className="tag-off">{copy.host.partOff}</span>}
               </button>
-              <div className="moves">
-                <button type="button" className="btn small" disabled={pending || i === 0} aria-label={`Move ${PART_NAMES[p]} up`} onClick={() => move(i, -1)}>&uarr;</button>
-                <button type="button" className="btn small" disabled={pending || i === order.length - 1} aria-label={`Move ${PART_NAMES[p]} down`} onClick={() => move(i, 1)}>&darr;</button>
-                {col && (
-                  <button
-                    type="button"
-                    className="btn small"
-                    disabled={pending}
-                    aria-pressed={on}
-                    onClick={() => start(() => { void setSectionShown(e.id, col, !on); })}
-                  >
-                    {on ? copy.host.partHide : copy.host.partShow}
-                  </button>
-                )}
-              </div>
-            </li>
+              {col && (
+                <button
+                  type="button"
+                  className="btn small"
+                  disabled={pending}
+                  aria-pressed={on}
+                  onClick={() => start(() => { void setSectionShown(e.id, col, !on); })}
+                >
+                  {on ? copy.host.partHide : copy.host.partShow}
+                </button>
+              )}
+            </>
           );
-        })}
-      </ol>
+        }}
+      </Reorder>
       {order.length !== INVITE_PARTS.length && <p className="hint">{copy.host.partsRepaired}</p>}
     </section>
   );
