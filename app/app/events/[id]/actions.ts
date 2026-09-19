@@ -262,6 +262,18 @@ export async function setKnowOrder(eventId: string, order: string[]) {
   revalidateEvent(eventId);
 }
 
+// Draft, live, saying thanks, put away. One tap from the badge in the header, which is where a
+// host reads the state, so the place that tells you is the place that changes it.
+const STATUSES = ["draft", "live", "thanks", "archived"];
+
+export async function setEventStatus(eventId: string, status: string) {
+  if (!STATUSES.includes(status)) return;
+  const { supabase } = await hostClient();
+  await supabase.from("events").update({ status }).eq("id", eventId);
+  revalidateEvent(eventId);
+  revalidatePath("/app");
+}
+
 // One part on or off, from the same list that reorders them, so a host is not sent to a tab of
 // switches to hide something they are looking at.
 export async function setSectionShown(eventId: string, column: string, shown: boolean) {

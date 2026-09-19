@@ -50,6 +50,12 @@ p { margin: 0; }
 .hint { color: var(--app-mute); font-size: 13px; line-height: 1.4; }
 /* A state, not a category, so it is a word in a quiet outline rather than a colour. */
 .tag { font-size: 12.5px; font-weight: 600; color: var(--app-mute); border: 1px solid var(--app-line-2); border-radius: 999px; padding: 3px 10px; }
+/* The same badge, now something you press. It carries the event's state and it is where the
+   state is changed, so it has to look pressable and be big enough to hit: a 12px pill in the
+   corner of a header is a label, not a target. */
+.tag.as-button { min-height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; background: var(--app-bg); color: var(--app-ink); border-color: var(--app-line-2); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.tag.as-button::after { content: "\203A"; font-size: 15px; line-height: 1; color: var(--app-mute); }
+.tag.as-button:hover { border-color: var(--app-mute); }
 
 /* Setup, one question per step. The step number is small and the question is the loudest thing
    on the screen, so it reads as being asked something rather than filling in a form. */

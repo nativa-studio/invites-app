@@ -6,8 +6,7 @@ import type { EventRow } from "@/lib/db/types";
 import { sectionById, type Section } from "./sections";
 import { InviteParts } from "./InviteParts";
 import { EditDrawer } from "./EditDrawer";
-import { EditCard, Sum } from "./EditCard";
-import { Choice } from "./fields";
+import { Sheet } from "./Sheet";
 
 // The invite, and a way to edit it by pointing at it.
 //
@@ -28,6 +27,7 @@ export function InviteEditor({ e }: { e: EventRow }) {
   const [open, setOpen] = useState<Section | null>(null);
   const [version, setVersion] = useState(0);
   const [asGuest, setAsGuest] = useState(false);
+  const [parts, setParts] = useState(false);
   const router = useRouter();
   const src = asGuest
     ? `/app/preview/${e.id}?as=guest&v=${version}`
@@ -65,6 +65,12 @@ export function InviteEditor({ e }: { e: EventRow }) {
         </button>
       </div>
       <p className="hint">{asGuest ? copy.host.modeGuestHint : copy.host.modeEditHint}</p>
+      {/* Above the invite rather than below it. The list is how you switch a part off and how you
+          move one, and both are things you do while looking at the invite, so reaching them used
+          to mean scrolling the whole invite out of the way first. */}
+      <div className="actions">
+        <button type="button" className="btn small" onClick={() => setParts(true)}>{copy.host.partsOpen}</button>
+      </div>
       <div className="screen phone">
         <iframe key={src} src={src} title="Your invite" />
       </div>
@@ -74,25 +80,15 @@ export function InviteEditor({ e }: { e: EventRow }) {
       </div>
       {/* Tapping the invite reaches every part that is on it, and none of the parts that are not.
           This list reaches all of them, and is also the only place a part can be moved, since
-          there is no gap on the invite to tap to say "put it here". */}
-      <InviteParts e={e} onEdit={(part) => { const s = sectionById(part); if (s) setOpen(s); }} />
-      {/* Whether the thing above is a draft or is out in the world. It lived on the Details tab,
-          which is gone, and it is the one setting on this screen that is about the invite as a
-          whole rather than about a part of it. */}
-      <EditCard
-        eventId={e.id}
-        title={copy.host.statusHeading}
-        blurb={copy.host.statusBlurb}
-        fields={["status"]}
-        summary={<Sum label="Right now" value={copy.host.statusNames[e.status] ?? e.status} />}
-      >
-        <Choice
-          id="status"
-          label="This event is"
-          value={e.status}
-          options={[["draft", "A draft"], ["live", "Live"], ["thanks", "Saying thanks"], ["archived", "Archived"]]}
-        />
-      </EditCard>
+          there is no gap on the invite to tap to say "put it here". In a sheet, because it is
+          seven rows of switches and handles that a host opens on purpose and then shuts. */}
+      {parts && (
+        <Sheet title={copy.host.partsHeading} blurb={copy.host.partsBlurb} onClose={() => setParts(false)}>
+          <div className="sheet-body">
+            <InviteParts e={e} onEdit={(part) => { const s = sectionById(part); if (s) { setParts(false); setOpen(s); } }} />
+          </div>
+        </Sheet>
+      )}
       {/* Keyed by section, so tapping a different part of the invite gets a fresh drawer rather
           than one still holding the last one's unsaved state. */}
       {open && <EditDrawer key={open.id} section={open} e={e} onClose={() => setOpen(null)} onSaved={saved} />}
