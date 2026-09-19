@@ -212,7 +212,10 @@ export function GuestList({ eventId, guests, event, site }: Props) {
                   ))}
                   <div className="actions">
                     {canShare && <button type="button" className="btn small" onClick={() => void shareVia(g, sendAsRemind)}>{copy.host.shareMore}</button>}
-                    <CopyButton text={link} label={copy.host.copy} />
+                    {/* The whole message, not the bare link. A host pasting into a group chat or
+                        an email wants the words as well, and the link is already inside them:
+                        the templates put it there. */}
+                    <CopyButton text={sendAsRemind ? reminderText(event, g, link) : inviteText(event, g, link)} label={copy.host.copyMessage} what="message" />
                     <button type="button" className="btn small" onClick={() => setSharing(null)}>{copy.host.shareClose}</button>
                   </div>
                 </>

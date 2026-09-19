@@ -169,6 +169,7 @@ export const copy = {
     knowOrderHeading: "The order they come in",
     knowOrderHint: "Drag a line by its handle, or focus one and use the arrow keys.",
     sendInvite: "The invite",
+    copyMessage: "Copy message",
     answerHeading: "Where are they up to?",
     answerBlurb: "For when somebody tells you in person, or you want to start them again.",
     answerYes: "Coming",
