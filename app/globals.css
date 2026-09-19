@@ -279,7 +279,6 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 
 /* A link for each group. One row per group: what it is called, the link itself, and the button
    that puts it on the clipboard ready for that chat. */
-.grouplinks { display: flex; flex-direction: column; gap: 14px; }
 /* Name, then the link, then what you can do with it, stacked. It was the link and one button
    side by side, which worked while there was one button. A second one took the link down to 90px
    and wrapped a url over six lines. */
@@ -325,13 +324,18 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 
 /* Where everyone is from. One row per group: the name, how it is going, and the link that
    brought them in. */
-.grouprow { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px; padding: 12px 0; border-top: 1px solid var(--app-line); }
-/* Every cell is placed by hand. Left to auto-placement the button landed in the first column and
-   shoved the group's name to the right. */
-.grouprow .n { grid-column: 1; grid-row: 1; font-weight: 650; font-size: 16px; }
-.grouprow .b { grid-column: 1; grid-row: 2; font-size: 14px; color: var(--app-muted, #6b7280); }
-.grouprow > button { grid-column: 2; grid-row: 1 / span 2; }
-.grouprow.plain .b { grid-column: 1 / -1; }
+/* The group, how it is going, and what you can do with its link, stacked. It was the first two
+   on the left and one button on the right, which worked while there was one button. Two of them
+   in that column leave a phone about 150px for the name and the counts. */
+.grouprow { display: grid; gap: 4px; padding: 14px 0; border-top: 1px solid var(--app-line); }
+.grouprow .n { font-weight: 650; font-size: 16px; }
+.grouprow .b { font-size: 14px; color: var(--app-muted, #6b7280); }
+.grouprow .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+
+/* A link for a group nobody is in yet, under the ones that exist. Ruled off, because it is the
+   one part of this card that is not a report on the guest list. */
+.newgroup { display: grid; gap: 8px; margin-top: 14px; padding-top: 16px; border-top: 2px solid var(--app-line); }
+.newgroup .field { margin: 0; }
 
 /* Deleting the event. Marked out so it does not read as one more setting, without shouting at a
    host who is only passing through. */

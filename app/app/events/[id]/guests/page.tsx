@@ -6,7 +6,6 @@ import { groupInviteText } from "@/lib/messages";
 import { AddGuest } from "@/components/host/AddGuest";
 import { GuestList } from "@/components/host/GuestList";
 import { GroupsPanel } from "@/components/host/GroupsPanel";
-import { GroupLinks } from "@/components/host/GroupLinks";
 import { HeadCount } from "@/components/host/HeadCount";
 import { FoodNote } from "@/components/host/replies";
 import { EditCard, Sum } from "@/components/host/EditCard";
@@ -29,9 +28,6 @@ export default async function Guests({ params }: { params: Promise<{ id: string 
   const site = await getSiteUrl();
   const groupLink = `${site}/e/${e.slug}`;
   const open = e.group_link_enabled !== false;
-  // The groups the guest list already carries, shown under the one being named so a host can find
-  // a link they handed out last week without retyping it.
-  const groupsInUse = [...new Set(list.flatMap((g) => g.groups ?? []))].sort((a, b) => a.localeCompare(b));
 
   return (
     <>
@@ -60,8 +56,7 @@ export default async function Guests({ params }: { params: Promise<{ id: string 
       >
         <Switch id="group_link_enabled" label="Group link open (for chats)" value={open} />
       </EditCard>
-      <GroupLinks base={groupLink} inUse={groupsInUse} event={e} />
-      <GroupsPanel guests={list} base={groupLink} />
+      <GroupsPanel guests={list} base={groupLink} event={e} />
       <GuestList eventId={e.id} guests={list} event={{ title: e.title, date: e.date, text_template: e.text_template, reminder_template: e.reminder_template }} site={site} />
     </>
   );
