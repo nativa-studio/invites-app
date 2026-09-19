@@ -138,19 +138,15 @@ function opening({ palette: p, addressee, title, artwork }: CardInput) {
   );
 }
 
-// C. Sealed. The envelope a guest is about to open, drawn the same way it is drawn in the app.
+// C. Sealed. The envelope a guest is about to open, drawn the same way it is drawn in the app, so
+// the thing in the chat and the thing they tap are one object: the two-tone flap folded down, the
+// wax seal at its point, the name written across the bottom, the characters standing in the corner.
 //
-// It used to be a flat rectangle with a postmark and a name on it, which meant a guest met one
-// object in the chat and a different one when they tapped it. This is the same envelope: the
-// two-tone flap folded down, the wax seal at its point, the name written across the bottom, and
-// the characters standing in the corner.
-//
-// A postmark and a stamp belong on the front of a letter and a sealed flap belongs on the back.
-// Both are here anyway, because this is one picture doing two jobs: saying it is addressed to the
-// reader, and saying it has not been opened yet. Losing either would cost more than the literalism
-// is worth.
-function sealed({ palette: p, addressee, title, age, artwork }: CardInput) {
-  const ink = shade(p.red, -0.45);
+// The back of the envelope, and only the back. A postmark and a stamp sat here too, on the
+// argument that one picture could do two jobs, and they read as the front: the chat showed a
+// letter face up with a flap folded down over it, which is not a thing that exists. The age went
+// with the stamp. The title under the picture already says how old the birthday is.
+function sealed({ palette: p, addressee, title, artwork }: CardInput) {
   const body = shade(p.red, -0.18);
   const rim = shade(p.red, -0.32);
   const name = (addressee ?? title).toUpperCase();
@@ -158,13 +154,19 @@ function sealed({ palette: p, addressee, title, age, artwork }: CardInput) {
   const EW = W - PAD * 2, EH = H - PAD * 2;
   const APEX = 300;
   // Fit the name to the space rather than guessing from its length. A guest is called whatever
-  // they are called, and the group link puts a whole title here, so a fixed size either wraps a
-  // long one with a word stranded on the second line, or wastes half the envelope on a short one.
-  // The room stops short of the characters in the corner. 0.62em is close enough to this face's
-  // average capital, and the floor and ceiling keep both extremes readable.
-  const room = 700;
+  // they are called, so a fixed size either wraps a long one with a word stranded on the second
+  // line, or wastes half the envelope on a short one.
+  //
+  // Both numbers here were wrong, and were corrected by measuring the card rather than reasoning
+  // about it. The room is the gap: the name starts 88 in and the characters stand 369 wide in a
+  // corner inset 40, which leaves 627. It said 700, the whole width to the corner, so "Anastasia
+  // and Christopher" was drawn straight through them. And 0.72em, not the 0.62 that was here, is
+  // what a capital of this face costs once a name is full of the wide ones: at 0.62 "Kate and Tom
+  // Richardson" was sized to 617 of the 624, came out 40 px wider than that, and wrapped. Sizing a
+  // shade small never shows. A stranded word does.
+  const room = 624;
   const track = name.length > 20 ? 7 : 12;
-  const size = Math.max(30, Math.min(74, Math.floor((room / name.length - track) / 0.62)));
+  const size = Math.max(26, Math.min(74, Math.floor((room / name.length - track) / 0.72)));
   return (
     <div style={{ width: W, height: H, display: "flex", background: "#FFFFFF", padding: PAD, fontFamily: "Nunito" }}>
       <div style={{ position: "relative", width: EW, height: EH, display: "flex", background: body, borderRadius: 22 }}>
@@ -173,22 +175,6 @@ function sealed({ palette: p, addressee, title, age, artwork }: CardInput) {
           <path d={`M0 0 L${EW / 2} ${APEX} L${EW} 0 Z`} fill={p.red} />
           <path d={`M0 0 L${EW / 2} ${APEX} L${EW} 0`} fill="none" stroke={rim} strokeWidth="5" strokeLinejoin="round" />
         </svg>
-        {/* The postmark, landing across the flap's edge the way one does. */}
-        <svg width="330" height="140" viewBox="0 0 330 140" style={{ position: "absolute", left: 92, top: 64 }}>
-          <g fill="none" stroke={ink} strokeWidth="3" opacity="0.45">
-            <circle cx="66" cy="66" r="52" />
-            <circle cx="66" cy="66" r="39" />
-            {[0, 1, 2, 3].map((i) => (
-              <path key={i} d={`M128 ${40 + i * 17} q28 -10 56 0 t56 0`} />
-            ))}
-          </g>
-        </svg>
-        {/* The stamp, with the age where a denomination goes. */}
-        <div style={{ position: "absolute", right: 44, top: 34, width: 132, height: 156, display: "flex", padding: 9, background: "#FFFFFF", borderRadius: 3, transform: "rotate(2deg)" }}>
-          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: shade(p.red, 0.82), border: `3px solid ${ink}` }}>
-            <div style={{ display: "flex", fontFamily: DISPLAY, fontSize: age && age.length > 1 ? 66 : 80, color: ink }}>{age ?? ""}</div>
-          </div>
-        </div>
         {/* The wax seal, at the point of the flap, holding it shut. */}
         <svg width="120" height="120" viewBox="0 0 120 120" style={{ position: "absolute", left: EW / 2 - 60, top: APEX - 60 }}>
           <circle cx="60" cy="60" r="52" fill={p.yellow} stroke={p.navy} strokeWidth="7" />
