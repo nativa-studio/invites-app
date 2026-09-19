@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import "@/app/invite.css";
 import { getEventBySlug } from "@/lib/guest/invite";
 import { getSiteUrl } from "@/lib/site-url";
+import { shareMetadata } from "@/lib/share-meta";
 import { copy } from "@/lib/copy";
-import { formatInviteDate } from "@/lib/format";
 import { GroupRsvp } from "@/components/invite/GroupRsvp";
 import { InviteBody, asLayout } from "@/components/invite/InviteBody";
 
@@ -13,16 +13,9 @@ import { InviteBody, asLayout } from "@/components/invite/InviteBody";
 export async function groupLinkMetadata(slug: string): Promise<Metadata> {
   const e = await getEventBySlug(slug);
   if (!e) return { title: "Invite" };
-  const title = e.share_title ?? e.title;
-  const description = e.share_description ?? [formatInviteDate(e.date), e.intro].filter(Boolean).join(". ");
   const site = await getSiteUrl();
   const image = `${site}/s/${e.slug}/card.png?v=${encodeURIComponent(e.date ?? "")}`;
-  return {
-    title,
-    description,
-    openGraph: { title, description, type: "website", images: [{ url: image, width: 1200, height: 630 }] },
-    twitter: { card: "summary_large_image", title, description, images: [image] },
-  };
+  return shareMetadata(e, image);
 }
 
 export async function renderGroupLink({ slug, group, layout }: { slug: string; group?: string; layout?: string }) {

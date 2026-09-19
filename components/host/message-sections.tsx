@@ -16,7 +16,7 @@ export const MESSAGE_SECTIONS: Section[] = [
     render: (e) => (
       <>
         <Field id="share_title" label="Title" value={e.share_title} hint="Empty falls back to the event's title." />
-        <Field id="share_description" label="The line under it" value={e.share_description} rows={3} hint="Empty falls back to the date and your opening line." />
+        <Field id="share_description" label="The line under it" value={e.share_description} rows={3} hint="Leave it empty and there is no line under the title." />
       </>
     ),
   },
