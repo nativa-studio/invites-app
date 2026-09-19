@@ -14,7 +14,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
   if (!e) return new Response("Not found", { status: 404 });
   const site = await getSiteUrl();
   const asked = new URL(request.url).searchParams.get("style");
-  const variant = (["posted", "opening", "sealed"] as const).find((v) => v === asked) as CardVariant | undefined;
+  const variant = (["front", "back", "posted", "opening", "sealed"] as const).find((v) => v === asked) as CardVariant | undefined;
   return new ImageResponse(
     envelopeCard({
       palette: paletteFor(e.palette, e.theme_id),

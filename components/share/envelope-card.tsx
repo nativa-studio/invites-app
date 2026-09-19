@@ -12,7 +12,7 @@ function shade(hex: string, amount: number): string {
   return `#${ch.map((v) => v.toString(16).padStart(2, "0")).join("")}`;
 }
 
-export type CardVariant = "posted" | "opening" | "sealed";
+export type CardVariant = "front" | "back" | "posted" | "opening" | "sealed";
 
 export type CardInput = {
   palette: Palette;
@@ -138,35 +138,18 @@ function opening({ palette: p, addressee, title, artwork }: CardInput) {
   );
 }
 
-// C. Sealed. The envelope a guest is about to open, drawn the same way it is drawn in the app, so
-// the thing in the chat and the thing they tap are one object: the two-tone flap folded down, the
-// wax seal at its point, the name written across the bottom, the characters standing in the corner.
+// The back of the same envelope: the flap folded down, the wax seal holding it shut, the name,
+// the characters. A postmark and a stamp were here too once, on the argument that one picture
+// could do two jobs, and they read as the front. They live on the front now, where they belong.
 //
-// The back of the envelope, and only the back. A postmark and a stamp sat here too, on the
-// argument that one picture could do two jobs, and they read as the front: the chat showed a
-// letter face up with a flap folded down over it, which is not a thing that exists. The age went
-// with the stamp. The title under the picture already says how old the birthday is.
-function sealed({ palette: p, addressee, title, artwork }: CardInput) {
+// This is the face that goes in a message, because it is the face the guest then taps open: the
+// picture in the chat and the thing on the page are one object.
+function back({ palette: p, addressee, title, artwork }: CardInput) {
   const body = shade(p.red, -0.18);
   const rim = shade(p.red, -0.32);
-  const name = (addressee ?? title).toUpperCase();
   const PAD = 26;
   const EW = W - PAD * 2, EH = H - PAD * 2;
   const APEX = 300;
-  // Fit the name to the space rather than guessing from its length. A guest is called whatever
-  // they are called, so a fixed size either wraps a long one with a word stranded on the second
-  // line, or wastes half the envelope on a short one.
-  //
-  // Both numbers here were wrong, and were corrected by measuring the card rather than reasoning
-  // about it. The room is the gap: the name starts 88 in and the characters stand 369 wide in a
-  // corner inset 40, which leaves 627. It said 700, the whole width to the corner, so "Anastasia
-  // and Christopher" was drawn straight through them. And 0.72em, not the 0.62 that was here, is
-  // what a capital of this face costs once a name is full of the wide ones: at 0.62 "Kate and Tom
-  // Richardson" was sized to 617 of the 624, came out 40 px wider than that, and wrapped. Sizing a
-  // shade small never shows. A stranded word does.
-  const room = 624;
-  const track = name.length > 20 ? 7 : 12;
-  const size = Math.max(26, Math.min(74, Math.floor((room / name.length - track) / 0.72)));
   return (
     <div style={{ width: W, height: H, display: "flex", background: "#FFFFFF", padding: PAD, fontFamily: "Nunito" }}>
       <div style={{ position: "relative", width: EW, height: EH, display: "flex", background: body, borderRadius: 22 }}>
@@ -180,34 +163,118 @@ function sealed({ palette: p, addressee, title, artwork }: CardInput) {
           <circle cx="60" cy="60" r="52" fill={p.yellow} stroke={p.navy} strokeWidth="7" />
           <path d="M66 24L34 66h24l-10 30 42-46H66l13-26z" fill={p.navy} />
         </svg>
-        {/* Who it is for. A label, then the name, the way a name is written on an envelope. */}
-        <div style={{ position: "absolute", left: 88, bottom: 92, display: "flex", flexDirection: "column", width: room }}>
-          <div style={{ display: "flex", fontFamily: HAND, fontSize: 30, letterSpacing: 9, color: p.cream, opacity: 0.85 }}>
-            {addressee ? "INVITE FOR" : "YOU'RE INVITED"}
+        {nameBlock(p, addressee, title, false)}
+        {characters(artwork)}
+      </div>
+    </div>
+  );
+}
+
+// The name, written where a name is written on an envelope. Both faces use this, so a guest sees
+// the same words in the same place whichever side they are looking at.
+//
+// Fitted to the space rather than guessed from its length: a guest is called whatever they are
+// called, so a fixed size either wraps a long name with a word stranded on the second line, or
+// wastes half the envelope on a short one.
+//
+// Both numbers here were wrong once, and were corrected by measuring the card rather than
+// reasoning about it. The room is the gap: the name starts 88 in and the characters stand 369
+// wide in a corner inset 40, which leaves 627. It said 700, the whole width across to the corner,
+// so "Anastasia and Christopher" was drawn straight through them. And 0.72em, not the 0.62 that
+// was here, is what a capital of this face costs once a name is full of the wide ones: at 0.62,
+// "Kate and Tom Richardson" was sized to 617 of the 624 available, came out 40 px wider than
+// that, and wrapped. Sizing a shade small never shows. A stranded word does.
+const ROOM = 624;
+
+function nameBlock(p: Palette, addressee: string | null | undefined, title: string, fallback: boolean) {
+  // The group link is addressed to nobody, so there is no name to write. On the back that line
+  // is simply left out: a chat app prints the title as text directly under the picture, and
+  // saying it twice in two type sizes looks like a mistake. The front is not in a chat, it is on
+  // the page itself with nothing printed under it, so there the title takes the name's place
+  // rather than leaving the envelope blank.
+  const big = addressee ?? (fallback ? title : null);
+  const name = (big ?? "").toUpperCase();
+  const track = name.length > 20 ? 7 : 12;
+  const size = Math.max(26, Math.min(74, Math.floor((ROOM / Math.max(1, name.length) - track) / 0.72)));
+  return (
+    <div style={{ position: "absolute", left: 88, bottom: 92, display: "flex", flexDirection: "column", width: ROOM }}>
+      <div style={{ display: "flex", fontFamily: HAND, fontSize: 30, letterSpacing: 9, color: p.cream, opacity: 0.85 }}>
+        {addressee ? "INVITE FOR" : "YOU'RE INVITED"}
+      </div>
+      {big ? (
+        <div style={{ display: "flex", fontSize: size, letterSpacing: track, color: PAPER, lineHeight: 1.1, marginTop: 10 }}>{name}</div>
+      ) : null}
+    </div>
+  );
+}
+
+// The characters, standing along the bottom corner, the same band the app stands there.
+function characters(artwork: string | null | undefined) {
+  if (!artwork) return null;
+  return (
+    <div style={{ position: "absolute", right: 40, bottom: 26, display: "flex" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={artwork} alt="" height={132} />
+    </div>
+  );
+}
+
+// The front of the same red envelope. One object with two faces: this one is what it looks like
+// coming towards you, so it carries the things a postie puts on a letter, the stamp and the
+// postmark, and it has no flap and no seal, because both of those are round the other side.
+//
+// Everything it shares with the back is drawn from the same numbers: the body colour, the corner
+// radius, where the name sits and how it is fitted, and the band of characters. The two should
+// look like one envelope turned over, not like two envelopes.
+function front({ palette: p, addressee, title, age, artwork }: CardInput) {
+  const body = shade(p.red, -0.18);
+  const mark = shade(p.red, -0.38);
+  const PAD = 26;
+  const EW = W - PAD * 2, EH = H - PAD * 2;
+  return (
+    <div style={{ width: W, height: H, display: "flex", background: "#FFFFFF", padding: PAD, fontFamily: "Nunito" }}>
+      <div style={{ position: "relative", width: EW, height: EH, display: "flex", background: body, borderRadius: 22 }}>
+        {/* The seam along the top, where the flap folds over from behind. The only sign from this
+            side that there is a flap at all. */}
+        <svg width={EW} height="10" viewBox={`0 0 ${EW} 10`} style={{ position: "absolute", left: 0, top: 0 }}>
+          <path d={`M22 6 L${EW - 22} 6`} stroke={mark} strokeWidth="4" opacity="0.5" strokeLinecap="round" />
+        </svg>
+        {/* The postmark, struck beside the stamp the way one is. */}
+        <svg width="300" height="150" viewBox="0 0 300 150" style={{ position: "absolute", right: 210, top: 44 }}>
+          <g fill="none" stroke={mark} strokeWidth="4" opacity="0.55" strokeLinecap="round">
+            <circle cx="70" cy="72" r="56" />
+            <circle cx="70" cy="72" r="42" />
+            {[0, 1, 2, 3].map((i) => (
+              <path key={i} d={`M138 ${46 + i * 18} q30 -11 60 0 t60 0`} />
+            ))}
+          </g>
+        </svg>
+        {/* The stamp, with the age where a denomination goes. */}
+        <div style={{ position: "absolute", right: 44, top: 34, width: 132, height: 156, display: "flex", padding: 9, background: "#FFFFFF", borderRadius: 3, transform: "rotate(2deg)" }}>
+          <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, background: p.sky, border: `3px solid ${p.navy}` }}>
+            <svg width="40" height="46" viewBox="0 0 26 30">
+              <path d="M14 1L2 17h9l-4 12 17-18h-9l5-10z" fill={p.yellow} stroke={p.navy} strokeWidth="2.4" strokeLinejoin="round" />
+            </svg>
+            {age ? <div style={{ display: "flex", fontFamily: DISPLAY, fontSize: 44, color: "#FFFFFF", lineHeight: 1 }}>{age}</div> : null}
           </div>
-          {addressee ? (
-            <div style={{ display: "flex", fontSize: size, letterSpacing: track, color: PAPER, lineHeight: 1.1, marginTop: 10 }}>{name}</div>
-          ) : null}
         </div>
-        {/* The characters, standing along the bottom corner, the same band the app stands there. */}
-        {artwork ? (
-          <div style={{ position: "absolute", right: 40, bottom: 26, display: "flex" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={artwork} alt="" height={132} />
-          </div>
-        ) : null}
+        {nameBlock(p, addressee, title, true)}
+        {characters(artwork)}
       </div>
     </div>
   );
 }
 
 export function envelopeCard(input: CardInput) {
-  // A sealed envelope is what a message should show: a letter with the reader's name on it.
-  // The other two stay reachable with ?style= for comparing them.
-  const variant: CardVariant = input.variant ?? "sealed";
+  // The front is what a message shows: a letter coming towards you, addressed, stamped, franked.
+  // The back is what the invite page itself opens, flap and seal, so between the chat and the
+  // page a guest sees the envelope turned over and then opened. The two older drawings, the
+  // cream letter and the half-open one, stay reachable with ?style= for comparing.
+  const variant: CardVariant = input.variant ?? "front";
+  if (variant === "front") return front(input);
   if (variant === "opening") return opening(input);
-  if (variant === "sealed") return sealed(input);
-  return posted(input);
+  if (variant === "posted") return posted(input);
+  return back(input);
 }
 
 export const CARD_SIZE = { width: W, height: H };
