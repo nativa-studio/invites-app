@@ -121,6 +121,42 @@
 .chip:has(input:focus-visible) { outline: 3px solid var(--yel); outline-offset: 3px; }
 .cal { display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: center; }
 
+/* The yes moment. Sits over the thank you card and never takes a tap: pointer-events none the
+   whole way down, so the calendar buttons underneath stay live while it plays. */
+.cheer { position: absolute; inset: -10px -10px auto; height: 260px; pointer-events: none; overflow: visible; z-index: 3; }
+/* The heading does the cheering. It was a second word over the top, which collided with the
+   heading on the card and fell off the screen above it. The card already says See you there in
+   the same red display face: bouncing that says the same thing with nothing extra on the screen,
+   and it cannot be clipped because it is part of the card. */
+.pcard.cheering .rsvp-h { animation: cheer-pop .75s cubic-bezier(.2, 1.5, .35, 1) both; }
+@keyframes cheer-pop {
+  0%   { transform: scale(.72) rotate(-4deg); }
+  38%  { transform: scale(1.13) rotate(2.5deg); }
+  62%  { transform: scale(.98) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* One flag: a triangle, the shape the product is named after. Thrown up, turned over, dropped. */
+.cheer .flag {
+  position: absolute; top: 120px; width: 13px; height: 17px;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  animation: cheer-flag 1.45s cubic-bezier(.25, .8, .3, 1) var(--wait) forwards;
+}
+.cheer .flag.c0 { background: var(--red); }
+.cheer .flag.c1 { background: var(--yel); }
+.cheer .flag.c2 { background: var(--sky-ink); }
+.cheer .flag.c3 { background: var(--forest); }
+.cheer .flag.c4 { background: var(--crm); }
+@keyframes cheer-flag {
+  0%   { opacity: 0; transform: translate3d(0, 10px, 0) rotate(0deg); }
+  12%  { opacity: 1; }
+  45%  { transform: translate3d(calc(var(--drift) * .6), calc(var(--lift) * -1), 0) rotate(var(--spin)); }
+  100% { opacity: 0; transform: translate3d(var(--drift), 30px, 0) rotate(calc(var(--spin) * 1.4)); }
+}
+/* Belt and braces. The component does not mount at all under reduced motion, and this makes sure
+   that if it ever does, it sits still rather than flying. */
+@media (prefers-reduced-motion: reduce) { .cheer { display: none; } }
+
 /* Bring a plate. A list to read down, not a form to fill in: a picture, what it is, who has it,
    and the one button that changes that. The button is on the right of its own row rather than
    under the dish, so the column of them reads as the thing to tap. */

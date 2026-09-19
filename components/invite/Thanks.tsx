@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import { copy } from "@/lib/copy";
 import { Bolt } from "@/components/art/icons";
+import { Celebrate } from "./Celebrate";
 
 // What a guest sees once they have replied, wherever they replied from. The personal link and
 // the group link land on the same card, because by then the two are the same person.
@@ -32,7 +33,10 @@ export function ThanksCard({
   }, [landed]);
 
   return (
-    <div className="pcard tilt-l" aria-live="polite" ref={card}>
+    <div className={`pcard tilt-l${yes && landed ? " cheering" : ""}`} aria-live="polite" ref={card}>
+      {/* Only on a yes, and only when the answer has just landed. Coming back to an invite you
+          answered last week is not a moment. */}
+      {yes && landed && <Celebrate />}
       <div className="rsvp-h"><Bolt size={24} /> {yes ? copy.thanks.yesTitle : copy.thanks.noTitle} <Bolt size={24} /></div>
       <div className="para">{yes ? copy.thanks.yesBody(count, host) : copy.thanks.noBody(host)}</div>
       {yes && dated && (
