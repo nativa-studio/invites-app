@@ -35,8 +35,8 @@ export function EventNav({ id }: { id: string }) {
   const base = `/app/events/${id}`;
   const bar = useRef<HTMLElement>(null);
 
-  // Three fit across a phone, so this does nothing today. It is kept because the bar is built to
-  // scroll and a fourth tab would put the one you are on off the side of the screen again.
+  // Five fit across a phone, 328px of 358, so this does nothing today. It is kept because the bar
+  // is built to scroll and a sixth tab would put the one you are on off the side of the screen.
   useEffect(() => {
     const on = bar.current?.querySelector<HTMLElement>("a.on");
     on?.scrollIntoView({ block: "nearest", inline: "center" });

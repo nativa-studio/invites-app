@@ -16,3 +16,21 @@ export function groupLabel(slug: string): string {
 export function isGroupSlug(v: string): boolean {
   return /^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$/.test(v);
 }
+
+/** The people a host has not labelled yet, who are the ones worth being able to find. A group
+ *  genuinely called this would collide, which is a trade against putting a control character in
+ *  the address bar: a null byte in a url is refused by some proxies and unreadable in all of them. */
+export const UNGROUPED = "__ungrouped";
+
+// Everyone in the chosen group. The empty string is everybody, and the sentinel above is the
+// people with no group at all.
+//
+// It lives here rather than beside the chips because the page filters with it on the server while
+// the chips need a browser to keep the chosen one in view. Exporting it from the component made
+// it a client function, and the page calling it took the whole screen down with a 500. Typecheck
+// and lint both passed; only loading the page said so.
+export function inGroup<T extends { groups?: string[] | null }>(guests: T[], chosen: string): T[] {
+  if (!chosen) return guests;
+  if (chosen === UNGROUPED) return guests.filter((x) => !x.groups?.length);
+  return guests.filter((x) => x.groups?.includes(chosen));
+}

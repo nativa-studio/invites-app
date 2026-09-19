@@ -8,6 +8,8 @@ import { GuestList } from "@/components/host/GuestList";
 import { GroupsPanel } from "@/components/host/GroupsPanel";
 import { HeadCount } from "@/components/host/HeadCount";
 import { FoodNote } from "@/components/host/replies";
+import { GroupFilter } from "@/components/host/GroupFilter";
+import { inGroup } from "@/lib/groups";
 import { EditCard, Sum } from "@/components/host/EditCard";
 import { Switch } from "@/components/host/fields";
 
@@ -22,20 +24,31 @@ import { Switch } from "@/components/host/fields";
 // The counting tiles that used to open this screen are gone. They sat directly above the numbers
 // card, which answers the same question and shows its working, so the screen opened by saying the
 // same thing twice before it said anything else.
-export default async function Guests({ params }: { params: Promise<{ id: string }> }) {
+//
+// The group filter is above all of it, and everything that counts people answers for the group
+// that is picked: the numbers, the food line and the list. The two cards about links do not,
+// because they are about the groups rather than about the people in one of them.
+export default async function Guests({
+  params, searchParams,
+}: { params: Promise<{ id: string }>; searchParams: Promise<{ group?: string }> }) {
   const { id } = await params;
-  const [e, list] = await Promise.all([loadEvent(id), loadGuests(id)]);
+  const { group } = await searchParams;
+  const [e, all] = await Promise.all([loadEvent(id), loadGuests(id)]);
   const site = await getSiteUrl();
   const groupLink = `${site}/e/${e.slug}`;
   const open = e.group_link_enabled !== false;
+  const chosen = group ?? "";
+  const list = inGroup(all, chosen);
+  const here = `/app/events/${id}/guests`;
 
   return (
     <>
-      {list.length === 0 && <p className="notice">No guests yet. Add them below, and every one gets their own link straight away.</p>}
+      {all.length === 0 && <p className="notice">No guests yet. Add them below, and every one gets their own link straight away.</p>}
+      <GroupFilter guests={all} chosen={chosen} base={here} />
       <HeadCount guests={list} splitParty={e.ask_party_mode === "split"} />
       {/* After the numbers, because it is what you do with them rather than what they are. */}
       <FoodNote guests={list} />
-      <AddGuest eventId={e.id} none={list.length === 0} />
+      <AddGuest eventId={e.id} none={all.length === 0} />
       {/* The switch that closes this link belongs next to the link, not on another screen. */}
       <EditCard
         eventId={e.id}
@@ -56,7 +69,7 @@ export default async function Guests({ params }: { params: Promise<{ id: string 
       >
         <Switch id="group_link_enabled" label="Group link open (for chats)" value={open} />
       </EditCard>
-      <GroupsPanel guests={list} base={groupLink} event={e} />
+      <GroupsPanel guests={all} base={groupLink} event={e} />
       <GuestList eventId={e.id} guests={list} event={{ title: e.title, date: e.date, text_template: e.text_template, reminder_template: e.reminder_template }} site={site} />
     </>
   );
