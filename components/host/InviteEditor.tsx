@@ -19,7 +19,7 @@ import { Choice } from "./fields";
 // Editing by pointing beats a tab of forty fields because the question answers itself: you do not
 // have to know that "what to bring" is the line that reads Wear, you tap the line that reads Wear.
 //
-// The same frame has a second setting: as a guest. Pick mode swallows every tap, which is right
+// The same frame has a second setting: Preview, which is the invite as a guest gets it. Pick mode swallows every tap, which is right
 // while you are editing and wrong the moment you want to know what the thing you have built
 // actually does. As a guest nothing is tappable for editing, the envelope opens the way theirs
 // does, and the reply is the guest's own form: press yes, answer the questions, read the thank
