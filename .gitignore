@@ -14,3 +14,6 @@ next-env.d.ts
 
 # Python bytecode from scripts/
 __pycache__/
+
+# Transpiled component renders from the check harness
+/.rendercheck/

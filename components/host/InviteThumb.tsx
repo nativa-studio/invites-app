@@ -56,11 +56,14 @@ export function InviteThumb({
             <span className="back" />
             <span className="pocket"><span className="sides" /><span className="edge" /></span>
             <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
+            {/* The characters stand on the envelope, the same band the invite page stands there,
+                and inside it in the markup as well as on the screen: every rule that sizes and
+                places them is written ".env .cast". Left as a sibling of the envelope rather than
+                a child, not one of those rules matched, and the band rendered at its natural size,
+                which is 1173px wide. That is what put a giant Pikachu across the corner of every
+                tile. */}
+            {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="120px" />}
           </span>
-          {/* The characters stand on the envelope, the same band the invite page stands there.
-              They were left off the first build of this, which took the most recognisable thing
-              on the envelope off the picture whose whole job is recognising it. */}
-          {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="120px" />}
         </span>
         <span className="ithumb-cardbox">
           <CoverCard e={e} />
