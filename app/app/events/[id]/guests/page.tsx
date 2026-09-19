@@ -6,7 +6,7 @@ import { GroupsPanel } from "@/components/host/GroupsPanel";
 import { HeadCount } from "@/components/host/HeadCount";
 import { FoodNote } from "@/components/host/replies";
 import { GroupFilter } from "@/components/host/GroupFilter";
-import { inGroup } from "@/lib/groups";
+import { inGroup, UNGROUPED } from "@/lib/groups";
 
 // Guests: everyone you are asking, how they are replying, and the links that reach them.
 //
@@ -38,6 +38,7 @@ export default async function Guests({
   const chosen = group ?? "";
   const list = inGroup(all, chosen);
   const here = `/app/events/${id}/guests`;
+  const groupNames = [...new Set(all.flatMap((g) => g.groups ?? []))].sort((a, b) => a.localeCompare(b));
 
   return (
     <>
@@ -46,7 +47,7 @@ export default async function Guests({
       <HeadCount guests={list} splitParty={e.ask_party_mode === "split"} />
       {/* After the numbers, because it is what you do with them rather than what they are. */}
       <FoodNote guests={list} />
-      <AddGuest eventId={e.id} none={all.length === 0} />
+      <AddGuest eventId={e.id} none={all.length === 0} groups={groupNames} preset={chosen === UNGROUPED ? "" : chosen} />
       <GroupsPanel guests={all} base={groupLink} event={e} />
       <GuestList eventId={e.id} guests={list} event={{ title: e.title, date: e.date, text_template: e.text_template, reminder_template: e.reminder_template }} site={site} />
     </>

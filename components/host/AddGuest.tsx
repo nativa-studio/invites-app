@@ -5,6 +5,7 @@ import { addGuest, addGuests, type AddGuestState, type AddManyState } from "@/ap
 
 import { contactPicker, useHasContactPicker } from "./capabilities";
 import { Sheet } from "./Sheet";
+import { GroupField } from "./GroupField";
 
 // Adding guests opens a sheet, the same one everything else in here opens.
 //
@@ -15,7 +16,15 @@ import { Sheet } from "./Sheet";
 // It stays open after a guest is added and the form clears itself, because a host adding guests
 // is usually adding several, and closing after each one would mean tapping Add a guest fifty
 // times.
-export function AddGuest({ eventId, none }: { eventId: string; none?: boolean }) {
+export function AddGuest({ eventId, none, groups = [], preset }: {
+  eventId: string;
+  none?: boolean;
+  /** The groups this event already has, offered by name so they cannot be respelt into two. */
+  groups?: string[];
+  /** The group the screen is filtered to. A host who has narrowed the list to the neighbours and
+   *  then taps Add a guest is adding a neighbour, so the form says so before they do. */
+  preset?: string;
+}) {
   const [mode, setMode] = useState<"one" | "many">("one");
   const [open, setOpen] = useState(false);
   const hasPicker = useHasContactPicker();
@@ -33,7 +42,9 @@ export function AddGuest({ eventId, none }: { eventId: string; none?: boolean })
               <button type="button" className="btn small" aria-pressed={mode === "one"} onClick={() => setMode("one")}>{copy.host.addOne}</button>
               <button type="button" className="btn small" aria-pressed={mode === "many"} onClick={() => setMode("many")}>{copy.host.addMany}</button>
             </div>
-            {mode === "one" ? <OneForm eventId={eventId} /> : <ManyForm eventId={eventId} hasPicker={hasPicker} />}
+            {mode === "one"
+              ? <OneForm eventId={eventId} groups={groups} preset={preset} />
+              : <ManyForm eventId={eventId} hasPicker={hasPicker} groups={groups} preset={preset} />}
           </div>
         </Sheet>
       )}
@@ -41,7 +52,7 @@ export function AddGuest({ eventId, none }: { eventId: string; none?: boolean })
   );
 }
 
-function OneForm({ eventId }: { eventId: string }) {
+function OneForm({ eventId, groups, preset }: { eventId: string; groups: string[]; preset?: string }) {
   const [state, formAction, pending] = useActionState<AddGuestState, FormData>(addGuest, {});
   const form = useRef<HTMLFormElement>(null);
   useEffect(() => { if (state.added) form.current?.reset(); }, [state]);
@@ -51,7 +62,7 @@ function OneForm({ eventId }: { eventId: string }) {
       <div className="field"><label htmlFor="g-name">{copy.host.name}</label><input id="g-name" name="name" type="text" required autoComplete="off" /></div>
       <div className="field"><label htmlFor="g-contact">{copy.host.contactName}</label><input id="g-contact" name="contact_name" type="text" autoComplete="off" /></div>
       <div className="field"><label htmlFor="g-phone">{copy.host.phone}</label><input id="g-phone" name="phone" type="tel" inputMode="tel" placeholder="04xx xxx xxx" /></div>
-      <div className="field"><label htmlFor="g-group">{copy.host.group}</label><input id="g-group" name="group" type="text" autoComplete="off" /><span className="hint">{copy.host.groupHint}</span></div>
+      <GroupField id="g-group" groups={groups} initial={preset} />
       <fieldset style={{ border: 0, padding: 0, margin: 0, display: "grid", gap: 6 }}>
         <legend className="field" style={{ padding: 0 }}><span className="label-ish">{copy.host.expected}</span></legend>
         <div style={{ display: "flex", gap: 10 }}>
@@ -67,7 +78,7 @@ function OneForm({ eventId }: { eventId: string }) {
   );
 }
 
-function ManyForm({ eventId, hasPicker }: { eventId: string; hasPicker: boolean }) {
+function ManyForm({ eventId, hasPicker, groups, preset }: { eventId: string; hasPicker: boolean; groups: string[]; preset?: string }) {
   const [state, formAction, pending] = useActionState<AddManyState, FormData>(addGuests, {});
   const box = useRef<HTMLTextAreaElement>(null);
   useEffect(() => { if (state.added && box.current) box.current.value = ""; }, [state]);
@@ -87,11 +98,7 @@ function ManyForm({ eventId, hasPicker }: { eventId: string; hasPicker: boolean 
   return (
     <form action={formAction} style={{ display: "grid", gap: 12 }}>
       <input type="hidden" name="event_id" value={eventId} />
-      <div className="field">
-        <label htmlFor="g-many-group">{copy.host.group}</label>
-        <input id="g-many-group" name="group" type="text" autoComplete="off" />
-        <span className="hint">{copy.host.groupHint}</span>
-      </div>
+      <GroupField id="g-many-group" groups={groups} initial={preset} />
       <div className="field">
         <label htmlFor="g-list">{copy.host.pasteLabel}</label>
         <textarea id="g-list" name="list" ref={box} rows={6} placeholder={copy.host.pasteExample} style={{ minHeight: 140 }} />
