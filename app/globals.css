@@ -218,9 +218,13 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 /* A link for each group. One row per group: what it is called, the link itself, and the button
    that puts it on the clipboard ready for that chat. */
 .grouplinks { display: flex; flex-direction: column; gap: 14px; }
-.grouplink { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px 12px; }
-.grouplink b { grid-column: 1 / -1; font-size: 15px; }
-.grouplink code { min-width: 0; }
+/* Name, then the link, then what you can do with it, stacked. It was the link and one button
+   side by side, which worked while there was one button. A second one took the link down to 90px
+   and wrapped a url over six lines. */
+.grouplink { display: grid; gap: 8px; }
+.grouplink b { font-size: 15px; }
+.grouplink code { min-width: 0; overflow-wrap: anywhere; }
+.grouplink .actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* A way out of the full size preview. The preview is the guest's page with no host chrome on it,
    so without this the only way back was the browser's own control, which a phone hides as soon as

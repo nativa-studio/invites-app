@@ -2,6 +2,7 @@ import { copy } from "@/lib/copy";
 import { loadEvent, loadGuests } from "@/lib/db/host";
 import { getSiteUrl } from "@/lib/site-url";
 import { CopyButton } from "@/components/host/CopyButton";
+import { groupInviteText } from "@/lib/messages";
 import { GroupLinks } from "@/components/host/GroupLinks";
 import { ReplyCounts, tally } from "@/components/host/ReplyCounts";
 import { EditCard, Sum } from "@/components/host/EditCard";
@@ -40,13 +41,16 @@ export default async function Tracking({ params }: { params: Promise<{ id: strin
           <>
             <p className="hint">{copy.host.groupLinkHint}</p>
             <code>{groupLink}</code>
-            <div className="actions"><CopyButton text={groupLink} label={copy.host.copy} /></div>
+            <div className="actions">
+              <CopyButton text={groupInviteText(e, groupLink)} label={copy.host.copyMessage} what="message" />
+              <CopyButton text={groupLink} label={copy.host.copy} />
+            </div>
           </>
         }
       >
         <Switch id="group_link_enabled" label="Group link open (for chats)" value={open} />
       </EditCard>
-      <GroupLinks base={groupLink} inUse={groupsInUse} />
+      <GroupLinks base={groupLink} inUse={groupsInUse} event={e} />
     </>
   );
 }
