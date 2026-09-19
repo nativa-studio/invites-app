@@ -17,7 +17,6 @@ export function InvitePage({ invite, token, link, skipAnimation, layout }: { inv
     <InviteBody
       e={e}
       greeting={copy.greeting(firstName(guest.name))}
-      addressee={guest.name}
       skipAnimation={skipAnimation ?? answered}
       layout={layout}
       reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />}

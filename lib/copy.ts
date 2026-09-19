@@ -19,7 +19,6 @@ export const copy = {
   envelope: {
     open: "Tap to open",
     // On the group link the envelope has no name to carry, so it is addressed to whoever opened it.
-    toYou: "To you",
     eyebrowBirthday: "Trainer wanted",
   },
   rsvp: {

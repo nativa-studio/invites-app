@@ -60,7 +60,6 @@ export default async function Preview({
         greeting={greeting}
         reply={reply}
         layout={asLayout(layout)}
-        addressee={guest?.name ? String(guest.name) : undefined}
         skipAnimation={pick === "1" || undefined}
       />
     </>

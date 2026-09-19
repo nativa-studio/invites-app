@@ -22,12 +22,11 @@ const DOTS = ["#EFB93C", "#7FAF95", "#93C7D6", "#E8763C", "#E0553F", "#3F6B57"];
 // on a panel rather than bare on the page, so there is something for the envelope to hand over.
 // Everything below follows once it has opened.
 export function LineupInvite({
-  event: e, greeting, reply, addressee, skipAnimation,
+  event: e, greeting, reply, skipAnimation,
 }: {
   event: PublicEvent;
   greeting: string;
   reply: React.ReactNode;
-  addressee: string;
   skipAnimation?: boolean;
 }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
@@ -41,7 +40,6 @@ export function LineupInvite({
         <p className="greet">{greeting}</p>
 
         <Envelope
-          addressee={addressee}
           openLabel={copy.envelope.open}
           skipAnimation={skipAnimation}
           mascot={mascotFor(e.invite_image_path)}

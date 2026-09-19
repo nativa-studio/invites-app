@@ -13,16 +13,13 @@ import { LineupInvite } from "./LineupInvite";
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
-// `addressee` is the name written on the envelope where a layout has one; the group link has
-// none to borrow, so it is addressed to whoever opened it.
 export function InviteBody({
-  e, greeting, reply, layout, addressee, skipAnimation,
+  e, greeting, reply, layout, skipAnimation,
 }: {
   e: PublicEvent;
   greeting: string;
   reply: React.ReactNode;
   layout?: PublicEvent["layout_id"];
-  addressee?: string;
   skipAnimation?: boolean;
 }) {
   const id = layout ?? e.layout_id;
@@ -32,7 +29,6 @@ export function InviteBody({
         event={e}
         greeting={greeting}
         reply={reply}
-        addressee={addressee ?? copy.envelope.toYou}
         skipAnimation={skipAnimation}
       />
     );
@@ -75,8 +71,7 @@ export function InviteBody({
       <div className="wrap">
         <div className="greet">{greeting}</div>
         <Envelope
-          addressee={addressee ?? copy.envelope.toYou}
-          cover={<CoverCard e={e} />}
+            cover={<CoverCard e={e} />}
           openLabel={copy.envelope.open}
           skipAnimation={skipAnimation}
           mascot={mascotFor(e.invite_image_path)}

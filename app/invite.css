@@ -155,8 +155,6 @@
 .env .pocket { overflow: hidden; }
 .env .pocket .sides { position: absolute; inset: 0; background: color-mix(in srgb, var(--red) 82%, black); border-radius: 0 0 10px 10px; clip-path: polygon(0 0,50% 58%,100% 0,100% 100%,0 100%); }
 .env .pocket .edge { position: absolute; inset: 0; background: var(--red); border-radius: 0 0 10px 10px; clip-path: polygon(0 0,50% 58%,100% 0,100% 6%,50% 64%,0 6%); opacity: .6; }
-.env .addr { position: absolute; left: 26px; right: 104px; bottom: 26px; font-family: var(--font-body); font-weight: 700; font-size: 20px; letter-spacing: .16em; text-transform: uppercase; line-height: 1.25; color: var(--crm); z-index: 2; overflow-wrap: anywhere; }
-.env .addr span { display: block; font-size: 14px; letter-spacing: .1em; opacity: .85; }
 /* The postmark, printed on the paper rather than stuck to it. Low contrast on purpose: a real one
    is ink on a coloured envelope, and it must not compete with the name. */
 /* The characters stand on the envelope, inside its edges on every side. Outside the pocket, which

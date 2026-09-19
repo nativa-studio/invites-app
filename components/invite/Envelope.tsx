@@ -4,13 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { Bolt } from "@/components/art/icons";
 
 type Mascot = { src: string; w: number; h: number };
-type Props = { addressee: string; addresseeLine?: string; cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean; mascot?: Mascot | null; bodyClassName?: string };
+type Props = { cover: React.ReactNode; children: React.ReactNode; openLabel: string; skipAnimation?: boolean; mascot?: Mascot | null; bodyClassName?: string };
 
 // The opening: tap (or wait), the flap lifts, the card rises, grows, and the envelope drops away.
 // The cover is drawn once, never twice: the envelope holds it until the opening is over, then
 // hands it to the page. Two copies at once would share one set of SVG pattern ids, and the
 // halftone shading would look up the copy inside the closed envelope and find nothing to paint.
-export function Envelope({ addressee, addresseeLine, cover, children, openLabel, skipAnimation, mascot, bodyClassName = "suite" }: Props) {
+//
+// Nothing is written on it. This is the back of the envelope, the face with the flap and the seal
+// on it, and a name belongs on the front. The guest has been greeted by name directly above this,
+// and the picture that brought them here carries their name on its front, so writing it a third
+// time on the thing they are about to open added nothing.
+export function Envelope({ cover, children, openLabel, skipAnimation, mascot, bodyClassName = "suite" }: Props) {
   const [phase, setPhase] = useState<"" | "open" | "rise" | "out" | "done">(skipAnimation ? "done" : "");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const started = useRef(false);
@@ -50,7 +55,6 @@ export function Envelope({ addressee, addresseeLine, cover, children, openLabel,
           <div className="clip"><div className="card-slot">{phase !== "done" && cover}</div></div>
           <div className="pocket">
             <div className="sides" /><div className="edge" />
-            <div className="addr">{addressee}{addresseeLine && <><br /><span>{addresseeLine}</span></>}</div>
           </div>
           <div className="flap"><div className="face front" /><div className="face backface" /><div className="rim" /></div>
           {/* The event's characters, standing along the envelope rather than printed on it. They sit
