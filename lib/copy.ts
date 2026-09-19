@@ -220,6 +220,11 @@ export const copy = {
     groupLinkPlain: "Everyone, no group",
     groupsHeading: "Groups",
     groupsBlurb: "Who's in each one and who has replied. Guests never see any of this.",
+    groupsOpen: "See them",
+    groupsSummary: (groups: number, loose: number) => {
+      const g = `${groups} ${groups === 1 ? "group" : "groups"}`;
+      return loose ? `${g}, and ${loose} ${loose === 1 ? "guest" : "guests"} in none of them.` : `${g}. Everyone is in one.`;
+    },
     groupsEmpty: "No groups yet. Add a guest with a group, or hand out a group link, and they show up here.",
     groupsNone: "No group",
     groupsNoneHint: ", added before you started using groups or through the plain link",

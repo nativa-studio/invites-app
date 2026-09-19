@@ -1,9 +1,12 @@
+"use client";
+import { useState } from "react";
 import { copy } from "@/lib/copy";
 import { groupSlug } from "@/lib/groups";
 import type { GuestRow } from "@/lib/db/types";
 import { groupInviteText, type TemplateEvent } from "@/lib/messages";
 import { CopyButton } from "./CopyButton";
 import { NewGroupLink } from "./NewGroupLink";
+import { Sheet } from "./Sheet";
 
 // The groups: who is in each one, how they are replying, and the link that reaches them.
 //
@@ -15,6 +18,11 @@ import { NewGroupLink } from "./NewGroupLink";
 // Copy message is the one a host wants nine times out of ten, since a group link exists to be
 // pasted into a chat, and it used to be on the card without the counts. Copy link on its own is
 // for a poster or a QR code.
+//
+// In a sheet rather than on the page. Eight groups is eight names, eight counts and sixteen
+// buttons, which is several phone screens of list between the guests above it and the guest list
+// below it, on a screen a host opens to do something else. The card says how many there are; the
+// sheet is for when you want a link.
 //
 // Guests with no group are counted too. A host who cannot see the unlabelled ones cannot fix them.
 export function GroupsPanel({ guests, base, event }: { guests: GuestRow[]; base: string; event: TemplateEvent }) {
@@ -31,12 +39,18 @@ export function GroupsPanel({ guests, base, event }: { guests: GuestRow[]; base:
   });
 
   const rows = names.map((n) => row(n, guests.filter((g) => g.groups?.includes(n))));
+  const [open, setOpen] = useState(false);
 
   return (
     <section className="card">
-      <h2 className="h2">{copy.host.groupsHeading}</h2>
-      <p className="hint">{copy.host.groupsBlurb}</p>
-      {rows.length === 0 && ungrouped.length === 0 && <p className="hint">{copy.host.groupsEmpty}</p>}
+      <div className="card-head">
+        <h2 className="h2">{copy.host.groupsHeading}</h2>
+        <button type="button" className="btn small" onClick={() => setOpen(true)}>{copy.host.groupsOpen}</button>
+      </div>
+      <p className="hint">{rows.length === 0 && ungrouped.length === 0 ? copy.host.groupsEmpty : copy.host.groupsSummary(rows.length, ungrouped.length)}</p>
+      {open && (
+        <Sheet title={copy.host.groupsHeading} blurb={copy.host.groupsBlurb} onClose={() => setOpen(false)}>
+          <div className="sheet-body">
       {rows.map((r) => {
         const link = `${base}/${groupSlug(r.name)}`;
         return (
@@ -62,6 +76,9 @@ export function GroupsPanel({ guests, base, event }: { guests: GuestRow[]; base:
         </div>
       )}
       <NewGroupLink base={base} event={event} />
+          </div>
+        </Sheet>
+      )}
     </section>
   );
 }
