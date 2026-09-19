@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { formatLongDate } from "@/lib/format";
 import { InviteThumb } from "./InviteThumb";
+import { paletteFor, paletteVars } from "@/components/art/palette";
+import { stockFor } from "@/lib/layouts";
 
 export type EventSummary = {
   id: string;
@@ -28,9 +30,15 @@ const STATUS: Record<string, string> = {
 // looks in the hand, then the words underneath.
 export function EventCard({ e }: { e: EventSummary }) {
   const status = STATUS[e.status ?? "draft"] ?? "Draft";
+  const p = paletteFor(e.palette, e.theme_id ?? "");
+  const beige = stockFor(e.layout_id ?? undefined) === "beige";
   return (
     <Link href={`/app/events/${e.id}`} className="evt-card">
-      <span className="evt-art">
+      {/* The invite's own ground, on the tile rather than only inside the thumbnail. It was a grey
+          box with the picture floating in it and a rule under it, which framed the invite twice:
+          once with the app's furniture and again with its own. The paper an event is printed on
+          is the fastest way to recognise it in a list, so it gets the whole area. */}
+      <span className={`evt-art${beige ? " beige" : ""}`} style={paletteVars(p)}>
         <InviteThumb artwork={e.invite_image_path} title={e.title} intro={e.intro} themeId={e.theme_id} palette={e.palette} layout={e.layout_id ?? undefined} />
       </span>
       <span className="evt-body">

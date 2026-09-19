@@ -80,9 +80,11 @@ p { margin: 0; }
    invite before they read its name. Two across on a phone, more as the screen allows. The picture
    is taller than it is wide, since that is the shape of the thing it stands for. */
 .evt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-.evt-card { display: grid; gap: 0; border: 1px solid var(--app-line); border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; background: var(--app-bg); min-width: 0; }
-.evt-card:hover { border-color: var(--app-line-2); }
-.evt-art { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; background: var(--app-sunk); border-bottom: 1px solid var(--app-line); overflow: hidden; }
+.evt-card { display: grid; gap: 0; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; background: var(--app-bg); min-width: 0; }
+/* The picture area is the invite's own paper, edge to edge, with nothing ruled off around it. The
+   colour is set per card, since it is the event's, not the app's. */
+.evt-art { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; background-color: var(--sky); overflow: hidden; }
+.evt-art.beige { background-color: #FDF6E4; }
 .evt-art svg { width: 44px; height: auto; }
 
 /* An invite, small: the card in front, its envelope open behind it. Percentages throughout, so
@@ -111,7 +113,7 @@ p { margin: 0; }
    box unless the box is scaled, and every length in the guest stylesheet is a pixel count. */
 .ithumb { --thumb: 0.221; position: relative; display: block; width: calc(680px * var(--thumb)); height: calc(730px * var(--thumb)); }
 .ithumb-scene { position: absolute; left: 0; top: 0; width: 680px; height: 730px; transform: scale(var(--thumb)); transform-origin: top left; }
-.ithumb-scene.invite { min-height: 0; padding: 0; overflow: visible; }
+.ithumb-scene.invite { min-height: 0; padding: 0; overflow: visible; background-image: none; }
 /* The page the invite is on comes with it: the suite's blue with its dots, which the invite class
    already carries, and the lineup's cream, which its own page sets and which is named here rather
    than inherited because the lineup class brings a whole page's worth of rules with it. The card
