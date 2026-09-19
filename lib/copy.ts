@@ -208,7 +208,7 @@ export const copy = {
     guestGroupNewTitle: "New group",
     guestGroupFor: (name: string) => `${name} goes in it, and you can put others in it after.`,
     guestGroupSave: "Save",
-    partsHeading: "What the invite is made of",
+    partsHeading: "Invite sections",
     partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first.",
     partSwitch: (name: string) => `${name}, on the invite`,
     partsRepaired: "A part was missing from the saved order and has been put back where it belongs.",
