@@ -118,6 +118,19 @@ works because the frame is an obvious boundary. Confirm that, or give us the joi
 from the same components rather than a picture of them. It is on the events list and it is the only
 place a host sees many invites at once. It has never been designed.
 
+**The app icon reads as teeth.** Marcia's own words, from her home screen, and she is right. The
+current icon is four identical triangles, evenly spaced, in a row across the middle of a pale
+cream tile, with a heavy dark line above them that curves **up** at both ends. Every one of those
+is a mouth cue: the even row is teeth, the line is a gum line, the upward curve is a smile, and
+the cream is skin. The two that do the most damage are the even spacing and the upward curve.
+
+Five attempts at a fix are in `docs/icon-candidates/`, rendered at 512 and at 60 px in
+`sheet.png`, because the complaint is about how it reads from across a room. What they establish:
+sagging the string instead of smiling it removes the mouth, breaking the even row removes the
+teeth, and coming off the horizontal midline stops the tile having an empty half for an eye to
+read a face into. The diagonal one survives 60 px best. None of them is a finished icon and they
+are offered as a diagnosis rather than as a shortlist.
+
 **Empty states are thin.** Version 2 asked for empty states that teach. What exists is a sentence.
 
 **The yes moment exists and is ours to keep or change.** Saying yes throws fourteen bunting flags
