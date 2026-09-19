@@ -54,6 +54,30 @@ LOCAL_PG_URL=postgres://postgres:postgres@localhost/bunting_test NEXT_PUBLIC_SUP
 
 Then open `http://localhost:3000/i/previewgab4`.
 
+## Who can sign in
+
+While Bunting is being built, only the people on a list may sign in. Everyone else who taps
+Continue with Google is signed straight back out and lands on `/not-yet`, a public page that says
+it is not open yet.
+
+In Vercel: **Settings**, **Environment Variables**, add
+
+```
+HOST_ALLOWLIST=marcia@nativa.studio
+```
+
+Tick Production, Preview and Development, then redeploy. Comma separate to add somebody:
+`marcia@nativa.studio, someone@example.com`. Case and spaces do not matter. **Not** a
+`NEXT_PUBLIC_` variable: a list of real email addresses does not belong in a browser.
+
+Leave it unset and anybody with a Google account can sign in, which is what a local checkout
+wants and what the app did before this existed.
+
+Two things this is not. It is not the security boundary: that is row level security in the
+database, where a signed-in stranger can only ever read their own rows and has never been able to
+see anybody else's guests, allergy notes or numbers. And it does not touch guests at all. Guest
+links have no sign-in, so every invite, RSVP and group link keeps working for everyone.
+
 ## Applying migrations
 
 Migrations are SQL files in `supabase/migrations/`, numbered and applied in order. Two ways to

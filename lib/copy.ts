@@ -8,6 +8,13 @@ export const copy = {
     google: "Continue with Google",
     signinError: "That sign-in did not go through. Please try again.",
   },
+  // Somebody signed in who is not on the list while this is being built.
+  notYet: {
+    title: "Bunting is still being built",
+    body: "Thanks for having a look. It is not open yet, so there is nothing here for you to sign in to. Marcia is using it for one party at a time while the rough edges come off.",
+    hint: "If you were expecting to get in, tell Marcia which email address you used and she will add it.",
+    back: "Back to the start",
+  },
   app: {
     yourEvents: "Your events",
     newEvent: "New event",
