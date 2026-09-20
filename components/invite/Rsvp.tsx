@@ -8,10 +8,21 @@ import { rsvpAction, type RsvpState } from "@/app/i/[token]/actions";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
+import { PlateCard } from "./PlateCard";
+import type { Plate } from "@/lib/guest/plate";
 
-type Props = { token: string; event: PublicEvent; guest: PublicGuest; googleLink: string | null; icsLink: string };
+type Props = {
+  token: string;
+  event: PublicEvent;
+  guest: PublicGuest;
+  googleLink: string | null;
+  icsLink: string;
+  /** The board as it stood when the page loaded, which is a board at all only for a guest who
+   *  had already said yes. A guest who says yes here gets a fresher one back with the reply. */
+  plate?: Plate | null;
+};
 
-export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
+export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate }: Props) {
   const [state, formAction, pending] = useActionState<RsvpState, FormData>(rsvpAction, { ok: false });
   const [choice, setChoice] = useState<"" | "yes" | "no">("");
   // "Change my answer" is tied to the state it was clicked from, so a fresh submission closes it again.
@@ -23,17 +34,24 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
   const who = firstName(guest.name);
 
   if (answered && !editing) {
+    // Whichever board is the newer one: the reply's, if they have just answered, otherwise the
+    // one the page was rendered with. The board lives here rather than beside the reply in the
+    // layout, because only this component knows what the current answer is.
+    const board = state.ok ? state.plate : plate;
     return (
-      <ThanksCard
-        yes={current.status === "yes"}
-        count={current.party_size ?? 0}
-        host={host}
-        dated={Boolean(e.date)}
-        googleLink={googleLink}
-        icsLink={icsLink}
-        onChange={() => { setEditingFrom(state); setChoice(""); }}
-        landed={state.ok}
-      />
+      <>
+        <ThanksCard
+          yes={current.status === "yes"}
+          count={current.party_size ?? 0}
+          host={host}
+          dated={Boolean(e.date)}
+          googleLink={googleLink}
+          icsLink={icsLink}
+          onChange={() => { setEditingFrom(state); setChoice(""); }}
+          landed={state.ok}
+        />
+        {current.status === "yes" && board?.enabled && <PlateCard token={token} plate={board} />}
+      </>
     );
   }
 

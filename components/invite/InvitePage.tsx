@@ -4,7 +4,6 @@ import { firstName } from "@/lib/format";
 import { googleCalendarLink } from "@/lib/calendar";
 import { InviteBody } from "./InviteBody";
 import { Rsvp } from "./Rsvp";
-import { PlateCard } from "./PlateCard";
 import type { Plate } from "@/lib/guest/plate";
 
 // A personal link. The layout itself lives in InviteBody, which the group link and the host's
@@ -21,8 +20,10 @@ export function InvitePage({ invite, token, link, plate, skipAnimation, layout }
       greeting={copy.greeting(firstName(guest.name))}
       skipAnimation={skipAnimation ?? answered}
       layout={layout}
-      reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} />}
-      plate={plate?.enabled && guest.status === "yes" ? <PlateCard token={token} plate={plate} /> : null}
+      // The board goes to the reply rather than to the layout. Where it belongs depends on the
+      // answer, and the answer changes in the browser after this has rendered, so the reply is
+      // the only thing that knows.
+      reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarLink(e, link)} icsLink={`/i/${token}/invite.ics`} plate={plate} />}
     />
   );
 }
