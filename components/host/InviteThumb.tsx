@@ -39,18 +39,32 @@ export function InviteThumb({
   ink?: string | null;
   set?: string | null;
 }) {
-  // The strip has no envelope and no characters, so drawing it as one would be a picture of a
-  // different design. Same rule as the rest of this file: show the real pieces, at the real size,
-  // and there is nothing for the tile to be wrong about. Its cover is three doodles and a title,
-  // so its tile is three doodles and a title.
+  // The strip, which has an envelope of its own now, so its tile is the same scene as every other
+  // design's: the cover standing in front of its own open envelope. Its own pieces though, never
+  // the suite's. The envelope is mixed from the event's two colours by the stylesheet, and the
+  // cover is the doodles and the title, not a card with a photograph in it.
+  //
+  // Same rule as the rest of this file: every piece here is the real one, at the real size, so
+  // there is nothing for the tile to be wrong about. A drawing of an envelope would be.
   if (layout === "strip") {
     const set = stripSet(chosenSet, themeId);
     return (
-      <span className="ithumb strip-thumb" style={{ background: paperFor(ink), color: inkFor(ink) }}>
-        <span className="strip-thumb-in">
-          <span className="trio">{set.trio.map((n, i) => <Mono key={i} name={n} size={28} />)}</span>
-          <span className="t">{title}</span>
-          {intro && <span className="b">{intro}</span>}
+      <span className="ithumb" style={{ "--ink": inkFor(ink), "--paper": paperFor(ink) } as React.CSSProperties}>
+        <span className="ithumb-scene strip-scene">
+          <span className="ithumb-envbox">
+            <span className="env ink still">
+              <span className="back" />
+              <span className="pocket"><span className="sides" /><span className="edge" /></span>
+              <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
+            </span>
+          </span>
+          <span className="ithumb-cardbox">
+            <span className="strip-card">
+              <span className="trio">{set.trio.map((n, i) => <Mono key={i} name={n} size={74} />)}</span>
+              <span className="t">{title}</span>
+              {intro && <span className="b">{intro}</span>}
+            </span>
+          </span>
         </span>
       </span>
     );

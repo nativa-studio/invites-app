@@ -54,9 +54,16 @@ export const LAYOUTS: LayoutOption[] = [
 // The paper each design's envelope is cut from. It is a property of the design rather than of the
 // event's palette, because it is the stationery: the suite is a red envelope on white, the lineup
 // is a cream page and takes a warmer, deeper shade of the same paper.
-const STOCK: Record<string, "red" | "beige"> = { suite: "red", lineup: "beige", strip: "beige" };
+//
+// `ink` is the odd one and the reason this is not just two names. The illustrated strip has no
+// fixed paper at all: it is one ink on a tint of that ink, chosen per event, so its envelope is
+// mixed from the same two colours rather than picked from a list. Everything that draws an
+// envelope therefore has to handle a stock whose colours it will not know until it has the event.
+export type Stock = "red" | "beige" | "ink";
 
-export function stockFor(layout: string | null | undefined): "red" | "beige" {
+const STOCK: Record<string, Stock> = { suite: "red", lineup: "beige", strip: "ink" };
+
+export function stockFor(layout: string | null | undefined): Stock {
   return STOCK[layout ?? ""] ?? "red";
 }
 

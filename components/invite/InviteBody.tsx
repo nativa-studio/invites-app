@@ -10,6 +10,7 @@ import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, Update
 import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
 import { AnnounceGift, AnnouncePlate } from "./Announce";
+import { UntilAnswered } from "./UntilAnswered";
 import { PlateSlot } from "./PlateSlot";
 import { LineupInvite } from "./LineupInvite";
 import { StripInvite } from "./StripInvite";
@@ -47,8 +48,12 @@ export function InviteBody({
   // the lineup layout takes its own reply and would otherwise quietly not have them.
   const announced = (
     <>
-      <AnnouncePlate e={e} answered={answered} />
-      <AnnounceGift e={e} answered={answered} />
+      {/* Wrapped, because `answered` is what the server knew when it drew the page and a guest
+          answers after that. See UntilAnswered. */}
+      <UntilAnswered>
+        <AnnouncePlate e={e} answered={answered} />
+        <AnnounceGift e={e} answered={answered} />
+      </UntilAnswered>
       {reply}
     </>
   );
@@ -65,6 +70,7 @@ export function InviteBody({
         reply={announced}
         after={about}
         plate={plateCard ?? <PlateSlot />}
+        skipAnimation={skipAnimation}
       />
     );
   }

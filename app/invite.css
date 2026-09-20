@@ -2,7 +2,11 @@
 /* The envelope's clip box is deliberately wider than the stage so the card can rise out of it,
    which spilled 18px past the viewport and gave a guest's phone a sideways scroll. Clip rather
    than hide: hidden would make this a scroll container and break the sticky pieces inside it. */
-.invite { overflow-x: clip; --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding: 0 16px 56px; }
+/* --flag-2 is spelled out rather than left to --sky-ink. skyInk returns the sky when the sky
+   reads against the paper, and the sky is the colour of the entire page: nineteen of the ninety
+   flags were drawn in the ground they were falling through. Navy is the design's keyline and is
+   dark on both grounds this palette takes. */
+.invite { --flag-2: var(--navy); overflow-x: clip; --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding: 0 16px 56px; }
 .invite .wrap { max-width: 390px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 30px; }
 .invite .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-sky); margin-top: 28px; text-align: center; }
 .pcard { box-sizing: border-box; position: relative; width: 100%; max-width: 390px; background: var(--paper); border-radius: 8px; border: 3px solid var(--navy); padding: 24px 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -161,11 +165,23 @@
 .cheer .flag.strip {
   width: calc(var(--size) * .42); height: calc(var(--size) * 1.7); clip-path: none; border-radius: 1px;
 }
-.cheer .flag.c0 { background: var(--red); }
-.cheer .flag.c1 { background: var(--yel); }
-.cheer .flag.c2 { background: var(--sky-ink); }
-.cheer .flag.c3 { background: var(--forest); }
-.cheer .flag.c4 { background: var(--crm); }
+/* Five colours, named as their own thing rather than borrowed from wherever they happened to fit.
+   A design that has five colours leaves these alone and gets the palette; a design drawn in one
+   ink sets them and gets five tints of it.
+
+   The fallback on c2 is not tidiness. --sky-ink is set by paletteVars and by nothing else, so on
+   any page that does not go through it the property was simply absent, and `background: var(--x)`
+   with no --x is transparent: nineteen of the ninety flags were drawn and could not be seen. */
+.cheer .flag.c0 { background: var(--flag-0, var(--red)); }
+.cheer .flag.c1 { background: var(--flag-1, var(--yel)); }
+.cheer .flag.c2 { background: var(--flag-2, var(--navy)); }
+.cheer .flag.c3 { background: var(--flag-3, var(--forest)); }
+.cheer .flag.c4 { background: var(--flag-4, var(--crm)); }
+/* The palest of the five gets a hairline of its own, because on a pale ground it was the ground.
+   A flag cannot take a border, it is a clip-path, so the edge is a shadow with no offset and no
+   blur, which follows the clipped shape the way a border would not. On a dark ground it costs
+   nothing and reads as the edge of a piece of paper. */
+.cheer .flag.c4 { filter: drop-shadow(0 0 0.6px color-mix(in srgb, var(--flag-edge, var(--navy)) 70%, transparent)); }
 
 /* The burst. Starts under the bottom edge and is thrown up and out, so it crosses the whole
    screen on the way up: that is what puts bunting at the top of the screen in the first half
@@ -322,6 +338,27 @@
 @keyframes frontoff { 0%,49.9% { opacity: 1 } 50%,100% { opacity: 0 } }
 @keyframes backon { 0%,49.9% { opacity: 0 } 50%,100% { opacity: 1 } }
 .open .seal, .open .hint { opacity: 0; transform: scale(.6); pointer-events: none; }
+/* The one-ink envelope, for a design that has no fixed paper.
+   Every colour is mixed from the two the page already has, so the envelope is cut from the same
+   stock as the invite inside it and follows the ink a host picks without being told. The seal is
+   the paper with an ink rim rather than a filled disc: on a page with two colours in it, a wax
+   blob is a third. */
+.env.ink .back { background-color: var(--paper); background-image: linear-gradient(90deg, color-mix(in srgb, var(--ink) 9%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 50%, transparent 50%); }
+.env.ink .pocket .sides { background: color-mix(in srgb, var(--ink) 24%, var(--paper)); }
+.env.ink .pocket .edge { background: color-mix(in srgb, var(--ink) 15%, var(--paper)); opacity: 1; }
+.env.ink .flap .front { background: color-mix(in srgb, var(--ink) 15%, var(--paper)); }
+.env.ink .flap .rim { background: color-mix(in srgb, var(--ink) 34%, var(--paper)); }
+.env.ink .flap .backface { background-color: var(--paper); background-image: linear-gradient(90deg, color-mix(in srgb, var(--ink) 9%, transparent) 50%, transparent 50%), linear-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 50%, transparent 50%); }
+.env.ink .seal { background: var(--paper); border-color: var(--ink); color: var(--ink); box-shadow: 0 2px 0 color-mix(in srgb, var(--ink) 25%, transparent); }
+/* The shadow under the paper is the page's ink too. It was a hardcoded navy, which is right under
+   a red envelope on blue and reads as a cold blue halo under a marigold one on cream. */
+.env.ink .back, .env.ink .pocket { filter: drop-shadow(0 12px 12px color-mix(in srgb, var(--ink) 26%, transparent)); }
+/* The card in this envelope is not a .pcard: the strip's cover is a panel cut from the page, so
+   the rule that fits a card to the slot has to name it too or the cover comes out at its own
+   height and hangs out of the paper. Same sum as the card's: the slot turns it a quarter turn
+   and halves it, so its HEIGHT becomes its width on screen, and 640 is what fits 342. */
+.env-root:not(.out) .card-slot .cover { height: 640px; justify-content: center; }
+
 /* The beige envelope, for the designs cut from that paper.
    It used to live in lineup.css as ".lineup .env ...", keyed off the page the envelope happened
    to be on. That is fine until something else wants one: the thumbnail is not a lineup page and

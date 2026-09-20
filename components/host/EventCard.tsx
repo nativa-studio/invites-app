@@ -4,6 +4,7 @@ import { copy } from "@/lib/copy";
 import { InviteThumb } from "./InviteThumb";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { stockFor } from "@/lib/layouts";
+import { inkFor, paperFor } from "@/lib/strip-set";
 
 export type EventSummary = {
   id: string;
@@ -37,14 +38,22 @@ const STATUS: Record<string, string> = {
 export function EventCard({ e }: { e: EventSummary }) {
   const status = STATUS[e.status ?? "draft"] ?? "Draft";
   const p = paletteFor(e.palette, e.theme_id ?? "");
-  const beige = stockFor(e.layout_id ?? undefined) === "beige";
+  // The panel behind the thumbnail is the paper the invite is printed on, so an event is
+  // recognised in a list by its own stock. The strip has no fixed paper: it is mixed from the
+  // event's ink, so its panel takes the same two variables the envelope inside it takes.
+  const stock = stockFor(e.layout_id ?? undefined);
   return (
     <Link href={`/app/events/${e.id}`} className="evt-card">
       {/* The invite's own ground, on the tile rather than only inside the thumbnail. It was a grey
           box with the picture floating in it and a rule under it, which framed the invite twice:
           once with the app's furniture and again with its own. The paper an event is printed on
           is the fastest way to recognise it in a list, so it gets the whole area. */}
-      <span className={`evt-art${beige ? " beige" : ""}`} style={paletteVars(p)}>
+      <span
+        className={`evt-art${stock === "beige" ? " beige" : ""}${stock === "ink" ? " ink" : ""}`}
+        style={stock === "ink"
+          ? ({ "--ink": inkFor(e.ink), "--paper": paperFor(e.ink) } as React.CSSProperties)
+          : paletteVars(p)}
+      >
         <InviteThumb artwork={e.invite_image_path} title={e.title} intro={e.intro} themeId={e.theme_id} palette={e.palette} layout={e.layout_id ?? undefined} ink={e.ink} />
       </span>
       <span className="evt-body">

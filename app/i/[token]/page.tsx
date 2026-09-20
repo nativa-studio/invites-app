@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   // The personal card reads through a function that arrived in migration 0003. Until a database
   // carries it, the preview falls back to the event's own card rather than showing nothing.
   const personal = await getInviteCard(token).then((c) => c !== null).catch(() => false);
-  const image = cardUrl(personal ? `${site}/s/i/${token}/card.png` : `${site}/s/${e.slug}/card.png`, e.date);
+  const image = cardUrl(personal ? `${site}/s/i/${token}/card.png` : `${site}/s/${e.slug}/card.png`, e);
   return shareMetadata(e, image);
 }
 

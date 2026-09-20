@@ -7,6 +7,7 @@
 //
 // Every stroke is `currentColor`, so the ink is chosen once on the page and every picture on it
 // follows. That is what makes the set swappable: nothing here knows which ink it is drawn in.
+import React from "react";
 import type { NoteKind } from "@/lib/good-to-know";
 
 const PATHS = {
@@ -65,6 +66,32 @@ export type MonoName = keyof typeof PATHS | keyof typeof ALIAS;
 // cannot name a picture that was never drawn, and a runsheet icon arrives as a plain string.
 const PATH_OF: Record<string, string> = PATHS;
 const ALIAS_OF: Record<string, string> = ALIAS;
+
+/** The raw path data for one picture, for anywhere that cannot render a React component: the
+ *  share card is drawn by Satori from a string of SVG, not from this module's JSX. */
+export function monoPath(name: MonoName): string {
+  return PATH_OF[ALIAS_OF[name] ?? name] ?? PATHS.bubble;
+}
+
+// The same picture as real elements rather than a string of markup.
+//
+// The share card is drawn by Satori, which renders SVG faithfully and refuses
+// dangerouslySetInnerHTML outright, so the one place that cannot take the string needs the
+// shapes. The set is written as markup because that is how it was drawn and how it reads; this
+// reads it back. Every attribute in it is a plain lowercase SVG attribute, which React takes
+// as-is, so there is no name mapping to keep in step.
+const TAG = /<(path|circle|ellipse|rect)\s([^>]*?)\/?>/g;
+const ATTR = /([a-zA-Z-]+)="([^"]*)"/g;
+
+export function monoShapes(name: MonoName): React.ReactElement[] {
+  const out: React.ReactElement[] = [];
+  for (const tag of monoPath(name).matchAll(TAG)) {
+    const props: Record<string, string> = {};
+    for (const a of tag[2].matchAll(ATTR)) props[a[1]] = a[2];
+    out.push(React.createElement(tag[1], { key: out.length, ...props }));
+  }
+  return out;
+}
 
 export function hasMono(name: string | null | undefined): name is MonoName {
   const n = ALIAS_OF[name ?? ""] ?? name ?? "";

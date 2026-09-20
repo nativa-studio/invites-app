@@ -85,6 +85,7 @@ p { margin: 0; }
    colour is set per card, since it is the event's, not the app's. */
 .evt-art { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; background-color: var(--sky); overflow: hidden; }
 .evt-art.beige { background-color: #FDF6E4; }
+.evt-art.ink { background-color: var(--paper); }
 .evt-art svg { width: 44px; height: auto; }
 
 /* An invite, small: the card in front, its envelope open behind it. Percentages throughout, so
@@ -582,10 +583,18 @@ fieldset.stack > legend { padding: 0; }
 /* The illustrated strip's tile. No envelope and no characters, because it has neither: its cover
    is three doodles over the title, so that is what stands here. Laid out at the tile's own size
    rather than scaled down from 680px, since there is nothing here that has to match a card. */
-/* The tile is 122 by 131. Measured, because the first go was laid out at the invite's sizes and
-   the title ran off the right edge with the bunting cut in half. */
-.ithumb.strip-thumb { display: flex; align-items: center; justify-content: center; padding: 8px; }
-.strip-thumb-in { display: flex; flex-direction: column; align-items: center; gap: 7px; text-align: center; max-width: 100%; }
-.strip-thumb-in .trio { display: flex; gap: 4px; align-items: flex-end; }
-.strip-thumb-in .t { font-family: var(--font-hand); font-size: 14px; line-height: 1.1; letter-spacing: 0.03em; max-width: 100%; }
-.strip-thumb-in .b { font-size: 9px; line-height: 1.35; opacity: 0.75; max-width: 100%; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* The strip's scene. Laid out at 680 by 730 like every other design's and scaled down with it,
+   so the envelope, the cover and the gap between them are the same proportions in every tile. */
+.ithumb-scene.strip-scene { background: var(--paper); color: var(--ink); }
+/* The card fills its side of the scene the way every other design's cover does. Without a height
+   it is only as tall as its three lines, and the tile came out as a small card in the corner of a
+   large empty sheet, which reads as a mistake rather than as a design. */
+.strip-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 22px; text-align: center; min-height: 520px;
+  background: var(--paper); border: 3px solid var(--ink); border-radius: 10px;
+  padding: 36px 26px 40px; box-sizing: border-box;
+}
+.strip-card .trio { display: flex; gap: 12px; align-items: flex-end; }
+.strip-card .t { font-family: var(--font-hand); font-size: 56px; line-height: 1.02; letter-spacing: 0.03em; text-wrap: balance; }
+.strip-card .b { font-size: 19px; line-height: 1.4; opacity: 0.78; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }

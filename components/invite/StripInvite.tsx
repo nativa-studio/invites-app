@@ -9,7 +9,7 @@ import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink } from "./Cards";
 import { Mono, monoNote, hasMono } from "@/components/art/mono";
 import { stripSet, inkFor, paperFor } from "@/lib/strip-set";
-import { ScrollCue } from "./ScrollCue";
+import { Envelope } from "./Envelope";
 
 // The illustrated strip: one ink on paper, straight down the page, no envelope and no cards.
 //
@@ -27,7 +27,7 @@ function Rule() {
 }
 
 export function StripInvite({
-  event: e, greeting, reply, after, plate,
+  event: e, greeting, reply, after, plate, skipAnimation,
 }: {
   event: PublicEvent;
   greeting: string;
@@ -36,6 +36,7 @@ export function StripInvite({
   after?: React.ReactNode;
   /** Bring a plate, drawn by whoever owns the guest's answer. */
   plate?: React.ReactNode;
+  skipAnimation?: boolean;
 }) {
   const set = stripSet(e.strip_set, e.theme_id);
   const ink = inkFor(e.ink);
@@ -144,30 +145,44 @@ export function StripInvite({
     <main className="strip" style={{ "--ink": ink, "--paper": paper } as React.CSSProperties}>
       <div className="page">
         <p className="greet">{greeting}</p>
-        {/* The cover. Three doodles and the title, and no photograph: when uploads land, an
-            uploaded invite replaces these two and everything below stays exactly as it is.
-            One element around all three, because data-section is the handle the host's editor
-            edits by and the drawer behind it holds the title and the line under it. Marked on the
-            doodles alone, tapping the title did nothing, which is the one place on the cover a
-            host is most likely to tap. */}
-        <div className="cover" data-section="cover">
-          <div className="trio">
-            {set.trio.map((n, i) => <Mono key={i} name={n} size={56} />)}
-          </div>
-          <h1>{e.title}</h1>
-          {e.intro && <p className="para">{e.intro}</p>}
-        </div>
-        {parts.map((node, i) => (
-          <React.Fragment key={i}>
-            <Rule />
-            {node}
-          </React.Fragment>
-        ))}
-        {after}
+        {/* The same envelope every other design uses, cut from this one's two colours. It was
+            built without one, and the opening is the part of this product that does not survive
+            being described: the children ask to watch it again. So the strip gets it too, and
+            gets it from the same component, because an animation written twice is an animation
+            that drifts.
+            The wax carries the middle doodle of the event's own set, so a Diwali invite is sealed
+            with a diya and a birthday with a cake. */}
+        <Envelope
+          stock="ink"
+          openLabel={copy.envelope.open}
+          skipAnimation={skipAnimation}
+          bodyClassName="strip-body"
+          seal={<Mono name={set.trio[1]} size={26} />}
+          cover={
+            /* Three doodles and the title, and no photograph: when uploads land, an uploaded
+               invite replaces these two and everything below stays exactly as it is.
+               One element around all three, because data-section is the handle the host's editor
+               edits by and the drawer behind it holds the title and the line under it. Marked on
+               the doodles alone, tapping the title did nothing, which is the one place on the
+               cover a host is most likely to tap. */
+            <div className="cover" data-section="cover">
+              <div className="trio">
+                {set.trio.map((n, i) => <Mono key={i} name={n} size={56} />)}
+              </div>
+              <h1>{e.title}</h1>
+              {e.intro && <p className="para">{e.intro}</p>}
+            </div>
+          }
+        >
+          {parts.map((node, i) => (
+            <React.Fragment key={i}>
+              <Rule />
+              {node}
+            </React.Fragment>
+          ))}
+          {after}
+        </Envelope>
       </div>
-      {/* The only layout with nothing to tap: no envelope hands the page over, so a guest whose
-          first section runs off the bottom edge has nothing saying the page continues. */}
-      <ScrollCue anchor=".strip section" />
     </main>
   );
 }
