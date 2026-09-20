@@ -62,8 +62,10 @@ export const copy = {
   },
   thanks: {
     yesTitle: "See you there!",
-    yesBody: (count: number, host: string) =>
-      count > 1 ? `We've got you down for ${count}. ${host} can't wait to see you.` : `We've got you down. ${host} can't wait to see you.`,
+    // One line, the same whatever the number. It used to open by reading the party size back,
+    // which is the app confirming its own bookkeeping at the moment a guest has just said yes:
+    // true, useful, and not the first thing to say to somebody who has just accepted.
+    yesBody: () => "We are so happy you can make it.",
     noTitle: "Sorry you can't make it",
     noBody: (host: string) => `${host} will miss you. Thanks for letting us know.`,
     addToCalendar: "Add to calendar",

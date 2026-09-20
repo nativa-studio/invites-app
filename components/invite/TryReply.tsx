@@ -37,7 +37,7 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
   gift?: Gift | null;
 }) {
   const [choice, setChoice] = useState<"" | "yes" | "no">("");
-  const [sent, setSent] = useState<{ yes: boolean; count: number } | null>(null);
+  const [sent, setSent] = useState<{ yes: boolean } | null>(null);
   const host = hostName(e.host_line, "The host");
 
   if (sent) {
@@ -45,7 +45,6 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
       <>
         <ThanksCard
           yes={sent.yes}
-          count={sent.count}
           host={host}
           dated={Boolean(e.date)}
           googleLink={googleLink}
@@ -74,10 +73,7 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
 
   function send(ev: React.FormEvent<HTMLFormElement>) {
     ev.preventDefault();
-    const f = new FormData(ev.currentTarget);
-    const n = (k: string) => Number(f.get(k) ?? 0) || 0;
-    const count = e.ask_party_mode === "split" ? n("children") + n("adults") : n("party_size");
-    setSent({ yes: choice === "yes", count });
+    setSent({ yes: choice === "yes" });
   }
 
   return (

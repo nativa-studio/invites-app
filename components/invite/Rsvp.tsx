@@ -48,7 +48,6 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate, gift 
       <>
         <ThanksCard
           yes={current.status === "yes"}
-          count={current.party_size ?? 0}
           host={host}
           dated={Boolean(e.date)}
           googleLink={googleLink}

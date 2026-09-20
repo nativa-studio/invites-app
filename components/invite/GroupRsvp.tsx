@@ -28,7 +28,6 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
       <>
         <ThanksCard
           yes={replied.status === "yes"}
-          count={replied.party_size ?? 0}
           host={host}
           dated={Boolean(e.date)}
           googleLink={state.ok ? state.googleLink : null}

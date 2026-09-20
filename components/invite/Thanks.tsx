@@ -14,10 +14,9 @@ import { Celebrate } from "./Celebrate";
 // brings itself into view. A guest coming back to an invite they have already answered is not
 // landing on anything, and is left at the top where they opened it.
 export function ThanksCard({
-  yes, count, host, dated, googleLink, icsLink, onChange, landed,
+  yes, host, dated, googleLink, icsLink, onChange, landed,
 }: {
   yes: boolean;
-  count: number;
   host: string;
   dated: boolean;
   googleLink: string | null;
@@ -41,7 +40,7 @@ export function ThanksCard({
       {yes && landed && <Celebrate />}
     <div className={`pcard tilt-l${yes && landed ? " cheering" : ""}`} aria-live="polite" ref={card}>
       <div className="rsvp-h"><Bolt size={24} /> {yes ? copy.thanks.yesTitle : copy.thanks.noTitle} <Bolt size={24} /></div>
-      <div className="para">{yes ? copy.thanks.yesBody(count, host) : copy.thanks.noBody(host)}</div>
+      <div className="para">{yes ? copy.thanks.yesBody() : copy.thanks.noBody(host)}</div>
       {yes && dated && (
         <div className="cal">
           <div className="label sky">{copy.thanks.addToCalendar}</div>
