@@ -12,7 +12,7 @@ type Sections = { details: boolean; day: boolean; know: boolean; after: boolean 
 const SECTION_LABELS: [keyof Sections, string, string][] = [
   ["details", "show_details", "The details: when, where, what to wear"],
   ["day", "show_runsheet", "The order of the afternoon"],
-  ["know", "show_good_to_know", "Good to know"],
+  ["know", "show_good_to_know", "Info booth"],
   ["after", "show_after", "Questions, and how to ask them"],
 ];
 

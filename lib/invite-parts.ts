@@ -14,7 +14,7 @@ export const PART_NAMES: Record<InvitePart, string> = {
   details: "The details",
   reply: "The reply",
   day: "The order of the afternoon",
-  know: "Good to know",
+  know: "Info booth",
   after: "Questions",
   signoff: "The sign-off",
 };

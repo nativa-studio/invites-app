@@ -5,7 +5,7 @@ import { copy } from "@/lib/copy";
 import { formatMoney, formatShortDate } from "@/lib/format";
 import type { Gift } from "@/lib/guest/gift";
 import { giftAction, type GiftState } from "@/app/i/[token]/gift-actions";
-import { Gift as GiftIcon } from "@/components/art/icons";
+import { Bolt, Gift as GiftIcon } from "@/components/art/icons";
 
 // The group gift, on the invite, for a guest who has answered.
 //
@@ -29,9 +29,10 @@ export function GiftCard({ token, gift }: { token: string; gift: Gift }) {
   const amount = formatMoney(g.suggested_amount);
 
   return (
-    <div className="pcard white gift" data-section="gift">
-      <div className="tape yel" />
-      <div className="label yel">{copy.gift.heading}</div>
+    // Same family as the reply and the thank you: cream, tilted, the heading in the display face
+    // between two bolts. See the note in PlateCard.
+    <div className="pcard tilt-l gift" data-section="gift">
+      <div className="rsvp-h"><Bolt size={24} /> {copy.gift.heading} <Bolt size={24} /></div>
       <GiftIcon size={40} />
 
       {/* Four ways this reads, because both halves can be missing. With no organiser it does not

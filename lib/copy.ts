@@ -80,6 +80,13 @@ export const copy = {
     everyone: "It's a bring a plate afternoon. Claim something below, or add your own.",
     free: "Bring something for the table if you like. Claim an item below or add your own, so we don't end up with five pavlovas.",
     empty: "Nothing on the list yet. Add what you're bringing and everyone else can see it.",
+    // Group headings rather than a status on every row. The status line only existed because
+    // everything was in one list; once they are apart, the heading says it and the row is just
+    // the dish.
+    yoursHeading: "You're bringing",
+    neededHeading: "Still to bring",
+    covered: (n: number) => (n === 1 ? "1 other thing is already covered." : `${n} other things are already covered.`),
+    allCovered: "Everything on the list has somebody bringing it. Add your own if you like.",
     nobody: "Nobody yet",
     claim: "I'll bring this",
     mine: "You're bringing this",
@@ -173,7 +180,7 @@ export const copy = {
     details: "The details",
     day: "The day",
     afternoon: "The order of the afternoon",
-    goodToKnow: "Good to know",
+    goodToKnow: "Info booth",
     plate: "Bring a plate",
     updates: "Updates",
     updatesBody: "Anything that changes shows here.",
@@ -209,16 +216,23 @@ export const copy = {
     giftsOptional: "Gifts are entirely optional.",
     giftsBooks: "Books only please, we're building a little library.",
     giftsWishlist: "There's a wish list if you'd like one:",
-    // The group gift, said in Good to know, where a guest still deciding meets it. The block
-    // itself only opens once they have answered, so this is the only mention they get before
-    // then, and it has to work as the whole of what they know.
+    // The group gift, said in Good to know, where a guest still deciding meets it.
     //
-    // It is joined onto the stance rather than added under it. "No gifts please" followed by a
-    // separate paragraph about a group gift reads as the invite contradicting itself, which is
-    // exactly what the journeys page writes these combined lines to avoid.
-    groupGift: "We're doing a group gift this year, and the details are with your reply.",
-    groupGiftWith: "If you'd like to join in, there's a group gift, and the details are with your reply.",
-    groupGiftNone: "If you'd like to give something, there's a group gift, and the details are with your reply.",
+    // It is joined onto whatever the host wrote about gifts rather than added under it. Two
+    // paragraphs, one saying no gifts and the next asking for money, read as the invite
+    // contradicting itself.
+    //
+    // Where to look is passed in, because it depends on whether the gift has a block on the
+    // invite at all. With no block the line is the whole of what a guest gets.
+    // Four whole sentences rather than one with a swappable tail. The tail version produced
+    // "there's a group gift, and ask the host and they'll let you know", which is two clauses
+    // wearing one conjunction. Where a guest should look is a different sentence, not a phrase.
+    groupGift: (block: boolean) => block
+      ? "We're doing a group gift this year, and the details are with your reply."
+      : "We're doing a group gift this year. Ask the host and they'll let you know how to join in.",
+    groupGiftWith: (block: boolean) => block
+      ? "If you'd like to join in, there's a group gift, and the details are with your reply."
+      : "If you'd like to join in, there's a group gift. Ask the host and they'll let you know how.",
     photosKidsOff: "We'd love you to take photos, just please keep photos of the kids off social media. Thank you!",
     photosAsk: "Snap away, and please check with people before posting them online.",
     photosShare: "Take all the photos you like and share them with us after.",
@@ -348,7 +362,7 @@ export const copy = {
     basicsBlurb: "What it is called, who it is from, and when.",
     placeHeading: "The place",
     placeBlurb: "Where it is, how to get in, and how to reach you. Getting in is shown only to people who have said yes.",
-    knowHeading: "Good to know",
+    knowHeading: "Info booth",
     knowBlurb: "The things somebody needs once they have decided to come.",
     groupLinkBlurb: "Closing it stops the link working for anyone who has it. Personal links keep working either way.",
     groupLinkOpen: "Open, anyone with the link can reply",
@@ -409,6 +423,8 @@ export const copy = {
     giftOn: "Running a group gift",
     giftOff: "Not running one",
     giftSwitch: "Run a group gift",
+    giftNoteFree: "Exactly what the invite says about gifts, in your words. Leave it empty to say nothing at all.",
+    photosNoteFree: "Exactly what the invite says about photos, in your words. Leave it empty to say nothing at all.",
     giftAlongside: "Sits alongside whatever you picked above, and the invite says both in one sentence. The rest of running it is on the Gift tab.",
     giftWhat: "What is it?",
     giftWhatHint: "What guests read on their invite. A blue scooter, a voucher for the nursery, a night away.",
@@ -483,6 +499,10 @@ export const copy = {
     // The two groups the board splits into. Which dish somebody is bringing was on every row and
     // is gone: a host running a table needs to know what is still missing, and the names made
     // every item two lines tall for a fact they only want when something goes wrong.
+    plateBlock: "Give it a block on the invite",
+    plateBlockHint: "On, guests get a card under their reply where they claim a dish. Off, the invite only mentions it at the info booth and you collect it yourself.",
+    giftBlock: "Give it a block on the invite",
+    giftBlockHint: "On, guests get a card under their reply with how to chip in and a tick when they have. Off, the invite only mentions it at the info booth.",
     plateClaimed: "Being brought",
     plateNeeded: "Still to be claimed",
     plateAllClaimed: "Every item has somebody bringing it.",

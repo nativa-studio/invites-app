@@ -3,7 +3,7 @@ import { useActionState, useState } from "react";
 import { copy } from "@/lib/copy";
 import type { Plate } from "@/lib/guest/plate";
 import { plateAction, type PlateState } from "@/app/i/[token]/plate-actions";
-import { Plate as PlateIcon } from "@/components/art/icons";
+import { Bolt, Plate as PlateIcon } from "@/components/art/icons";
 
 // The board, on the invite, for a guest who has said yes.
 //
@@ -24,44 +24,67 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
   const [adding, setAdding] = useState(false);
 
   const allergies = board.allergies.map((a) => copy.plate.allergy(a.n, a.chip)).join(", ");
+  const mine = board.items.filter((i) => i.mine);
+  const needed = board.items.filter((i) => !i.claimed);
+  // Somebody else has these. A count rather than a list: there is nothing to tap on another
+  // guest's dish, and naming them is what this card stopped doing.
+  const covered = board.items.filter((i) => i.claimed && !i.mine).length;
+
+  const row = (i: (typeof board.items)[number]) => (
+    <li className="dish" key={i.id}>
+      <PlateIcon size={32} />
+      <div className="what">
+        <span className="n">{i.label}</span>
+        {/* Kept whole. "nut free" broken over two lines reads as two things. */}
+        {i.tags.length > 0 && <span className="b"><span className="tags">{i.tags.join(", ")}</span></span>}
+      </div>
+      <form action={act}>
+        <input type="hidden" name="token" value={token} />
+        <input type="hidden" name="item" value={i.id} />
+        <input type="hidden" name="what" value={i.mine ? "unclaim" : "claim"} />
+        <button className={`pbtn small${i.mine ? "" : " primary"}`} type="submit" disabled={pending}>
+          {i.mine ? copy.plate.unclaim : copy.plate.claim}
+        </button>
+      </form>
+    </li>
+  );
 
   return (
-    <div className="pcard white plate" data-section="plate">
-      <div className="tape sky" />
-      <div className="label sky">{copy.plate.heading}</div>
+    // Cream paper, tilted, heading in the display face between two bolts: the same card the
+    // reply and the thank you are, because they are the same kind of thing. It was white with a
+    // tape strip and a small label, which is the family the details and the runsheet belong to:
+    // cards you read. This is a card you act on, and it should look like the other one of those.
+    <div className="pcard tilt-r plate" data-section="plate">
+      <div className="rsvp-h"><Bolt size={24} /> {copy.plate.heading} <Bolt size={24} /></div>
       <p className="para">{board.host_note || (board.mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
       {allergies && <p className="allergy">{copy.plate.allergies(allergies)}</p>}
 
       {board.items.length === 0 && <p className="small">{copy.plate.empty}</p>}
 
-      <ul className="dishes">
-        {board.items.map((i) => (
-          <li className={i.claimed ? "dish taken" : "dish"} key={i.id}>
-            <PlateIcon size={32} />
-            <div className="what">
-              <span className="n">{i.label}</span>
-              <span className="b">
-                {/* Yours, taken, or free. Never whose: the board used to name whoever had
-                    claimed each dish, which turned a list of what is still needed into a
-                    register of the neighbours for anybody holding a link. */}
-                {i.mine ? copy.plate.mine : i.claimed ? copy.plate.taken : copy.plate.nobody}
-                {/* Kept whole. "nut free" broken over two lines reads as two things. */}
-                {i.tags.length > 0 && <span className="tags"> · {i.tags.join(", ")}</span>}
-              </span>
-            </div>
-            <form action={act}>
-              <input type="hidden" name="token" value={token} />
-              <input type="hidden" name="item" value={i.id} />
-              <input type="hidden" name="what" value={i.mine ? "unclaim" : "claim"} />
-              {(i.mine || !i.claimed) && (
-                <button className="pbtn small" type="submit" disabled={pending}>
-                  {i.mine ? copy.plate.unclaim : copy.plate.claim}
-                </button>
-              )}
-            </form>
-          </li>
-        ))}
-      </ul>
+      {/* Grouped, so the status line on every row can go.
+          It used to be one list where each dish said what it was doing: nobody yet, someone's
+          bringing this, you're bringing this. Three groups say the same thing once each, which
+          makes every row shorter and puts the only two rows a guest can act on together at the
+          top. What other people have taken collapses to a count, because a guest's job here is
+          picking from what is left and reading a register of covered dishes is not part of it. */}
+      {mine.length > 0 && (
+        <>
+          <div className="dishgroup">{copy.plate.yoursHeading}</div>
+          <ul className="dishes">{mine.map((i) => row(i))}</ul>
+        </>
+      )}
+
+      {needed.length > 0 && (
+        <>
+          <div className="dishgroup">{copy.plate.neededHeading}</div>
+          <ul className="dishes">{needed.map((i) => row(i))}</ul>
+        </>
+      )}
+
+      {covered > 0 && <p className="small">{copy.plate.covered(covered)}</p>}
+      {needed.length === 0 && mine.length === 0 && board.items.length > 0 && (
+        <p className="small">{copy.plate.allCovered}</p>
+      )}
 
       {state.error && <div className="err" role="alert">{state.error}</div>}
 

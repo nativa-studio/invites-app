@@ -35,6 +35,10 @@ export type PublicEvent = {
   parents_mode: "stay" | "drop_off" | "either";
   siblings_welcome: boolean;
   photo_sharing: "none" | "kids_off_social" | "ask" | "share";
+  /** What the host wrote about photos. Replaced the preset list in migration 0021, which
+   *  backfilled it from whichever preset each event had picked. Optional because a database
+   *  without that migration has no column. */
+  photos_note?: string | null;
   rsvp_by: string | null;
   save_the_date: boolean;
   group_link_enabled: boolean;
@@ -59,6 +63,10 @@ export type PublicEvent = {
   custom_question: string | null;
   custom_question_type: string | null;
   plate_enabled: boolean;
+  /** Whether the plate draws its own block on the invite, or only its line in Good to know.
+   *  Optional because a database without migration 0019 has no column; absent means on. */
+  plate_block?: boolean;
+  gift_block?: boolean;
   plate_mode: string;
   plate_host_note: string | null;
   host_phone: string | null;

@@ -1,5 +1,5 @@
 import { copy } from "@/lib/copy";
-import { Gift as GiftIcon, Plate as PlateIcon } from "@/components/art/icons";
+import { Bolt, Gift as GiftIcon, Plate as PlateIcon } from "@/components/art/icons";
 
 // The plate board and the gift block, as the host's preview draws them while editing.
 //
@@ -13,9 +13,8 @@ import { Gift as GiftIcon, Plate as PlateIcon } from "@/components/art/icons";
 // names match the entries in sections.tsx, the same as every other card.
 export function PreviewPlate({ note, mode }: { note: string | null; mode: string }) {
   return (
-    <div className="pcard white plate" data-section="plate">
-      <div className="tape sky" />
-      <div className="label sky">{copy.plate.heading}</div>
+    <div className="pcard tilt-r plate" data-section="plate">
+      <div className="rsvp-h"><Bolt size={24} /> {copy.plate.heading} <Bolt size={24} /></div>
       <PlateIcon size={36} />
       <p className="para">{note || (mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
       <div className="small">{copy.host.previewPlate}</div>
@@ -25,9 +24,8 @@ export function PreviewPlate({ note, mode }: { note: string | null; mode: string
 
 export function PreviewGift({ description, organiser }: { description: string | null; organiser: string | null }) {
   return (
-    <div className="pcard white gift" data-section="gift">
-      <div className="tape yel" />
-      <div className="label yel">{copy.gift.heading}</div>
+    <div className="pcard tilt-l gift" data-section="gift">
+      <div className="rsvp-h"><Bolt size={24} /> {copy.gift.heading} <Bolt size={24} /></div>
       <GiftIcon size={36} />
       <p className="para">
         {organiser

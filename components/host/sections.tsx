@@ -89,9 +89,13 @@ export const SECTIONS: Section[] = [
     title: "Bring a plate",
     blurb: "Whether you are asking guests to bring something, and what the invite says about it. The list of dishes itself is on the Potluck tab, because that is a job rather than wording.",
     show: { column: "plate_enabled", label: copy.host.potluckSwitch },
-    fields: ["plate_mode", "plate_host_note"],
+    fields: ["plate_block", "plate_mode", "plate_host_note"],
     render: (e) => (
       <>
+        {/* Whether it gets a card at all, before what the card says. Off leaves the line in Good
+            to know, which is the announcement, and takes away the panel, which is where a guest
+            acts: a host collecting dishes by text wants the first and not the second. */}
+        <Switch id="plate_block" label={copy.host.plateBlock} value={e.plate_block !== false} hint={copy.host.plateBlockHint} />
         <Choice id="plate_mode" label={copy.host.potluckMode} value={e.plate_mode} options={PLATE_MODES} hint={copy.host.potluckModeHint} />
         <Field id="plate_host_note" label={copy.host.potluckNote} value={e.plate_host_note} rows={2} hint={copy.host.potluckNoteHint} />
       </>
@@ -105,9 +109,10 @@ export const SECTIONS: Section[] = [
     // Putting those fields in this drawer would have let a host type somebody else's bank details.
     blurb: "One present from everyone. What it is and roughly what it might come to are yours. Where the money goes and the note to everyone belong to whoever is organising it, on the Gift tab or their own page.",
     show: { column: "group_gift_enabled", label: copy.host.giftSwitch },
-    fields: ["gift_description", "gift_target"],
+    fields: ["gift_block", "gift_description", "gift_target"],
     render: (e) => (
       <>
+        <Switch id="gift_block" label={copy.host.giftBlock} value={e.gift_block !== false} hint={copy.host.giftBlockHint} />
         <Field id="gift_description" label={copy.host.giftWhat} value={e.gift_description ?? null} hint={copy.host.giftWhatHint} />
         <Field id="gift_target" label={copy.host.giftTarget} value={e.gift_target != null ? String(e.gift_target) : null} hint={copy.host.giftTargetHint} />
       </>
@@ -123,9 +128,9 @@ export const SECTIONS: Section[] = [
   },
   {
     id: "know",
-    title: "Good to know",
+    title: "Info booth",
     blurb: "What to bring, food, gifts, photos. Each line only appears when you have said something about it, and they come in the order you put them in.",
-    show: { column: "show_good_to_know", label: "Show good to know" },
+    show: { column: "show_good_to_know", label: "Show the info booth" },
     fields: [...KNOW_FIELDS, "show_good_to_know"],
     render: (e) => <KnowEditor e={e} />,
   },

@@ -360,3 +360,11 @@
 .no-envelope .suite { display: flex; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .open .env .flap .front { animation: none; opacity: 0; } .open .env .flap .backface { animation: none; opacity: 1; } }
 
+
+/* The guests' board, grouped. The heading carries what the status line on every row used to say,
+   so the rows lost a line each and the card lost the repetition. */
+.plate .dishgroup {
+  width: 100%; font-family: var(--font-hand); font-size: 19px; color: var(--sky-ink);
+  text-align: left; margin-top: 4px;
+}
+.plate .dishes + .dishgroup { margin-top: 10px; }

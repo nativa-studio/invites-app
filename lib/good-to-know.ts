@@ -37,29 +37,29 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // with no link is still silence, because the line would be an announcement with nothing behind
   // it, and the editor says so under the box.
   //
-  // A group gift joins onto whichever stance the host picked rather than arriving as a line of
-  // its own. Two separate sentences had the invite saying "no gifts please" and then asking for
-  // money, which reads as a contradiction however each half is worded. When the stance is quiet
-  // the group gift is the whole line, because a quiet stance means the host did not want to talk
-  // about gifts, not that they did not want to mention the one they are actually running.
-  const gg = e.group_gift_enabled;
-  // Joined with a full stop when the stance has not brought its own. The wish list line ends with
-  // whatever the host pasted in, usually a bare URL, so "example.com/list If you'd like to join
-  // in" arrived as one run-on with no gap a reader could rest at.
-  const stance = (text: string, joined: string) => ({
-    kind: "gifts" as const,
-    text: gg ? `${/[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`} ${joined}` : text,
-  });
-  if (e.gift_stance === "none") lines.push(stance(copy.lines.giftsNone, copy.lines.groupGiftNone));
-  if (e.gift_stance === "optional") lines.push(stance(e.gift_note ? `${copy.lines.giftsOptional} ${e.gift_note}` : copy.lines.giftsOptional, copy.lines.groupGiftWith));
-  if (e.gift_stance === "books") lines.push(stance(e.gift_note ? `${copy.lines.giftsBooks} ${e.gift_note}` : copy.lines.giftsBooks, copy.lines.groupGiftWith));
-  if (e.gift_stance === "wishlist" && e.gift_note) lines.push(stance(`${copy.lines.giftsWishlist} ${e.gift_note}`, copy.lines.groupGiftWith));
-  if (gg && (e.gift_stance === "quiet" || (e.gift_stance === "wishlist" && !e.gift_note))) {
-    lines.push({ kind: "gifts", text: copy.lines.groupGift });
+  // Gifts and photos are whatever the host wrote. They used to be a dropdown of preset wordings,
+  // which is a guess at what somebody wants to say and gives a host who wants to say something
+  // close but not identical nowhere to put it. The presets became each host's starting text in
+  // migration 0021, so nothing changed on any invite that already existed.
+  //
+  // The group gift is still its own switch, because it is a fact about the event rather than a
+  // sentence, and it joins onto whatever the host wrote rather than arriving as a line of its
+  // own: two paragraphs about gifts read as the invite talking to itself.
+  const giftNote = e.gift_note?.trim();
+  if (e.group_gift_enabled) {
+    // Where to look depends on whether there is a block to look at. Off, the line is the whole
+    // of what a guest gets, so it must not send them to a card that is not there.
+    const block = e.gift_block !== false;
+    lines.push({
+      kind: "gifts",
+      text: giftNote
+        ? `${/[.!?]$/.test(giftNote) ? giftNote : `${giftNote}.`} ${copy.lines.groupGiftWith(block)}`
+        : copy.lines.groupGift(block),
+    });
+  } else if (giftNote) {
+    lines.push({ kind: "gifts", text: giftNote });
   }
-  if (e.photo_sharing === "kids_off_social") lines.push({ kind: "photos", text: copy.lines.photosKidsOff });
-  if (e.photo_sharing === "ask") lines.push({ kind: "photos", text: copy.lines.photosAsk });
-  if (e.photo_sharing === "share") lines.push({ kind: "photos", text: copy.lines.photosShare });
+  if (e.photos_note?.trim()) lines.push({ kind: "photos", text: e.photos_note.trim() });
   if (e.good_to_know) lines.push({ kind: "other", text: e.good_to_know });
   return lines;
 }
