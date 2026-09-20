@@ -238,9 +238,6 @@ export const copy = {
     groupGift: (block: boolean) => block
       ? "We're doing a group gift this year, and the details are with your reply."
       : "We're doing a group gift this year. Ask the host and they'll let you know how to join in.",
-    groupGiftWith: (block: boolean) => block
-      ? "If you'd like to join in, there's a group gift, and the details are with your reply."
-      : "If you'd like to join in, there's a group gift. Ask the host and they'll let you know how.",
     photosKidsOff: "We'd love you to take photos, just please keep photos of the kids off social media. Thank you!",
     photosAsk: "Snap away, and please check with people before posting them online.",
     photosShare: "Take all the photos you like and share them with us after.",
@@ -434,7 +431,7 @@ export const copy = {
     giftSwitch: "Run a group gift",
     giftNoteFree: "Exactly what the invite says about gifts, in your words. Leave it empty to say nothing at all.",
     photosNoteFree: "Exactly what the invite says about photos, in your words. Leave it empty to say nothing at all.",
-    giftAlongside: "Sits alongside whatever you picked above, and the invite says both in one sentence. The rest of running it is on the Gift tab.",
+    giftAlongside: "Turns the feature on. It does not change the wording above: what you write there is what the invite says. Leave that box empty and the invite mentions the group gift for you. The rest of running it is on the Gift tab.",
     giftWhat: "What is it?",
     giftWhatHint: "What guests read on their invite. A blue scooter, a voucher for the nursery, a night away.",
     giftTarget: "Worth aiming for (optional)",

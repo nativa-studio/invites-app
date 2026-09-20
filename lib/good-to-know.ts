@@ -45,19 +45,24 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // The group gift is still its own switch, because it is a fact about the event rather than a
   // sentence, and it joins onto whatever the host wrote rather than arriving as a line of its
   // own: two paragraphs about gifts read as the invite talking to itself.
+  // What the host wrote is the whole of it. Nothing is appended to it, ever.
+  //
+  // The group gift used to add its own sentence on the end of whatever was typed, which is how
+  // "Gifts are optional. There may be a group gift if you prefer that. More info to come." came
+  // out of the invite followed by "If you'd like to join in, there's a group gift. Ask the host
+  // and they'll let you know how." The host had already said all of that, in their own words, in
+  // a field whose hint promises it is exactly what the invite says.
+  //
+  // The switch still writes a sentence when there is nothing to write over: a group gift that is
+  // running and never mentioned is worse than a default sentence. So it fills a silence and
+  // never edits a voice.
   const giftNote = e.gift_note?.trim();
-  if (e.group_gift_enabled) {
+  if (giftNote) {
+    lines.push({ kind: "gifts", text: giftNote });
+  } else if (e.group_gift_enabled) {
     // Where to look depends on whether there is a block to look at. Off, the line is the whole
     // of what a guest gets, so it must not send them to a card that is not there.
-    const block = e.gift_block !== false;
-    lines.push({
-      kind: "gifts",
-      text: giftNote
-        ? `${/[.!?]$/.test(giftNote) ? giftNote : `${giftNote}.`} ${copy.lines.groupGiftWith(block)}`
-        : copy.lines.groupGift(block),
-    });
-  } else if (giftNote) {
-    lines.push({ kind: "gifts", text: giftNote });
+    lines.push({ kind: "gifts", text: copy.lines.groupGift(e.gift_block !== false) });
   }
   if (e.photos_note?.trim()) lines.push({ kind: "photos", text: e.photos_note.trim() });
   if (e.good_to_know) lines.push({ kind: "other", text: e.good_to_know });
