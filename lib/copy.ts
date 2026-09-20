@@ -184,14 +184,17 @@ export const copy = {
   // The one place Bunting speaks for itself. At the foot of every invite, shut, because a guest
   // opened this to read about a party and not about the app that drew it.
   about: {
-    summary: "About this app",
-    body: "Bunting app is being built by Nativa Studio, which is Marcia's studio. It is still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers.",
-    // Marcia's list, with the two typos fixed and one repeat taken out: "sharing the load with
-    // whoever else is organising, organising potluck list" used the word twice in one breath.
-    what: "One place for the invite, the RSVPs, the allergy information, the to do list, sharing the load with whoever else is organising, the potluck list and the group gift.",
-    ask: "If you want to help me test it, let me know here.",
+    // Her friends are reading this, not customers. It said "About this app", which is what a
+    // stranger's software says, and it hid the one fact that makes anybody curious: she made it.
+    // So the line that shows while it is shut is the fact itself, in the voice the invite is
+    // signed in, and the wording inside is first person for the same reason.
+    summary: "Ma is building this app",
+    peek: "Have a look",
+    body: "Yes, really. It is my own thing, still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers.",
+    what: "One place for the invite, the replies, the allergy information, the to do list, sharing the load with whoever else is organising, the potluck list and the group gift.",
+    ask: "If you want to help me test it, put your hand up and I will be in touch before it launches.",
     up: "Sounds good",
-    done: "Thanks. Marcia will be in touch before it launches.",
+    done: "Thanks. I will be in touch before it launches.",
     undo: "Actually, no thanks",
     failed: "That didn't go through. Please try again.",
   },
@@ -370,7 +373,7 @@ export const copy = {
     answerNo: "Not coming",
     answerNoWhy: "Counts them out, and stops them being reminded.",
     answerSent: "I've sent it myself",
-    answerSentWhy: "For a guest you texted from your own Messages, or told in person. Marks it as sent so they drop off the not sent list.",
+    answerSentWhy: "For a guest you texted from your own Messages, or told in person. Marks it as sent so they drop off the not sent list. Their answer is left exactly as it is.",
     answerPending: "Still waiting on them",
     answerPendingWhy: "Clears the answer. Keeps the record of what you sent.",
     answerUnsent: "Back to not sent",
