@@ -1,5 +1,6 @@
 import { copy } from "@/lib/copy";
 import type { GuestRow } from "@/lib/db/types";
+import { realAllergies } from "@/lib/allergies";
 
 // What the people who have said yes need feeding around.
 //
@@ -16,7 +17,9 @@ export function foodSummary(guests: GuestRow[]) {
   // Allergies are counted apart and named apart. A count of chips is a shopping list; an allergy
   // is a sentence somebody has to read before they cook, and it must not be summed into "3 nut
   // free" and lost.
-  const allergies = yes.filter((g) => g.allergies?.trim());
+  // Same rule as the Tracking card: a polite "No" is not an allergy, and this line exists to be
+  // read in a hurry.
+  const allergies = realAllergies(yes);
   return { counts: Object.entries(tally), notes: yes.some((g) => g.dietary_note), allergies };
 }
 

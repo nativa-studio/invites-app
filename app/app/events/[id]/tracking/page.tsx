@@ -4,6 +4,7 @@ import { counts } from "@/lib/heads";
 import { ActivityDrawer } from "@/components/host/ActivityDrawer";
 import { copy } from "@/lib/copy";
 import { groupsOf } from "@/lib/group-colours";
+import { realAllergies } from "@/lib/allergies";
 
 // Tracking: where the event is up to, in four answers.
 //
@@ -30,7 +31,10 @@ export default async function Tracking({ params }: { params: Promise<{ id: strin
 
   // Only from the people who are coming. A pending guest has no answers to these, and somebody
   // who has said no is not being catered for.
-  const allergies = coming.filter((g) => g.allergies?.trim());
+  // Only the answers that say something. The question is asked of everybody who comes, so plenty
+  // of people answer it politely with "No" or "N/A", and a list of those buries the one line that
+  // matters under the ones that do not.
+  const allergies = realAllergies(coming);
   const chips = coming
     .flatMap((g) => g.dietary)
     .reduce<Record<string, number>>((m, d) => ({ ...m, [d]: (m[d] ?? 0) + 1 }), {});
