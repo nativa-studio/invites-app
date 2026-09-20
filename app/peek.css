@@ -4,7 +4,14 @@
    long before words. The page crops the characters, so they read as peeking rather than placed. */
 /* Full-bleed artwork and the envelope's clip box are both wider than the page on purpose. Clip
    rather than hide: hidden would make this a scroll container and break the sticky pieces. */
-.peek { overflow-x: clip;
+/* `main.peek` rather than `.peek`, because a bare class name here is not this layout's to take.
+   The About this app block had a span called "peek" (the little line under the heading), and
+   every invite in the app, the suite and the lineup included, was drawing an 844px empty cream
+   panel at its foot and reading its colours out of this layout instead of the event's. The
+   stylesheet loads on every invite page: InviteBody imports every layout so it can dispatch to
+   any of them, and a layout's stylesheet comes with it. So a layout gets one word, and it has to
+   be on the layout's own element. */
+main.peek { overflow-x: clip;
   --page: #F9F0DA;
   --panel: #FFFAEC;
   --ink: #2B2119;

@@ -4,6 +4,8 @@ import { paletteFor, paletteVars } from "@/components/art/palette";
 import { CoverCard } from "@/components/invite/Cards";
 import { stockFor } from "@/lib/layouts";
 import { mascotFor } from "@/lib/artwork";
+import { stripSet, inkFor, paperFor } from "@/lib/strip-set";
+import { Mono } from "@/components/art/mono";
 import Image from "next/image";
 
 // One invite, small: its own cover card standing in front of its own envelope, open.
@@ -23,7 +25,7 @@ const W = 400;
 const H = 470;
 
 export function InviteThumb({
-  artwork, title, intro, palette, themeId, layout,
+  artwork, title, intro, palette, themeId, layout, ink,
 }: {
   artwork: string | null;
   title: string;
@@ -32,7 +34,26 @@ export function InviteThumb({
   themeId?: string | null;
   /** Which design. Only the envelope's paper depends on it; the card is the card. */
   layout?: string;
+  /** The strip's one colour. The other designs take their colours from the palette. */
+  ink?: string | null;
 }) {
+  // The strip has no envelope and no characters, so drawing it as one would be a picture of a
+  // different design. Same rule as the rest of this file: show the real pieces, at the real size,
+  // and there is nothing for the tile to be wrong about. Its cover is three doodles and a title,
+  // so its tile is three doodles and a title.
+  if (layout === "strip") {
+    const set = stripSet(themeId);
+    return (
+      <span className="ithumb strip-thumb" style={{ background: paperFor(ink), color: inkFor(ink) }}>
+        <span className="strip-thumb-in">
+          <span className="trio">{set.trio.map((n, i) => <Mono key={i} name={n} size={34} />)}</span>
+          <span className="t">{title}</span>
+          {intro && <span className="b">{intro}</span>}
+        </span>
+      </span>
+    );
+  }
+
   const p = paletteFor(palette, themeId ?? "");
   const mascot = mascotFor(artwork);
   const beige = stockFor(layout) === "beige";

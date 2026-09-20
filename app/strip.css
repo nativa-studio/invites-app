@@ -1,0 +1,86 @@
+/* The illustrated strip. One ink on paper, straight down the page, no cards and no envelope.
+   The drawing is the dividing: three doodles over the title, a dashed rule between sections, a
+   doodle against every line that has something to say. Ported from design/round1. */
+.strip {
+  /* The two the event chooses. Everything else on the page is one of these two. */
+  --ink: #1F1B17;
+  --paper: #FBF6EC;
+  /* Read by the shared reply form, so one RSVP serves every layout. One ink means every one of
+     these is the ink or the paper: a strip with a red in it is not a strip. */
+  --navy: var(--ink);
+  --red: var(--ink);
+  --sky: var(--ink);
+  --yel: var(--ink);
+  --forest: var(--ink);
+  --crm: var(--paper);
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+.strip .page {
+  max-width: 430px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 34px;
+  padding: 36px 22px 56px;
+}
+.strip .greet { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; margin: 0; }
+.strip .trio { display: flex; gap: 10px; justify-content: center; align-items: flex-end; }
+.strip h1 { font-family: var(--font-hand); font-size: 54px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
+.strip .label { font-family: var(--font-hand); font-size: 40px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
+.strip .para { font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; margin: 0; }
+.strip .rule { width: 120px; border-top: 2px dashed currentColor; opacity: 0.5; }
+/* A rule per section, and a section that draws nothing leaves its rule behind: Bring a plate is
+   a part of the page whether or not the guest reading it has said yes, and on the group link it
+   never draws at all. Two rules in a row is the page saying there was something here. Hidden
+   rather than spaced away, so it takes its gap with it. */
+.strip .rule + .rule, .strip .page > .rule:last-child { display: none; }
+.strip section { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+
+/* The pill, the one link on the page that looks like a control. */
+.strip .maps {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px;
+  border: 2px solid currentColor; border-radius: 999px; text-decoration: none; font-weight: 700;
+  color: inherit;
+}
+
+/* The day: time, doodle, what happens. */
+.strip .stops { display: flex; flex-direction: column; gap: 18px; width: 100%; }
+.strip .stop { display: grid; grid-template-columns: 52px 44px 1fr; gap: 10px; align-items: start; }
+.strip .stop .t { font-family: var(--font-hand); font-size: 20px; text-align: right; padding-top: 8px; }
+.strip .stop .pic { display: flex; justify-content: center; }
+.strip .stop .n { font-family: var(--font-hand); font-size: 22px; line-height: 1; }
+.strip .stop .b { font-size: 15px; line-height: 1.45; opacity: 0.72; }
+
+/* The info booth and the updates: a doodle beside every line. */
+.strip .lines { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 320px; margin: 0 auto; }
+/* The block is centred, the lines inside it are not: each line was as wide as its own sentence
+   and centred in the column, so the doodles zig-zagged down the page instead of standing in one.
+   Full width and a fixed slot for the picture puts them in a column, whatever the line says. */
+.strip .line { display: flex; gap: 12px; align-items: center; width: 100%; }
+.strip .line > svg { flex: 0 0 40px; }
+.strip .line > div { font-size: 16px; line-height: 1.45; flex: 1; }
+
+/* Questions and photos at the end, side by side. */
+.strip .after { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; width: 100%; }
+.strip .after.one { grid-template-columns: 1fr; }
+.strip .after > div { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.strip .after .n { font-family: var(--font-hand); font-size: 22px; }
+.strip .after .b { font-size: 14px; opacity: 0.72; color: inherit; }
+.strip .after a.b { text-decoration: underline; }
+
+.strip .signoff { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.strip .signoff .msg { font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; margin: 0; }
+.strip .signoff .from { font-size: 13px; opacity: 0.72; text-align: center; margin: 0; }
+
+/* The shared reply form, wearing this layout's clothes: no card, no tape, no tilt, no shadow. */
+.strip .pcard { background: transparent; border: 0; box-shadow: none; transform: none; padding: 0; max-width: none; gap: 14px; width: 100%; }
+.strip .pcard .tape { display: none; }
+.strip .rsvp-h { font-family: var(--font-hand); font-size: 56px; line-height: 1; letter-spacing: 0.04em; color: var(--ink); }
+/* The bolts either side of the heading belong to the poster set, which this one is not in. */
+.strip .rsvp-h svg { display: none; }
+.strip .pbtn { border: 2px solid var(--ink); border-radius: 12px; max-width: 320px; min-height: 54px; font-weight: 700; }
+.strip .pbtn.primary { background: var(--ink); color: var(--paper); }

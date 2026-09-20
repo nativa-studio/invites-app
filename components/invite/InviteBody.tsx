@@ -12,11 +12,11 @@ import { AboutApp } from "./AboutApp";
 import { AnnounceGift, AnnouncePlate } from "./Announce";
 import { PlateSlot } from "./PlateSlot";
 import { LineupInvite } from "./LineupInvite";
+import { StripInvite } from "./StripInvite";
 // Recovered for Marcia to look at and point. Nothing is offered to a host until she does: these
 // are reachable by ?layout= only, which is what the design picker already uses to flick through.
 import { PeekInvite } from "./PeekInvite";
 import { PostInvite } from "./PostInvite";
-import { ScrollCue } from "./ScrollCue";
 
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
@@ -57,6 +57,17 @@ export function InviteBody({
   const id = layout ?? e.layout_id;
   if (id === "peek") return <PeekInvite event={e} greeting={greeting} reply={announced} />;
   if (id === "post") return <PostInvite event={e} greeting={greeting} addressee={greeting} reply={announced} skipAnimation={skipAnimation} />;
+  if (id === "strip") {
+    return (
+      <StripInvite
+        event={e}
+        greeting={greeting}
+        reply={announced}
+        after={about}
+        plate={plateCard ?? <PlateSlot />}
+      />
+    );
+  }
   if (id === "lineup") {
     return (
       <LineupInvite
@@ -104,23 +115,6 @@ export function InviteBody({
       ))}
     </>
   );
-
-  // The illustrated strip: the same cards as the suite, no envelope, straight down the page.
-  if (id === "strip") {
-    return (
-      <main className="invite no-envelope" style={paletteVars(p)}>
-        <div className="wrap">
-          <div className="greet">{greeting}</div>
-          <div className="suite">
-            <CoverCard e={e} />
-            {below}
-            {about}
-          </div>
-        </div>
-        <ScrollCue />
-      </main>
-    );
-  }
 
   // The stationery suite: the cover arrives in an envelope that opens.
   //

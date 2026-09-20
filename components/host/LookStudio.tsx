@@ -25,6 +25,7 @@ export type LookState = {
   artwork: string | null;
   palette: Palette | null;
   themeId: string | null;
+  ink: string | null;
 };
 
 // Design: what kind of party it is, then what the invite looks like.
@@ -96,7 +97,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
               onClick={() => setOpen(d)}
             >
               <span className="design-art">
-                <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} />
+                <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={saved.ink} />
               </span>
               <span className="n">{d.name}</span>
               <span className="b">{d.line}</span>

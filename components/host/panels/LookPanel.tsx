@@ -21,6 +21,7 @@ export function LookPanel({ e }: { e: EventRow }) {
           layout: asLayoutId(e.layout_id),
           palette: e.palette,
           themeId: e.theme_id,
+          ink: e.ink,
           sections: {
             details: e.show_details !== false,
             day: e.show_runsheet !== false,

@@ -16,7 +16,7 @@ const TIMES = ["start_time", "end_time"] as const;
 // editor and not to this line, so choosing it saved nothing at all and said it had saved.
 const CHOICES: Record<string, readonly string[]> = {
   type: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
-  layout_id: ["suite", "lineup"],
+  layout_id: ["suite", "lineup", "strip"],
   parents_mode: ["stay", "drop_off", "either"],
   photo_sharing: optionValues(PHOTO_OPTIONS),
   gift_stance: optionValues(GIFT_OPTIONS),
