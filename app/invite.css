@@ -379,18 +379,23 @@
 }
 .about > summary::-webkit-details-marker { display: none; }
 .about > summary:hover, .about[open] > summary { opacity: 1; }
+/* Opened, it is a card rather than loose text. It used to print straight onto the patterned sky,
+   which is the hardest thing on the page to read a paragraph off, and it made the one part of
+   the invite that is not the invite look like something that had fallen out of it. */
 .about .inner {
   display: grid; gap: 12px; justify-items: center; text-align: center;
-  padding: 4px 18px 20px; line-height: 1.55;
+  margin: 2px auto 0; padding: 20px 20px 24px; line-height: 1.55;
+  background: var(--paper); color: var(--navy);
+  border: 3px solid var(--navy); border-radius: 8px; box-shadow: var(--shadow);
 }
 .about .inner p { margin: 0; max-width: 320px; }
 .about .inner .ta { opacity: 0.85; }
 .about .inner form { display: grid; gap: 12px; justify-items: center; }
 /* The thumbs up borrows the invite's button, in the footer's cream rather than the card's navy,
    since out here there is no paper behind it. */
-.about .pbtn { border-color: var(--on-sky); color: var(--on-sky); min-height: 44px; }
+.about .pbtn { min-height: 44px; }
 .about .as-quiet {
-  border: 0; background: none; color: var(--on-sky); font: inherit; opacity: 0.8; cursor: pointer;
+  border: 0; background: none; color: var(--navy); font: inherit; opacity: 0.75; cursor: pointer;
   min-height: 44px; text-decoration: underline; text-underline-offset: 4px;
 }
 /* The covered dishes, run together. No buttons in here, so it is plain text at the card's own

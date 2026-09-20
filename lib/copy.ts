@@ -179,16 +179,17 @@ export const copy = {
   // opened this to read about a party and not about the app that drew it.
   about: {
     summary: "About this app",
-    body: "Bunting is being built by Nativa Studio, which is Marcia's studio. It is still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers.",
-    // The list earns its place: "a work in progress" tells a reader nothing about what it does,
-    // and this is the only chance the app gets to say so.
-    what: "One place for the invite, the RSVPs, the to do list, sharing it with whoever else is organising, the potluck list and the group gift.",
+    body: "Bunting app is being built by Nativa Studio, which is Marcia's studio. It is still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers.",
+    // Marcia's list, with the two typos fixed and one repeat taken out: "sharing the load with
+    // whoever else is organising, organising potluck list" used the word twice in one breath.
+    what: "One place for the invite, the RSVPs, the allergy information, the to do list, sharing the load with whoever else is organising, the potluck list and the group gift.",
     ask: "If you want to help me test it, let me know here.",
     up: "Sounds good",
     done: "Thanks. Marcia will be in touch before it launches.",
     undo: "Actually, no thanks",
     failed: "That didn't go through. Please try again.",
   },
+
   sections: {
     details: "The details",
     day: "The day",
