@@ -13,7 +13,7 @@ const GABRIEL = "/artwork/gabriel-lineup.png";
 
 /** The poster at the top of the cover card. Marcia's own, shown whole and cropped by the frame. */
 const COVERS: Record<string, Picture> = {
-  [GABRIEL]: { src: "/artwork/gabriel-cover.jpg", w: 1200, h: 2400 },
+  [GABRIEL]: { src: "/artwork/gabriel-cover.jpg", w: 1012, h: 1934 },
 };
 
 /** The band the lineup stands along the bottom of its cover. */
