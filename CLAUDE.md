@@ -51,6 +51,29 @@ plate card and the gift card each exist three times, as the live one a guest act
 editor draws (`PreviewExtras.tsx`). Restyling one means changing three. Left that way on purpose:
 the duplication is cosmetic, and the copy that mattered is gone.
 
+## A server screen cannot call a function out of a "use client" file
+
+Every export of a module marked `"use client"` is a client reference on the server, components and
+plain functions alike. Importing one into a server component typechecks, lints, and then throws at
+render:
+
+```
+Attempted to call counts() from the server but counts is on the client.
+```
+
+That is what the Tracking page died of on 20 September. `counts()` lived in `HeadCount.tsx`, which
+is a client component because it opens a sheet, and the new server page imported it for the same
+sums. Nothing about the types was wrong, so nothing caught it until Marcia opened the page and got
+a white screen with an error number on it.
+
+So: anything both a server screen and a client one needs lives in a module neither of them owns.
+`lib/heads.ts` is where the head counting went. Components are the one thing that may cross the
+line, because that is what the line is for.
+
+It is cheap to prove either way. A throwaway page under `app/zz-probe/` that calls the function
+and nothing else either builds or names the fault in one line, and a route with no sign-in on it
+can be loaded from a session, which the host screens cannot.
+
 ## No guessing
 
 Every expensive hour on this project has been spent on a guess that read like an answer. Six
