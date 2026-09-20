@@ -34,10 +34,13 @@ export function GiftCard({ token, gift }: { token: string; gift: Gift }) {
       <div className="label yel">{copy.gift.heading}</div>
       <GiftIcon size={40} />
 
+      {/* Four ways this reads, because both halves can be missing. With no organiser it does not
+          invent one: "Someone is organising it" is worse than not raising the question, and the
+          fallback used to be the heading itself, which put "Group gift" on the card twice. */}
       <p className="para">
         {who
           ? g.description ? copy.gift.running(who, g.description) : copy.gift.runningNoWhat(who)
-          : g.description ? copy.gift.running("Someone", g.description) : copy.gift.heading}
+          : g.description ? copy.gift.noOrganiser(g.description) : copy.gift.noOrganiserNoWhat}
       </p>
 
       {/* Nothing to ask anybody to do until the organiser has said where the money goes, so the

@@ -467,3 +467,17 @@ fieldset.stack > legend { padding: 0; }
 /* The "they are in Family" link. Left as browser blue it was the only blue on the screen, and
    read as something gone wrong rather than as the way to the guest. */
 .hint a { color: var(--app-ink); text-underline-offset: 3px; }
+
+/* Who has chipped in, and who still needs asking. Name on the left, amount or the two nudge
+   buttons on the right, wrapping rather than squashing on a phone.
+
+   Not ".who": that is already the name beside a row of send buttons in the guest list, and two
+   rules under one name is a bug that only shows up on the screen you were not looking at. */
+.paidlist { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; }
+.paidlist li {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  padding: 10px 0; border-top: 1px solid var(--app-line);
+}
+.paidlist li:first-child { border-top: 0; }
+.paidlist .n { font-weight: 600; overflow-wrap: anywhere; }
+.paidlist .b { display: flex; gap: 6px; align-items: center; color: var(--app-mute); font-variant-numeric: tabular-nums; }

@@ -359,17 +359,58 @@ export async function saveGift(eventId: string, v: {
   enabled: boolean;
   description: string | null;
   target: number | null;
-  organiserGuestId: string | null;
+  /** A guest's id, the string "me" for the host themselves, or null for nobody yet. */
+  organiser: string | null;
 }) {
-  const { supabase } = await hostClient();
+  const { supabase, uid } = await hostClient();
   await supabase.from("events").update({ group_gift_enabled: v.enabled }).eq("id", eventId);
   if (v.enabled) {
+    const me = v.organiser === "me";
+    // Surprise is deliberately not listed. On an insert the column default decides (false, since
+    // migration 0017), and on an update a column that is not listed is left alone, so saving the
+    // description never quietly reverses somebody's surprise.
     await supabase.from("group_gift").upsert({
       event_id: eventId,
       description: v.description,
       target: v.target,
-      organiser_guest_id: v.organiserGuestId,
+      organiser_guest_id: me ? null : v.organiser,
+      organiser_profile_id: me ? uid : null,
     }, { onConflict: "event_id" });
   }
+  revalidateEvent(eventId);
+}
+
+// The organiser's own side of it, when the organiser is the host.
+//
+// A guest organiser edits these on their token page, through the security definer functions. A
+// host is already signed in and already owns the row, so they edit it here, and the two paths
+// write the same columns. Guarded by the same rule either way: only the organiser may.
+export async function saveGiftDetails(eventId: string, v: {
+  payDetails: string | null;
+  payReference: string | null;
+  message: string | null;
+  suggested: number | null;
+  chipInBy: string | null;
+  surprise: boolean;
+}) {
+  const { supabase, uid } = await hostClient();
+  await supabase.from("group_gift").update({
+    pay_details: v.payDetails,
+    pay_reference: v.payReference,
+    message: v.message,
+    suggested_amount: v.suggested,
+    chip_in_by: v.chipInBy,
+    surprise: v.surprise,
+  }).eq("event_id", eventId).eq("organiser_profile_id", uid);
+  revalidateEvent(eventId);
+}
+
+// One line to everybody, replacing the last one. A status rather than a feed, same as the guest
+// organiser's version: somebody opening their invite wants the state of the thing, not its history.
+export async function postGiftUpdate(eventId: string, text: string) {
+  const { supabase, uid } = await hostClient();
+  await supabase.from("group_gift")
+    .update({ latest_update: text.trim() || null })
+    .eq("event_id", eventId).eq("organiser_profile_id", uid);
   revalidateEvent(eventId);
 }

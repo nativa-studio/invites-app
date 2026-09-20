@@ -7,6 +7,10 @@ import type { PublicEvent } from "@/lib/db/types";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
+import { PlateCard } from "./PlateCard";
+import { GiftCard } from "./GiftCard";
+import type { Plate } from "@/lib/guest/plate";
+import type { Gift } from "@/lib/guest/gift";
 
 // The reply block, for a host trying their own invite.
 //
@@ -19,11 +23,18 @@ import { ThanksCard } from "./Thanks";
 // thank you card, the same calendar buttons. The only difference is the last step. Nothing is
 // written, because there is nobody to write it against: a preview has no guest row and no token,
 // and a host pressing yes on their own party must never turn up in their own numbers.
-export function TryReply({ e, who, googleLink, icsLink }: {
+// Not a token, and not shaped like one. Nothing inside the inert block can be tapped, so this is
+// never sent anywhere; if it ever were, it fails the token check and writes nothing.
+const PREVIEW_TOKEN = "preview";
+
+export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
   e: PublicEvent;
   who: string;
   googleLink: string | null;
   icsLink: string | null;
+  /** Built from the host's own rows, because a preview has no token to read them with. */
+  plate?: Plate | null;
+  gift?: Gift | null;
 }) {
   const [choice, setChoice] = useState<"" | "yes" | "no">("");
   const [sent, setSent] = useState<{ yes: boolean; count: number } | null>(null);
@@ -31,16 +42,33 @@ export function TryReply({ e, who, googleLink, icsLink }: {
 
   if (sent) {
     return (
-      <ThanksCard
-        yes={sent.yes}
-        count={sent.count}
-        host={host}
-        dated={Boolean(e.date)}
-        googleLink={googleLink}
-        icsLink={icsLink}
-        onChange={() => { setSent(null); setChoice(""); }}
-        landed
-      />
+      <>
+        <ThanksCard
+          yes={sent.yes}
+          count={sent.count}
+          host={host}
+          dated={Boolean(e.date)}
+          googleLink={googleLink}
+          icsLink={icsLink}
+          onChange={() => { setSent(null); setChoice(""); }}
+          landed
+        />
+        {/* The two things guests write to, shown as they will see them, on the same rule the real
+            invite uses: the plate for a yes, the gift for either answer.
+
+            Inert rather than rebuilt. These are the guest's own components with the host's own
+            rows poured into them, so what a host checks here cannot drift from what a guest
+            opens. What they cannot be is live: there is no guest row and no token to claim a dish
+            as, and a host pressing a button on their own party must not turn up in their own
+            numbers. inert takes the whole subtree out of reach of a tap and out of the
+            accessibility tree, without greying anything out, so it still looks like the guest's. */}
+        {(plate?.enabled || gift?.enabled) && (
+          <div className="tryextras" inert>
+            {sent.yes && plate?.enabled && <PlateCard token={PREVIEW_TOKEN} plate={plate} />}
+            {gift?.enabled && <GiftCard token={PREVIEW_TOKEN} gift={gift} />}
+          </div>
+        )}
+      </>
     );
   }
 

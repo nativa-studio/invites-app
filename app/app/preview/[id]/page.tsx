@@ -12,6 +12,7 @@ import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import { PickMode } from "@/components/host/PickMode";
 import { PreviewReply } from "@/components/invite/PreviewReply";
 import { TryReply } from "@/components/invite/TryReply";
+import { previewGift, previewPlate } from "@/lib/db/preview-extras";
 
 // The host's own look at their invite. Reads the event row straight from the table, so it works
 // on a draft and before a single guest exists, and it never touches a guest's opened flag the
@@ -44,6 +45,15 @@ export default async function Preview({
     supabase.from("updates").select("body, posted_at").eq("event_id", id).order("posted_at", { ascending: false }),
     supabase.from("guests").select("name, token").eq("event_id", id).limit(1).maybeSingle(),
   ]);
+  // The plate and the gift, for the "as a guest" view. Read from the host's own rows, because a
+  // preview has no token to call the guest functions with. Only fetched when that view is on:
+  // the editing view never draws them, and this is three queries.
+  const row = event as EventRow;
+  const [{ data: allGuests }, gift] = await Promise.all([
+    asGuest && row.plate_enabled ? supabase.from("guests").select("status, dietary").eq("event_id", id) : { data: null },
+    asGuest ? previewGift(id, row) : null,
+  ]);
+  const plate = asGuest ? await previewPlate(id, row, allGuests ?? []) : null;
   // The Layout tab previews what you are about to save, not what is saved. Anything it hands over
   // in the query string wins over the stored row, so a switch you have just flicked shows here
   // before you commit to it. Absent means use what is stored.
@@ -66,6 +76,8 @@ export default async function Preview({
         who={who ?? copy.host.tryWho}
         googleLink={googleCalendarLink(e, token ? inviteLink(await getSiteUrl(), token) : "")}
         icsLink={token ? `/i/${token}/invite.ics` : null}
+        plate={plate}
+        gift={gift}
       />
     )
     : <PreviewReply e={e} who={who} />;
