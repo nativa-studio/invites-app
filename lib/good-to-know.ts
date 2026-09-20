@@ -100,7 +100,7 @@ export const PLATE_MODES: [string, string][] = [
 export const optionValues = (options: [string, string][]): string[] => options.map(([v]) => v);
 
 export const NOTE_NAMES: Record<NoteKind, string> = {
-  siblings: "Brothers and sisters",
+  siblings: "Siblings welcome",
   bring: "What to bring or wear",
   serve: "What you'll serve",
   plate: "Bring a plate",

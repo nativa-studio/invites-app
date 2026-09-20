@@ -219,7 +219,7 @@ export const copy = {
   },
   lines: {
     siblingsNo: "We're keeping it to invited kids only. Sorry, siblings!",
-    siblings: "Brothers and sisters are welcome too.",
+    siblings: "Siblings welcome, just include them in your numbers.",
     giftsNone: "No gifts please, your company is the present.",
     giftsOptional: "Gifts are entirely optional.",
     giftsBooks: "Books only please, we're building a little library.",
