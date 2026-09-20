@@ -10,7 +10,6 @@ import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, Update
 import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
 import { AnnounceGift, AnnouncePlate } from "./Announce";
-import { OpenAgain } from "./OpenAgain";
 import { LineupInvite } from "./LineupInvite";
 
 // Every layout, in one place. The personal link, the group link and the host's own preview all
@@ -46,12 +45,6 @@ export function InviteBody({
   );
   // Drawn once and handed to whichever layout runs, so neither can quietly not have it.
   const about = <AboutApp token={token ?? null} curious={curious ?? false} pretend={pretend} />;
-  // Open it again, for everybody, once the envelope has finished. It draws nothing until then,
-  // and nothing at all if there is no envelope on the page.
-  //
-  // A drag to replay was the other idea and is the wrong one on a phone: pulling down at the top
-  // of a page is the browser's own refresh, and a gesture nobody is told about is not a feature.
-  const replay = <OpenAgain />;
   const id = layout ?? e.layout_id;
   if (id === "lineup") {
     return (
@@ -60,7 +53,6 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        replay={replay}
         skipAnimation={skipAnimation}
       />
     );
@@ -106,7 +98,6 @@ export function InviteBody({
     <main className="invite" style={paletteVars(p)}>
       <div className="wrap">
         <div className="greet">{greeting}</div>
-        {replay}
         <Envelope
             cover={<CoverCard e={e} />}
           openLabel={copy.envelope.open}
