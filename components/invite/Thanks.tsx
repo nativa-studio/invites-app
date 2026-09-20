@@ -38,7 +38,11 @@ export function ThanksCard({
           transformed element is a containing block for anything fixed inside it, which would pin
           the flags to the card instead of letting them fall down the screen. */}
       {yes && landed && <Celebrate />}
-    <div className={`pcard tilt-l${yes && landed ? " cheering" : ""}`} aria-live="polite" ref={card}>
+    {/* The same dashed green edge the reply card has. They are two halves of one exchange, the
+        question and the answer to it, and until now the answer arrived in the solid navy border
+        every card on the invite wears, so it read as another thing to look at rather than as the
+        reply closing. */}
+    <div className={`pcard tilt-l reply${yes && landed ? " cheering" : ""}`} aria-live="polite" ref={card}>
       <div className="rsvp-h"><Bolt size={24} /> {yes ? copy.thanks.yesTitle : copy.thanks.noTitle} <Bolt size={24} /></div>
       <div className="para">{yes ? copy.thanks.yesBody() : copy.thanks.noBody(host)}</div>
       {yes && dated && (
