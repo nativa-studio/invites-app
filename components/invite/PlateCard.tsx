@@ -19,10 +19,26 @@ import { Bolt } from "@/components/art/icons";
 //
 // The allergy line is counts. No names, no notes. A guest wrote "Ada carries an epipen" in a box
 // meant for the host, and it is not going on a board forty people can read.
-export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
+export function PlateCard({ token, plate, pretend }: { token: string; plate: Plate; pretend?: boolean }) {
   const [state, act, pending] = useActionState<PlateState, FormData>(plateAction, { plate });
-  const board = state.plate ?? plate;
+  // The host trying their own invite. Everything works and nothing is written, which is the same
+  // rule the reply already follows there: a preview has no guest row and no token, and a host
+  // claiming a dish at their own party must not turn up on their own list.
+  //
+  // It was inert instead, which made the one screen built to answer "what do my guests get" the
+  // one screen where you could not find out.
+  const [local, setLocal] = useState<Plate>(plate);
+  const board = pretend ? local : state.plate ?? plate;
   const [adding, setAdding] = useState(false);
+
+  const toggle = (id: string) => setLocal((b) => ({
+    ...b,
+    items: b.items.map((i) => (i.id === id ? { ...i, mine: !i.mine, claimed: !i.mine } : i)),
+  }));
+  const addLocal = (label: string, tags: string[]) => setLocal((b) => ({
+    ...b,
+    items: [...b.items, { id: `p${b.items.length}`, label, quantity: null, tags, claimed: true, mine: true, added_by_me: true }],
+  }));
 
   const allergies = board.allergies.map((a) => copy.plate.allergy(a.n, a.chip)).join(", ");
   const mine = board.items.filter((i) => i.mine);
@@ -38,19 +54,27 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
   //
   // Yours is the filled one with the stamp on it. It says Yours rather than an instruction,
   // because it is already done, and pressing it is how you undo that.
+  const face = (i: (typeof board.items)[number]) => (
+    <>
+      <span className="n">{i.label}</span>
+      <span className="do">{i.mine ? copy.plate.mine : copy.plate.claim}</span>
+      {i.tags.length > 0 && <span className="tg">{i.tags.join(", ")}</span>}
+      {i.mine && <span className="stamp"><Bolt size={16} /></span>}
+    </>
+  );
+
   const row = (i: (typeof board.items)[number]) => (
     <li key={i.id}>
-      <form action={act}>
-        <input type="hidden" name="token" value={token} />
-        <input type="hidden" name="item" value={i.id} />
-        <input type="hidden" name="what" value={i.mine ? "unclaim" : "claim"} />
-        <button type="submit" className={`dishtile${i.mine ? " mine" : ""}`} disabled={pending}>
-          <span className="n">{i.label}</span>
-          <span className="do">{i.mine ? copy.plate.mine : copy.plate.claim}</span>
-          {i.tags.length > 0 && <span className="tg">{i.tags.join(", ")}</span>}
-          {i.mine && <span className="stamp"><Bolt size={16} /></span>}
-        </button>
-      </form>
+      {pretend ? (
+        <button type="button" className={`dishtile${i.mine ? " mine" : ""}`} onClick={() => toggle(i.id)}>{face(i)}</button>
+      ) : (
+        <form action={act}>
+          <input type="hidden" name="token" value={token} />
+          <input type="hidden" name="item" value={i.id} />
+          <input type="hidden" name="what" value={i.mine ? "unclaim" : "claim"} />
+          <button type="submit" className={`dishtile${i.mine ? " mine" : ""}`} disabled={pending}>{face(i)}</button>
+        </form>
+      )}
     </li>
   );
 
@@ -82,7 +106,19 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
           and adding your own is the other option, so it should not compete with the bars for
           the eye, and it sits with them because that is the moment it occurs to somebody. */}
       {adding ? (
-        <form action={act} className="addplate">
+        <form
+          className="addplate"
+          {...(pretend
+            ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => {
+                ev.preventDefault();
+                const f = new FormData(ev.currentTarget);
+                const label = String(f.get("label") ?? "").trim();
+                if (!label) return;
+                addLocal(label, f.getAll("tags").map(String));
+                setAdding(false);
+              } }
+            : { action: act })}
+        >
           <input type="hidden" name="token" value={token} />
           <input type="hidden" name="what" value="add" />
           <div className="q">

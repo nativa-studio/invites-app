@@ -52,21 +52,13 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
           onChange={() => { setSent(null); setChoice(""); }}
           landed
         />
-        {/* The two things guests write to, shown as they will see them, on the same rule the real
-            invite uses: the plate for a yes, the gift for either answer.
-
-            Inert rather than rebuilt. These are the guest's own components with the host's own
-            rows poured into them, so what a host checks here cannot drift from what a guest
-            opens. What they cannot be is live: there is no guest row and no token to claim a dish
-            as, and a host pressing a button on their own party must not turn up in their own
-            numbers. inert takes the whole subtree out of reach of a tap and out of the
-            accessibility tree, without greying anything out, so it still looks like the guest's. */}
-        {(plate?.enabled || gift?.enabled) && (
-          <div className="tryextras" inert>
-            {sent.yes && plate?.enabled && <PlateCard token={PREVIEW_TOKEN} plate={plate} />}
-            {gift?.enabled && <GiftCard token={PREVIEW_TOKEN} gift={gift} />}
-          </div>
-        )}
+        {/* The two things guests write to, working, on the same rule the reply above them
+            follows: everything responds and nothing is written. They were inert, which made the
+            one screen built to answer "what do my guests actually get" the one screen where a
+            host could not find out. There is no guest row and no token here, so the claiming and
+            the ticking happen in the page and are gone when it reloads. */}
+        {sent.yes && plate?.enabled && <PlateCard token={PREVIEW_TOKEN} plate={plate} pretend />}
+        {gift?.enabled && <GiftCard token={PREVIEW_TOKEN} gift={gift} pretend />}
       </>
     );
   }

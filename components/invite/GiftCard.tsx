@@ -17,9 +17,12 @@ import { Gift as GiftIcon } from "@/components/art/icons";
 // No money moves through this. The organiser has typed where to send it and the guest pays them
 // however they already pay people. The tick is the whole feature: it is what stops the organiser
 // asking the same person three times and what stops somebody being quietly left off the card.
-export function GiftCard({ token, gift }: { token: string; gift: Gift }) {
+export function GiftCard({ token, gift, pretend }: { token: string; gift: Gift; pretend?: boolean }) {
   const [state, act, pending] = useActionState<GiftState, FormData>(giftAction, { gift });
-  const g = state.gift ?? gift;
+  // The host trying their own invite: the tick works and nothing is written. See the note in
+  // PlateCard for why this is not simply switched off.
+  const [local, setLocal] = useState<Gift>(gift);
+  const g = pretend ? local : state.gift ?? gift;
   // The amount box opens on tapping the tick rather than sitting there, because the amount is
   // optional and an open box with a cursor in it does not read as optional.
   const [saying, setSaying] = useState(false);
@@ -72,14 +75,23 @@ export function GiftCard({ token, gift }: { token: string; gift: Gift }) {
           <p className="small">{g.chipped_count === 0 ? copy.gift.countNone : copy.gift.count(g.chipped_count)}</p>
 
           {g.chipped_in ? (
-            <form action={act}>
+            <form {...(pretend
+              ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => { ev.preventDefault(); setLocal((v) => ({ ...v, chipped_in: false, my_amount: null, chipped_count: Math.max(0, v.chipped_count - 1) })); } }
+              : { action: act })}>
               <input type="hidden" name="token" value={token} />
               <input type="hidden" name="what" value="unchip" />
               <p className="done">{copy.gift.ticked}{g.my_amount != null && ` ${formatMoney(g.my_amount)}.`}</p>
               <button className="pbtn small" type="submit" disabled={pending}>{copy.gift.untick}</button>
             </form>
           ) : saying ? (
-            <form action={act} className="chipin">
+            <form className="chipin" {...(pretend
+              ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => {
+                  ev.preventDefault();
+                  const raw = String(new FormData(ev.currentTarget).get("amount") ?? "").replace(/[^0-9.]/g, "");
+                  const amount = raw === "" || Number.isNaN(Number(raw)) ? null : Number(raw);
+                  setLocal((v) => ({ ...v, chipped_in: true, my_amount: amount, chipped_count: v.chipped_count + 1 }));
+                } }
+              : { action: act })}>
               <input type="hidden" name="token" value={token} />
               <input type="hidden" name="what" value="chip" />
               <div className="q">
