@@ -39,6 +39,8 @@ export type PublicEvent = {
    *  backfilled it from whichever preset each event had picked. Optional because a database
    *  without that migration has no column. */
   photos_note?: string | null;
+  /** Free text, on the info booth. No default and no switch: the line exists when it is written. */
+  drinks_note?: string | null;
   rsvp_by: string | null;
   save_the_date: boolean;
   group_link_enabled: boolean;

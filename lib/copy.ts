@@ -509,6 +509,7 @@ export const copy = {
     giftOff: "Not running one",
     giftSwitch: "Run a group gift",
     giftNoteFree: "Exactly what the invite says about gifts, in your words. Leave it empty to say nothing at all.",
+    drinksNoteFree: "Whatever you want to say about drinks. Bring your own, what is provided, what there is for the children. Leave it empty and the invite says nothing about drinks at all.",
     photosNoteFree: "Exactly what the invite says about photos, in your words. Leave it empty to say nothing at all.",
     giftAlongside: "Turns the feature on. It does not change the wording above: what you write there is what the invite says. Leave that box empty and the invite mentions the group gift for you. The rest of running it is on the Gift tab.",
     giftWhat: "What is it?",
