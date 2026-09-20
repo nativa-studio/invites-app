@@ -51,7 +51,7 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
       {state.ok && <input type="hidden" name="token" value={state.token} />}
       <div className="rsvp-h"><Bolt size={24} /> {copy.rsvp.heading} <Bolt size={24} /></div>
       <div className="rsvp-q">{copy.rsvp.questionGroup}</div>
-      {e.rsvp_by && <div className="para" style={{ fontSize: 15 }}>{copy.rsvp.replyBy(formatShortDate(e.rsvp_by))}</div>}
+      <div className="para nudge">{copy.rsvp.nudge}</div>
 
       {choice === "" && (
         <>
@@ -60,6 +60,9 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
           {editing && <button type="button" className="pbtn small" onClick={() => setEditingFrom(null)}>{copy.rsvp.keep}</button>}
         </>
       )}
+      {/* Under the buttons, and only while nothing has been chosen: once a guest is answering
+          the questions, the deadline is behind them. */}
+      {choice === "" && e.rsvp_by && <div className="replyby">{copy.rsvp.replyBy(formatShortDate(e.rsvp_by))}</div>}
 
       {choice !== "" && (
         <>

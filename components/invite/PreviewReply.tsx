@@ -19,9 +19,10 @@ export function PreviewReply({ e, who }: { e: PublicEvent; who?: string }) {
     <div className="pcard tilt-l reply" data-section="reply">
       <div className="rsvp-h"><Bolt size={24} /> {copy.rsvp.heading} <Bolt size={24} /></div>
       <div className="rsvp-q">Can <u>{who ?? "your guest"}</u> make it?</div>
-      {e.rsvp_by && <div className="para" style={{ fontSize: 15 }}>{copy.rsvp.replyBy(formatShortDate(e.rsvp_by))}</div>}
+      <div className="para nudge">{copy.rsvp.nudge}</div>
       <span className="pbtn primary" aria-hidden="true">{e.yes_label ?? copy.rsvp.yes}</span>
       <span className="pbtn" aria-hidden="true">{e.no_label ?? copy.rsvp.no}</span>
+      {e.rsvp_by && <div className="replyby">{copy.rsvp.replyBy(formatShortDate(e.rsvp_by))}</div>}
       <div className="small">{copy.host.previewReply}</div>
     </div>
   );
