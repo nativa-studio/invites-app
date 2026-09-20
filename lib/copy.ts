@@ -347,7 +347,7 @@ export const copy = {
       yes: (who: string) => `${who} said yes`,
       no: (who: string) => `${who} can't come`,
       joined: (who: string) => `${who} came in via the group link`,
-      calendar: (who: string) => `${who} took the calendar file`,
+      calendar: (who: string) => `${who} tapped Add to calendar`,
       token: (who: string) => `${who} got a new link`,
       sent: (who: string) => `You sent ${who} their link`,
       opened: (who: string) => `${who} opened their invite`,
@@ -630,10 +630,10 @@ export const copy = {
       markedYes: "you marked them as coming",
       markedNo: "you marked them as not coming",
       reminded: "reminded",
-      // Not "added to calendar". What we know is that they took the file or opened Google with
-      // the event filled in, and a phone that previews the file and is tapped away from looks
-      // exactly the same from here. The word has to carry that.
-      calendar: "took the calendar file",
+      // Not "added to calendar", which claims more than is known: a phone that previews the file
+      // and is tapped away from looks exactly the same from here. The tap is the part that was
+      // actually observed, so the tap is what it says.
+      calendar: "tapped Add to calendar",
     },
   },
   templates: {
