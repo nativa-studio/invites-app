@@ -32,6 +32,10 @@ const TABS = [
   { seg: "/tracking", label: "Tracking" },
   { seg: "/message", label: "Message" },
   { seg: "/potluck", label: "Potluck" },
+  // Next to Potluck, because the two are opposites that look alike and a host reaching for one is
+  // in the same frame of mind as the other: Potluck is the food guests carry, Shopping is the
+  // food you buy. Guests never see this one.
+  { seg: "/shopping", label: "Shopping" },
   { seg: "/gift", label: "Gift" },
   { seg: "/look", label: "Design" },
 ] as const;

@@ -41,6 +41,10 @@ export default async function Potluck({ params }: { params: Promise<{ id: string
         <Field id="plate_host_note" label={copy.host.potluckNote} value={e.plate_host_note} rows={2} hint={copy.host.potluckNoteHint} />
       </EditCard>
 
+      {/* The two food lists are next to each other in the tab bar and are easy to mix up, so the
+          one guests can see says so. */}
+      <p className="hint">{copy.host.shopNotPotluck}</p>
+
       <PlateBoard
         eventId={e.id}
         items={items}

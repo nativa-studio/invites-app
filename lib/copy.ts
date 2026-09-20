@@ -320,6 +320,27 @@ export const copy = {
     stripHint: "The three drawings at the top of the invite, and the one colour everything is drawn in.",
     stripSetLabel: "Pictures",
     stripInkLabel: "Ink",
+    // The shopping list. Called shopping, not "checklist" or "to do": a host opens this standing
+    // in a supermarket, and the words on it should be the words they would use there.
+    shopHeading: "Shopping list",
+    shopBlurb: "What still has to be bought. Only you and your co-hosts can see this, never guests.",
+    shopNone: "Nothing on the list yet. Add the first thing you need.",
+    shopAdd: "Add",
+    shopWhat: "What to buy",
+    shopWhatPlaceholder: "Ice",
+    shopHowMuch: "How much",
+    shopHowMuchHint: "However you would write it on a scrap of paper: 2 kg, a dozen, enough for 30.",
+    shopGot: (got: number, total: number) => `${got} of ${total} in the trolley`,
+    shopAllGot: "Everything on the list is bought.",
+    shopGotBy: (who: string) => `${who} got it`,
+    shopClear: "Clear what is bought",
+    shopClearHint: "Takes the ticked lines off the list. The rest stay.",
+    shopEdit: "Change it",
+    shopRemove: "Take it off",
+    shopTick: "In the trolley",
+    // Said on the Potluck tab, because the two lists are easy to confuse and the difference
+    // matters: one is what you buy, the other is what guests carry.
+    shopNotPotluck: "Guests never see this list. What they are bringing is on Potluck.",
     sectionsHeading: "What the invite shows",
     sectionsHint: "A section with nothing in it stays hidden anyway. These are for leaving one out on purpose.",
     savedTitle: "Saved.",
