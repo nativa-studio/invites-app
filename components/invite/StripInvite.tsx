@@ -37,7 +37,7 @@ export function StripInvite({
   /** Bring a plate, drawn by whoever owns the guest's answer. */
   plate?: React.ReactNode;
 }) {
-  const set = stripSet(e.theme_id);
+  const set = stripSet(e.strip_set, e.theme_id);
   const ink = inkFor(e.ink);
   const paper = paperFor(e.ink);
   const maps = mapsLink(e);

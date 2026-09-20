@@ -25,7 +25,7 @@ const W = 400;
 const H = 470;
 
 export function InviteThumb({
-  artwork, title, intro, palette, themeId, layout, ink,
+  artwork, title, intro, palette, themeId, layout, ink, set: chosenSet,
 }: {
   artwork: string | null;
   title: string;
@@ -34,15 +34,17 @@ export function InviteThumb({
   themeId?: string | null;
   /** Which design. Only the envelope's paper depends on it; the card is the card. */
   layout?: string;
-  /** The strip's one colour. The other designs take their colours from the palette. */
+  /** The strip's one colour and its doodles. The other designs take their look from the palette
+   *  and the artwork. */
   ink?: string | null;
+  set?: string | null;
 }) {
   // The strip has no envelope and no characters, so drawing it as one would be a picture of a
   // different design. Same rule as the rest of this file: show the real pieces, at the real size,
   // and there is nothing for the tile to be wrong about. Its cover is three doodles and a title,
   // so its tile is three doodles and a title.
   if (layout === "strip") {
-    const set = stripSet(themeId);
+    const set = stripSet(chosenSet, themeId);
     return (
       <span className="ithumb strip-thumb" style={{ background: paperFor(ink), color: inkFor(ink) }}>
         <span className="strip-thumb-in">

@@ -40,6 +40,14 @@ const PATHS = {
   cup: '<path d="M14 20h28v18a14 14 0 0 1-28 0z"/><path d="M42 24h5a6 6 0 0 1 0 12h-5"/><path d="M10 56h36"/>',
   bolt: '<path d="M36 6L16 36h12l-4 22 22-32H34l4-20z"/>',
   clock: '<circle cx="32" cy="32" r="22"/><path d="M32 18v14l10 6"/>',
+  // Diwali. The diya is the one everybody knows, so it stands in the middle of the trio; the
+  // lantern and the rangoli are either side of it and read at 56px without needing colour, which
+  // a string of fairy lights or a marigold garland does not.
+  diya: '<path d="M8 36h48"/><path d="M10 36c3 10 11 16 22 16s19-6 22-16"/><path d="M32 36v-5"/><path d="M32 31c-5-5-3-11 0-14 3 3 5 9 0 14z"/>',
+  // Second go. The first was straight-sided with three long strokes under it and read as a box on
+  // legs. A paper lantern is the bulge and the fringe, so both got bigger.
+  lantern: '<path d="M32 4v6"/><path d="M23 10h18"/><path d="M23 10c-7 6-7 22 0 28M41 10c7 6 7 22 0 28"/><path d="M23 38h18"/><path d="M17 24h30"/><path d="M26 38v8M29 38v10M32 38v12M35 38v10M38 38v8"/>',
+  rangoli: '<circle cx="32" cy="32" r="6"/><path d="M32 13c4 6 4 10 0 13-4-3-4-7 0-13zM32 51c4-6 4-10 0-13-4 3-4 7 0 13zM13 32c6-4 10-4 13 0-3 4-7 4-13 0zM51 32c-6-4-10-4-13 0 3 4 7 4 13 0z"/><path d="M18 18c7 1 10 4 11 11-7-1-10-4-11-11zM46 46c-7-1-10-4-11-11 7 1 10 4 11 11zM18 46c1-7 4-10 11-11-1 7-4 10-11 11zM46 18c-1 7-4 10-11 11 1-7 4-10 11-11z"/>',
 } as const;
 
 // The poster set and this one do not name every picture the same way, and the runsheet already

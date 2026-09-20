@@ -268,6 +268,33 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .design .b { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; }
 .design .tag { margin-top: 4px; }
 
+/* The strip's two choices. Each set tile is drawn in the ink that is chosen right now, so picking
+   a colour repaints the whole row and a host sees the pair they are actually choosing rather than
+   two settings they have to hold in their head at once. */
+.look-sub { font-size: 13px; font-weight: 600; color: var(--app-mute); margin: 12px 0 2px; }
+.sets { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.set {
+  display: grid; gap: 5px; justify-items: center; padding: 10px 6px; border-radius: 10px;
+  border: 1px solid var(--app-line-2); cursor: pointer; font: inherit; min-width: 0;
+}
+.set:hover { border-color: var(--app-mute); }
+.set.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
+.set .trio { display: flex; gap: 3px; align-items: flex-end; }
+.set .n { font-size: 12.5px; font-weight: 600; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+/* A grid, not a wrapping row. Seven 44px circles in the 332px this card gives them wrapped six
+   and one, and the one left on its own reads as a mistake rather than as a palette. Four and
+   three is the same information, laid out on purpose. Measured. */
+.inks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; justify-items: center; max-width: 340px; }
+@media (min-width: 460px) { .inks { grid-template-columns: repeat(7, 1fr); } }
+/* 44px, because it is a target on a phone. The ink is the disc; the paper is the ring around it,
+   so the swatch shows the pair rather than the colour on its own. */
+.swatch {
+  width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--app-line-2);
+  display: grid; place-items: center; cursor: pointer; padding: 0;
+}
+.swatch > span { width: 22px; height: 22px; border-radius: 999px; display: block; }
+.swatch.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 2px var(--app-ink); }
+
 /* The drawer. It slides up from the bottom on a phone, which is where a hand is, and it never
    takes the whole screen: the invite stays visible above it so you can see what you are editing. */
 .sheet-back { position: fixed; inset: 0; z-index: 20; background: rgba(28, 25, 23, 0.32); display: flex; align-items: flex-end; justify-content: center; }

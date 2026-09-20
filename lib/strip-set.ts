@@ -17,6 +17,9 @@ const INKS: Record<string, string> = {
   terracotta: "#9C4A22",
   cobalt: "#2C2A5A",
   burgundy: "#6E2430",
+  // Deep marigold. The colour Diwali wants, dark enough to read a paragraph in: 6.39 to 1 on its
+  // own paper, measured, where a bright saffron is about 2.
+  marigold: "#8A4A08",
   sage: "#4F6B4A",
   navy: "#1B2A4A",
 };
@@ -28,6 +31,7 @@ const PAPERS: Record<string, string> = {
   terracotta: "#FBF4EE",
   cobalt: "#F7F4FB",
   burgundy: "#FBF3F4",
+  marigold: "#FFF6E6",
   sage: "#F6F8F2",
   navy: "#F4F6FA",
 };
@@ -52,6 +56,7 @@ const SETS: Record<string, StripSet> = {
   quiet: { id: "quiet", name: "Quiet", trio: ["leaf", "candle", "leaf"] },
   night: { id: "night", name: "A night out", trio: ["glasses", "disco", "glasses"] },
   home: { id: "home", name: "Home and family", trio: ["leaf", "plate", "cup"] },
+  diwali: { id: "diwali", name: "Diwali", trio: ["lantern", "diya", "rangoli"] },
 };
 
 const FALLBACK: StripSet = SETS.birthday;
@@ -59,10 +64,26 @@ const FALLBACK: StripSet = SETS.birthday;
 /** Every set, for a picker to offer. */
 export const STRIP_SETS: StripSet[] = Object.values(SETS);
 
-/** The pictures for an event. A theme with no set of its own gets the birthday one rather than
- *  nothing: three pictures is the cover, and an invite with no cover is not an invite. */
-export function stripSet(themeId: string | null | undefined): StripSet {
-  return SETS[themeId ?? ""] ?? FALLBACK;
+/** The inks a host is offered, in the order they are shown. Sage is deliberately absent: it is
+ *  the same hex as olive, and two swatches a guest could never tell apart is not a choice. It
+ *  stays in the table above because baby showers were created with it. */
+export const STRIP_INKS: { id: string; name: string }[] = [
+  { id: "charcoal", name: "Charcoal" },
+  { id: "navy", name: "Navy" },
+  { id: "cobalt", name: "Cobalt" },
+  { id: "olive", name: "Olive" },
+  { id: "terracotta", name: "Terracotta" },
+  { id: "burgundy", name: "Burgundy" },
+  { id: "marigold", name: "Marigold" },
+];
+
+/** The pictures for an event: the host's choice, or the one their theme implies.
+ *
+ *  Two arguments rather than one because a host can now pick, and every event made before they
+ *  could has nothing in the column. A theme with no set of its own gets the birthday one rather
+ *  than nothing: three pictures is the cover, and an invite with no cover is not an invite. */
+export function stripSet(chosen: string | null | undefined, themeId?: string | null): StripSet {
+  return SETS[chosen ?? ""] ?? SETS[themeId ?? ""] ?? FALLBACK;
 }
 
 export function inkFor(ink: string | null | undefined): string {
