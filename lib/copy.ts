@@ -11,8 +11,15 @@ export const copy = {
   // Somebody signed in who is not on the list while this is being built.
   notYet: {
     title: "Bunting is still being built",
-    body: "Thanks for having a look. It is not open yet, so there is nothing here for you to sign in to. Marcia is using it for one party at a time while the rough edges come off.",
-    hint: "If you were expecting to get in, tell Marcia which email address you used and she will add it.",
+    // One line for why they are here, then the same three paragraphs the invite carries under
+    // "Ma is building this app". Somebody who lands on this page has tried to sign in, which
+    // means they are interested enough to want the rest of it, and sending them away with an
+    // apology and nothing else wasted the one moment they were asking.
+    //
+    // The paragraphs are not copied. They are read from about below, so the two places cannot
+    // drift into saying different things about the same product.
+    body: "Thanks for having a look. It is not open yet, so there is nothing here for you to sign in to.",
+    hint: "If you were expecting to get in, or you want to help test it, tell Marcia which email address you used and she will add it.",
     back: "Back to the start",
   },
   app: {
@@ -121,11 +128,6 @@ export const copy = {
     notComing: "Say yes on your invite first, and the list opens up.",
     wrongLink: "This link doesn't look right. Ask the host to send it again.",
     failed: "That didn't go through. Please try again.",
-    feedbackLabel: "Anything you would change?",
-    feedbackPlaceholder: "What worked, what didn't, what you expected to happen",
-    feedbackSend: "Send it to Ma",
-    feedbackDone: "Thanks, that is really useful.",
-    feedbackAgain: "Say something else",
   },
   // The group gift, as guests and the organiser read it. No money moves through the app, so
   // every word here is about people paying each other, not about paying us.

@@ -15,6 +15,15 @@ export default function NotYet() {
     <main className="host">
       <h1 className="h1">{copy.notYet.title}</h1>
       <p className="muted">{copy.notYet.body}</p>
+      {/* What it is, in the same words the invite uses. Somebody who has just tried to sign in
+          is asking what this is, and an apology with no answer in it wastes the question.
+          Read from copy.about rather than written again here, so the two cannot drift. */}
+      <p className="muted">{copy.about.body}</p>
+      <p className="muted">{copy.about.what}</p>
+      {/* The hand up on the invite is a button, because there is a guest row to write it against.
+          Here there is nobody signed in and nothing to write to, so the line below says how to
+          put your hand up instead: tell her which address you used. */}
+      <p className="muted">{copy.about.ask}</p>
       <p className="hint">{copy.notYet.hint}</p>
       <div className="actions">
         <Link className="btn" href="/">{copy.notYet.back}</Link>
