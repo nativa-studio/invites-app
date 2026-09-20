@@ -34,6 +34,13 @@ export const copy = {
     heading: "RSVP",
     question: (name: string) => `Can ${name} make it?`,
     questionGroup: "Can you make it?",
+    // Above the buttons, and the reply by date moved below them. The date used to be the only
+    // thing said before a guest chose, which is the host's deadline put to somebody who is not
+    // certain yet, and it reads as a demand for a commitment they cannot give. So they close the
+    // page meaning to come back. This says the opposite first: an answer now is useful even if it
+    // is not final, and it is theirs to change. The deadline still matters, so it sits under the
+    // buttons, which is where somebody who has decided not to answer today will read it.
+    nudge: "Your answer helps us plan. Come back here and update it if your plans change.",
     replyBy: (date: string) => `Please reply by ${date} so we can get the numbers right.`,
     yes: "Yes, we're coming",
     no: "Sorry, can't make it",
@@ -77,6 +84,13 @@ export const copy = {
     addToCalendar: "Add to calendar",
     google: "Google Calendar",
     apple: "Apple or Outlook",
+    // True already, and nobody knew: lib/calendar.ts writes the invite link into the event's
+    // description and its URL field. Three weeks later the text carrying the link is buried and
+    // the calendar entry is the one place a guest can still find their way back.
+    calendarCarriesLink: "Add it to your calendar and your invite link comes with it.",
+    // Under Change my answer. The button was there and the promise was not, so nothing told a
+    // guest their answer was not final until after they had given it.
+    changeHint: "This link is yours, so you can change your answer any time.",
     changed: "Reply updated",
   },
   // Bring a plate, as a guest reads it. The board is only ever seen by somebody who has said

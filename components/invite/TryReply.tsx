@@ -72,7 +72,7 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
     <form className="pcard tilt-l reply" onSubmit={send}>
       <div className="rsvp-h"><Bolt size={24} /> {copy.rsvp.heading} <Bolt size={24} /></div>
       <div className="rsvp-q">Can <u>{who}</u> make it?</div>
-      {e.rsvp_by && <div className="para" style={{ fontSize: 15 }}>{copy.rsvp.replyBy(formatShortDate(e.rsvp_by))}</div>}
+      <div className="para nudge">{copy.rsvp.nudge}</div>
 
       {choice === "" && (
         <>
@@ -80,6 +80,9 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
           <button type="button" className="pbtn" onClick={() => setChoice("no")}>{e.no_label ?? copy.rsvp.no}</button>
         </>
       )}
+      {/* Under the buttons, and only while nothing has been chosen: once a guest is answering
+          the questions, the deadline is behind them. */}
+      {choice === "" && e.rsvp_by && <div className="replyby">{copy.rsvp.replyBy(formatShortDate(e.rsvp_by))}</div>}
 
       {choice === "yes" && <YesQuestions e={e} />}
       {choice === "no" && <NoteQuestion placeholder="Have a wonderful day, sorry to miss it" />}
