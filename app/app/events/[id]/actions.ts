@@ -316,9 +316,24 @@ export async function removePlateItem(eventId: string, itemId: string) {
   revalidateEvent(eventId);
 }
 
-export async function releasePlateItem(eventId: string, itemId: string) {
+// Putting a dish against somebody's name, from the host's side.
+//
+// Half a guest list answers a potluck in the group chat rather than on their invite: "I'll do the
+// salad" arrives as a text, and until now the only way to record it was to ask that person to go
+// and tap it themselves, which nobody does. So the host can do it for them, the same way they can
+// already answer an RSVP on a guest's behalf.
+//
+// It overwrites whoever had it rather than refusing. A host doing this is looking at the board
+// and means it; two people claiming one dish is a thing to fix, not a thing to be stopped from
+// fixing. Passing null is the same as freeing it up.
+export async function assignPlateItem(eventId: string, itemId: string, guestId: string | null) {
   const { supabase } = await hostClient();
-  await supabase.from("plate_items").update({ claimed_by_guest_id: null }).eq("id", itemId).eq("event_id", eventId);
+  // Scoped to this event on both sides, so an id from somewhere else writes nothing.
+  if (guestId) {
+    const { data: guest } = await supabase.from("guests").select("id").eq("id", guestId).eq("event_id", eventId).maybeSingle();
+    if (!guest) return;
+  }
+  await supabase.from("plate_items").update({ claimed_by_guest_id: guestId }).eq("id", itemId).eq("event_id", eventId);
   revalidateEvent(eventId);
 }
 

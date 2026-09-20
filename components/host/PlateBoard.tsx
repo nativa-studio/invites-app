@@ -3,7 +3,7 @@ import { useState, useTransition } from "react";
 import { copy } from "@/lib/copy";
 import { firstName } from "@/lib/format";
 import type { HostPlateItem } from "@/lib/db/plate";
-import { addPlateItem, releasePlateItem, removePlateItem, renamePlateItem } from "@/app/app/events/[id]/actions";
+import { addPlateItem, assignPlateItem, removePlateItem, renamePlateItem } from "@/app/app/events/[id]/actions";
 import { Sheet } from "./Sheet";
 
 // The bring a plate board, from the host's side.
@@ -15,9 +15,11 @@ import { Sheet } from "./Sheet";
 // guest adds one they are already carrying. The two are told apart on the row, because "nobody
 // yet" on something the host asked for is a thing to chase and "nobody yet" is impossible on
 // something a guest added, since putting it up is how they say they are bringing it.
-export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies }: {
+export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies, guests }: {
   eventId: string;
   items: HostPlateItem[];
+  /** Everyone who said yes, for putting a dish against a name. */
+  guests: { id: string; name: string }[];
   enabled: boolean;
   mode: string;
   hostNote: string | null;
@@ -126,9 +128,28 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
           onClose={() => setEditing(null)}
         >
           <div className="sheet-body">
-            {/* Who has it, said once, here, rather than on every row of the board. */}
-            {editing.bringing && <p className="hint">{copy.host.plateWhoIs(editing.bringing)}</p>}
             {editing.tags.length > 0 && <p className="hint">{editing.tags.join(", ")}</p>}
+            {/* Who has it, and the way to change it. A host can put a dish against a name because
+                half a potluck is answered in the group chat rather than on anybody's invite, and
+                the alternative was asking that person to go and tap it themselves. */}
+            <div className="field">
+              <label htmlFor="plate_who">{copy.host.plateWho}</label>
+              <select
+                id="plate_who"
+                value={editing.claimedBy ?? ""}
+                disabled={pending}
+                onChange={(ev) => {
+                  const who = ev.target.value || null;
+                  const id = editing.id;
+                  setEditing({ ...editing, claimedBy: who, bringing: guests.find((g) => g.id === who)?.name ?? null });
+                  start(async () => { await assignPlateItem(eventId, id, who); });
+                }}
+              >
+                <option value="">{copy.host.plateWhoNobody}</option>
+                {guests.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
+              </select>
+              <span className="hint">{copy.host.plateWhoHint}</span>
+            </div>
             <div className="field">
               <label htmlFor="plate_rename">{copy.plate.addLabel}</label>
               <input id="plate_rename" type="text" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} autoComplete="off" />
@@ -142,12 +163,6 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
               >
                 {copy.host.plateRenameSave}
               </button>
-              {editing.bringing && (
-                <button type="button" className="btn small" disabled={pending}
-                  onClick={() => { const id = editing.id; start(async () => { await releasePlateItem(eventId, id); setEditing(null); }); }}>
-                  {copy.host.plateRelease}
-                </button>
-              )}
               <button type="button" className="btn small" disabled={pending}
                 onClick={() => { const id = editing.id; start(async () => { await removePlateItem(eventId, id); setEditing(null); }); }}>
                 {copy.host.plateRemove}

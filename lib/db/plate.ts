@@ -9,6 +9,8 @@ export type HostPlateItem = {
   bringing: string | null;
   /** True when a guest put it on the list themselves, rather than the host asking for it. */
   fromGuest: boolean;
+  /** Whose id it is against, so the host's picker can open on the right person. */
+  claimedBy: string | null;
 };
 
 // The board, for the host. Their own screen, so names are whole names: a host chasing the salad
@@ -17,7 +19,7 @@ export const loadPlate = cache(async (eventId: string): Promise<HostPlateItem[]>
   const supabase = await createClient();
   const { data } = await supabase
     .from("plate_items")
-    .select("id, label, tags, added_by_guest_id, claimed:guests!plate_items_claimed_by_guest_id_fkey(name)")
+    .select("id, label, tags, added_by_guest_id, claimed_by_guest_id, claimed:guests!plate_items_claimed_by_guest_id_fkey(name)")
     .eq("event_id", eventId)
     .order("created_at");
   return (data ?? []).map((r) => {
@@ -29,6 +31,7 @@ export const loadPlate = cache(async (eventId: string): Promise<HostPlateItem[]>
       tags: (r.tags ?? []) as string[],
       bringing: who?.name ?? null,
       fromGuest: r.added_by_guest_id != null,
+      claimedBy: r.claimed_by_guest_id ? String(r.claimed_by_guest_id) : null,
     };
   });
 });

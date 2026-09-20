@@ -48,6 +48,7 @@ export default async function Potluck({ params }: { params: Promise<{ id: string
         mode={e.plate_mode}
         hostNote={e.plate_host_note}
         allergies={foodSummary(guests).counts}
+        guests={guests.filter((g) => g.status === "yes").map((g) => ({ id: g.id, name: g.name }))}
       />
     </>
   );
