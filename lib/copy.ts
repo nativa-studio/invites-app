@@ -651,6 +651,10 @@ export const copy = {
     /* Where {name} goes on a group link, which is addressed to a chat rather than to a person. */
     groupGreeting: "everyone",
   },
+  // The line the scroll cue says, for the layouts with no envelope.
+  more: {
+    label: "There's more below",
+  },
   closed: {
     title: "This link is closed",
     body: "The host has closed the group link. Text them and they'll send you your own.",

@@ -1,0 +1,104 @@
+/* Peek: the characters live at the edges of the page and lean in over each section, the way
+   they do on the wallpaper they were cut from. Every section is a soft panel in its own
+   character's colour, and the words are coloured too, because a four year old reads colour
+   long before words. The page crops the characters, so they read as peeking rather than placed. */
+/* Full-bleed artwork and the envelope's clip box are both wider than the page on purpose. Clip
+   rather than hide: hidden would make this a scroll container and break the sticky pieces. */
+.peek { overflow-x: clip;
+  --page: #F9F0DA;
+  --panel: #FFFAEC;
+  --ink: #2B2119;
+  --ink-soft: #6C5D4E;
+  --rule: #E5D8BC;
+  /* Read by the shared reply form, so one RSVP serves every layout. */
+  --navy: #2B2119;
+  --red: #D2452F;
+  --sky: #3B7E96;
+  --yel: #F2C640;
+  --crm: #F9F0DA;
+  --paper: #FFFDF6;
+  --forest: #3F6B57;
+  min-height: 100vh;
+  background: var(--page);
+  /* A grain of paper, so the cut-out characters sit on the same stock they were drawn on. */
+  background-image: radial-gradient(#E9DDBE 0.8px, transparent 0.9px);
+  background-size: 7px 7px;
+  color: var(--ink);
+  padding-bottom: 60px;
+}
+.peek .page { max-width: 430px; margin: 0 auto; position: relative; overflow: hidden; }
+
+/* Anyone leaning in from an edge. Cropped by the page, never by a box. */
+/* Anyone leaning in from an edge. Your file has already cropped each of them at the screen
+   edge, so their own cut sits flush with the page and nothing is taken off twice. They are
+   anchored by their feet, not their heads, so a tall one and a short one lean on a panel by
+   the same amount. */
+.peek .peeker { position: absolute; bottom: calc(100% - 44px); width: auto; height: 168px; z-index: 2; pointer-events: none; }
+.peek .peeker.left { left: -18px; }
+.peek .peeker.right { right: -18px; }
+
+/* Cover */
+.peek .greet { position: relative; z-index: 3; font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); text-align: center; padding: 34px 20px 0; }
+.peek .cover { position: relative; padding: 0 22px; }
+/* The two over the title lean in behind the words, the way they do on the wallpaper. */
+.peek .cover .peeker { top: -12px; bottom: auto; height: 156px; z-index: 0; }
+.peek .cover .peeker.left { left: 0; }
+.peek .cover .peeker.right { right: 0; }
+.peek .cover > :not(.peeker) { position: relative; z-index: 1; }
+.peek .eyebrow { font-family: var(--font-hand); font-size: 19px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); text-align: center; margin-top: 26px; }
+.peek h1.title { font-family: var(--font-display); font-size: 52px; line-height: 0.97; text-align: center; margin-top: 10px; text-wrap: balance; }
+.peek h1.title .age {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.18em; height: 1.18em; margin-left: 0.06em; vertical-align: -0.16em;
+  border-radius: 50%; background: var(--yel); border: 4px solid var(--ink); color: var(--ink);
+  box-shadow: 0 4px 0 rgba(43, 33, 25, 0.16);
+}
+.peek .sub { font-size: 17px; line-height: 1.55; text-align: center; color: var(--ink-soft); margin: 14px auto 0; max-width: 31ch; }
+.peek .when { display: grid; gap: 2px; text-align: center; margin-top: 20px; font-size: 18px; line-height: 1.45; }
+.peek .when .day { font-family: var(--font-display); font-size: 22px; color: var(--forest); }
+.peek .from { font-size: 14px; text-align: center; color: var(--ink-soft); margin-top: 12px; }
+/* The hero stands behind the line that closes the cover, which is where the drawing is cut. */
+.peek .ground { margin: 16px -22px 0; border-bottom: 3px dashed var(--rule); }
+.peek .hero { display: block; width: 286px; height: auto; margin: 0 auto -3px; }
+.peek .heroless { display: block; height: 8px; width: 130px; margin: 34px auto 0; border-radius: 4px; background: linear-gradient(90deg, var(--yel) 0 25%, #7FAF95 25% 50%, #93C7D6 50% 75%, var(--red) 75% 100%); }
+
+/* Sections: a soft panel each, with room above for whoever is leaning on it */
+.peek .s { position: relative; margin: 130px 18px 0; padding: 52px 20px 30px; border-radius: 24px; background: var(--panel); }
+.peek .s.sky { background: #E7F1F5; }
+.peek .s.sand { background: #F6EADB; }
+.peek .s.blush { background: #FBEBEF; }
+.peek .s.butter { background: #FBF2D9; }
+.peek .label { font-family: var(--font-hand); font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; line-height: 1.2; }
+.peek .s.sky .label { color: var(--sky); }
+.peek .s.sand .label { color: #8A5A34; }
+.peek .s.blush .label { color: #C55B78; }
+.peek .mid { text-align: center; }
+
+.peek .kv { display: grid; grid-template-columns: 74px 1fr; gap: 10px 14px; margin-top: 20px; font-size: 17px; line-height: 1.45; }
+.peek .kv .k { font-family: var(--font-hand); font-size: 18px; color: var(--sky); padding-top: 2px; }
+.peek .kv.icons { grid-template-columns: 34px 1fr; align-items: start; }
+.peek .kv.icons .k { padding-top: 0; }
+.peek .maps { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; margin-top: 20px; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--paper); color: var(--ink); font-family: var(--font-display); font-size: 17px; text-decoration: none; }
+
+/* The day: the time is a sticker, not a column */
+.peek .stops { margin-top: 20px; display: grid; gap: 18px; }
+.peek .stop { display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: start; }
+.peek .stop .t { display: inline-flex; align-items: center; justify-content: center; min-height: 30px; padding: 0 10px; border-radius: 999px; background: #E8763C; color: #FFF9EC; font-family: var(--font-display); font-size: 16px; }
+.peek .stop .n { font-family: var(--font-display); font-size: 21px; line-height: 1.15; }
+.peek .stop .b { font-size: 15px; line-height: 1.5; color: var(--ink-soft); margin-top: 2px; }
+
+/* Good to know: a coloured dot instead of an icon, so nothing competes with the drawings */
+.peek .notes { margin-top: 20px; display: grid; gap: 15px; }
+.peek .note-line { display: grid; grid-template-columns: 14px 1fr; gap: 14px; font-size: 16px; line-height: 1.5; }
+.peek .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 7px; border: 2px solid var(--ink); }
+
+.peek .foot { text-align: center; font-size: 14px; color: var(--ink-soft); padding: 34px 24px 0; }
+.peek .foot a { color: var(--sky); }
+
+/* The shared reply form, wearing this layout's clothes: it is already on a panel. */
+.peek .pcard { background: transparent; border: 0; box-shadow: none; transform: none; padding: 0; max-width: none; gap: 14px; }
+.peek .pcard .tape { display: none; }
+.peek .rsvp-h { font-family: var(--font-display); font-size: 40px; color: var(--red); }
+.peek .pbtn { border-width: 2.5px; border-radius: 14px; max-width: 330px; }
+.peek .q input[type=text], .peek .q input[type=tel], .peek .q textarea { border-width: 2px; background: var(--paper); }
+.peek .chip { border-width: 2px; background: var(--paper); }

@@ -46,7 +46,9 @@ export type PublicEvent = {
   group_link_enabled: boolean;
   look_mode: "artwork" | "upload";
   theme_id: string;
-  layout_id: "suite" | "lineup";
+  /** The three after the first two are recovered and reachable by ?layout= only, for Marcia to
+   *  look at. Nothing offers them to a host until she says which ones stay. */
+  layout_id: "suite" | "lineup" | "peek" | "post" | "strip";
   ink: string;
   palette: Palette | null;
   invite_image_path: string | null;
