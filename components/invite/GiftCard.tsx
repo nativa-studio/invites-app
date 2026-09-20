@@ -5,7 +5,7 @@ import { copy } from "@/lib/copy";
 import { formatMoney, formatShortDate } from "@/lib/format";
 import type { Gift } from "@/lib/guest/gift";
 import { giftAction, type GiftState } from "@/app/i/[token]/gift-actions";
-import { Bolt, Gift as GiftIcon } from "@/components/art/icons";
+import { Gift as GiftIcon } from "@/components/art/icons";
 
 // The group gift, on the invite, for a guest who has answered.
 //
@@ -29,11 +29,15 @@ export function GiftCard({ token, gift }: { token: string; gift: Gift }) {
   const amount = formatMoney(g.suggested_amount);
 
   return (
-    // Same family as the reply and the thank you: cream, tilted, the heading in the display face
-    // between two bolts. See the note in PlateCard.
-    <div className="pcard tilt-l gift" data-section="gift">
-      <div className="rsvp-h"><Bolt size={24} /> {copy.gift.heading} <Bolt size={24} /></div>
-      <GiftIcon size={40} />
+    // Cream, with two bits of tape crossed over each other and the heading in red above the
+    // present. Deliberately not the plate's card: they sit one under the other and telling them
+    // apart at a glance is worth more than making them a matched set. The plate is the white one
+    // with the blue tape, this is the cream one with the cross.
+    <div className="pcard cream gift" data-section="gift">
+      <div className="tape yel cross" />
+      <div className="tape sky over" />
+      <div className="label red">{copy.gift.heading}</div>
+      <GiftIcon size={36} />
 
       {/* Four ways this reads, because both halves can be missing. With no organiser it does not
           invent one: "Someone is organising it" is worse than not raising the question, and the

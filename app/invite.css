@@ -396,3 +396,22 @@
 /* The covered dishes, run together. No buttons in here, so it is plain text at the card's own
    size rather than the taller line the host's board needs for tapping. */
 .plate .run { margin: 0; width: 100%; text-align: left; font-size: 15px; line-height: 1.6; opacity: 0.8; }
+
+/* What somebody else is already bringing, as tags rather than rows. A guest reads these so they
+   do not arrive with a second pavlova, and there is nothing to tap on another guest's dish, so
+   they are text with a shape rather than buttons. Every third one is filled, which gives the
+   block the bunting's own rhythm without meaning anything: a filled tag that meant something
+   would be a thing to explain. */
+.plate .covered { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-wrap: wrap; gap: 8px; }
+.plate .covered li {
+  padding: 7px 14px; border-radius: 999px; border: 2.5px solid var(--navy);
+  background: var(--paper); font-family: var(--font-display); font-size: 15px; line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.plate .covered li.on { background: var(--yel); }
+
+/* Two bits of tape crossed over each other, which is how a thing actually gets stuck to a wall
+   when one piece was not going to hold it. The yellow goes down first and the blue over the top,
+   so the overlap reads as an order rather than a collision. */
+.pcard .tape.cross { transform: rotate(-19deg); }
+.pcard .tape.over { transform: rotate(13deg); }

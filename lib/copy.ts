@@ -84,7 +84,7 @@ export const copy = {
     // everything was in one list; once they are apart, the heading says it and the row is just
     // the dish.
     yoursHeading: "You're bringing",
-    neededHeading: "Still to bring",
+    neededHeading: "Here are some ideas",
     coveredHeading: "Already covered",
     allCovered: "Everything on the list has somebody bringing it. Add your own if you like.",
     nobody: "Nobody yet",

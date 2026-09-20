@@ -3,7 +3,7 @@ import { useActionState, useState } from "react";
 import { copy } from "@/lib/copy";
 import type { Plate } from "@/lib/guest/plate";
 import { plateAction, type PlateState } from "@/app/i/[token]/plate-actions";
-import { Bolt, Plate as PlateIcon } from "@/components/art/icons";
+import { Plate as PlateIcon } from "@/components/art/icons";
 
 // The board, on the invite, for a guest who has said yes.
 //
@@ -51,24 +51,19 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
   );
 
   return (
-    // Cream paper, tilted, heading in the display face between two bolts: the same card the
-    // reply and the thank you are, because they are the same kind of thing. It was white with a
-    // tape strip and a small label, which is the family the details and the runsheet belong to:
-    // cards you read. This is a card you act on, and it should look like the other one of those.
-    <div className="pcard tilt-r plate" data-section="plate">
-      <div className="rsvp-h"><Bolt size={24} /> {copy.plate.heading} <Bolt size={24} /></div>
+    // White, taped, with the plate over a hand written heading. It went cream with the reply's
+    // bolts for a while, on the argument that a card you act on should look like the other card
+    // you act on. Marcia's call is the other way: the reply is the one moment on the invite that
+    // should feel like the invite talking, and everything after it is the busy part of the page.
+    <div className="pcard white plate" data-section="plate">
+      <div className="tape sky" />
+      <PlateIcon size={36} />
+      <div className="label sky">{copy.plate.heading}</div>
       <p className="para">{board.host_note || (board.mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
       {allergies && <p className="allergy">{copy.plate.allergies(allergies)}</p>}
 
       {board.items.length === 0 && <p className="small">{copy.plate.empty}</p>}
 
-      {/* Grouped, so the status line on every row can go.
-          It used to be one list where each dish said what it was doing: nobody yet, someone's
-          bringing this, you're bringing this. Three groups say the same thing once each, which
-          makes every row shorter and puts the only two rows a guest can act on together at the
-          top. What other people have taken collapses to a count, because a guest's job here is
-          picking from what is left, and what is covered is worth seeing but not worth a row
-          each. */}
       {mine.length > 0 && (
         <>
           <div className="dishgroup">{copy.plate.yoursHeading}</div>
@@ -76,6 +71,9 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
         </>
       )}
 
+      {/* Ideas rather than a list of jobs. Most of these are the host guessing at what a table
+          needs, and a guest is free to ignore every one of them and bring something else, which
+          is why the button that does exactly that sits with them rather than after everything. */}
       {needed.length > 0 && (
         <>
           <div className="dishgroup">{copy.plate.neededHeading}</div>
@@ -83,28 +81,8 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
         </>
       )}
 
-      {covered.length > 0 && (
-        <>
-          <div className="dishgroup">{copy.plate.coveredHeading}</div>
-          {/* Names only, and no buttons: another guest's dish is not yours to touch. Middot
-              rather than comma, because "Sausage rolls, the good ones" is a real thing somebody
-              types and in a comma run it reads as two dishes. */}
-          <p className="run">
-            {covered.map((i, n) => (
-              <span key={i.id}>{n > 0 && " \u00b7 "}{i.label}</span>
-            ))}
-          </p>
-        </>
-      )}
-      {needed.length === 0 && mine.length === 0 && board.items.length > 0 && (
-        <p className="small">{copy.plate.allCovered}</p>
-      )}
-
-      {state.error && <div className="err" role="alert">{state.error}</div>}
-
       {/* Shut until it is wanted. An open box with a cursor in it on a page a guest came to read
-          asks them to think of something, and most of them are here to claim what is already
-          listed. */}
+          asks them to think of something, and most of them are here to claim what is listed. */}
       {adding ? (
         <form action={act} className="addplate">
           <input type="hidden" name="token" value={token} />
@@ -126,6 +104,26 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
       ) : (
         <button type="button" className="pbtn small" onClick={() => setAdding(true)}>{copy.plate.addHeading}</button>
       )}
+
+      {/* What somebody else has, as tags rather than rows. A guest reads these so they do not
+          turn up with a second pavlova, and that is all: there is nothing to tap on another
+          guest's dish, and a row each would be most of a screen on a long page. */}
+      {covered.length > 0 && (
+        <>
+          <div className="dishgroup">{copy.plate.coveredHeading}</div>
+          <ul className="covered">
+            {covered.map((i, n) => (
+              <li key={i.id} className={n % 3 === 0 ? "on" : ""}>{i.label}</li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {needed.length === 0 && mine.length === 0 && board.items.length > 0 && (
+        <p className="small">{copy.plate.allCovered}</p>
+      )}
+
+      {state.error && <div className="err" role="alert">{state.error}</div>}
     </div>
   );
 }
