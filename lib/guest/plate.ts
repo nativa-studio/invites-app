@@ -22,8 +22,6 @@ export type Plate = {
   mode: string;
   host_note: string | null;
   items: PlateItem[];
-  /** Counts by dietary chip across the guests who are coming. Never names, never free text. */
-  allergies: { chip: string; n: number }[];
 };
 
 export async function getPlate(token: string): Promise<Plate | null> {
