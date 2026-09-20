@@ -85,7 +85,7 @@ export const copy = {
     // the dish.
     yoursHeading: "You're bringing",
     neededHeading: "Still to bring",
-    covered: (n: number) => (n === 1 ? "1 other thing is already covered." : `${n} other things are already covered.`),
+    coveredHeading: "Already covered",
     allCovered: "Everything on the list has somebody bringing it. Add your own if you like.",
     nobody: "Nobody yet",
     claim: "I'll bring this",
@@ -175,6 +175,17 @@ export const copy = {
     nudgeBody: (who: string, what: string, link: string) =>
       `Hi ${who}, we're putting in for ${what}. Everything you need is here: ${link}`,
     notYours: "This page belongs to whoever is organising the gift.",
+  },
+  // The one place Bunting speaks for itself. At the foot of every invite, shut, because a guest
+  // opened this to read about a party and not about the app that drew it.
+  about: {
+    summary: "About this app",
+    body: "Bunting is being built by Nativa Studio, which is Marcia's studio. It is still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers that never seem to have a good tool for them.",
+    ask: "If you would like to know more, or you would help test it before it launches, give it a thumbs up.",
+    up: "Sounds good",
+    done: "Thanks. Marcia will be in touch before it launches.",
+    undo: "Actually, no thanks",
+    failed: "That didn't go through. Please try again.",
   },
   sections: {
     details: "The details",

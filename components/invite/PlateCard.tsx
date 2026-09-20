@@ -26,9 +26,10 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
   const allergies = board.allergies.map((a) => copy.plate.allergy(a.n, a.chip)).join(", ");
   const mine = board.items.filter((i) => i.mine);
   const needed = board.items.filter((i) => !i.claimed);
-  // Somebody else has these. A count rather than a list: there is nothing to tap on another
-  // guest's dish, and naming them is what this card stopped doing.
-  const covered = board.items.filter((i) => i.claimed && !i.mine).length;
+  // Somebody else has these. Named, so a guest can see what is already handled and not turn up
+  // with a second pavlova, but run together rather than listed: there is nothing to tap on
+  // another guest's dish, and eight more rows is most of a screen on a page that is already long.
+  const covered = board.items.filter((i) => i.claimed && !i.mine);
 
   const row = (i: (typeof board.items)[number]) => (
     <li className="dish" key={i.id}>
@@ -66,7 +67,8 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
           bringing this, you're bringing this. Three groups say the same thing once each, which
           makes every row shorter and puts the only two rows a guest can act on together at the
           top. What other people have taken collapses to a count, because a guest's job here is
-          picking from what is left and reading a register of covered dishes is not part of it. */}
+          picking from what is left, and what is covered is worth seeing but not worth a row
+          each. */}
       {mine.length > 0 && (
         <>
           <div className="dishgroup">{copy.plate.yoursHeading}</div>
@@ -81,7 +83,19 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
         </>
       )}
 
-      {covered > 0 && <p className="small">{copy.plate.covered(covered)}</p>}
+      {covered.length > 0 && (
+        <>
+          <div className="dishgroup">{copy.plate.coveredHeading}</div>
+          {/* Names only, and no buttons: another guest's dish is not yours to touch. Middot
+              rather than comma, because "Sausage rolls, the good ones" is a real thing somebody
+              types and in a comma run it reads as two dishes. */}
+          <p className="run">
+            {covered.map((i, n) => (
+              <span key={i.id}>{n > 0 && " \u00b7 "}{i.label}</span>
+            ))}
+          </p>
+        </>
+      )}
       {needed.length === 0 && mine.length === 0 && board.items.length > 0 && (
         <p className="small">{copy.plate.allCovered}</p>
       )}

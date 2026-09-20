@@ -4,7 +4,7 @@
    than hide: hidden would make this a scroll container and break the sticky pieces inside it. */
 .invite { overflow-x: clip; --shadow: 0 18px 30px -18px rgba(27,42,74,0.45), 0 2px 4px rgba(27,42,74,0.08); min-height: 100vh; background-color: var(--sky); background-image: radial-gradient(color-mix(in srgb, var(--navy) 20%, transparent) 1.6px, transparent 1.7px); background-size: 14px 14px; color: var(--navy); padding: 0 16px 56px; }
 .invite .wrap { max-width: 390px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 30px; }
-.invite .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--crm); margin-top: 28px; text-align: center; }
+.invite .greet { font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-sky); margin-top: 28px; text-align: center; }
 .pcard { box-sizing: border-box; position: relative; width: 100%; max-width: 390px; background: var(--paper); border-radius: 8px; border: 3px solid var(--navy); padding: 24px 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .pcard.white { background: #fff; }
 .pcard.cream { background: var(--crm); }
@@ -244,8 +244,8 @@
   border: 2px solid var(--navy); font-size: 14.5px; line-height: 1.4;
 }
 .err { background: #fff; border: 2px solid var(--red); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--red); }
-.foot { font-size: 13px; color: var(--crm); text-align: center; }
-.foot a { color: var(--crm); }
+.foot { font-size: 13px; color: var(--on-sky); text-align: center; }
+.foot a { color: var(--on-sky); }
 
 /* The envelope.
 
@@ -368,3 +368,31 @@
   text-align: left; margin-top: 4px;
 }
 .plate .dishes + .dishgroup { margin-top: 10px; }
+
+/* About this app. Discreet is the brief: one quiet line at the foot of the page, shut, in the
+   cream that the rest of the footer uses against the sky. It opens into a readable column rather
+   than a card, because it is not part of the invite and should not look like another one. */
+.about { width: 100%; max-width: 390px; margin: 4px auto 0; color: var(--on-sky); font-size: 13px; }
+.about > summary {
+  list-style: none; cursor: pointer; text-align: center; padding: 14px 8px; min-height: 44px;
+  opacity: 0.75; text-decoration: underline; text-underline-offset: 4px;
+}
+.about > summary::-webkit-details-marker { display: none; }
+.about > summary:hover, .about[open] > summary { opacity: 1; }
+.about .inner {
+  display: grid; gap: 12px; justify-items: center; text-align: center;
+  padding: 4px 18px 20px; line-height: 1.55;
+}
+.about .inner p { margin: 0; max-width: 320px; }
+.about .inner .ta { opacity: 0.85; }
+.about .inner form { display: grid; gap: 12px; justify-items: center; }
+/* The thumbs up borrows the invite's button, in the footer's cream rather than the card's navy,
+   since out here there is no paper behind it. */
+.about .pbtn { border-color: var(--on-sky); color: var(--on-sky); min-height: 44px; }
+.about .as-quiet {
+  border: 0; background: none; color: var(--on-sky); font: inherit; opacity: 0.8; cursor: pointer;
+  min-height: 44px; text-decoration: underline; text-underline-offset: 4px;
+}
+/* The covered dishes, run together. No buttons in here, so it is plain text at the card's own
+   size rather than the taller line the host's board needs for tapping. */
+.plate .run { margin: 0; width: 100%; text-align: left; font-size: 15px; line-height: 1.6; opacity: 0.8; }

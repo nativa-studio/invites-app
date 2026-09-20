@@ -10,7 +10,7 @@ import type { Gift } from "@/lib/guest/gift";
 // A personal link. The layout itself lives in InviteBody, which the group link and the host's
 // preview use too, so the three can never drift apart. All this adds is who the guest is: their
 // name on the envelope, their greeting, and their own reply form.
-export function InvitePage({ invite, token, link, plate, gift, skipAnimation, layout }: { invite: Invite; token: string; link: string; plate?: Plate | null; gift?: Gift | null; skipAnimation?: boolean; layout?: Invite["event"]["layout_id"] }) {
+export function InvitePage({ invite, token, link, plate, gift, curious, skipAnimation, layout }: { invite: Invite; token: string; link: string; plate?: Plate | null; gift?: Gift | null; curious?: boolean; skipAnimation?: boolean; layout?: Invite["event"]["layout_id"] }) {
   const { event: e, guest } = invite;
   // Someone who has already replied lands on the invite open, so changing an answer does not
   // mean sitting through the post again.
@@ -21,6 +21,8 @@ export function InvitePage({ invite, token, link, plate, gift, skipAnimation, la
       greeting={copy.greeting(firstName(guest.name))}
       skipAnimation={skipAnimation ?? answered}
       layout={layout}
+      token={token}
+      curious={curious}
       // The board goes to the reply rather than to the layout. Where it belongs depends on the
       // answer, and the answer changes in the browser after this has rendered, so the reply is
       // the only thing that knows.

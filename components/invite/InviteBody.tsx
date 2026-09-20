@@ -8,29 +8,37 @@ import { mascotFor } from "@/lib/artwork";
 import { orderedParts, type InvitePart } from "@/lib/invite-parts";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
+import { AboutApp } from "./AboutApp";
 import { LineupInvite } from "./LineupInvite";
 
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e, greeting, reply, layout, skipAnimation,
+  e, greeting, reply, layout, skipAnimation, token, curious,
 }: {
   e: PublicEvent;
   greeting: string;
   reply: React.ReactNode;
+  /** For the About this app line at the foot. Null on the group link before anybody has replied,
+   *  where there is no guest row yet to record a thumbs up against. */
+  token?: string | null;
+  curious?: boolean;
   layout?: PublicEvent["layout_id"];
   skipAnimation?: boolean;
 }) {
   const id = layout ?? e.layout_id;
   if (id === "lineup") {
     return (
-      <LineupInvite
-        event={e}
-        greeting={greeting}
-        reply={reply}
-        skipAnimation={skipAnimation}
-      />
+      <>
+        <LineupInvite
+          event={e}
+          greeting={greeting}
+          reply={reply}
+          skipAnimation={skipAnimation}
+        />
+        <AboutApp token={token ?? null} curious={curious ?? false} />
+      </>
     );
   }
 
@@ -78,6 +86,9 @@ export function InviteBody({
         >
           {below}
         </Envelope>
+        {/* Outside the envelope and last on the page. It is about the app, not the party, so it
+            goes after everything the host wrote and nowhere near it. */}
+        <AboutApp token={token ?? null} curious={curious ?? false} />
       </div>
     </main>
   );

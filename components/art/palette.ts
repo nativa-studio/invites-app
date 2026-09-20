@@ -43,9 +43,22 @@ export function skyInk(p: Palette): string {
   return p.navy;
 }
 
+// Ink for the text that stands on the page itself rather than on a card: the greeting, the
+// footer, the About this app line.
+//
+// It was the cream, hardcoded, which is right for a blue sky and invisible on a cream one. On
+// the Summer palette the sky is #F6EFE1 and the cream is #FBF7EF, 1.03:1, and the greeting on
+// every invite drawn in it was there in the markup and not on the screen. Same fault as the one
+// skyInk exists to fix, one layer out: a colour assumed instead of measured.
+export function onSky(p: Palette): string {
+  if (contrast(p.cream, p.sky) >= 4.5) return p.cream;
+  if (contrast(p.paper, p.sky) >= 4.5) return p.paper;
+  return p.navy;
+}
+
 export function paletteVars(p: Palette): React.CSSProperties {
   return {
     "--sky": p.sky, "--navy": p.navy, "--yel": p.yellow, "--crm": p.cream, "--red": p.red, "--paper": p.paper, "--forest": p.forest,
-    "--sky-ink": skyInk(p),
+    "--sky-ink": skyInk(p), "--on-sky": onSky(p),
   } as React.CSSProperties;
 }
