@@ -50,8 +50,14 @@ export const copy = {
     adults: "adults",
     names: "Who's coming?",
     namesHint: "First names are plenty. Everyone counts, little ones too.",
-    dietary: "Anything we should know about food?",
-    dietaryNote: "Allergies or anything else, in your words",
+    // Two questions, not one. An allergy is a safety fact and a dietary requirement is a
+    // preference or a practice, and the box that used to hold both said "Allergies or anything
+    // else", which asks somebody to put an epipen and a preference for oat milk in one sentence.
+    allergies: "Any allergies?",
+    allergiesNote: "e.g. peanuts, carries an epipen",
+    allergiesHint: "Food or contact, and how serious. This goes to the hosts, never onto a list other guests can see.",
+    dietary: "Anything else about food?",
+    dietaryNote: "Anything else, in your words",
     access: "Any access needs?",
     accessHint: "Step-free entry, a quiet corner, anything that helps. Only if it helps us. Skip if not.",
     note: "A note for the host (optional)",
@@ -288,6 +294,7 @@ export const copy = {
     savedBody: "Your guests' links show the change straight away.",
     savedWithout: (cols: string[]) => `${cols.length === 1 ? "One setting" : `${cols.length} settings`} did not save: the database does not have ${cols.length === 1 ? "a column" : "columns"} called ${cols.join(", ")} yet, so it needs the newest migration run against it. Everything else is saved.`,
     backToParty: "Back to the party",
+    allergies: "Allergies:",
     food: (parts: string) => `Food: ${parts}.`,
     foodNotes: "Some notes too, see the guest list.",
     coming: "coming",

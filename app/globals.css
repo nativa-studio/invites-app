@@ -229,6 +229,9 @@ p { margin: 0; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .notice { background: var(--app-sunk); border: 1px solid var(--app-line); border-left: 2px solid var(--app-ink); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 14px; color: var(--app-mute); }
 .notice b { color: var(--app-ink); }
+/* The allergy line. Same shape as a notice, in the warning ink, because it is the one line on the
+   Guests screen that somebody has to act on before they cook rather than read and move past. */
+.notice.warn { border-left-color: var(--app-off); color: var(--app-ink); }
 code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--app-sunk); border: 1px solid var(--app-line); padding: 2px 6px; border-radius: 5px; word-break: break-all; }
 
 /* The layout picker: a card each with a drawing of the shape, and the real invite underneath,

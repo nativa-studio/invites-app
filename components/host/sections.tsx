@@ -69,13 +69,16 @@ export const SECTIONS: Section[] = [
     id: "reply",
     title: "The reply",
     blurb: "What a guest is asked when they say yes, and what the two buttons say. Changing a question after somebody has answered it cannot be undone for that guest, so it is worth settling before the links go out.",
-    fields: ["rsvp_by", "ask_party_mode", "ask_names", "ask_dietary", "ask_accessibility", "ask_emergency", "custom_question", "yes_label", "no_label"],
+    fields: ["rsvp_by", "ask_party_mode", "ask_names", "ask_allergies", "ask_dietary", "ask_accessibility", "ask_emergency", "custom_question", "yes_label", "no_label"],
     render: (e) => (
       <>
         <Field id="rsvp_by" label="Reply by" value={e.rsvp_by} type="date" />
         <Choice id="ask_party_mode" label="How many" value={e.ask_party_mode} options={[["split", "Children and adults separately"], ["single", "One number"]]} />
         <Switch id="ask_names" label="Names of everyone coming" value={e.ask_names} />
-        <Switch id="ask_dietary" label="Food needs and allergies" value={e.ask_dietary} />
+        {/* Two switches where there was one. Allergies are asked on their own because they are a
+            safety answer rather than a preference, and because they are not always about food. */}
+        <Switch id="ask_allergies" label="Allergies, food or contact" value={e.ask_allergies !== false} />
+        <Switch id="ask_dietary" label="Other food needs" value={e.ask_dietary} />
         <Switch id="ask_accessibility" label="Access needs (free text)" value={e.ask_accessibility} />
         <Switch id="ask_emergency" label="Emergency contact (drop-off parties)" value={e.ask_emergency} />
         <Field id="custom_question" label="One extra question (optional)" value={e.custom_question} />

@@ -256,16 +256,6 @@ function front({ palette: p, addressee, title, age, artwork, stock }: CardInput)
         <svg width={EW} height="10" viewBox={`0 0 ${EW} 10`} style={{ position: "absolute", left: 0, top: 0 }}>
           <path d={`M22 6 L${EW - 22} 6`} stroke={st.rim} strokeWidth="4" strokeLinecap="round" />
         </svg>
-        {/* The postmark, struck beside the stamp the way one is. */}
-        <svg width="300" height="150" viewBox="0 0 300 150" style={{ position: "absolute", right: 210, top: 44 }}>
-          <g fill="none" stroke={st.mark} strokeWidth="4" strokeLinecap="round">
-            <circle cx="70" cy="72" r="56" />
-            <circle cx="70" cy="72" r="42" />
-            {[0, 1, 2, 3].map((i) => (
-              <path key={i} d={`M138 ${46 + i * 18} q30 -11 60 0 t60 0`} />
-            ))}
-          </g>
-        </svg>
         {/* The stamp, with the age where a denomination goes. */}
         <div style={{ position: "absolute", right: 44, top: 34, width: 132, height: 156, display: "flex", padding: 9, background: "#FFFFFF", borderRadius: 3, transform: "rotate(2deg)" }}>
           <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, background: p.sky, border: `3px solid ${p.navy}` }}>
@@ -275,6 +265,19 @@ function front({ palette: p, addressee, title, age, artwork, stock }: CardInput)
             {age ? <div style={{ display: "flex", fontFamily: DISPLAY, fontSize: 44, color: "#FFFFFF", lineHeight: 1 }}>{age}</div> : null}
           </div>
         </div>
+        {/* The postmark, struck across the stamp the way a real one cancels it. Drawn after the
+            stamp so it prints over it: it sat clear of the stamp before, which read as two marks
+            side by side rather than one franking the other. The waves run 24 px onto the stamp's
+            left edge, which is enough to be over it and not enough to hide the age. */}
+        <svg width="300" height="150" viewBox="0 0 300 150" style={{ position: "absolute", right: 110, top: 44 }}>
+          <g fill="none" stroke={st.mark} strokeWidth="4" strokeLinecap="round">
+            <circle cx="70" cy="72" r="56" />
+            <circle cx="70" cy="72" r="42" />
+            {[0, 1, 2, 3].map((i) => (
+              <path key={i} d={`M138 ${46 + i * 18} q30 -11 60 0 t60 0`} />
+            ))}
+          </g>
+        </svg>
         {nameBlock(st, addressee, title, true)}
         {characters(artwork)}
       </div>

@@ -24,7 +24,7 @@ const CHOICES: Record<string, readonly string[]> = {
   ask_party_mode: ["single", "split"],
   status: ["draft", "live", "thanks", "archived"],
 };
-const SWITCHES = ["siblings_welcome", "ask_names", "ask_dietary", "ask_accessibility", "ask_emergency", "plate_enabled", "plate_block", "gift_block", "group_link_enabled", "save_the_date", "group_gift_enabled", "show_details", "show_runsheet", "show_good_to_know", "show_after", "show_signoff"] as const;
+const SWITCHES = ["siblings_welcome", "ask_names", "ask_allergies", "ask_dietary", "ask_accessibility", "ask_emergency", "plate_enabled", "plate_block", "gift_block", "group_link_enabled", "save_the_date", "group_gift_enabled", "show_details", "show_runsheet", "show_good_to_know", "show_after", "show_signoff"] as const;
 
 // Every form says which fields it owns, in a hidden `_fields` input, and only those are written.
 //

@@ -58,6 +58,9 @@ export type PublicEvent = {
   ask_names: boolean;
   ask_dietary: boolean;
   dietary_chips: string[];
+  /** Absent means on: a database without migration 0028 does not send the column, and an event
+   *  that has never been thought about should ask about allergies rather than not. */
+  ask_allergies?: boolean;
   ask_accessibility: boolean;
   ask_emergency: boolean;
   custom_question: string | null;
@@ -115,6 +118,9 @@ export type PublicGuest = {
   party_names: string[];
   dietary: string[];
   dietary_note: string | null;
+  /** Free text, and never on the potluck board. Asked apart from the dietary chips because an
+   *  allergy is a safety fact rather than a preference, and is not always about food. */
+  allergies: string | null;
   accessibility_note: string | null;
   custom_answer: string | null;
   note: string | null;
@@ -153,6 +159,9 @@ export type GuestRow = {
   party_names: string[];
   dietary: string[];
   dietary_note: string | null;
+  /** Free text, and never on the potluck board. Asked apart from the dietary chips because an
+   *  allergy is a safety fact rather than a preference, and is not always about food. */
+  allergies: string | null;
   accessibility_note: string | null;
   note: string | null;
   source: "invited" | "group_link";

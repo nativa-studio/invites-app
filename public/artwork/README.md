@@ -19,8 +19,17 @@ other artwork gets the layout with no characters at all, which it is built to su
 
 ## gabriel-cover.jpg
 
-Marcia's poster for Gabriel's party, kept whole. The cover card frames it two by three and
-centres it, which lands on the mountain, the lake band, the ear, the eye and the cheek. It
-replaced a version of this drawn from scratch in SVG, which was not good enough and, worse, meant
-her own picture was nowhere on the invite. Same rule as the rest of this folder: event artwork,
+Marcia's poster for Gabriel's party, kept whole. 1012 by 1934.
+
+She sends these from her phone, so what arrives is a screenshot: the picture with the phone's
+grey chrome down both sides and across the foot. Those bars are measured off rather than guessed
+at (find the columns and rows that are flat #808080, take the box inside them, then check the
+border of the result has no grey pixels left in it at all) and the crop is saved back over this
+file as a quality 90 JPEG with no chroma subsampling, which keeps the flat colour and the navy
+line work clean at about 300 KB. Update the numbers in lib/artwork.ts when the size changes: they
+are the intrinsic size Next needs, and a wrong pair makes the cover the wrong shape.
+
+The cover card frames it two by three and centres it, which lands on the mountain, the lake band,
+the ear, the eye and the cheek. It replaced a version of this drawn from scratch in SVG, which was
+not good enough and, worse, meant her own picture was nowhere on the invite. Same rule as the rest of this folder: event artwork,
 never gallery artwork offered to another host.

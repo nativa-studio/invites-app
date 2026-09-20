@@ -222,7 +222,7 @@ export function GuestList({ eventId, guests, everyone, base, event, site }: Prop
           ];
           const expecting = copy.host.expecting(g.expected_children, g.expected_adults);
           const detail = g.status === "yes"
-            ? [g.party_size ? `${g.party_size} coming` : null, g.party_names.length ? g.party_names.join(", ") : null, g.dietary.length ? g.dietary.join(", ") : null, g.dietary_note, g.accessibility_note ? `Access: ${g.accessibility_note}` : null, g.note ? `"${g.note}"` : null].filter(Boolean).join(" · ")
+            ? [g.party_size ? `${g.party_size} coming` : null, g.party_names.length ? g.party_names.join(", ") : null, g.allergies ? `Allergies: ${g.allergies}` : null, g.dietary.length ? g.dietary.join(", ") : null, g.dietary_note, g.accessibility_note ? `Access: ${g.accessibility_note}` : null, g.note ? `"${g.note}"` : null].filter(Boolean).join(" · ")
             : [g.status === "pending" && expecting ? expecting : null, g.note ? `"${g.note}"` : null].filter(Boolean).join(" · ");
           return (
             <article className="guest" key={g.id}>
