@@ -126,6 +126,20 @@ main.strip .signoff .from { font-size: 13px; opacity: 0.72; text-align: center; 
    RSVP heading, and paper-coloured text is no text at all. */
 main.strip svg { --sky: var(--paper); --yel: var(--paper); --crm: var(--paper); --red: var(--paper); --forest: var(--paper); }
 
+/* The reply block holds up to three separate things: the plate announcement, the group gift
+   announcement and the reply itself. On the stationery suite each is a tilted card with tape on
+   it, so they read as three cards without any help. Here they are three headings in one column,
+   18px apart, and nothing says where one ends and the next begins: Bring a plate ran straight
+   into RSVP.
+   So they take the page's own separator, the same dashed rule that divides every other block,
+   drawn as the first thing inside each block after the first. It cannot be a border on the block
+   itself: these are centred and each is as wide as its own longest line, so a border would be a
+   different length every time instead of the one 120px rule the page uses everywhere. */
+main.strip section > .pcard + .pcard::before {
+  content: ""; width: 120px; border-top: 2px dashed currentColor; opacity: 0.5;
+  margin: 16px 0;
+}
+
 /* The shared reply form, wearing this layout's clothes: no card, no tape, no tilt, no shadow. */
 main.strip .pcard { background: transparent; border: 0; box-shadow: none; transform: none; padding: 0; max-width: none; gap: 14px; width: 100%; }
 main.strip .pcard .tape { display: none; }
