@@ -10,13 +10,14 @@ import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, Update
 import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
 import { AnnounceGift, AnnouncePlate } from "./Announce";
+import { PlateSlot } from "./PlateSlot";
 import { LineupInvite } from "./LineupInvite";
 
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e, greeting, reply, layout, skipAnimation, token, curious, answered, pretend,
+  e, greeting, reply, layout, skipAnimation, token, curious, answered, pretend, plateCard,
 }: {
   e: PublicEvent;
   greeting: string;
@@ -30,6 +31,9 @@ export function InviteBody({
   /** The host trying their own invite. Everything works and nothing is written, the same rule the
    *  reply and the plate board already follow there. */
   pretend?: boolean;
+  /** The editor's own drawing of the plate card, which is not a guest's and answers to no reply.
+   *  Left out everywhere else, where the card comes from the guest's answer. */
+  plateCard?: React.ReactNode;
   layout?: PublicEvent["layout_id"];
   skipAnimation?: boolean;
 }) {
@@ -53,6 +57,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
+        plate={plateCard ?? <PlateSlot />}
         skipAnimation={skipAnimation}
       />
     );
@@ -76,6 +81,10 @@ export function InviteBody({
     reply: announced,
     day: e.show_runsheet ? <DayCard e={e} /> : null,
     know: e.show_good_to_know ? <KnowCard e={e} /> : null,
+    // Bring a plate, on its own rather than under the reply. It draws nothing until the guest
+    // reading it has said yes, and nothing at all outside a reply provider, which is the editor
+    // drawing the invite with nobody answering. There the editor passes its own card instead.
+    plate: plateCard ?? <PlateSlot />,
     after: e.show_after ? <AskCard e={e} /> : null,
     // Absent means on: a database without migration 0008 does not send the column, and the
     // sign-off is a part every event gets rather than one to opt into.

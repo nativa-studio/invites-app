@@ -22,7 +22,7 @@ const DOTS = ["#EFB93C", "#7FAF95", "#93C7D6", "#E8763C", "#E0553F", "#3F6B57"];
 // on a panel rather than bare on the page, so there is something for the envelope to hand over.
 // Everything below follows once it has opened.
 export function LineupInvite({
-  event: e, greeting, reply, after, skipAnimation,
+  event: e, greeting, reply, after, plate, skipAnimation,
 }: {
   event: PublicEvent;
   greeting: string;
@@ -30,6 +30,8 @@ export function LineupInvite({
   /** The very last thing inside the envelope, after the sign-off. The suite puts About this app
    *  here; this layout had nowhere to put it, so it had none at all. */
   after?: React.ReactNode;
+  /** Bring a plate, which this layout puts after the info booth like the suite does. */
+  plate?: React.ReactNode;
   skipAnimation?: boolean;
 }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
@@ -111,6 +113,8 @@ export function LineupInvite({
               </div>
             </section>
           )}
+
+          {plate}
 
           {/* Who to ask, and the one thing to remember on the way out. Two cells, a symbol over a
               name over a line, the same pair the suite ends on, so the two layouts ask the same

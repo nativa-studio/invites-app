@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { copy } from "@/lib/copy";
 import { buzz } from "@/lib/haptic";
 import { formatShortDate, hostName } from "@/lib/format";
@@ -8,8 +8,8 @@ import { groupRsvpAction, type GroupState } from "@/app/e/[slug]/actions";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, WhoQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
-import { PlateCard } from "./PlateCard";
 import { GiftCard } from "./GiftCard";
+import { useReply } from "./ReplyState";
 
 // The reply on a group link. The same card a guest with their own link answers on, asking the
 // one extra thing this link cannot know: who you are.
@@ -21,8 +21,17 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
   const host = hostName(e.host_line, "The host");
   const replied = state.ok ? state.guest : null;
 
+  // Told to the rest of the page, so the plate part further down can draw itself. On a group link
+  // the token does not exist until the reply makes one, which is why the provider starts empty
+  // here and this is the only thing that ever fills it.
+  const ctx = useReply();
+  const report = ctx?.report;
+  useEffect(() => {
+    if (!state.ok || !report) return;
+    report({ token: state.token, status: state.guest.status, plate: state.plate, gift: state.gift });
+  }, [state, report]);
+
   if (replied && !editing) {
-    const plate = state.ok ? state.plate : null;
     const gift = state.ok ? state.gift : null;
     return (
       <>
@@ -35,9 +44,8 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
           onChange={() => { setEditingFrom(state); setChoice(""); }}
           landed={state.ok}
         />
-        {/* The board, for somebody who has just said yes on a group link. They have a token now,
-            which is the thing that was missing: it is made by the reply, not before it. */}
-        {plate?.enabled && state.ok && replied.status === "yes" && <PlateCard token={state.token} plate={plate} />}
+        {/* The plate is drawn further down the invite, by its own part. The gift stays here: it
+            is for either answer, since somebody who cannot come may still want to chip in. */}
         {gift?.enabled && state.ok && <GiftCard token={state.token} gift={gift} />}
       </>
     );

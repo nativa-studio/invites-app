@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { copy } from "@/lib/copy";
 import { buzz } from "@/lib/haptic";
 import { formatShortDate, firstName, hostName } from "@/lib/format";
@@ -8,8 +8,8 @@ import { rsvpAction, type RsvpState } from "@/app/i/[token]/actions";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
-import { PlateCard } from "./PlateCard";
 import { GiftCard } from "./GiftCard";
+import { useReply } from "./ReplyState";
 import type { Plate } from "@/lib/guest/plate";
 import type { Gift } from "@/lib/guest/gift";
 
@@ -19,15 +19,15 @@ type Props = {
   guest: PublicGuest;
   googleLink: string | null;
   icsLink: string;
-  /** The board as it stood when the page loaded, which is a board at all only for a guest who
-   *  had already said yes. A guest who says yes here gets a fresher one back with the reply. */
+  /** Only so the page can hand it to the reply provider as the starting value. The board itself
+   *  is drawn further down the invite, by its own part, which reads that provider. */
   plate?: Plate | null;
   /** The gift block as it stood on load, which is a block at all only for a guest who had
    *  already answered. Answering here brings a fresher one back with the reply. */
   gift?: Gift | null;
 };
 
-export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate, gift }: Props) {
+export function Rsvp({ token, event: e, guest, googleLink, icsLink, gift }: Props) {
   const [state, formAction, pending] = useActionState<RsvpState, FormData>(rsvpAction, { ok: false });
   const [choice, setChoice] = useState<"" | "yes" | "no">("");
   // "Change my answer" is tied to the state it was clicked from, so a fresh submission closes it again.
@@ -38,11 +38,21 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate, gift 
   const host = hostName(e.host_line, "The host");
   const who = firstName(guest.name);
 
+  // The plate board is its own part of the invite now, below the info booth, so it cannot read
+  // the answer off this component the way it did when it was drawn here. It is told instead, and
+  // only when a reply actually lands: the initial value is already in the provider, put there by
+  // the server, so reporting on every render would be saying the same thing twice.
+  const ctx = useReply();
+  const report = ctx?.report;
+  useEffect(() => {
+    if (!state.ok || !report) return;
+    report({ token, status: state.guest.status, plate: state.plate, gift: state.gift });
+  }, [state, report, token]);
+
   if (answered && !editing) {
-    // Whichever board is the newer one: the reply's, if they have just answered, otherwise the
-    // one the page was rendered with. The board lives here rather than beside the reply in the
-    // layout, because only this component knows what the current answer is.
-    const board = state.ok ? state.plate : plate;
+    // Whichever gift is the newer one: the reply's, if they have just answered, otherwise the
+    // one the page was rendered with. The plate is no longer here: it is a part of the invite in
+    // its own right, further down the page, and reads the answer from the provider.
     const present = state.ok ? state.gift : gift;
     return (
       <>
@@ -55,7 +65,6 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate, gift 
           onChange={() => { setEditingFrom(state); setChoice(""); }}
           landed={state.ok}
         />
-        {current.status === "yes" && board?.enabled && <PlateCard token={token} plate={board} />}
         {/* Either answer, unlike the plate: somebody who cannot come may still want to chip in. */}
         {present?.enabled && <GiftCard token={token} gift={present} />}
       </>
