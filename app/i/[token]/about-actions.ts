@@ -1,5 +1,5 @@
 "use server";
-import { setCurious } from "@/lib/guest/about";
+import { leaveFeedback, setCurious } from "@/lib/guest/about";
 import { isValidToken } from "@/lib/tokens";
 
 export type CuriousState = { token: string; curious: boolean; error?: boolean };
@@ -17,5 +17,24 @@ export async function curiousAction(prev: CuriousState): Promise<CuriousState> {
     return { token: prev.token, curious: !prev.curious };
   } catch {
     return { ...prev, error: true };
+  }
+}
+
+export type FeedbackState = { sent?: boolean; error?: boolean };
+
+// The feedback box. One field, one button, and the message is gone from the page once it has
+// landed, because a box still holding what you wrote looks like it did not send.
+//
+// An empty box is not an error, it is somebody who changed their mind, so it closes quietly.
+export async function feedbackAction(_prev: FeedbackState, fd: FormData): Promise<FeedbackState> {
+  const token = String(fd.get("token") ?? "");
+  const body = String(fd.get("body") ?? "").trim();
+  if (!isValidToken(token)) return { error: true };
+  if (!body) return {};
+  try {
+    await leaveFeedback(token, body);
+    return { sent: true };
+  } catch {
+    return { error: true };
   }
 }

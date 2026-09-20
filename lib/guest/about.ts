@@ -18,3 +18,8 @@ export async function isCurious(token: string): Promise<boolean> {
 
 export const setCurious = (token: string, yes: boolean) =>
   callGuestRpc<boolean>(yes ? "app_curious" : "app_not_curious", { p_token: token });
+
+// What somebody typed into the feedback box. Nothing comes back: the function returns void on
+// purpose, so this is a place to say something and never a place to read anything.
+export const leaveFeedback = (token: string, body: string) =>
+  callGuestRpc<null>("leave_app_feedback", { p_token: token, p_body: body });
