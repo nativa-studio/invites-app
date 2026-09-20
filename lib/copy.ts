@@ -326,6 +326,13 @@ export const copy = {
     // everything that has happened.
     trackHeading: "Where it is up to",
     trackComing: "Coming",
+    // The split, wherever a total is shown. Only worth printing when the event asked for it and
+    // somebody answered: an event that asks for one number has no kids and no adults, only people,
+    // and "0 kids, 26 adults" would be a fact the host never asked anybody for.
+    split: (kids: number, adults: number) => [
+      kids > 0 ? `${kids} ${kids === 1 ? "kid" : "kids"}` : null,
+      adults > 0 ? `${adults} ${adults === 1 ? "adult" : "adults"}` : null,
+    ].filter(Boolean).join(", "),
     trackWaiting: "Still to reply",
     trackNo: "Not coming",
     trackAsked: "Asked",

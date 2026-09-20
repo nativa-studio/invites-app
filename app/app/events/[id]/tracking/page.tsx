@@ -18,7 +18,11 @@ export default async function Tracking({ params }: { params: Promise<{ id: strin
   const [e, guests] = await Promise.all([loadEvent(id), loadGuests(id)]);
   const feed = await loadActivity(id, guests);
 
-  const c = counts(guests, e.ask_party_mode === "split");
+  const splitParty = e.ask_party_mode === "split";
+  const c = counts(guests, splitParty);
+  // The same gate the event list uses. An event that asks for one number has people, not kids and
+  // adults, so it must not grow a split out of stray columns.
+  const breakdown = splitParty ? copy.host.split(c.replied.kids, c.replied.adults) : "";
   const coming = guests.filter((g) => g.status === "yes");
   const sent = guests.filter((g) => g.sent_at).length;
   const opened = guests.filter((g) => g.opened_at).length;
@@ -40,7 +44,12 @@ export default async function Tracking({ params }: { params: Promise<{ id: strin
             a count of replies answers a question nobody asked. */}
         <dl className="sum">
           <dt>{copy.host.trackComing}</dt>
-          <dd>{c.replied.total}</dd>
+          {/* The total, then the split it is made of. Only when the event asked for a split and
+              somebody answered it: an event that asks for one number has people, not kids. */}
+          <dd>
+            {c.replied.total}
+            {breakdown && <span className="muted"> ({breakdown})</span>}
+          </dd>
           <dt>{copy.host.trackWaiting}</dt>
           <dd>{c.waiting}</dd>
           <dt>{copy.host.trackNo}</dt>

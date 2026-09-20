@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatLongDate } from "@/lib/format";
+import { copy } from "@/lib/copy";
 import { InviteThumb } from "./InviteThumb";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { stockFor } from "@/lib/layouts";
@@ -17,6 +18,10 @@ export type EventSummary = {
   yes: number;
   pending: number;
   people: number;
+  /** Zero on an event that asks for one number rather than a split, where there is no such thing
+   *  as a kid or an adult, only people. */
+  kids: number;
+  adults: number;
 };
 
 const STATUS: Record<string, string> = {
@@ -48,6 +53,11 @@ export function EventCard({ e }: { e: EventSummary }) {
           <span className={`tag ${e.status === "live" ? "on" : ""}`}>{status}</span>
           <span className="evt-count">{countLine(e)}</span>
         </span>
+        {/* The split, under the headline rather than crammed into it. A card is read at a glance
+            and "10 kids, 16 adults, 26 coming, 23 to reply" is not a glance. */}
+        {e.people > 0 && copy.host.split(e.kids, e.adults) && (
+          <span className="evt-split">{copy.host.split(e.kids, e.adults)}</span>
+        )}
       </span>
     </Link>
   );
