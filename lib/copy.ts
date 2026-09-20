@@ -21,7 +21,9 @@ export const copy = {
     noEvents: "No events yet. Your first one takes about ten minutes.",
     signOut: "Sign out",
   },
-  greeting: (name: string) => `Hi ${name}, something for you`,
+  // The name stays, because being greeted by name is the whole point of a personal link, and the
+  // tail matches what the group link says, so the two are the same invitation worded once.
+  greeting: (name: string) => `Hi ${name}, you're invited`,
   greetingGroup: "You're invited",
   envelope: {
     open: "Tap to open",
@@ -220,6 +222,8 @@ export const copy = {
     plateEveryone: "It's a bring a plate afternoon, so please bring something for the table.",
   },
   host: {
+    previewPlate: "Guests claim a dish here once they have said yes.",
+    previewGift: "Guests read how to chip in here once they have answered. The bank details come from whoever is organising it.",
     previewReply: "Tap to change what this asks, including the reply by date. To answer it the way a guest does, switch to Preview.",
     modeLabel: "How to look at your invite",
     modeEdit: "Change it",
@@ -401,6 +405,7 @@ export const copy = {
     giftOn: "Running a group gift",
     giftOff: "Not running one",
     giftSwitch: "Run a group gift",
+    giftAlongside: "Sits alongside whatever you picked above, and the invite says both in one sentence. The rest of running it is on the Gift tab.",
     giftWhat: "What is it?",
     giftWhatHint: "What guests read on their invite. A blue scooter, a voucher for the nursery, a night away.",
     giftTarget: "Worth aiming for (optional)",

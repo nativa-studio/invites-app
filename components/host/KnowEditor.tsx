@@ -23,7 +23,7 @@ import { Reorder } from "./Reorder";
 
 export const KNOW_FIELDS = [
   "siblings_welcome", "what_to_bring", "serve_text",
-  "gift_stance", "gift_note", "photo_sharing", "good_to_know",
+  "gift_stance", "gift_note", "group_gift_enabled", "photo_sharing", "good_to_know",
 ] as const;
 
 export function KnowEditor({ e }: { e: EventRow }) {
@@ -47,10 +47,21 @@ export function KnowEditor({ e }: { e: EventRow }) {
         // for it is told where it went rather than finding a second copy of it.
         return <p className="hint">{copy.host.plateElsewhere}</p>;
       case "gifts":
+        // Two settings, not one choice, because they are two different questions and a host
+        // wants both answers: gifts are optional AND there is a group gift. The stance is what
+        // to do about bringing a present, the switch is whether everyone is going in on one, and
+        // the invite joins whichever are on into a single sentence rather than two that read
+        // like the invite arguing with itself.
+        //
+        // The switch is also on the Gift tab, where the rest of running a gift lives. It is here
+        // as well because this is where the wording is, and a host picking "gifts are optional"
+        // is standing exactly where the question "should I also mention the group gift" occurs
+        // to them. Both write the same column, so there is no second copy to drift.
         return (
           <>
             <Choice id="gift_stance" label={NOTE_NAMES.gifts} value={e.gift_stance} options={GIFT_OPTIONS} hint="Say nothing leaves gifts off the invite altogether." />
             <Field id="gift_note" label="Gift note (optional)" value={e.gift_note} hint="Added to the end of the line above. Wish list needs it, and prints nothing without it: put the link here." />
+            <Switch id="group_gift_enabled" label={copy.host.giftSwitch} value={e.group_gift_enabled} hint={copy.host.giftAlongside} />
           </>
         );
       case "photos":

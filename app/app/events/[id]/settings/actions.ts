@@ -63,7 +63,17 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
   if (own.has("title") && !patch.title) return { error: "The event needs a title." };
   if (own.has("host_phone")) patch.host_phone = patch.host_phone ? normalisePhone(String(patch.host_phone)) : null;
   if (own.has("ask_phone")) patch.ask_phone = patch.ask_phone ? normalisePhone(String(patch.ask_phone)) : null;
-  if (Object.keys(patch).length === 0) return { error: "Nothing to save." };
+  // The gift's description and target are drawn on the invite and edited from the same drawer as
+  // everything else, but they live on group_gift. They are pulled out of the patch here rather
+  // than given a second save path, so the invite editor stays one form with one button and a host
+  // never has to know which table a field sleeps in.
+  const giftPatch: Record<string, unknown> = {};
+  if (own.has("gift_description")) giftPatch.description = String(fd.get("gift_description") ?? "").trim() || null;
+  if (own.has("gift_target")) {
+    const raw = String(fd.get("gift_target") ?? "").replace(/[^0-9.]/g, "");
+    giftPatch.target = raw === "" || Number.isNaN(Number(raw)) ? null : Number(raw);
+  }
+  if (Object.keys(patch).length === 0 && Object.keys(giftPatch).length === 0) return { error: "Nothing to save." };
 
   // A database that has not had the latest migration run against it is missing the newest columns.
   // Everything else in the same save should still go through, and the host should be told which
@@ -75,7 +85,8 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
   // a column or stops.
   const missed: string[] = [];
   let error: { message: string } | null = null;
-  for (;;) {
+  // Nothing for this table when the drawer only owns gift fields.
+  for (; Object.keys(patch).length > 0;) {
     ({ error } = await supabase.from("events").update(patch).eq("id", id));
     if (!error) break;
     const unknown = unknownColumn(error.message);
@@ -85,6 +96,20 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
     if (Object.keys(patch).length === 0) return { error: copy.host.savedWithout(missed) };
   }
   if (error) return { error: error.message };
+
+  // Upsert rather than update: switching the gift on from this drawer is the first moment a row
+  // exists, and a host who typed what the present is should not have to type it again on the Gift
+  // tab. Only the declared columns are sent, so the organiser's bank details, note and surprise
+  // are left exactly as they were.
+  if (Object.keys(giftPatch).length > 0) {
+    const { error: giftError } = await supabase
+      .from("group_gift")
+      .upsert({ event_id: id, ...giftPatch }, { onConflict: "event_id" });
+    // A database without migration 0016 has no table to write to. The rest of the save already
+    // went through, so say which part did not rather than losing the lot.
+    if (giftError) missed.push("gift_description");
+  }
+
   const note = missed.length ? copy.host.savedWithout(missed) : undefined;
   revalidateEvent(id);
   return { saved: true, note };

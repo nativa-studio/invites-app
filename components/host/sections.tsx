@@ -4,6 +4,7 @@ import { copy } from "@/lib/copy";
 import { askLine, signoffMessage } from "@/lib/ask-line";
 import { hostName } from "@/lib/format";
 import { KnowEditor, KNOW_FIELDS } from "@/components/host/KnowEditor";
+import { PLATE_MODES } from "@/lib/good-to-know";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
 // data-section names the invite carries, so tapping a card on the preview finds its entry here.
@@ -80,6 +81,35 @@ export const SECTIONS: Section[] = [
         <Field id="custom_question" label="One extra question (optional)" value={e.custom_question} />
         <Field id="yes_label" label="The yes button" value={e.yes_label} hint={`Leave it empty for \u201c${copy.rsvp.yes}\u201d`} />
         <Field id="no_label" label="The no button" value={e.no_label} hint={`Leave it empty for \u201c${copy.rsvp.no}\u201d`} />
+      </>
+    ),
+  },
+  {
+    id: "plate",
+    title: "Bring a plate",
+    blurb: "Whether you are asking guests to bring something, and what the invite says about it. The list of dishes itself is on the Potluck tab, because that is a job rather than wording.",
+    show: { column: "plate_enabled", label: copy.host.potluckSwitch },
+    fields: ["plate_mode", "plate_host_note"],
+    render: (e) => (
+      <>
+        <Choice id="plate_mode" label={copy.host.potluckMode} value={e.plate_mode} options={PLATE_MODES} hint={copy.host.potluckModeHint} />
+        <Field id="plate_host_note" label={copy.host.potluckNote} value={e.plate_host_note} rows={2} hint={copy.host.potluckNoteHint} />
+      </>
+    ),
+  },
+  {
+    id: "gift",
+    title: "Group gift",
+    // Only the host's half is here. Where the money goes and the note to contributors belong to
+    // whoever is organising it, who is usually not the host, and they have their own page for it.
+    // Putting those fields in this drawer would have let a host type somebody else's bank details.
+    blurb: "One present from everyone. What it is and roughly what it might come to are yours. Where the money goes and the note to everyone belong to whoever is organising it, on the Gift tab or their own page.",
+    show: { column: "group_gift_enabled", label: copy.host.giftSwitch },
+    fields: ["gift_description", "gift_target"],
+    render: (e) => (
+      <>
+        <Field id="gift_description" label={copy.host.giftWhat} value={e.gift_description ?? null} hint={copy.host.giftWhatHint} />
+        <Field id="gift_target" label={copy.host.giftTarget} value={e.gift_target != null ? String(e.gift_target) : null} hint={copy.host.giftTargetHint} />
       </>
     ),
   },

@@ -153,4 +153,14 @@ export type GuestRow = {
   created_at: string;
 };
 
-export type EventRow = PublicEvent & { text_template: string | null; reminder_template: string | null; access_info: string | null };
+export type EventRow = PublicEvent & {
+  text_template: string | null;
+  reminder_template: string | null;
+  access_info: string | null;
+  /** Joined from group_gift, not columns on events. They are here because the invite editor
+   *  edits by pointing at a card, and the gift card on the invite is drawn from these two. The
+   *  save action knows to send them back to the other table. Optional because most callers do
+   *  not join it, and because a database without migration 0016 has no row to join. */
+  gift_description?: string | null;
+  gift_target?: number | null;
+};

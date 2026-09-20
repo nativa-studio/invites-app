@@ -43,7 +43,13 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // the group gift is the whole line, because a quiet stance means the host did not want to talk
   // about gifts, not that they did not want to mention the one they are actually running.
   const gg = e.group_gift_enabled;
-  const stance = (text: string, joined: string) => ({ kind: "gifts" as const, text: gg ? `${text} ${joined}` : text });
+  // Joined with a full stop when the stance has not brought its own. The wish list line ends with
+  // whatever the host pasted in, usually a bare URL, so "example.com/list If you'd like to join
+  // in" arrived as one run-on with no gap a reader could rest at.
+  const stance = (text: string, joined: string) => ({
+    kind: "gifts" as const,
+    text: gg ? `${/[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`} ${joined}` : text,
+  });
   if (e.gift_stance === "none") lines.push(stance(copy.lines.giftsNone, copy.lines.groupGiftNone));
   if (e.gift_stance === "optional") lines.push(stance(e.gift_note ? `${copy.lines.giftsOptional} ${e.gift_note}` : copy.lines.giftsOptional, copy.lines.groupGiftWith));
   if (e.gift_stance === "books") lines.push(stance(e.gift_note ? `${copy.lines.giftsBooks} ${e.gift_note}` : copy.lines.giftsBooks, copy.lines.groupGiftWith));

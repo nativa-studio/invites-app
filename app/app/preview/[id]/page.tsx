@@ -11,6 +11,7 @@ import { googleCalendarLink } from "@/lib/calendar";
 import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import { PickMode } from "@/components/host/PickMode";
 import { PreviewReply } from "@/components/invite/PreviewReply";
+import { PreviewGift, PreviewPlate } from "@/components/invite/PreviewExtras";
 import { TryReply } from "@/components/invite/TryReply";
 import { previewGift, previewPlate } from "@/lib/db/preview-extras";
 
@@ -49,9 +50,11 @@ export default async function Preview({
   // preview has no token to call the guest functions with. Only fetched when that view is on:
   // the editing view never draws them, and this is three queries.
   const row = event as EventRow;
-  const [{ data: allGuests }, gift] = await Promise.all([
+  const [{ data: allGuests }, gift, giftRow] = await Promise.all([
     asGuest && row.plate_enabled ? supabase.from("guests").select("status, dietary").eq("event_id", id) : { data: null },
     asGuest ? previewGift(id, row) : null,
+    // The editing view draws the gift card too, and it needs what a guest would read on it.
+    !asGuest && row.group_gift_enabled ? giftLine(supabase, id) : null,
   ]);
   const plate = asGuest ? await previewPlate(id, row, allGuests ?? []) : null;
   // The Layout tab previews what you are about to save, not what is saved. Anything it hands over
@@ -80,7 +83,17 @@ export default async function Preview({
         gift={gift}
       />
     )
-    : <PreviewReply e={e} who={who} />;
+    : (
+      <>
+        <PreviewReply e={e} who={who} />
+        {/* Drawn, and tappable, so the two parts of the invite guests write to can be edited the
+            same way as every other part: point at the card, change what it says. Off means no
+            card, the same rule the rest of the invite follows, and the switch that turns them
+            back on lives in the drawer and on their own tabs. */}
+        {row.plate_enabled && <PreviewPlate note={row.plate_host_note} mode={row.plate_mode} />}
+        {row.group_gift_enabled && <PreviewGift description={giftRow?.description ?? null} organiser={giftRow?.organiser ?? null} />}
+      </>
+    );
   // Picking means the host is editing, so the envelope starts open: a section they cannot see is
   // a section they cannot tap. Trying it as a guest is the opposite: the envelope is half of what
   // a guest gets, so it opens the way theirs does.
@@ -125,4 +138,23 @@ function unsaved(show: string | undefined): Partial<EventRow> {
     for (const [key, column] of Object.entries(SECTIONS)) patch[column] = on.has(key);
   }
   return patch as Partial<EventRow>;
+}
+
+// What the gift card says, for the editing view: what the present is, and the first name of
+// whoever is running it, whether that is a guest or one of the hosts.
+async function giftLine(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  id: string,
+): Promise<{ description: string | null; organiser: string | null } | null> {
+  const { data } = await supabase
+    .from("group_gift")
+    .select("description, guest:guests!group_gift_organiser_guest_id_fkey(name), host:profiles!group_gift_organiser_profile_id_fkey(name)")
+    .eq("event_id", id)
+    .maybeSingle();
+  if (!data) return null;
+  const one = <T,>(v: T | T[] | null): T | null => (Array.isArray(v) ? v[0] ?? null : v);
+  const g = one(data.guest as { name: string } | { name: string }[] | null);
+  const h = one(data.host as { name: string } | { name: string }[] | null);
+  const name = g?.name ?? h?.name ?? null;
+  return { description: data.description, organiser: name ? firstName(name) : null };
 }
