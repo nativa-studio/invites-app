@@ -36,7 +36,13 @@ export function ActivityDrawer({ feed }: { feed: Happening[] }) {
               {feed.map((h, i) => (
                 <li key={`${h.at}-${i}`} className={h.kind}>
                   <span className="n">{copy.host.did[h.kind](h.who)}</span>
-                  <span className="t">{formatDateTime(h.at)}</span>
+                  {/* The group beside the time rather than in the sentence, so the line still
+                      reads as a sentence. It is there to tell which Sarah, and a host who works
+                      through the neighbours on Tuesday can find them without reading the names. */}
+                  <span className="t">
+                    {formatDateTime(h.at)}
+                    {h.group && <span className="tag">{h.group}</span>}
+                  </span>
                 </li>
               ))}
             </ol>
