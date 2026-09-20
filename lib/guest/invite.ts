@@ -49,6 +49,8 @@ export type InviteCard = {
   /** The one ink, for the design whose envelope is mixed rather than picked. Added in 0036, so
    *  an older database sends nothing and the mix falls back to charcoal. */
   ink?: string | null;
+  /** Which doodles stand in the corner. Added in 0037; absent falls back to the theme's set. */
+  strip_set?: string | null;
   invite_image_path: string | null;
 };
 

@@ -27,6 +27,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ toke
       age: card.title.match(/turning (\d+)/i)?.[1] ?? null,
       stock,
       ink: card.ink,
+      set: card.strip_set,
+      themeId: card.theme_id,
       variant,
     }),
     { ...CARD_SIZE, fonts: cardFonts(), headers: { "cache-control": "public, max-age=3600, s-maxage=86400" } },

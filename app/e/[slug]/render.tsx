@@ -15,7 +15,7 @@ export async function groupLinkMetadata(slug: string): Promise<Metadata> {
   const e = await getEventBySlug(slug);
   if (!e) return { title: "Invite" };
   const site = await getSiteUrl();
-  const image = cardUrl(`${site}/s/${e.slug}/card.png`, e.date);
+  const image = cardUrl(`${site}/s/${e.slug}/card.png`, e);
   return shareMetadata(e, image);
 }
 

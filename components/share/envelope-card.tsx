@@ -1,5 +1,6 @@
 import type { Palette } from "@/lib/db/types";
-import { inkFor, paperFor } from "@/lib/strip-set";
+import { inkFor, paperFor, stripSet } from "@/lib/strip-set";
+import { monoShapes } from "@/components/art/mono";
 import type { Stock as StockId } from "@/lib/layouts";
 
 // Drawn by Satori, which has no clip-path and turns CSS border triangles into blocks. The
@@ -73,6 +74,10 @@ export type CardInput = {
   stock?: StockName;
   /** Which ink, for the stock that is mixed rather than picked. */
   ink?: string | null;
+  /** Which set of doodles, for the design that stands those in the corner instead of a cast. */
+  set?: string | null;
+  /** Falls back to the set the theme implies, the same as the invite does. */
+  themeId?: string | null;
   variant?: CardVariant;
 };
 
@@ -193,7 +198,7 @@ function opening({ palette: p, addressee, title, artwork }: CardInput) {
 //
 // This is the face that goes in a message, because it is the face the guest then taps open: the
 // picture in the chat and the thing on the page are one object.
-function back({ palette: p, addressee, title, artwork, stock, ink }: CardInput) {
+function back({ palette: p, addressee, title, artwork, stock, ink, set, themeId }: CardInput) {
   const st = stockFor(p, stock, ink);
   const PAD = 26;
   const EW = W - PAD * 2, EH = H - PAD * 2;
@@ -214,7 +219,7 @@ function back({ palette: p, addressee, title, artwork, stock, ink }: CardInput) 
           <path d="M66 24L34 66h24l-10 30 42-46H66l13-26z" fill={stock === "ink" ? st.ink : p.navy} />
         </svg>
         {nameBlock(st, addressee, title, false)}
-        {characters(artwork)}
+        {stock === "ink" ? trio(st, set, themeId) : characters(artwork)}
       </div>
     </div>
   );
@@ -269,6 +274,25 @@ function characters(artwork: string | null | undefined) {
   );
 }
 
+// And for the design that has no cast: its own three doodles, in the same corner, at the size the
+// characters stand there. Without them the envelope was a name in the bottom left and six hundred
+// empty pixels, which reads as a card that failed to load rather than as a plain envelope.
+//
+// Drawn as raw SVG with an explicit stroke: Satori renders SVG faithfully but this is not a
+// browser, and currentColor has nothing to inherit from out here.
+function trio(st: Stock, set: string | null | undefined, themeId: string | null | undefined) {
+  const names = stripSet(set, themeId).trio;
+  return (
+    <div style={{ position: "absolute", right: 56, bottom: 54, display: "flex", alignItems: "flex-end", gap: 22 }}>
+      {names.map((n, i) => (
+        <svg key={i} width="104" height="104" viewBox="0 0 64 64" fill="none" stroke={st.ink} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          {monoShapes(n)}
+        </svg>
+      ))}
+    </div>
+  );
+}
+
 // The front of the same red envelope. One object with two faces: this one is what it looks like
 // coming towards you, so it carries the things a postie puts on a letter, the stamp and the
 // postmark, and it has no flap and no seal, because both of those are round the other side.
@@ -276,7 +300,7 @@ function characters(artwork: string | null | undefined) {
 // Everything it shares with the back is drawn from the same numbers: the body colour, the corner
 // radius, where the name sits and how it is fitted, and the band of characters. The two should
 // look like one envelope turned over, not like two envelopes.
-function front({ palette: p, addressee, title, age, artwork, stock, ink }: CardInput) {
+function front({ palette: p, addressee, title, age, artwork, stock, ink, set, themeId }: CardInput) {
   const st = stockFor(p, stock, ink);
   const PAD = 26;
   const EW = W - PAD * 2, EH = H - PAD * 2;
@@ -322,7 +346,7 @@ function front({ palette: p, addressee, title, age, artwork, stock, ink }: CardI
           </g>
         </svg>
         {nameBlock(st, addressee, title, true)}
-        {characters(artwork)}
+        {stock === "ink" ? trio(st, set, themeId) : characters(artwork)}
       </div>
     </div>
   );

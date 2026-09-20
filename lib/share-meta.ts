@@ -22,14 +22,43 @@ export function shareDescription(e: ShareFields): string {
 // The version on the card's own URL. A chat app caches the picture against that URL, so the only
 // way to replace a preview it has already drawn is to ask for a different one.
 //
-// It used to be the event date on its own, which changes when the party moves and never when the
-// drawing does. So when the stamp and the postmark came off the envelope, every chat that had
-// already shown somebody the stamped one went on showing it. Bump CARD_REV whenever the card is
-// redrawn, and every preview in every chat is fetched again.
-const CARD_REV = 4;
+// Bump CARD_REV whenever the drawing itself changes, and every preview in every chat is fetched
+// again. 5 is the one-ink envelope: a third stock, a stamp drawn in the event's own ink, and no
+// borrowed characters on the design that has none.
+const CARD_REV = 5;
 
-export function cardUrl(path: string, date: string | null | undefined): string {
-  return `${path}?v=${CARD_REV}-${encodeURIComponent(date ?? "")}`;
+/** Everything about an event that changes the picture. */
+type CardLook = {
+  date?: string | null;
+  layout_id?: string | null;
+  ink?: string | null;
+  invite_image_path?: string | null;
+  title?: string | null;
+  share_title?: string | null;
+};
+
+// A short, stable hash of those, on the end of the URL.
+//
+// The version used to be CARD_REV and the date, and the date is the one thing on this list a host
+// changes least often. Everything else moved the picture without moving the address: switch the
+// design, pick a different ink, change the name on the front, and the chat app, and the Message
+// tab, went on showing the old envelope. That became a real fault the moment a host could choose
+// an ink, because the choice is invisible in the one place they look to check it.
+//
+// FNV-1a, because it has to give the same answer on the server and in the browser and be short
+// enough to read in a URL. It is not a checksum of anything and nothing is verified against it.
+function look(e: CardLook): string {
+  let h = 2166136261;
+  for (const part of [e.date, e.layout_id, e.ink, e.invite_image_path, e.share_title ?? e.title]) {
+    const s = part ?? "";
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    h ^= 31; h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(36);
+}
+
+export function cardUrl(path: string, e: CardLook): string {
+  return `${path}?v=${CARD_REV}-${look(e)}`;
 }
 
 export function shareMetadata(e: ShareFields, image: string): Metadata {
