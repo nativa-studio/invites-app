@@ -210,6 +210,7 @@ export const copy = {
     askBody: (host: string) => `Text ${host}`,
     /* What a tap on the number starts the guest off with. They write the question; this says
        which party it is about, so a host running three at once knows before they read it. */
+    askBodyNoName: "Text",
     askSmsBody: (title: string) => `Hi, about ${title}: `,
     openInMaps: "Open in Maps",
     when: "When",

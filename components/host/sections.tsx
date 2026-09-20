@@ -139,7 +139,7 @@ export const SECTIONS: Section[] = [
     title: "Questions",
     blurb: "The last block on the invite: who a guest texts when they have a question. The name and the number are printed together, and tapping the number opens their messages with the party already named.",
     show: { column: "show_after", label: "Show the questions block" },
-    fields: ["ask_note", "ask_name", "ask_phone", "show_after"],
+    fields: ["ask_note", "ask_name", "ask_phone", "ask_name_2", "ask_phone_2", "show_after"],
     render: (e) => (
       <>
         {/* Two boxes, because they were one and it was wrong. Who answers the phone is not always
@@ -157,6 +157,22 @@ export const SECTIONS: Section[] = [
           value={e.ask_phone}
           type="tel"
           hint={e.host_phone ? `Empty means ${e.host_phone}, your mobile from Details.` : "Empty means your mobile from Details, which you have not set yet."}
+        />
+        {/* A second person, optional, with their own number so a guest taps the one they want.
+            One name and one number had hosts writing "Marcia or Tommy" against a single phone,
+            which is two people and one number and a guest guessing whose it is. */}
+        <Field
+          id="ask_name_2"
+          label="Somebody else to text (optional)"
+          value={e.ask_name_2 ?? null}
+          hint="A second person who can answer questions. They get their own line on the invite."
+        />
+        <Field
+          id="ask_phone_2"
+          label="Their number"
+          value={e.ask_phone_2 ?? null}
+          type="tel"
+          hint="Needed for the second person to appear at all: a name with no number is not a way to reach anybody."
         />
         <Field
           id="ask_note"

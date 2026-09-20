@@ -3,7 +3,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
-import { askLine, askPhoneSuffix, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
+import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
 import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Pin, Bbq, Plate, Cap, Cake, Kids, Shower, Sun, Towel } from "@/components/art/icons";
 import { orderedNotes, type NoteKind } from "@/lib/good-to-know";
 
@@ -147,8 +147,9 @@ export function KnowCard({ e }: { e: PublicEvent }) {
 // where a guest reads it while deciding what the day will be like. This is the parting reminder,
 // for the guest already holding a camera, and four words is all a reminder is.
 export function AskCard({ e }: { e: PublicEvent }) {
-  const sms = askSms(e);
-  const phone = askPhoneSuffix(e);
+  // One line per person, each its own link, because a host with two people fielding questions
+  // used to have to write both names against one number.
+  const contacts = askContacts(e);
   const photos = photoLine(e);
   return (
     <div className="pcard cream tilt-l" data-section="after">
@@ -157,9 +158,11 @@ export function AskCard({ e }: { e: PublicEvent }) {
         <div>
           <Bubble size={44} />
           <span className="n">{copy.sections.askHeading}</span>
-          {sms
-            ? <a className="b" href={sms}>{askLine(e)}{phone ? ` ${phone}` : ""}</a>
-            : <span className="b">{askLine(e)}</span>}
+          {contacts.map((c) => (
+            c.sms
+              ? <a className="b" key={c.key} href={c.sms}>{c.label}</a>
+              : <span className="b" key={c.key}>{c.label}</span>
+          ))}
         </div>
         {photos && (
           <div>

@@ -73,3 +73,33 @@ export function photoLine(e: Pick<PublicEvent, "photo_sharing">): string | null 
 export function signoffMessage(e: Pick<PublicEvent, "signoff_note">): string {
   return e.signoff_note?.trim() || copy.sections.signoffDefault;
 }
+
+// Who a guest can text, as a list. One line each, each its own link.
+//
+// The first is the one that has always been here: the host's own wording when they wrote any,
+// otherwise a line built from the sign-off, with the number printed after it unless that wording
+// already contains it. The second is plainer, because a host adding a second person is naming
+// them rather than writing a sentence.
+//
+// A second person needs a number. A name with nothing to ring is not a way to reach anybody, and
+// a line a guest cannot tap is the opposite of what this block is for.
+export type AskContact = { key: string; label: string; sms: string | null };
+
+export function askContacts(
+  e: Pick<PublicEvent, "ask_note" | "ask_name" | "ask_phone" | "ask_name_2" | "ask_phone_2" | "host_line" | "host_phone" | "title">,
+): AskContact[] {
+  const out: AskContact[] = [];
+  const suffix = askPhoneSuffix(e);
+  out.push({ key: "one", label: `${askLine(e)}${suffix ? ` ${suffix}` : ""}`, sms: askSms(e) });
+
+  const phone2 = e.ask_phone_2?.trim();
+  if (phone2) {
+    const name2 = e.ask_name_2?.trim();
+    out.push({
+      key: "two",
+      label: `${name2 ? copy.sections.askBody(name2) : copy.sections.askBodyNoName} ${formatMobile(phone2)}`,
+      sms: `sms:${normalisePhone(phone2)}?&body=${encodeURIComponent(copy.sections.askSmsBody(e.title))}`,
+    });
+  }
+  return out;
+}
