@@ -25,6 +25,11 @@ import { usePathname } from "next/navigation";
 const TABS = [
   { seg: "", label: "Invite" },
   { seg: "/guests", label: "Guests" },
+  // Tracking is back, next to Guests, and it is not what it was. The old one counted the replies,
+  // which Guests already did, and that is why it went. This one answers the questions the guest
+  // list cannot without scrolling it: how many people, what has to be cooked around, and what has
+  // happened since you last looked.
+  { seg: "/tracking", label: "Tracking" },
   { seg: "/message", label: "Message" },
   { seg: "/potluck", label: "Potluck" },
   { seg: "/gift", label: "Gift" },
