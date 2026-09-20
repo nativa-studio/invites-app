@@ -1,9 +1,10 @@
 "use client";
 import { useActionState, useState } from "react";
 import { copy } from "@/lib/copy";
+import { sentenceList } from "@/lib/format";
 import type { Plate } from "@/lib/guest/plate";
 import { plateAction, type PlateState } from "@/app/i/[token]/plate-actions";
-import { Plate as PlateIcon } from "@/components/art/icons";
+import { Bolt } from "@/components/art/icons";
 
 // The board, on the invite, for a guest who has said yes.
 //
@@ -31,58 +32,55 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
   // another guest's dish, and eight more rows is most of a screen on a page that is already long.
   const covered = board.items.filter((i) => i.claimed && !i.mine);
 
+  // A tile, two to a row. Every dish is the same shape whether it is yours or going, so the
+  // board reads as a set of things to press rather than a table to study, and two across fits
+  // eight dishes in the space four rows used.
+  //
+  // Yours is the filled one with the stamp on it. It says Yours rather than an instruction,
+  // because it is already done, and pressing it is how you undo that.
   const row = (i: (typeof board.items)[number]) => (
-    <li className="dish" key={i.id}>
-      <PlateIcon size={32} />
-      <div className="what">
-        <span className="n">{i.label}</span>
-        {/* Kept whole. "nut free" broken over two lines reads as two things. */}
-        {i.tags.length > 0 && <span className="b"><span className="tags">{i.tags.join(", ")}</span></span>}
-      </div>
+    <li key={i.id}>
       <form action={act}>
         <input type="hidden" name="token" value={token} />
         <input type="hidden" name="item" value={i.id} />
         <input type="hidden" name="what" value={i.mine ? "unclaim" : "claim"} />
-        <button className={`pbtn small${i.mine ? "" : " primary"}`} type="submit" disabled={pending}>
-          {i.mine ? copy.plate.unclaim : copy.plate.claim}
+        <button type="submit" className={`dishtile${i.mine ? " mine" : ""}`} disabled={pending}>
+          <span className="n">{i.label}</span>
+          <span className="do">{i.mine ? copy.plate.mine : copy.plate.claim}</span>
+          {i.tags.length > 0 && <span className="tg">{i.tags.join(", ")}</span>}
+          {i.mine && <span className="stamp"><Bolt size={16} /></span>}
         </button>
       </form>
     </li>
   );
 
   return (
-    // White, taped, with the plate over a hand written heading. It went cream with the reply's
-    // bolts for a while, on the argument that a card you act on should look like the other card
-    // you act on. Marcia's call is the other way: the reply is the one moment on the invite that
-    // should feel like the invite talking, and everything after it is the busy part of the page.
-    <div className="pcard white plate" data-section="plate">
-      <div className="tape sky" />
-      <PlateIcon size={36} />
-      <div className="label sky">{copy.plate.heading}</div>
+    // Paper, one strip of tape, the heading in red. Every dish is a bar rather than a row, so
+    // the whole thing is one tap wide and the board reads as a set of things to press rather
+    // than a table to study.
+    <div className="pcard tilt-r plate" data-section="plate">
+      {/* One at each top corner, the way a sheet of paper actually gets stuck up. Not the pair
+          crossed over each other in the middle, which is the gift card's and stays there. */}
+      <div className="tape tl" />
+      <div className="tape tr" />
+      <div className="label red">{copy.plate.heading}</div>
       <p className="para">{board.host_note || (board.mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
       {allergies && <p className="allergy">{copy.plate.allergies(allergies)}</p>}
 
       {board.items.length === 0 && <p className="small">{copy.plate.empty}</p>}
 
-      {mine.length > 0 && (
-        <>
-          <div className="dishgroup">{copy.plate.yoursHeading}</div>
-          <ul className="dishes">{mine.map((i) => row(i))}</ul>
-        </>
+      {/* Yours first, because it is the one that is already settled, then everything still
+          going. No headings over either: the bars say which is which themselves. */}
+      {(mine.length > 0 || needed.length > 0) && (
+        <ul className="dishtiles">
+          {mine.map((i) => row(i))}
+          {needed.map((i) => row(i))}
+        </ul>
       )}
 
-      {/* Ideas rather than a list of jobs. Most of these are the host guessing at what a table
-          needs, and a guest is free to ignore every one of them and bring something else, which
-          is why the button that does exactly that sits with them rather than after everything. */}
-      {needed.length > 0 && (
-        <>
-          <div className="dishgroup">{copy.plate.neededHeading}</div>
-          <ul className="dishes">{needed.map((i) => row(i))}</ul>
-        </>
-      )}
-
-      {/* Shut until it is wanted. An open box with a cursor in it on a page a guest came to read
-          asks them to think of something, and most of them are here to claim what is listed. */}
+      {/* A link rather than a button. Claiming one of the host's ideas is the main thing here
+          and adding your own is the other option, so it should not compete with the bars for
+          the eye, and it sits with them because that is the moment it occurs to somebody. */}
       {adding ? (
         <form action={act} className="addplate">
           <input type="hidden" name="token" value={token} />
@@ -102,20 +100,19 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
           <button className="pbtn primary" type="submit" disabled={pending}>{copy.plate.add}</button>
         </form>
       ) : (
-        <button type="button" className="pbtn small" onClick={() => setAdding(true)}>{copy.plate.addHeading}</button>
+        <button type="button" className="pbtn quiet" onClick={() => setAdding(true)}>{copy.plate.addHeading}</button>
       )}
 
-      {/* What somebody else has, as tags rather than rows. A guest reads these so they do not
-          turn up with a second pavlova, and that is all: there is nothing to tap on another
-          guest's dish, and a row each would be most of a screen on a long page. */}
+      {/* What other people have, as a sentence. It was tags, and before that a list, and before
+          that a row each. A guest reads this once, to know they are not the second pavlova, so
+          it should take one line of reading and no decisions. */}
       {covered.length > 0 && (
         <>
-          <div className="dishgroup">{copy.plate.coveredHeading}</div>
-          <ul className="covered">
-            {covered.map((i, n) => (
-              <li key={i.id} className={n % 3 === 0 ? "on" : ""}>{i.label}</li>
-            ))}
-          </ul>
+          <div className="rule" />
+          <p className="ontable">
+            {copy.plate.onTable}{" "}
+            <span className="names">{sentenceList(covered.map((i) => i.label))}</span>
+          </p>
         </>
       )}
 

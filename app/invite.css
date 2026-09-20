@@ -415,3 +415,50 @@
    so the overlap reads as an order rather than a collision. */
 .pcard .tape.cross { transform: rotate(-19deg); }
 .pcard .tape.over { transform: rotate(13deg); }
+
+/* Bring a plate: tiles, two to a row.
+   Every dish is the same shape whether it is yours or still going, so the board reads as a set of
+   things to press rather than a table to study, and two across fits eight dishes in the room four
+   rows used. */
+.plate .dishtiles { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 10px; }
+.plate .dishtile {
+  position: relative; width: 100%; min-height: 62px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1px; padding: 12px 10px;
+  border: 2.5px solid var(--navy); border-radius: 12px; background: var(--paper);
+  cursor: pointer; text-align: center; box-shadow: 0 3px 0 color-mix(in srgb, var(--navy) 22%, transparent);
+}
+.plate .dishtile .n { font-family: var(--font-display); font-size: 16px; line-height: 1.15; color: var(--navy); overflow-wrap: anywhere; }
+.plate .dishtile .do { font-family: var(--font-hand); font-size: 14px; letter-spacing: 0.04em; color: var(--red); text-transform: uppercase; }
+.plate .dishtile .tg { font-size: 11px; opacity: 0.7; }
+/* Yours: filled, and stamped. Pressing it is how you put it back, which is why it still reads as
+   a button rather than settling into the card. */
+.plate .dishtile.mine { background: var(--yel); }
+.plate .dishtile.mine .do { color: var(--navy); text-transform: none; }
+.plate .dishtile .stamp {
+  position: absolute; top: -12px; right: -8px; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--yel); border: 2.5px solid var(--navy); display: flex; align-items: center;
+  justify-content: center; transform: rotate(-8deg);
+}
+.plate .dishtile:disabled { opacity: 0.6; cursor: default; }
+
+/* One strip at each top corner, the way a sheet of paper actually gets stuck up. */
+.pcard .tape.tl { left: 6px; top: -10px; margin-left: 0; transform: rotate(-24deg); }
+.pcard .tape.tr { left: auto; right: 6px; top: -10px; margin-left: 0; transform: rotate(24deg); }
+
+/* What other people have, as a sentence. It was tags, and before that a list, and before that a
+   row each. A guest reads it once, to know they are not the second pavlova. */
+.plate .ontable {
+  margin: 0; width: 100%; text-align: center; font-family: var(--font-hand); font-size: 15px;
+  letter-spacing: 0.04em; line-height: 1.7; text-transform: uppercase;
+}
+.plate .ontable .names { color: var(--sky-ink); }
+/* The little rule under the tiles. The shared one is 4px tall with a 2px border on each edge,
+   which leaves nothing of the yellow and draws as a navy dash. Here it gets the height to
+   actually be a strip of yellow. */
+.plate .rule { width: 46px; height: 10px; border-radius: 3px; }
+/* Bringing something else is the other option, not the main one, so it does not get the display
+   face at full size competing with the tiles. */
+.plate .pbtn.quiet { font-size: 16px; min-height: 44px; }
+/* Smaller at the corners than the single strip across the middle: two full width pieces of tape
+   on one card reads as gift wrapping rather than as a note stuck to a wall. */
+.pcard .tape.tl, .pcard .tape.tr { width: 68px; height: 22px; }

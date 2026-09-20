@@ -139,3 +139,10 @@ export function formatMoney(amount: number | null | undefined): string {
   const whole = Math.round(amount * 100) % 100 === 0;
   return `$${amount.toLocaleString("en-AU", { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 })}`;
 }
+
+// A list the way a person says it: "a, b, c and d". No comma before the and, which is the
+// Australian habit and the house style everywhere else in this app.
+export function sentenceList(items: string[]): string {
+  if (items.length <= 1) return items[0] ?? "";
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+}

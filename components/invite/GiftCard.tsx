@@ -29,13 +29,11 @@ export function GiftCard({ token, gift }: { token: string; gift: Gift }) {
   const amount = formatMoney(g.suggested_amount);
 
   return (
-    // Cream, with two bits of tape crossed over each other and the heading in red above the
-    // present. Deliberately not the plate's card: they sit one under the other and telling them
-    // apart at a glance is worth more than making them a matched set. The plate is the white one
-    // with the blue tape, this is the cream one with the cross.
+    // Cream, one strip of tape, the heading in red above the present. Deliberately not the
+    // plate's card: they sit one under the other and telling them apart at a glance is worth
+    // more than making them a matched set.
     <div className="pcard cream gift" data-section="gift">
-      <div className="tape yel cross" />
-      <div className="tape sky over" />
+      <div className="tape" />
       <div className="label red">{copy.gift.heading}</div>
       <GiftIcon size={36} />
 

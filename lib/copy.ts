@@ -80,16 +80,13 @@ export const copy = {
     everyone: "It's a bring a plate afternoon. Claim something below, or add your own.",
     free: "Bring something for the table if you like. Claim an item below or add your own, so we don't end up with five pavlovas.",
     empty: "Nothing on the list yet. Add what you're bringing and everyone else can see it.",
-    // Group headings rather than a status on every row. The status line only existed because
-    // everything was in one list; once they are apart, the heading says it and the row is just
-    // the dish.
-    yoursHeading: "You're bringing",
-    neededHeading: "Here are some ideas",
-    coveredHeading: "Already covered",
+    // No group headings. The rows say which is which themselves: yours is the filled one with
+    // the stamp, and the rest carry the words that claim them.
+    onTable: "What's covered:",
     allCovered: "Everything on the list has somebody bringing it. Add your own if you like.",
     nobody: "Nobody yet",
-    claim: "I'll bring this",
-    mine: "You're bringing this",
+    claim: "I'll bring it",
+    mine: "Yours",
     unclaim: "Put it back",
     // Taken, not who by. A guest deciding what to carry needs to know what is already covered;
     // a register of which neighbour brought what is the host's business and nobody else's.
