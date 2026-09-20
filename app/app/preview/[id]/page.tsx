@@ -73,13 +73,18 @@ export default async function Preview({
   // guest, so it needs somebody's token: the same first guest the greeting borrows. An event with
   // nobody on the list yet gets Google only, rather than a button that leads to a 404.
   const token = guest?.token ? String(guest.token) : null;
+  // preview=1 so the download is not counted as this guest tapping Add to calendar. The token
+  // here is a real guest's, borrowed for the greeting, and a host trying their own invite must
+  // not leave a mark on somebody else's row. The Google button stays pointed straight at Google
+  // for the same reason, rather than at our counting redirect.
+  const previewIcs = token ? `/i/${token}/invite.ics?preview=1` : null;
   const reply = asGuest
     ? (
       <TryReply
         e={e}
         who={who ?? copy.host.tryWho}
         googleLink={googleCalendarLink(e, token ? inviteLink(await getSiteUrl(), token) : "")}
-        icsLink={token ? `/i/${token}/invite.ics` : null}
+        icsLink={previewIcs}
         plate={plate}
         gift={gift}
       />

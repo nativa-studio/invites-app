@@ -121,6 +121,9 @@ export type PublicGuest = {
   /** Free text, and never on the potluck board. Asked apart from the dietary chips because an
    *  allergy is a safety fact rather than a preference, and is not always about food. */
   allergies: string | null;
+  /** First tap of Add to calendar, either button. The calendar file being taken, which is not
+   *  quite the event being saved, so the host screen says "took the calendar file". */
+  calendar_at?: string | null;
   accessibility_note: string | null;
   custom_answer: string | null;
   note: string | null;
@@ -162,6 +165,9 @@ export type GuestRow = {
   /** Free text, and never on the potluck board. Asked apart from the dietary chips because an
    *  allergy is a safety fact rather than a preference, and is not always about food. */
   allergies: string | null;
+  /** First tap of Add to calendar, either button. The calendar file being taken, which is not
+   *  quite the event being saved, so the host screen says "took the calendar file". */
+  calendar_at?: string | null;
   accessibility_note: string | null;
   note: string | null;
   source: "invited" | "group_link";

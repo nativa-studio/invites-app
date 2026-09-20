@@ -34,6 +34,17 @@ export function googleCalendarLink(e: PublicEvent, link: string): string | null 
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+// The Google button's address on a guest's own invite: our redirect rather than Google itself,
+// so a tap can be counted. Null when the event has no date, exactly like the link it forwards to,
+// so a caller cannot end up drawing a button that leads to a 404.
+//
+// The host's preview does not use this. Its buttons carry a real guest's token, borrowed for the
+// greeting, so a host trying their own invite would otherwise stamp that guest as having added
+// the party to their calendar.
+export function googleCalendarPath(e: PublicEvent, token: string): string | null {
+  return calendarWindow(e) ? `/i/${token}/calendar/google` : null;
+}
+
 export function icsFile(e: PublicEvent, link: string): string | null {
   const w = calendarWindow(e);
   if (!w) return null;
