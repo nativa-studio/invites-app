@@ -1,5 +1,5 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { copy } from "@/lib/copy";
 import { curiousAction, type CuriousState } from "@/app/i/[token]/about-actions";
 
@@ -12,11 +12,20 @@ import { curiousAction, type CuriousState } from "@/app/i/[token]/about-actions"
 // Discreet is the whole brief. Somebody opened this to find out about a party, not to read about
 // the software that drew it, and a product pitch above the sign-off would be taking a moment that
 // belongs to the host.
-export function AboutApp({ token, curious }: { token: string | null; curious: boolean }) {
+export function AboutApp({ token, curious, pretend }: { token: string | null; curious: boolean; pretend?: boolean }) {
   const [state, act, pending] = useActionState<CuriousState, FormData>(
     curiousAction,
     { token: token ?? "", curious },
   );
+  // The host trying their own invite. There is no guest row to write a thumbs up against, so the
+  // button keeps its answer in the browser and nothing is saved. It was left out entirely, which
+  // meant the one screen built to answer "what do my guests see" was the one place the ask and
+  // the button could not be seen at all.
+  const [local, setLocal] = useState(false);
+  const on = pretend ? local : state.curious;
+  const ask = (body: React.ReactNode) => (pretend
+    ? <form onSubmit={(ev) => { ev.preventDefault(); setLocal((v) => !v); }}>{body}</form>
+    : <form action={act}>{body}</form>);
 
   return (
     <details className="about">
@@ -24,20 +33,20 @@ export function AboutApp({ token, curious }: { token: string | null; curious: bo
       <div className="inner">
         <p>{copy.about.body}</p>
         <p>{copy.about.what}</p>
-        {/* No token means the group link before anybody has replied: there is no row to record a
-            thumbs up against yet, so the text stands on its own rather than offering a button
-            that would have nowhere to write. */}
-        {token && (
-          state.curious ? (
-            <form action={act}>
+        {/* No token and not a preview means the group link before anybody has replied: there is
+            no row to record a thumbs up against yet, so the text stands on its own rather than
+            offering a button that would have nowhere to write. */}
+        {(token || pretend) && (
+          on ? ask(
+            <>
               <p className="ta">{copy.about.done}</p>
               <button type="submit" className="as-quiet" disabled={pending}>{copy.about.undo}</button>
-            </form>
-          ) : (
-            <form action={act}>
+            </>,
+          ) : ask(
+            <>
               <p>{copy.about.ask}</p>
               <button type="submit" className="pbtn small" disabled={pending}>👍 {copy.about.up}</button>
-            </form>
+            </>,
           )
         )}
         {state.error && <p className="ta">{copy.about.failed}</p>}

@@ -127,6 +127,7 @@ export default async function Preview({
         greeting={greeting}
         reply={reply}
         layout={asLayout(layout)}
+        pretend
         skipAnimation={pick === "1" && !asGuest ? true : undefined}
       />
     </>

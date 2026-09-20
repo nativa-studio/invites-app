@@ -21,6 +21,7 @@ export function answerFromForm(fd: FormData): RsvpInput | null {
     party_names: str(fd, "party_names").split(/,|\n|\band\b|&/).map((s) => s.trim()).filter(Boolean),
     dietary: fd.getAll("dietary").map(String).filter(Boolean),
     dietary_note: str(fd, "dietary_note"),
+    allergies: str(fd, "allergies"),
     accessibility_note: str(fd, "accessibility_note"),
     custom_answer: str(fd, "custom_answer"),
     note: str(fd, "note"),

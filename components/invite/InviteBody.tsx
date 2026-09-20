@@ -16,7 +16,7 @@ import { LineupInvite } from "./LineupInvite";
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e, greeting, reply, layout, skipAnimation, token, curious, answered,
+  e, greeting, reply, layout, skipAnimation, token, curious, answered, pretend,
 }: {
   e: PublicEvent;
   greeting: string;
@@ -27,6 +27,9 @@ export function InviteBody({
   /** Whether this guest has replied. The announcements come off once they have. */
   answered?: boolean;
   curious?: boolean;
+  /** The host trying their own invite. Everything works and nothing is written, the same rule the
+   *  reply and the plate board already follow there. */
+  pretend?: boolean;
   layout?: PublicEvent["layout_id"];
   skipAnimation?: boolean;
 }) {
@@ -40,18 +43,18 @@ export function InviteBody({
       {reply}
     </>
   );
+  // Drawn once and handed to whichever layout runs, so neither can quietly not have it.
+  const about = <AboutApp token={token ?? null} curious={curious ?? false} pretend={pretend} />;
   const id = layout ?? e.layout_id;
   if (id === "lineup") {
     return (
-      <>
-        <LineupInvite
-          event={e}
-          greeting={greeting}
-          reply={reply}
-          skipAnimation={skipAnimation}
-        />
-        <AboutApp token={token ?? null} curious={curious ?? false} />
-      </>
+      <LineupInvite
+        event={e}
+        greeting={greeting}
+        reply={announced}
+        after={about}
+        skipAnimation={skipAnimation}
+      />
     );
   }
 
@@ -102,10 +105,14 @@ export function InviteBody({
           mascot={mascotFor(e.invite_image_path)}
         >
           {below}
+          {/* Inside the envelope, and last of everything in it. Outside, it sat under a sealed
+              invite: a guest who had not opened their invitation yet was being told about the
+              software that made it, which is the wrong thing at the wrong moment and gives away
+              that there is a thing to scroll past before there is anything to scroll to. It is
+              the very end, after the host's sign-off, because it is about the app and not the
+              party and it should be the last thing anybody meets. */}
+          {about}
         </Envelope>
-        {/* Outside the envelope and last on the page. It is about the app, not the party, so it
-            goes after everything the host wrote and nowhere near it. */}
-        <AboutApp token={token ?? null} curious={curious ?? false} />
       </div>
     </main>
   );

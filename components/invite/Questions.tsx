@@ -19,6 +19,7 @@ export type Answers = {
   party_names?: string[];
   dietary?: string[];
   dietary_note?: string | null;
+  allergies?: string | null;
   accessibility_note?: string | null;
   custom_answer?: string | null;
   emergency_name?: string | null;
@@ -68,6 +69,17 @@ export function YesQuestions({ e, had, expected }: { e: PublicEvent; had?: Answe
           <label htmlFor="party_names">{copy.questions.names}</label>
           <input id="party_names" name="party_names" type="text" defaultValue={(a.party_names ?? []).join(", ")} placeholder="Mia, Sam and Priya" autoComplete="off" />
           <span className="hint">{copy.questions.namesHint}</span>
+        </div>
+      )}
+      {/* Allergies first, and on their own. It is the answer that changes what may be in the room
+          rather than what is on a plate, it is not always about food, and it is the one a host
+          must not have to go looking for underneath a preference. Free text on purpose: a chip
+          can say "nut free" and cannot say "peanuts, carries an epipen, other nuts are fine". */}
+      {e.ask_allergies !== false && (
+        <div className="q">
+          <label htmlFor="allergies">{copy.questions.allergies}</label>
+          <input id="allergies" name="allergies" type="text" defaultValue={a.allergies ?? ""} placeholder={copy.questions.allergiesNote} autoComplete="off" />
+          <span className="hint">{copy.questions.allergiesHint}</span>
         </div>
       )}
       {e.ask_dietary && (

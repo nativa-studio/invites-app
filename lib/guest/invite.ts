@@ -48,6 +48,7 @@ export type RsvpInput = {
   party_names?: string[];
   dietary?: string[];
   dietary_note?: string;
+  allergies?: string;
   accessibility_note?: string;
   custom_answer?: string;
   note?: string;
@@ -65,6 +66,7 @@ export async function submitRsvp(token: string, input: RsvpInput): Promise<Publi
     p_party_names: input.party_names ?? null,
     p_dietary: input.dietary ?? null,
     p_dietary_note: input.dietary_note ?? null,
+    p_allergies: input.allergies ?? null,
     p_accessibility_note: input.accessibility_note ?? null,
     p_custom_answer: input.custom_answer ?? null,
     p_note: input.note ?? null,
