@@ -29,7 +29,6 @@ export function PreviewGift({ description, organiser, off }: { description: stri
       <div className="tape" />
       <div className="label red">{copy.gift.heading}</div>
       <GiftIcon size={36} />
-      <GiftIcon size={36} />
       <p className="para">
         {organiser
           ? description ? copy.gift.running(organiser, description) : copy.gift.runningNoWhat(organiser)

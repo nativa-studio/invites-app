@@ -3,7 +3,17 @@
 // they change their mind against the real thing.
 /** `line` is what the tile says under the name. Optional: a design whose name already says what
  *  it is does not need a sentence repeating it. */
-export type LayoutOption = { id: string; name: string; line?: string; suits: string[] };
+export type LayoutOption = {
+  id: string;
+  name: string;
+  line?: string;
+  suits: string[];
+  /** Not offered any more, but still known. A design is retired by hiding it, never by deleting
+   *  the row: asLayoutId reads this list to decide whether a saved value is a real design, and a
+   *  deleted row would make every event already on it read as unset. The Design tab would then
+   *  post the default back over their choice the next time it saved. */
+  hidden?: boolean;
+};
 
 // `suits` is which kinds of party a design is right for, and it is a judgement rather than a
 // rule: the suite is tape, tilted cards and characters standing in the corner, which is lovely
@@ -18,11 +28,16 @@ export const LAYOUTS: LayoutOption[] = [
     name: "Pokémon",
     suits: ["kids_party", "birthday", "gathering", "baby_shower"],
   },
+  // Retired at Marcia's word. Still drawn for any event already saved on it, and still reachable
+  // by ?layout=lineup, but no longer offered: it is the one remaining design that does not honour
+  // the order a host puts their sections in, so leaving it in the gallery meant reordering worked
+  // on two designs out of three and silently did nothing on the third.
   {
     id: "lineup",
     name: "The lineup",
     line: "One page, artwork along the bottom",
     suits: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
+    hidden: true,
   },
   // The one design in the range with no photograph and no characters in it. Everything else here
   // is somebody's artwork, which is lovely for a fourth birthday and leaves a housewarming or a
@@ -47,10 +62,11 @@ export function stockFor(layout: string | null | undefined): "red" | "beige" {
 
 /** The designs that suit a kind of party, and the ones that do not, kept apart rather than lost. */
 export function designsFor(type: string | null | undefined): { fits: LayoutOption[]; rest: LayoutOption[] } {
-  if (!type) return { fits: LAYOUTS, rest: [] };
+  const offered = LAYOUTS.filter((l) => !l.hidden);
+  if (!type) return { fits: offered, rest: [] };
   return {
-    fits: LAYOUTS.filter((l) => l.suits.includes(type)),
-    rest: LAYOUTS.filter((l) => !l.suits.includes(type)),
+    fits: offered.filter((l) => l.suits.includes(type)),
+    rest: offered.filter((l) => !l.suits.includes(type)),
   };
 }
 

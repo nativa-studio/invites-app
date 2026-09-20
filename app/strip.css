@@ -28,6 +28,9 @@
   padding: 36px 22px 56px;
 }
 .strip .greet { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; margin: 0; }
+/* The cover is one block so it is one thing to tap in the editor, and the gaps inside it are its
+   own rather than the page's, so it still reads as three separate lines. */
+.strip .cover { display: flex; flex-direction: column; align-items: center; gap: 26px; width: 100%; }
 .strip .trio { display: flex; gap: 10px; justify-content: center; align-items: flex-end; }
 .strip h1 { font-family: var(--font-hand); font-size: 54px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
 .strip .label { font-family: var(--font-hand); font-size: 40px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
@@ -75,6 +78,15 @@
 .strip .signoff { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .strip .signoff .msg { font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; margin: 0; }
 .strip .signoff .from { font-size: 13px; opacity: 0.72; text-align: center; margin: 0; }
+
+/* The poster icons, wearing this layout's clothes.
+   `icons.tsx` draws flat shapes filled with --sky, --yel, --crm, --red and --forest, with a
+   --navy keyline. On this page all five are the ink, so a present came out as a solid ink square
+   with an ink outline round it. Filled with the paper instead, the same shapes read as line
+   drawings and sit beside the monoline ones.
+   On the svg rather than on .strip, because --red is also the colour of an error message and the
+   RSVP heading, and paper-coloured text is no text at all. */
+.strip svg { --sky: var(--paper); --yel: var(--paper); --crm: var(--paper); --red: var(--paper); --forest: var(--paper); }
 
 /* The shared reply form, wearing this layout's clothes: no card, no tape, no tilt, no shadow. */
 .strip .pcard { background: transparent; border: 0; box-shadow: none; transform: none; padding: 0; max-width: none; gap: 14px; width: 100%; }

@@ -46,7 +46,7 @@ export function NewEventForm() {
 
       <div hidden={step !== 1}>
         <div className="tiles art">
-          {LAYOUTS.map((l) => (
+          {LAYOUTS.filter((l) => !l.hidden).map((l) => (
             <button key={l.id} type="button" className={`tile ${layout === l.id ? "on" : ""}`} aria-pressed={layout === l.id} onClick={() => { setLayout(l.id); setStep(2); }}>
               <LayoutThumb id={l.id} />
               <span className="tile-name">{l.name}</span>

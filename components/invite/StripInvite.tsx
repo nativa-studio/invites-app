@@ -145,12 +145,18 @@ export function StripInvite({
       <div className="page">
         <p className="greet">{greeting}</p>
         {/* The cover. Three doodles and the title, and no photograph: when uploads land, an
-            uploaded invite replaces these two and everything below stays exactly as it is. */}
-        <div className="trio" data-section="cover">
-          {set.trio.map((n, i) => <Mono key={i} name={n} size={56} />)}
+            uploaded invite replaces these two and everything below stays exactly as it is.
+            One element around all three, because data-section is the handle the host's editor
+            edits by and the drawer behind it holds the title and the line under it. Marked on the
+            doodles alone, tapping the title did nothing, which is the one place on the cover a
+            host is most likely to tap. */}
+        <div className="cover" data-section="cover">
+          <div className="trio">
+            {set.trio.map((n, i) => <Mono key={i} name={n} size={56} />)}
+          </div>
+          <h1>{e.title}</h1>
+          {e.intro && <p className="para">{e.intro}</p>}
         </div>
-        <h1>{e.title}</h1>
-        {e.intro && <p className="para">{e.intro}</p>}
         {parts.map((node, i) => (
           <React.Fragment key={i}>
             <Rule />
