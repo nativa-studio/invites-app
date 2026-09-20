@@ -95,6 +95,28 @@ Get this wrong and the instructions are useless however correct they are.
   address with `/settings/environment-variables` on the end. Never send her hunting through a
   menu for something that has an address.
 
+## Nothing is fixed until `main` moves, and a session cannot move it
+
+This cost four rounds on 20 September. The About this app block was fixed, tested and pushed, and
+Marcia kept photographing it in the wrong place, because a push to a branch changes nothing she
+can see. She was looking at the live site, which is `main`, and `main` had not moved.
+
+- **Pushing a branch is not publishing.** The live site builds `main`. Until `main` changes,
+  everything done in a session is invisible to her, however green the tests were.
+- **A session cannot push to `main`.** It is blocked here as a production deploy. The route is:
+  work on the branch, push it, open a pull request, and it is merged. Merging through the GitHub
+  API is blocked too until Marcia says to go ahead, so ask once, plainly: "reply merge it and I
+  will". Do not keep repeating the link at her instead of offering.
+- **Never say a change is live because it was pushed.** Check it: `git fetch origin main` and
+  confirm the commit is an ancestor of `origin/main`, then read the deployed page itself, see
+  "Checking a deploy from a session" in `SETUP.md`. Reading the HTML found this fault in one
+  fetch, after two rounds of guessing at it.
+- **Vercel takes a minute or two** after the merge, and then she has to reload. Tell her to pull
+  down to refresh, never to press Back: Back restores the page her phone already had, which is
+  the old one, and that looks exactly like the fix not working.
+- **She only ever has to tap Merge.** Never hand her git commands, and never leave the work
+  finished-but-unmerged without saying so in the same breath as saying it is done.
+
 ## Facts about this setup, so they are not rediscovered
 
 - There is **one Supabase project, `invites-dev`** (ref `kihsdobmmvnfvokbmmgj`, Sydney). There is no
