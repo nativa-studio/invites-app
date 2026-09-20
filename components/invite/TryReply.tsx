@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { copy } from "@/lib/copy";
 import { buzz } from "@/lib/haptic";
 import { formatShortDate, hostName } from "@/lib/format";
@@ -7,8 +7,8 @@ import type { PublicEvent } from "@/lib/db/types";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
-import { PlateCard } from "./PlateCard";
 import { GiftCard } from "./GiftCard";
+import { useReply } from "./ReplyState";
 import type { Plate } from "@/lib/guest/plate";
 import type { Gift } from "@/lib/guest/gift";
 
@@ -40,6 +40,22 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
   const [sent, setSent] = useState<{ yes: boolean } | null>(null);
   const host = hostName(e.host_line, "The host");
 
+  // The same telling the guest's reply does, so the plate part further down draws itself here
+  // too. A host trying their own invite has to see it where a guest will, which is the whole
+  // point of this screen, and pretend keeps every tap in the page and out of the database.
+  const ctx = useReply();
+  const report = ctx?.report;
+  useEffect(() => {
+    if (!report) return;
+    report({
+      token: PREVIEW_TOKEN,
+      status: sent ? (sent.yes ? "yes" : "no") : "pending",
+      plate: plate ?? null,
+      gift: gift ?? null,
+      pretend: true,
+    });
+  }, [sent, plate, gift, report]);
+
   if (sent) {
     return (
       <>
@@ -57,7 +73,6 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
             one screen built to answer "what do my guests actually get" the one screen where a
             host could not find out. There is no guest row and no token here, so the claiming and
             the ticking happen in the page and are gone when it reloads. */}
-        {sent.yes && plate?.enabled && <PlateCard token={PREVIEW_TOKEN} plate={plate} pretend />}
         {gift?.enabled && <GiftCard token={PREVIEW_TOKEN} gift={gift} pretend />}
       </>
     );

@@ -6,7 +6,11 @@
 // The default order is the one the self-check asks for, each thing at the moment it is needed.
 // What changed, then everything needed to decide whether to come, then the reply while the
 // deciding is still in hand. Everything after it is for someone who has already said yes.
-export const INVITE_PARTS = ["updates", "details", "reply", "day", "know", "after", "signoff"] as const;
+//
+// Bring a plate is one of those, and it sits after the info booth rather than directly under the
+// reply, where it used to be. Claiming a dish is a job for somebody who has read what the day
+// involves, not the next thing to do after answering.
+export const INVITE_PARTS = ["updates", "details", "reply", "day", "know", "plate", "after", "signoff"] as const;
 export type InvitePart = (typeof INVITE_PARTS)[number];
 
 export const PART_NAMES: Record<InvitePart, string> = {
@@ -15,6 +19,7 @@ export const PART_NAMES: Record<InvitePart, string> = {
   reply: "The reply",
   day: "The order of the afternoon",
   know: "Info booth",
+  plate: "Bring a plate",
   after: "Questions",
   signoff: "The sign-off",
 };
@@ -23,6 +28,9 @@ export const PART_NAMES: Record<InvitePart, string> = {
  *  reply is the point of the invite, and updates show themselves only once there are any. */
 export const PART_SWITCH: Partial<Record<InvitePart, string>> = {
   details: "show_details",
+  // Not plate_block, which decides whether the invite carries a card announcing it before anybody
+  // has replied. This is whether there is a plate at all.
+  plate: "plate_enabled",
   day: "show_runsheet",
   know: "show_good_to_know",
   after: "show_after",

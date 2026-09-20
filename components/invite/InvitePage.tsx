@@ -3,6 +3,7 @@ import { copy } from "@/lib/copy";
 import { firstName } from "@/lib/format";
 import { googleCalendarPath } from "@/lib/calendar";
 import { InviteBody } from "./InviteBody";
+import { ReplyProvider } from "./ReplyState";
 import { Rsvp } from "./Rsvp";
 import type { Plate } from "@/lib/guest/plate";
 import type { Gift } from "@/lib/guest/gift";
@@ -24,6 +25,9 @@ export function InvitePage({ invite, token, plate, gift, curious, skipAnimation,
   // awkward place.
   const answered = guest.status !== "pending";
   return (
+    // The answer, in one place, so the reply card and the plate part further down the page agree
+    // about it without either owning the other.
+    <ReplyProvider initial={{ token, status: guest.status, plate: plate ?? null, gift: gift ?? null }}>
     <InviteBody
       e={e}
       greeting={copy.greeting(firstName(guest.name))}
@@ -37,5 +41,6 @@ export function InvitePage({ invite, token, plate, gift, curious, skipAnimation,
       // the only thing that knows.
       reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarPath(e, token)} icsLink={`/i/${token}/invite.ics`} plate={plate} gift={gift} />}
     />
+    </ReplyProvider>
   );
 }

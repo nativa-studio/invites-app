@@ -12,6 +12,7 @@ import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import { PickMode } from "@/components/host/PickMode";
 import { PreviewReply } from "@/components/invite/PreviewReply";
 import { PreviewGift, PreviewPlate } from "@/components/invite/PreviewExtras";
+import { ReplyProvider } from "@/components/invite/ReplyState";
 import { TryReply } from "@/components/invite/TryReply";
 import { previewGift, previewPlate } from "@/lib/db/preview-extras";
 
@@ -101,7 +102,6 @@ export default async function Preview({
             else opens that drawer, so hiding it the way the guest's page does would leave a
             host looking at a setting they could no longer reach. Trying it as a guest is the
             view that tells the truth, and there it is gone. */}
-        {row.plate_enabled && <PreviewPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} />}
         {row.group_gift_enabled && <PreviewGift description={giftRow?.description ?? null} organiser={giftRow?.organiser ?? null} off={row.gift_block === false} />}
       </>
     );
@@ -127,14 +127,21 @@ export default async function Preview({
         </>
       )}
       {pick === "1" && !asGuest && <PickMode />}
-      <InviteBody
-        e={e}
-        greeting={greeting}
-        reply={reply}
-        layout={asLayout(layout)}
-        pretend
-        skipAnimation={pick === "1" && !asGuest ? true : undefined}
-      />
+      {/* The answer lives here in try as a guest, so the plate part below the info booth draws
+          itself the way it does on a real invite. Editing draws its own card instead and answers
+          to no reply, so it needs no provider at all. */}
+      <ReplyProvider initial={{ token: token ?? "", status: "pending", plate: null, gift: null, pretend: true }}>
+        <InviteBody
+          e={e}
+          greeting={greeting}
+          reply={reply}
+          layout={asLayout(layout)}
+          pretend
+          plateCard={asGuest || !row.plate_enabled ? undefined
+            : <PreviewPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} />}
+          skipAnimation={pick === "1" && !asGuest ? true : undefined}
+        />
+      </ReplyProvider>
     </>
   );
 }
