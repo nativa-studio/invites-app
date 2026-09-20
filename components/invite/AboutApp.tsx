@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { copy } from "@/lib/copy";
 import { curiousAction, type CuriousState } from "@/app/i/[token]/about-actions";
 
@@ -23,13 +23,55 @@ export function AboutApp({ token, curious, pretend }: { token: string | null; cu
   // the button could not be seen at all.
   const [local, setLocal] = useState(false);
   const on = pretend ? local : state.curious;
+
+  // The nudge. It is the last thing on a long page, it is shut, and it is one quiet line, so it
+  // is easy to scroll past without registering that there is anything there. When it comes into
+  // view it waves once: a small tilt, half a second, and then it stops and never does it again.
+  //
+  // Once, on purpose. A thing that moves every time you scroll past is not an invitation to look,
+  // it is a fly in the room, and this sits under somebody's party invitation rather than on a
+  // shop window. It also only waves while shut: once it is open the waving is over, the reader
+  // is already there.
+  //
+  // Nothing moves for a reader who has asked their phone to stop animating things, and nothing
+  // moves in a browser without IntersectionObserver, which is the state the page is already in.
+  const box = useRef<HTMLDetailsElement>(null);
+  const waved = useRef(false);
+  const [wave, setWave] = useState(false);
+  useEffect(() => {
+    const el = box.current;
+    if (!el || waved.current) return;
+    if (typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting || waved.current) continue;
+          waved.current = true;
+          io.disconnect();
+          // A beat after it arrives, so it waves at a reader who has stopped, not at a scroll
+          // that is still flying past it.
+          setTimeout(() => setWave(true), 350);
+        }
+      },
+      // Most of it has to be on screen, or it waves while it is still a sliver at the bottom edge.
+      { threshold: 0.9 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   const ask = (body: React.ReactNode) => (pretend
     ? <form onSubmit={(ev) => { ev.preventDefault(); setLocal((v) => !v); }}>{body}</form>
     : <form action={act}>{body}</form>);
 
   return (
-    <details className="about">
-      <summary>{copy.about.summary}</summary>
+    <details className={`about${wave ? " wave" : ""}`} ref={box} onToggle={() => setWave(false)}>
+      <summary>
+        {copy.about.summary}
+        {/* The instruction is separate from the fact, and quieter, so the line reads as her
+            saying something rather than as a button asking to be pressed. */}
+        <span className="peek">{copy.about.peek}</span>
+      </summary>
       <div className="inner">
         <p>{copy.about.body}</p>
         <p>{copy.about.what}</p>

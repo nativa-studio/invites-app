@@ -79,11 +79,24 @@ export async function setGuestAnswer(eventId: string, guestId: string, next: Gue
   const patch: Record<string, unknown> =
     next === "yes" || next === "no"
       ? { status: next, replied_at: now, answered_by_host: true }
+      // Marking it sent is only about sending. It used to also set the guest back to waiting and
+      // throw away replied_at, which destroyed a real reply: Márcio e Juliana answered yes for two
+      // on 20 September, Marcia tapped "I've sent it myself" on their row an hour later, and their
+      // answer was gone with nothing in the trail to say why. The button's own wording promised
+      // only that they would drop off the not sent list, which is what it does now.
+      //
+      // Sending and replying are separate facts about a guest and neither one may quietly rewrite
+      // the other. A host who does want the answer cleared has the option below, which says so.
+      : next === "sent"
+        ? sent
       // Back to waiting keeps the record of sending. Back to not sent clears the lot, so the guest
       // reads exactly as they did the moment they were added.
-      : next === "pending" || next === "sent"
-        ? { status: "pending", replied_at: null, answered_by_host: false, ...sent }
+      : next === "pending"
+        ? { status: "pending", replied_at: null, answered_by_host: false }
         : { status: "pending", replied_at: null, answered_by_host: false, sent_at: null, sent_by: null, reminded_at: null, opened_at: null };
+
+  // Nothing to write: already sent, and sending is all this was asked to change.
+  if (Object.keys(patch).length === 0) { revalidateEvent(eventId); return; }
 
   let { error } = await supabase.from("guests").update(patch).eq("id", guestId).eq("event_id", eventId);
   // A database without migration 0011 has no column to stamp. Everything else still lands; the
