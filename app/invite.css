@@ -201,6 +201,42 @@
 .plate .dish .pbtn { min-height: 40px; font-size: 13.5px; padding: 0 12px; white-space: nowrap; }
 .plate .addplate { display: grid; gap: 12px; width: 100%; }
 
+/* The group gift. Read top to bottom: what it is, what to do, how it is going, then the tick.
+
+   The how-to-pay block is boxed because it is the one part a guest will come back to with their
+   banking app open, and because bank details are four lines rather than a sentence: pre-wrap
+   keeps the BSB on its own line instead of running it into the account number. */
+.gift .howto, .gift .latest {
+  width: 100%; margin: 0; padding: 12px 14px; border-radius: 10px;
+  border: 2px solid var(--navy); background: color-mix(in srgb, var(--crm) 55%, var(--paper));
+  display: grid; gap: 4px; text-align: left;
+}
+.gift .latest { background: color-mix(in srgb, var(--yel) 30%, var(--paper)); }
+.gift .pay { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15.5px; line-height: 1.45; }
+.gift .done { margin: 0; font-family: var(--font-display); font-size: 17px; }
+.gift .chipin { display: grid; gap: 12px; width: 100%; }
+
+/* The organiser's page. Cards down a column, nothing tilted: it is a job to work through rather
+   than an invite to enjoy, and a tilted form is harder to fill in on a phone. */
+.organiser { padding: 24px 16px 64px; }
+.orgwrap { display: grid; gap: 16px; max-width: 440px; margin: 0 auto; }
+.orgwrap .pcard { width: 100%; }
+.orgwrap .rsvp-h { margin: 0; }
+.who { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: 2px; }
+.who li {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 12px 0; border-top: 2px dotted color-mix(in srgb, var(--navy) 25%, transparent);
+}
+.who li:first-child { border-top: 0; }
+.who .n { font-family: var(--font-display); font-size: 16.5px; overflow-wrap: anywhere; }
+.who .b { display: flex; gap: 8px; align-items: center; font-size: 14px; opacity: .8; }
+.who .b .pbtn { min-height: 40px; font-size: 13.5px; padding: 0 12px; white-space: nowrap; }
+/* The surprise switch. A box you can see, beside a sentence, because it is one decision with a
+   consequence rather than one of a row of tags. */
+.orgswitch { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; cursor: pointer; font-weight: 700; }
+.orgswitch input { flex: none; width: 24px; height: 24px; margin: 0; accent-color: var(--navy); }
+.orgswitch .hint { display: block; font-weight: 400; margin-top: 4px; }
+
 /* What the kitchen needs to know, counted. Never a name and never anybody's note. */
 .allergy {
   width: 100%; margin: 0; padding: 10px 14px; border-radius: 10px;

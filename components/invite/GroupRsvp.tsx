@@ -9,6 +9,7 @@ import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, WhoQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
 import { PlateCard } from "./PlateCard";
+import { GiftCard } from "./GiftCard";
 
 // The reply on a group link. The same card a guest with their own link answers on, asking the
 // one extra thing this link cannot know: who you are.
@@ -22,6 +23,7 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
 
   if (replied && !editing) {
     const plate = state.ok ? state.plate : null;
+    const gift = state.ok ? state.gift : null;
     return (
       <>
         <ThanksCard
@@ -37,6 +39,7 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
         {/* The board, for somebody who has just said yes on a group link. They have a token now,
             which is the thing that was missing: it is made by the reply, not before it. */}
         {plate?.enabled && state.ok && replied.status === "yes" && <PlateCard token={state.token} plate={plate} />}
+        {gift?.enabled && state.ok && <GiftCard token={state.token} gift={gift} />}
       </>
     );
   }

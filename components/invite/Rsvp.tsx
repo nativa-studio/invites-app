@@ -9,7 +9,9 @@ import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
 import { PlateCard } from "./PlateCard";
+import { GiftCard } from "./GiftCard";
 import type { Plate } from "@/lib/guest/plate";
+import type { Gift } from "@/lib/guest/gift";
 
 type Props = {
   token: string;
@@ -20,9 +22,12 @@ type Props = {
   /** The board as it stood when the page loaded, which is a board at all only for a guest who
    *  had already said yes. A guest who says yes here gets a fresher one back with the reply. */
   plate?: Plate | null;
+  /** The gift block as it stood on load, which is a block at all only for a guest who had
+   *  already answered. Answering here brings a fresher one back with the reply. */
+  gift?: Gift | null;
 };
 
-export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate }: Props) {
+export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate, gift }: Props) {
   const [state, formAction, pending] = useActionState<RsvpState, FormData>(rsvpAction, { ok: false });
   const [choice, setChoice] = useState<"" | "yes" | "no">("");
   // "Change my answer" is tied to the state it was clicked from, so a fresh submission closes it again.
@@ -38,6 +43,7 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate }: Pro
     // one the page was rendered with. The board lives here rather than beside the reply in the
     // layout, because only this component knows what the current answer is.
     const board = state.ok ? state.plate : plate;
+    const present = state.ok ? state.gift : gift;
     return (
       <>
         <ThanksCard
@@ -51,6 +57,8 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink, plate }: Pro
           landed={state.ok}
         />
         {current.status === "yes" && board?.enabled && <PlateCard token={token} plate={board} />}
+        {/* Either answer, unlike the plate: somebody who cannot come may still want to chip in. */}
+        {present?.enabled && <GiftCard token={token} gift={present} />}
       </>
     );
   }

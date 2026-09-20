@@ -27,6 +27,7 @@ const TABS = [
   { seg: "/guests", label: "Guests" },
   { seg: "/message", label: "Message" },
   { seg: "/potluck", label: "Potluck" },
+  { seg: "/gift", label: "Gift" },
   { seg: "/look", label: "Design" },
 ] as const;
 
@@ -35,8 +36,8 @@ export function EventNav({ id }: { id: string }) {
   const base = `/app/events/${id}`;
   const bar = useRef<HTMLElement>(null);
 
-  // Five fit across a phone, 328px of 358, so this does nothing today. It is kept because the bar
-  // is built to scroll and a sixth tab would put the one you are on off the side of the screen.
+  // Six no longer fit across a phone, which is what this is for: tapping Design used to leave it
+  // off the right edge with no sign it was the one you were on.
   useEffect(() => {
     const on = bar.current?.querySelector<HTMLElement>("a.on");
     on?.scrollIntoView({ block: "nearest", inline: "center" });

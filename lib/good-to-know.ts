@@ -36,10 +36,21 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // all, so a host picking one got silence and no way to tell it apart from a bug. A wish list
   // with no link is still silence, because the line would be an announcement with nothing behind
   // it, and the editor says so under the box.
-  if (e.gift_stance === "none") lines.push({ kind: "gifts", text: copy.lines.giftsNone });
-  if (e.gift_stance === "optional") lines.push({ kind: "gifts", text: e.gift_note ? `${copy.lines.giftsOptional} ${e.gift_note}` : copy.lines.giftsOptional });
-  if (e.gift_stance === "books") lines.push({ kind: "gifts", text: e.gift_note ? `${copy.lines.giftsBooks} ${e.gift_note}` : copy.lines.giftsBooks });
-  if (e.gift_stance === "wishlist" && e.gift_note) lines.push({ kind: "gifts", text: `${copy.lines.giftsWishlist} ${e.gift_note}` });
+  //
+  // A group gift joins onto whichever stance the host picked rather than arriving as a line of
+  // its own. Two separate sentences had the invite saying "no gifts please" and then asking for
+  // money, which reads as a contradiction however each half is worded. When the stance is quiet
+  // the group gift is the whole line, because a quiet stance means the host did not want to talk
+  // about gifts, not that they did not want to mention the one they are actually running.
+  const gg = e.group_gift_enabled;
+  const stance = (text: string, joined: string) => ({ kind: "gifts" as const, text: gg ? `${text} ${joined}` : text });
+  if (e.gift_stance === "none") lines.push(stance(copy.lines.giftsNone, copy.lines.groupGiftNone));
+  if (e.gift_stance === "optional") lines.push(stance(e.gift_note ? `${copy.lines.giftsOptional} ${e.gift_note}` : copy.lines.giftsOptional, copy.lines.groupGiftWith));
+  if (e.gift_stance === "books") lines.push(stance(e.gift_note ? `${copy.lines.giftsBooks} ${e.gift_note}` : copy.lines.giftsBooks, copy.lines.groupGiftWith));
+  if (e.gift_stance === "wishlist" && e.gift_note) lines.push(stance(`${copy.lines.giftsWishlist} ${e.gift_note}`, copy.lines.groupGiftWith));
+  if (gg && (e.gift_stance === "quiet" || (e.gift_stance === "wishlist" && !e.gift_note))) {
+    lines.push({ kind: "gifts", text: copy.lines.groupGift });
+  }
   if (e.photo_sharing === "kids_off_social") lines.push({ kind: "photos", text: copy.lines.photosKidsOff });
   if (e.photo_sharing === "ask") lines.push({ kind: "photos", text: copy.lines.photosAsk });
   if (e.photo_sharing === "share") lines.push({ kind: "photos", text: copy.lines.photosShare });

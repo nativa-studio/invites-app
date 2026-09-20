@@ -4,6 +4,7 @@ import { isValidToken } from "@/lib/tokens";
 import { answerFromForm, formString } from "@/lib/rsvp-form";
 import { googleCalendarLink } from "@/lib/calendar";
 import { getPlate, type Plate } from "@/lib/guest/plate";
+import { getGift, type Gift } from "@/lib/guest/gift";
 import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import type { PublicGuest } from "@/lib/db/types";
 
@@ -11,7 +12,7 @@ export type GroupState =
   // The plate board rides back with the reply. A guest on the group link has no token until they
   // answer, so there is no earlier moment to have fetched it, and the page they are standing on
   // was rendered before they existed.
-  | { ok: true; guest: PublicGuest; token: string; googleLink: string | null; icsLink: string; plate: Plate | null }
+  | { ok: true; guest: PublicGuest; token: string; googleLink: string | null; icsLink: string; plate: Plate | null; gift: Gift | null }
   | { ok: false; error?: string };
 
 // Replying through the group link.
@@ -51,6 +52,7 @@ export async function groupRsvpAction(_prev: GroupState, fd: FormData): Promise<
       googleLink: e ? googleCalendarLink(e, inviteLink(site, token)) : null,
       icsLink: `/i/${token}/invite.ics`,
       plate: guest.status === "yes" ? await getPlate(token) : null,
+      gift: await getGift(token),
     };
   } catch {
     return { ok: false, error: "Your reply didn't go through. Please try again." };

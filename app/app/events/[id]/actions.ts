@@ -343,3 +343,33 @@ export async function setSectionShown(eventId: string, column: string, shown: bo
   await supabase.from("events").update({ [column]: shown }).eq("id", eventId);
   revalidateEvent(eventId);
 }
+
+// The group gift, from the host's side.
+//
+// The host owns three things about it: what it is, what it might come to, and who is running it.
+// Everything else (where the money goes, the note to contributors, the updates) belongs to the
+// organiser and is edited on their own page, because the organiser is usually not the host and
+// the whole point of the feature is that the host does not have to run it.
+//
+// The row is created the moment the switch goes on, rather than the first time somebody saves
+// something into it. A switch that is on with no row behind it leaves every guest looking at an
+// empty block, which is the worst of both: the invite says there is a group gift and then has
+// nothing to say about it.
+export async function saveGift(eventId: string, v: {
+  enabled: boolean;
+  description: string | null;
+  target: number | null;
+  organiserGuestId: string | null;
+}) {
+  const { supabase } = await hostClient();
+  await supabase.from("events").update({ group_gift_enabled: v.enabled }).eq("id", eventId);
+  if (v.enabled) {
+    await supabase.from("group_gift").upsert({
+      event_id: eventId,
+      description: v.description,
+      target: v.target,
+      organiser_guest_id: v.organiserGuestId,
+    }, { onConflict: "event_id" });
+  }
+  revalidateEvent(eventId);
+}

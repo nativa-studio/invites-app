@@ -130,3 +130,12 @@ export function hostName(hostLine: string | null | undefined, fallback = "the ho
   const trimmed = (hostLine ?? "").trim().replace(/^((with\s+)?(love|thanks)\s+)?(from\s+)?/i, "").trim();
   return trimmed || fallback;
 }
+
+// Money, in dollars, the way a person writes it. Whole amounts lose the trailing zeros, because
+// "$20" is what somebody types and "$20.00" is what an invoice says. Australian dollars, so the
+// symbol is a bare dollar sign rather than the A$ an international format would produce.
+export function formatMoney(amount: number | null | undefined): string {
+  if (amount == null || !Number.isFinite(amount)) return "";
+  const whole = Math.round(amount * 100) % 100 === 0;
+  return `$${amount.toLocaleString("en-AU", { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 })}`;
+}

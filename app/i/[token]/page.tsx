@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getInvite, getInviteCard } from "@/lib/guest/invite";
 import { getPlate } from "@/lib/guest/plate";
+import { getGift } from "@/lib/guest/gift";
 import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import { cardUrl, shareMetadata } from "@/lib/share-meta";
 import { InvitePage } from "@/components/invite/InvitePage";
@@ -30,8 +31,11 @@ export default async function Page({ params, searchParams }: Params) {
   const link = inviteLink(await getSiteUrl(), token);
   // Only fetched for a guest who is coming, since that is the only one who sees it. A host who
   // has never switched bring a plate on gets null back and no card.
-  const plate = invite.guest.status === "yes" ? await getPlate(token) : null;
+  const [plate, gift] = await Promise.all([
+    invite.guest.status === "yes" ? getPlate(token) : null,
+    invite.guest.status === "pending" ? null : getGift(token),
+  ]);
   // ?layout= lets a host hold their own phone and flick through the designs before choosing one
   // in Settings. It changes nothing: the saved layout is whatever Settings says.
-  return <InvitePage invite={invite} token={token} link={link} plate={plate} layout={asLayout(layout)} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
+  return <InvitePage invite={invite} token={token} link={link} plate={plate} gift={gift} layout={asLayout(layout)} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
 }
