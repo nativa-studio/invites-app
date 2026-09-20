@@ -41,7 +41,10 @@ export function PlateCard({ token, plate }: { token: string; plate: Plate }) {
             <div className="what">
               <span className="n">{i.label}</span>
               <span className="b">
-                {i.mine ? copy.plate.mine : i.bringing ? copy.plate.bringing(i.bringing) : copy.plate.nobody}
+                {/* Yours, taken, or free. Never whose: the board used to name whoever had
+                    claimed each dish, which turned a list of what is still needed into a
+                    register of the neighbours for anybody holding a link. */}
+                {i.mine ? copy.plate.mine : i.claimed ? copy.plate.taken : copy.plate.nobody}
                 {/* Kept whole. "nut free" broken over two lines reads as two things. */}
                 {i.tags.length > 0 && <span className="tags"> · {i.tags.join(", ")}</span>}
               </span>

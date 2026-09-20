@@ -11,8 +11,7 @@ export type PlateItem = {
   label: string;
   quantity: number | null;
   tags: string[];
-  /** The first name of whoever is bringing it, or null while nobody is. */
-  bringing: string | null;
+  /** Whether somebody has it, never who. The name is not sent at all: see migration 0018. */
   claimed: boolean;
   mine: boolean;
   added_by_me: boolean;

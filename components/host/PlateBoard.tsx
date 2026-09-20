@@ -1,6 +1,7 @@
 "use client";
 import { useState, useTransition } from "react";
 import { copy } from "@/lib/copy";
+import { firstName } from "@/lib/format";
 import type { HostPlateItem } from "@/lib/db/plate";
 import { addPlateItem, releasePlateItem, removePlateItem, renamePlateItem } from "@/app/app/events/[id]/actions";
 import { Sheet } from "./Sheet";
@@ -30,7 +31,9 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
   const [newLabel, setNewLabel] = useState("");
   const [label, setLabel] = useState("");
   const [tags, setTags] = useState<string[]>([]);
-  const unclaimed = items.filter((i) => !i.bringing).length;
+  const needed = items.filter((i) => !i.bringing);
+  const claimed = items.filter((i) => i.bringing);
+  const unclaimed = needed.length;
 
   if (!enabled) return null;
 
@@ -60,33 +63,60 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
 
       {items.length === 0 && <p className="hint">{copy.host.plateEmpty}</p>}
 
-      {items.map((i) => (
-        <div className="grouprow" key={i.id}>
-          {/* The name is the way to change the name, the same as the invite's own parts list. A
-              third button on the row would have been the fourth thing to read on it. */}
-          <button
-            type="button"
-            className="n as-link"
-            onClick={() => { setEditing(i); setNewLabel(i.label); }}
-          >
-            {i.label}
-          </button>
-          <div className="b">
-            {i.bringing ?? (i.fromGuest ? copy.host.plateNobody : copy.host.plateAsked)}
-            {i.tags.length > 0 && ` · ${i.tags.join(", ")}`}
-          </div>
-          <div className="actions">
-            {i.bringing && (
-              <button type="button" className="btn small" disabled={pending} onClick={() => start(() => { void releasePlateItem(eventId, i.id); })}>
-                {copy.host.plateRelease}
-              </button>
+      {/* Two groups, and the dishes run on rather than stacking.
+          Every item used to be its own row three lines deep: the dish, who was bringing it, and
+          two buttons. Twenty dishes was a page of scrolling to answer one question, which is what
+          is still missing. Who is bringing what is gone from the board entirely: a host reads it
+          once, when something goes wrong, and it is in the sheet behind each dish.
+          The dish name was already the way to rename it, so it stays a button and the two actions
+          that used to sit beside it moved in behind it. */}
+      {items.length > 0 && (
+        <>
+          <div className="dishrun">
+            <span className="ql">{copy.host.plateNeeded}</span>
+            {needed.length === 0 ? (
+              <p className="hint">{copy.host.plateAllClaimed}</p>
+            ) : (
+              <p className="run">
+                {needed.map((i, n) => (
+                  <span key={i.id}>
+                    {n > 0 && " \u00b7 "}
+                    <button type="button" className="as-link" onClick={() => { setEditing(i); setNewLabel(i.label); }}>{i.label}</button>
+                  </span>
+                ))}
+              </p>
             )}
-            <button type="button" className="btn small" disabled={pending} onClick={() => start(() => { void removePlateItem(eventId, i.id); })}>
-              {copy.host.plateRemove}
-            </button>
           </div>
-        </div>
-      ))}
+
+          <div className="dishrun">
+            <span className="ql">{copy.host.plateClaimed}</span>
+            {claimed.length === 0 ? (
+              <p className="hint">{copy.host.plateNoneClaimed}</p>
+            ) : (
+              <p className="run">
+                {claimed.map((i, n) => (
+                  <span key={i.id}>
+                    {n > 0 && " \u00b7 "}
+                    {/* The dish and whoever has it wrap as one. Loose, "Cheese and crackers"
+                        ended a line and "(Ali)" started the next, which reads as a dish called
+                        Ali. See .pair. */}
+                    <span className="pair">
+                      <button type="button" className="as-link" onClick={() => { setEditing(i); setNewLabel(i.label); }}>{i.label}</button>
+                      {/* First names here, whole name in the sheet behind the dish. Whole names
+                          put every dish on a line of its own, which is the list this was meant to
+                          replace; the one time a host needs to know which Sam, they are one tap
+                          from it. Bracketed rather than run on, so a dish whose own name has a
+                          comma in it cannot be mistaken for the person carrying it. */}
+                      {i.bringing && <span className="by"> ({firstName(i.bringing)})</span>}
+                    </span>
+                  </span>
+                ))}
+              </p>
+            )}
+          </div>
+          <p className="hint">{copy.host.plateTapHint}</p>
+        </>
+      )}
 
       {editing && (
         <Sheet
@@ -96,6 +126,9 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
           onClose={() => setEditing(null)}
         >
           <div className="sheet-body">
+            {/* Who has it, said once, here, rather than on every row of the board. */}
+            {editing.bringing && <p className="hint">{copy.host.plateWhoIs(editing.bringing)}</p>}
+            {editing.tags.length > 0 && <p className="hint">{editing.tags.join(", ")}</p>}
             <div className="field">
               <label htmlFor="plate_rename">{copy.plate.addLabel}</label>
               <input id="plate_rename" type="text" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} autoComplete="off" />
@@ -108,6 +141,16 @@ export function PlateBoard({ eventId, items, enabled, mode, hostNote, allergies 
                 onClick={() => { const id = editing.id; start(async () => { await renamePlateItem(eventId, id, newLabel); setEditing(null); }); }}
               >
                 {copy.host.plateRenameSave}
+              </button>
+              {editing.bringing && (
+                <button type="button" className="btn small" disabled={pending}
+                  onClick={() => { const id = editing.id; start(async () => { await releasePlateItem(eventId, id); setEditing(null); }); }}>
+                  {copy.host.plateRelease}
+                </button>
+              )}
+              <button type="button" className="btn small" disabled={pending}
+                onClick={() => { const id = editing.id; start(async () => { await removePlateItem(eventId, id); setEditing(null); }); }}>
+                {copy.host.plateRemove}
               </button>
             </div>
           </div>

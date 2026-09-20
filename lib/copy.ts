@@ -84,7 +84,9 @@ export const copy = {
     claim: "I'll bring this",
     mine: "You're bringing this",
     unclaim: "Put it back",
-    bringing: (who: string) => `${who} is bringing this`,
+    // Taken, not who by. A guest deciding what to carry needs to know what is already covered;
+    // a register of which neighbour brought what is the host's business and nobody else's.
+    taken: "Someone's bringing this",
     addHeading: "Bringing something else?",
     addLabel: "What is it?",
     addPlaceholder: "Pavlova, garden salad, a bag of ice",
@@ -478,6 +480,15 @@ export const copy = {
     plateEmpty: "Ask for the things you actually need and guests can claim them. They can add their own too.",
     plateNobody: "Nobody yet",
     plateAsked: "You asked for this, nobody yet",
+    // The two groups the board splits into. Which dish somebody is bringing was on every row and
+    // is gone: a host running a table needs to know what is still missing, and the names made
+    // every item two lines tall for a fact they only want when something goes wrong.
+    plateClaimed: "Being brought",
+    plateNeeded: "Still to be claimed",
+    plateAllClaimed: "Every item has somebody bringing it.",
+    plateNoneClaimed: "Nobody has claimed anything yet.",
+    plateTapHint: "Tap any of them to rename it, free it up or take it off.",
+    plateWhoIs: (who: string) => `${who} is bringing this.`,
     plateRename: "Rename it",
     plateRenameBlurb: "Changes what it is called on everyone's list. Whoever is bringing it keeps it.",
     plateRenameSave: "Save the name",

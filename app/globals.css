@@ -481,3 +481,20 @@ fieldset.stack > legend { padding: 0; }
 .paidlist li:first-child { border-top: 0; }
 .paidlist .n { font-weight: 600; overflow-wrap: anywhere; }
 .paidlist .b { display: flex; gap: 6px; align-items: center; color: var(--app-mute); font-variant-numeric: tabular-nums; }
+
+/* The potluck board: two runs of dish names rather than two columns of rows.
+
+   The names are buttons, so they carry .as-link's 44px minimum height, which inside a paragraph
+   would space the lines like a list again. Inline-flex is dropped back to baseline text here and
+   the tap target comes from the line height instead, which on a 16px line with this padding is
+   still over 44px from the top of one name to the next. */
+.dishrun { margin-top: 14px; }
+.dishrun .ql { display: block; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--app-mute); margin-bottom: 2px; }
+/* 2.4 rather than 2.2: measured, the names came out 43px tall and the gap between
+   lines 43px, both a pixel under a thumb. */
+.dishrun .run { margin: 0; line-height: 2.4; }
+.dishrun .run .as-link { display: inline; min-height: 0; line-height: inherit; padding: 4px 0; }
+.dishrun .by { color: var(--app-mute); }
+/* A dish and whoever is bringing it, wrapping as one thing. max-width keeps a very long dish
+   name breaking inside the pair rather than running off the side of the card. */
+.dishrun .pair { display: inline-block; max-width: 100%; }

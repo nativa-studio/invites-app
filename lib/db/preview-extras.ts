@@ -30,15 +30,12 @@ export async function previewPlate(
     enabled: true,
     mode: e.plate_mode,
     host_note: e.plate_host_note,
-    // First names, because that is what the guests' board shows. The host's own board on the
-    // Potluck tab is the one that gives whole names, since chasing the salad needs to know
-    // which Sam.
+    // No names: the guests' board does not carry them, so neither does a preview of it.
     items: items.map((i) => ({
       id: i.id,
       label: i.label,
       quantity: null,
       tags: i.tags,
-      bringing: i.bringing ? firstName(i.bringing) : null,
       claimed: Boolean(i.bringing),
       mine: false,
       added_by_me: false,
