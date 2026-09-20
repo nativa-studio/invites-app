@@ -82,6 +82,7 @@ export const copy = {
     empty: "Nothing on the list yet. Add what you're bringing and everyone else can see it.",
     // No group headings. The rows say which is which themselves: yours is the filled one with
     // the stamp, and the rest carry the words that claim them.
+    afterYes: "The list opens up once you have replied.",
     onTable: "What's covered:",
     allCovered: "Everything on the list has somebody bringing it. Add your own if you like.",
     nobody: "Nobody yet",
@@ -110,6 +111,7 @@ export const copy = {
   gift: {
     heading: "Group gift",
     // The organiser has not filled in their side yet, so there is nothing to ask anybody to do.
+    afterYes: "How to chip in opens up once you have replied.",
     sorting: (who: string) => `${who} is sorting out the details. They'll be here soon.`,
     sortingNoName: "The details are being sorted. They'll be here soon.",
     running: (who: string, what: string) => `${who} is organising a group gift: ${what}.`,
@@ -177,8 +179,11 @@ export const copy = {
   // opened this to read about a party and not about the app that drew it.
   about: {
     summary: "About this app",
-    body: "Bunting is being built by Nativa Studio, which is Marcia's studio. It is still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers that never seem to have a good tool for them.",
-    ask: "If you would like to know more, or you would help test it before it launches, give it a thumbs up.",
+    body: "Bunting is being built by Nativa Studio, which is Marcia's studio. It is still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers.",
+    // The list earns its place: "a work in progress" tells a reader nothing about what it does,
+    // and this is the only chance the app gets to say so.
+    what: "One place for the invite, the RSVPs, the to do list, sharing it with whoever else is organising, the potluck list and the group gift.",
+    ask: "If you want to help me test it, let me know here.",
     up: "Sounds good",
     done: "Thanks. Marcia will be in touch before it launches.",
     undo: "Actually, no thanks",
@@ -506,10 +511,10 @@ export const copy = {
     // The two groups the board splits into. Which dish somebody is bringing was on every row and
     // is gone: a host running a table needs to know what is still missing, and the names made
     // every item two lines tall for a fact they only want when something goes wrong.
-    plateBlock: "Give it a block on the invite",
+    plateBlock: "Also give it a card in the invite",
     plateBlockHint: "On, guests get a card under their reply where they claim a dish. Off, the invite only mentions it at the info booth and you collect it yourself.",
-    giftBlock: "Give it a block on the invite",
-    giftBlockHint: "On, guests get a card under their reply with how to chip in and a tick when they have. Off, the invite only mentions it at the info booth.",
+    giftBlock: "Also give it a card in the invite",
+    giftBlockHint: "A card in the invite saying a group gift is happening, for guests who are still deciding. Off, the info booth line is the only mention. Either way, everyone who answers gets how to chip in after their reply.",
     plateClaimed: "Being brought",
     plateNeeded: "Still to be claimed",
     plateAllClaimed: "Every item has somebody bringing it.",

@@ -22,6 +22,7 @@ export function InvitePage({ invite, token, link, plate, gift, curious, skipAnim
       skipAnimation={skipAnimation ?? answered}
       layout={layout}
       token={token}
+      answered={answered}
       curious={curious}
       // The board goes to the reply rather than to the layout. Where it belongs depends on the
       // answer, and the answer changes in the browser after this has rendered, so the reply is

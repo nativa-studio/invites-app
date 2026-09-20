@@ -23,6 +23,7 @@ export function AboutApp({ token, curious }: { token: string | null; curious: bo
       <summary>{copy.about.summary}</summary>
       <div className="inner">
         <p>{copy.about.body}</p>
+        <p>{copy.about.what}</p>
         {/* No token means the group link before anybody has replied: there is no row to record a
             thumbs up against yet, so the text stands on its own rather than offering a button
             that would have nowhere to write. */}

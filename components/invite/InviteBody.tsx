@@ -9,13 +9,14 @@ import { orderedParts, type InvitePart } from "@/lib/invite-parts";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
+import { AnnounceGift, AnnouncePlate } from "./Announce";
 import { LineupInvite } from "./LineupInvite";
 
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e, greeting, reply, layout, skipAnimation, token, curious,
+  e, greeting, reply, layout, skipAnimation, token, curious, answered,
 }: {
   e: PublicEvent;
   greeting: string;
@@ -23,10 +24,22 @@ export function InviteBody({
   /** For the About this app line at the foot. Null on the group link before anybody has replied,
    *  where there is no guest row yet to record a thumbs up against. */
   token?: string | null;
+  /** Whether this guest has replied. The announcements come off once they have. */
+  answered?: boolean;
   curious?: boolean;
   layout?: PublicEvent["layout_id"];
   skipAnimation?: boolean;
 }) {
+  // The two announcements sit immediately before the reply: the last thing a guest reads before
+  // deciding, which is where news about what the day will involve belongs. Computed once, because
+  // the lineup layout takes its own reply and would otherwise quietly not have them.
+  const announced = (
+    <>
+      <AnnouncePlate e={e} answered={answered} />
+      <AnnounceGift e={e} answered={answered} />
+      {reply}
+    </>
+  );
   const id = layout ?? e.layout_id;
   if (id === "lineup") {
     return (
@@ -53,7 +66,11 @@ export function InviteBody({
   const draw: Record<InvitePart, React.ReactNode> = {
     updates: <UpdatesCard e={e} />,
     details: e.show_details ? <DetailsCard e={e} /> : null,
-    reply,
+    // The two announcements sit immediately before the reply, not in the reorderable list. They
+    // are the last thing a guest reads before deciding, which is where news about what the day
+    // will involve belongs, and they are not parts a host arranges: each is tied to a feature
+    // switch rather than to a place on the page. Both draw nothing unless the host asked for one.
+    reply: announced,
     day: e.show_runsheet ? <DayCard e={e} /> : null,
     know: e.show_good_to_know ? <KnowCard e={e} /> : null,
     after: e.show_after ? <AskCard e={e} /> : null,
