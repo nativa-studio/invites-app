@@ -390,6 +390,20 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 /* The group, as a tag on the meta line. Smaller than the tag on an event card, because there is
    one per line here and a row of full sized pills would read as the point of the list. */
 .feed li .t .tag { padding: 1px 7px; font-size: 11px; }
+/* One colour per group, so a host working through the neighbours can find them down the page
+   without reading a single name. The host app is otherwise almost colourless on purpose, and this
+   is the exception that earns it: the colour is the only thing here doing a job at a glance.
+   Filled tint with the app's own ink on it rather than coloured text, which is what keeps it
+   readable: measured, every one of these is over 14:1 against the ink, where AA asks for 4.5.
+   The border is the tint darkened, so a tag still has an edge on white. */
+.feed li .t .tag.g0 { background: #E3EDFA; border-color: #B9D1EE; color: var(--app-ink); }
+.feed li .t .tag.g1 { background: #E4F3E7; border-color: #BADDC2; color: var(--app-ink); }
+.feed li .t .tag.g2 { background: #FBE8E0; border-color: #EFC8B7; color: var(--app-ink); }
+.feed li .t .tag.g3 { background: #F6EFDD; border-color: #E2D3AE; color: var(--app-ink); }
+.feed li .t .tag.g4 { background: #EFE8F7; border-color: #D2C3E6; color: var(--app-ink); }
+.feed li .t .tag.g5 { background: #DFF1F1; border-color: #AFD9D9; color: var(--app-ink); }
+.feed li .t .tag.g6 { background: #FBE5EE; border-color: #EFBDD3; color: var(--app-ink); }
+.feed li .t .tag.g7 { background: #ECECE8; border-color: #D0D0C9; color: var(--app-ink); }
 /* The two that are somebody deciding, marked. The rest are steps along the way. */
 .feed li.yes { border-left-color: var(--app-on); }
 .feed li.no { border-left-color: var(--app-off); }

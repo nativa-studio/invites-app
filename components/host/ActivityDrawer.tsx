@@ -4,6 +4,7 @@ import { copy } from "@/lib/copy";
 import { formatDateTime } from "@/lib/format";
 import type { Happening } from "@/lib/db/activity";
 import { Sheet } from "./Sheet";
+import { groupColour } from "@/lib/group-colours";
 
 // Everything that has happened, behind a button.
 //
@@ -11,7 +12,7 @@ import { Sheet } from "./Sheet";
 // number: it is eighty lines of detail that answer "what changed" rather than "where are we", and
 // a host opens this screen for the second question far more often than the first. It is one tap
 // away when they want it and none of the page when they do not.
-export function ActivityDrawer({ feed }: { feed: Happening[] }) {
+export function ActivityDrawer({ feed, groups }: { feed: Happening[]; groups: string[] }) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -41,7 +42,7 @@ export function ActivityDrawer({ feed }: { feed: Happening[] }) {
                       through the neighbours on Tuesday can find them without reading the names. */}
                   <span className="t">
                     {formatDateTime(h.at)}
-                    {h.group && <span className="tag">{h.group}</span>}
+                    {h.group && <span className={`tag g${groupColour(h.group, groups)}`}>{h.group}</span>}
                   </span>
                 </li>
               ))}
