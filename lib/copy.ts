@@ -27,6 +27,10 @@ export const copy = {
   greetingGroup: "You're invited",
   envelope: {
     open: "Tap to open",
+    // For somebody coming back. A guest who has already replied lands on the invite open, which
+    // is right, and several of them then said they missed the envelope and wanted it again. One
+    // quiet line under the greeting, where they are already looking when the page loads.
+    again: "Open it again",
     // On the group link the envelope has no name to carry, so it is addressed to whoever opened it.
     eyebrowBirthday: "Trainer wanted",
   },

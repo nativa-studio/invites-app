@@ -22,7 +22,7 @@ const DOTS = ["#EFB93C", "#7FAF95", "#93C7D6", "#E8763C", "#E0553F", "#3F6B57"];
 // on a panel rather than bare on the page, so there is something for the envelope to hand over.
 // Everything below follows once it has opened.
 export function LineupInvite({
-  event: e, greeting, reply, after, skipAnimation,
+  event: e, greeting, reply, after, replay, skipAnimation,
 }: {
   event: PublicEvent;
   greeting: string;
@@ -30,6 +30,8 @@ export function LineupInvite({
   /** The very last thing inside the envelope, after the sign-off. The suite puts About this app
    *  here; this layout had nowhere to put it, so it had none at all. */
   after?: React.ReactNode;
+  /** Open it again, under the greeting. Null unless the envelope was skipped. */
+  replay?: React.ReactNode;
   skipAnimation?: boolean;
 }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
@@ -41,6 +43,7 @@ export function LineupInvite({
     <main className="lineup">
       <div className="page">
         <p className="greet">{greeting}</p>
+        {replay}
 
         <Envelope
           stock="beige"
