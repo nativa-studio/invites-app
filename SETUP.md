@@ -54,6 +54,73 @@ LOCAL_PG_URL=postgres://postgres:postgres@localhost/bunting_test NEXT_PUBLIC_SUP
 
 Then open `http://localhost:3000/i/previewgab4`.
 
+## Running the real app in a session
+
+A session gets `SUPABASE_ACCESS_TOKEN`, which is a management token, not an app key. The app needs
+the publishable key, and that can be fetched with the token already in hand rather than asked for:
+
+```
+set -a && . ./.env.local && set +a
+REF="${SUPABASE_PROJECT_REF:-kihsdobmmvnfvokbmmgj}"
+curl -s -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+  "https://api.supabase.com/v1/projects/$REF/api-keys?reveal=true" \
+  | python3 -c "import json,sys;[print(k['api_key']) for k in json.load(sys.stdin) if k['type']=='publishable']"
+```
+
+Put that and `NEXT_PUBLIC_SUPABASE_URL=https://<ref>.supabase.co` into `.env.local`, which is git
+ignored, then `npm run build && npx next start`. That is a real app against the real database, so
+guest pages, RPCs and server actions all work. Never `npm run dev`: client components do not
+hydrate here.
+
+Test against a scratch event of your own (`insert into public.events ... slug = 'zz-something'`)
+and delete it afterwards. The live site runs on this same database, so anything else you touch is
+somebody's real party.
+
+## What a session cannot reach, and how to fix it
+
+Outbound network goes through an allowlist set on the cloud environment, not by this repo. As of
+20 September 2026 these work: `api.supabase.com`, `*.supabase.co`, `api.vercel.com`, github, npm,
+and `invites-app-xi.vercel.app`. **`bunting.cloud` does not**, which means the instruction further
+up this file to read the live site with curl fails at its real address. Use the vercel.app address
+instead, or allow the domain:
+
+At claude.ai/code, select the cloud icon showing the environment name in the row above the message
+box (there is no settings page and no direct URL). Hover the environment, select the settings icon
+on its right, set **Network access** to **Custom**, and list one domain per line in **Allowed
+domains**:
+
+```
+bunting.cloud
+*.bunting.cloud
+```
+
+Tick **Also include default list of common package managers**, or npm and everything else stops.
+
+Environment variables live in the same dialog, in `.env` format, one `KEY=value` per line. Both
+are copied once at session start, so a change lands in the next session, not this one.
+
+## Checking a deploy from a session
+
+`api.vercel.com` is reachable and answers `403 missing an authentication token` without one, so a
+Vercel token works from here. With `VERCEL_TOKEN` set on the environment:
+
+```
+curl -s -H "Authorization: Bearer $VERCEL_TOKEN" \
+  "https://api.vercel.com/v6/deployments?app=invites-app&limit=3" \
+  | python3 -m json.tool | grep -E '"(state|readyState|url|createdAt)"'
+```
+
+Without a token, the deploy can still be confirmed without asking anyone for a screenshot. Every
+commit that touches CSS changes the hash of the built stylesheet, so fetch a page and look for a
+class that only exists in the new code:
+
+```
+curl -s https://invites-app-xi.vercel.app/e/<some-slug> | grep -o '/_next/static/[^"]*\.css'
+```
+
+then fetch each of those and grep for the class. `app/globals.css` is on every page;
+`app/invite.css` only loads on invite routes, so check an invite page for anything drawn there.
+
 ## Who can sign in
 
 While Bunting is being built, only the people on a list may sign in. Everyone else who taps
