@@ -87,13 +87,6 @@ export const copy = {
     addToCalendar: "Add to calendar",
     google: "Google Calendar",
     apple: "Apple or Outlook",
-    // True already, and nobody knew: lib/calendar.ts writes the invite link into the event's
-    // description and its URL field. Three weeks later the text carrying the link is buried and
-    // the calendar entry is the one place a guest can still find their way back.
-    calendarCarriesLink: "Add it to your calendar and your invite link comes with it.",
-    // Under Change my answer. The button was there and the promise was not, so nothing told a
-    // guest their answer was not final until after they had given it.
-    changeHint: "This link is yours, so you can change your answer any time.",
     changed: "Reply updated",
   },
   // Bring a plate, as a guest reads it. The board is only ever seen by somebody who has said

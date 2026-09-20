@@ -50,14 +50,10 @@ export function ThanksCard({
           <div className="label sky">{copy.thanks.addToCalendar}</div>
           {googleLink && <a className="pbtn small" href={googleLink} target="_blank" rel="noreferrer">{copy.thanks.google}</a>}
           {icsLink && <a className="pbtn small" href={icsLink}>{copy.thanks.apple}</a>}
-          <p className="replyby">{copy.thanks.calendarCarriesLink}</p>
         </div>
       )}
       {/* The way back, not a third thing to do. See .pbtn.quiet. */}
       <button type="button" className="pbtn small quiet" onClick={onChange}>{copy.rsvp.change}</button>
-      {/* On a no as well as a yes, and it matters more there: somebody whose day frees up is
-          exactly the person who needs to know the link still works. */}
-      <p className="replyby">{copy.thanks.changeHint}</p>
     </div>
     </>
   );

@@ -14,9 +14,13 @@
 /* The two quiet lines on the reply card: the nudge above the buttons and the reply by date under
    them. The nudge is the same size as the card's other prose because it is the thing being said;
    the date is a size down because it is the footnote to it, and it used to be the only sentence
-   there and read as the demand. */
+   there and read as the demand.
+   The thank you card had two more of these under its buttons, explaining that the calendar entry
+   carries the link and that the answer can be changed. Both went: the card is what somebody sees
+   at the moment they have just said yes, and it should be four words and a way back, not a page
+   of notes about how the link works. */
 .pcard.reply .nudge { font-size: 15px; }
-.pcard.reply .replyby, .pcard .cal .replyby {
+.pcard.reply .replyby {
   font-size: 13px; line-height: 1.45; text-align: center; max-width: 300px; margin: 0; opacity: 0.72;
 }
 /* The host's own picture, framed at the top of the card the way a poster is. Two by three, so a
