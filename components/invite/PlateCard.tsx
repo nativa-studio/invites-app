@@ -17,8 +17,9 @@ import { Bolt } from "@/components/art/icons";
 // last pavlova within the same minute, and the second one has to see the first one's name rather
 // than a claim that quietly did nothing.
 //
-// The allergy line is counts. No names, no notes. A guest wrote "Ada carries an epipen" in a box
-// meant for the host, and it is not going on a board forty people can read.
+// No allergy line. It said "Please keep in mind: 1 guest needs Dairy free" on the card where a
+// guest claims a dish, which is the room's food needs counted up and put in front of forty
+// people. Whoever is cooking needs that and has it, on the host's own potluck board.
 export function PlateCard({ token, plate, pretend }: { token: string; plate: Plate; pretend?: boolean }) {
   const [state, act, pending] = useActionState<PlateState, FormData>(plateAction, { plate });
   // The host trying their own invite. Everything works and nothing is written, which is the same
@@ -40,7 +41,6 @@ export function PlateCard({ token, plate, pretend }: { token: string; plate: Pla
     items: [...b.items, { id: `p${b.items.length}`, label, quantity: null, tags, claimed: true, mine: true, added_by_me: true }],
   }));
 
-  const allergies = board.allergies.map((a) => copy.plate.allergy(a.n, a.chip)).join(", ");
   const mine = board.items.filter((i) => i.mine);
   const needed = board.items.filter((i) => !i.claimed);
   // Somebody else has these. Named, so a guest can see what is already handled and not turn up
@@ -89,7 +89,6 @@ export function PlateCard({ token, plate, pretend }: { token: string; plate: Pla
       <div className="tape tr" />
       <div className="label red">{copy.plate.heading}</div>
       <p className="para">{board.host_note || (board.mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
-      {allergies && <p className="allergy">{copy.plate.allergies(allergies)}</p>}
 
       {board.items.length === 0 && <p className="small">{copy.plate.empty}</p>}
 

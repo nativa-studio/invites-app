@@ -251,12 +251,6 @@
 .orgswitch input { flex: none; width: 24px; height: 24px; margin: 0; accent-color: var(--navy); }
 .orgswitch .hint { display: block; font-weight: 400; margin-top: 4px; }
 
-/* What the kitchen needs to know, counted. Never a name and never anybody's note. */
-.allergy {
-  width: 100%; margin: 0; padding: 10px 14px; border-radius: 10px;
-  background: color-mix(in srgb, var(--yel) 35%, var(--paper));
-  border: 2px solid var(--navy); font-size: 14.5px; line-height: 1.4;
-}
 .err { background: #fff; border: 2px solid var(--red); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--red); }
 .foot { font-size: 13px; color: var(--on-sky); text-align: center; }
 .foot a { color: var(--on-sky); }
