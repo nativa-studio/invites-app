@@ -419,6 +419,18 @@
 /* The thumbs up borrows the invite's button, in the footer's cream rather than the card's navy,
    since out here there is no paper behind it. */
 .about .pbtn { min-height: 44px; }
+/* The feedback box, at the foot of the card. A line above it, because it is a different thing
+   from the hand up and should not look like a second half of it. */
+.about .feedback {
+  display: grid; gap: 8px; justify-items: center; width: 100%; max-width: 320px;
+  border-top: 2px dotted color-mix(in srgb, var(--navy) 25%, transparent); padding-top: 16px; margin-top: 4px;
+}
+.about .feedback label { font-size: 14px; }
+.about .feedback textarea {
+  width: 100%; font: inherit; font-size: 15px; color: var(--navy); background: #fff;
+  border: 2px solid var(--navy); border-radius: 6px; padding: 10px 12px; resize: vertical; min-height: 84px;
+}
+.about .feedback textarea:focus-visible { outline: 3px solid var(--yel); outline-offset: 2px; }
 .about .as-quiet {
   border: 0; background: none; color: var(--navy); font: inherit; opacity: 0.75; cursor: pointer;
   min-height: 44px; text-decoration: underline; text-underline-offset: 4px;

@@ -128,6 +128,11 @@ export const copy = {
     notComing: "Say yes on your invite first, and the list opens up.",
     wrongLink: "This link doesn't look right. Ask the host to send it again.",
     failed: "That didn't go through. Please try again.",
+    feedbackLabel: "Anything you would change?",
+    feedbackPlaceholder: "What worked, what didn't, what you expected to happen",
+    feedbackSend: "Send it to Ma",
+    feedbackDone: "Thanks, that is really useful.",
+    feedbackAgain: "Say something else",
   },
   // The group gift, as guests and the organiser read it. No money moves through the app, so
   // every word here is about people paying each other, not about paying us.
@@ -206,7 +211,9 @@ export const copy = {
     // So the line that shows while it is shut is the fact itself, in the voice the invite is
     // signed in, and the wording inside is first person for the same reason.
     summary: "Ma is building this app",
-    peek: "Have a look",
+    // The second line of the shut summary. It was "Have a look", which says there is something
+    // here without saying why anybody would want it. This says what she actually wants back.
+    peek: "Feedback welcome",
     body: "Yes, really. It is my own thing, still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers.",
     what: "One place for the invite, the replies, the allergy information, the to do list, sharing the load with whoever else is organising, the potluck list and the group gift.",
     ask: "If you want to help me test it, put your hand up and I will be in touch before it launches.",
@@ -214,6 +221,11 @@ export const copy = {
     done: "Thanks. I will be in touch before it launches.",
     undo: "Actually, no thanks",
     failed: "That didn't go through. Please try again.",
+    feedbackLabel: "Anything you would change?",
+    feedbackPlaceholder: "What worked, what didn't, what you expected to happen",
+    feedbackSend: "Send it to Ma",
+    feedbackDone: "Thanks, that is really useful.",
+    feedbackAgain: "Say something else",
   },
 
   sections: {
