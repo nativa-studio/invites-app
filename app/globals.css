@@ -386,7 +386,10 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
 .feed li { display: grid; gap: 2px; border-left: 2px solid var(--app-line-2); padding-left: 12px; }
 .feed li .n { font-size: 15px; line-height: 1.4; overflow-wrap: anywhere; }
-.feed li .t { font-size: 12px; color: var(--app-mute); }
+.feed li .t { font-size: 12px; color: var(--app-mute); display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+/* The group, as a tag on the meta line. Smaller than the tag on an event card, because there is
+   one per line here and a row of full sized pills would read as the point of the list. */
+.feed li .t .tag { padding: 1px 7px; font-size: 11px; }
 /* The two that are somebody deciding, marked. The rest are steps along the way. */
 .feed li.yes { border-left-color: var(--app-on); }
 .feed li.no { border-left-color: var(--app-off); }

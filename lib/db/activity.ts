@@ -19,20 +19,31 @@ export type Happening = {
   at: string;
   kind: "yes" | "no" | "joined" | "calendar" | "token" | "sent" | "opened" | "reminded";
   who: string;
+  /** The group they are labelled with, for the tag beside the line. Null for anybody who has not
+   *  been put in one, which shows nothing rather than the words "no group": the tag is there to
+   *  tell two Sarahs apart, not to nag about tidying the list. */
+  group: string | null;
 };
 
 type Row = {
   kind: string;
   detail: string | null;
   at: string;
-  guest: { name: string } | { name: string }[] | null;
+  guest: Named | Named[] | null;
 };
+
+type Named = { name: string; groups: string[] | null };
+
+// One group per guest in the app, even though the column holds a list: the picker on a guest's
+// row sets one. First is therefore the one, and a guest who somehow carries two is labelled with
+// the first rather than with a crowd of tags.
+const groupOf = (g: { groups?: string[] | null } | null | undefined) => g?.groups?.[0] ?? null;
 
 export const loadActivity = cache(async (eventId: string, guests: GuestRow[]): Promise<Happening[]> => {
   const supabase = await createClient();
   const { data } = await supabase
     .from("activity")
-    .select("kind, detail, at, guest:guests(name)")
+    .select("kind, detail, at, guest:guests(name, groups)")
     .eq("event_id", eventId)
     .order("at", { ascending: false })
     .limit(120);
@@ -50,13 +61,14 @@ export const loadActivity = cache(async (eventId: string, guests: GuestRow[]): P
         ? (row.kind as Happening["kind"])
         : null;
     if (!kind) continue;
-    out.push({ at: row.at, kind, who });
+    out.push({ at: row.at, kind, who, group: groupOf(g) });
   }
 
   for (const g of guests) {
-    if (g.sent_at) out.push({ at: g.sent_at, kind: "sent", who: g.name });
-    if (g.opened_at) out.push({ at: g.opened_at, kind: "opened", who: g.name });
-    if (g.reminded_at) out.push({ at: g.reminded_at, kind: "reminded", who: g.name });
+    const group = groupOf(g);
+    if (g.sent_at) out.push({ at: g.sent_at, kind: "sent", who: g.name, group });
+    if (g.opened_at) out.push({ at: g.opened_at, kind: "opened", who: g.name, group });
+    if (g.reminded_at) out.push({ at: g.reminded_at, kind: "reminded", who: g.name, group });
   }
 
   return out.sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0)).slice(0, 80);
