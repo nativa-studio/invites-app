@@ -6,7 +6,7 @@ import { PanelForm } from "@/components/host/PanelForm";
 
 // What the invite looks like: its shape, and which parts of it show at all. The pictures are no
 // longer a choice: there is one bundled set and every event gets it.
-export const LOOK_FIELDS = ["type", "layout_id", "show_details", "show_runsheet", "show_good_to_know", "show_after"] as const;
+export const LOOK_FIELDS = ["type", "layout_id", "strip_set", "ink", "show_details", "show_runsheet", "show_good_to_know", "show_after"] as const;
 
 export function LookPanel({ e }: { e: EventRow }) {
   return (
@@ -21,6 +21,8 @@ export function LookPanel({ e }: { e: EventRow }) {
           layout: asLayoutId(e.layout_id),
           palette: e.palette,
           themeId: e.theme_id,
+          ink: e.ink,
+          stripSet: e.strip_set ?? null,
           sections: {
             details: e.show_details !== false,
             day: e.show_runsheet !== false,

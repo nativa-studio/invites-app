@@ -4,6 +4,7 @@ import { revalidateEvent } from "@/lib/revalidate-event";
 import { normalisePhone } from "@/lib/format";
 import { copy } from "@/lib/copy";
 import { GIFT_OPTIONS, PHOTO_OPTIONS, PLATE_MODES, optionValues } from "@/lib/good-to-know";
+import { STRIP_SETS, STRIP_INKS } from "@/lib/strip-set";
 
 export type SaveState = { saved?: boolean; error?: string; note?: string };
 
@@ -16,7 +17,11 @@ const TIMES = ["start_time", "end_time"] as const;
 // editor and not to this line, so choosing it saved nothing at all and said it had saved.
 const CHOICES: Record<string, readonly string[]> = {
   type: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
-  layout_id: ["suite", "lineup"],
+  layout_id: ["suite", "lineup", "strip"],
+  // Taken from the lists the picker offers rather than written out again here. The copies had
+  // already drifted once on this screen, which is the comment above this block.
+  strip_set: STRIP_SETS.map((s) => s.id),
+  ink: STRIP_INKS.map((i) => i.id),
   parents_mode: ["stay", "drop_off", "either"],
   photo_sharing: optionValues(PHOTO_OPTIONS),
   gift_stance: optionValues(GIFT_OPTIONS),

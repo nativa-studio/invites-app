@@ -315,6 +315,11 @@ export const copy = {
     newEventNext: "Your invite exists. Pick how it looks, then fill in the details and add your guests.",
     previewHint: "Exactly what a guest opens, on their phone. Nothing you tap here is counted.",
     openFull: "Open full size",
+    // The illustrated strip's own two choices, shown only when it is the design in use.
+    stripHeading: "Pictures and ink",
+    stripHint: "The three drawings at the top of the invite, and the one colour everything is drawn in.",
+    stripSetLabel: "Pictures",
+    stripInkLabel: "Ink",
     sectionsHeading: "What the invite shows",
     sectionsHint: "A section with nothing in it stays hidden anyway. These are for leaving one out on purpose.",
     savedTitle: "Saved.",

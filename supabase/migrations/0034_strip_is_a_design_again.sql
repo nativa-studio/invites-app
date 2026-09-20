@@ -1,0 +1,14 @@
+-- The illustrated strip goes back in the range, so the column default stops handing it out.
+--
+-- events.layout_id has defaulted to 'strip' since the first migration, from a week when the strip
+-- was going to be the only design. It was then cut, and for a while the default named a layout
+-- that did not exist: an event created without a pick saved 'strip', rendered as the suite, and
+-- showed nothing chosen in the picker.
+--
+-- The strip is real again, which turns that stale default into a live fault rather than a dead
+-- one: an event created without a pick would now silently come out as a design nobody chose.
+-- So the default becomes the suite, which is what those events were already being drawn as.
+--
+-- Nothing is rewritten. No row carries 'strip' today (checked), and if one ever did, it now gets
+-- the design it names.
+alter table public.events alter column layout_id set default 'suite';

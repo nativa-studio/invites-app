@@ -50,6 +50,10 @@ export type PublicEvent = {
    *  look at. Nothing offers them to a host until she says which ones stay. */
   layout_id: "suite" | "lineup" | "peek" | "post" | "strip";
   ink: string;
+  /** Which set of doodles the illustrated strip draws. Null falls back to the theme, which is
+   *  every event made before the picker existed. Added in 0035, so an older database sends
+   *  nothing and the strip falls back the same way. */
+  strip_set?: string | null;
   palette: Palette | null;
   invite_image_path: string | null;
   details_strip: boolean;

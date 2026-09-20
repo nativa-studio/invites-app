@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { copy } from "@/lib/copy";
 import { designsFor, LAYOUTS, type LayoutOption } from "@/lib/layouts";
+import { STRIP_SETS, STRIP_INKS, stripSet, inkFor, paperFor } from "@/lib/strip-set";
+import { Mono } from "@/components/art/mono";
 import { EVENT_TYPES } from "@/lib/event-types";
 import { InviteThumb } from "./InviteThumb";
 import { Sheet } from "./Sheet";
@@ -25,6 +27,8 @@ export type LookState = {
   artwork: string | null;
   palette: Palette | null;
   themeId: string | null;
+  ink: string | null;
+  stripSet: string | null;
 };
 
 // Design: what kind of party it is, then what the invite looks like.
@@ -45,6 +49,10 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
   const [layout, setLayout] = useState(saved.layout);
   const [sections, setSections] = useState(saved.sections);
   const [showAll, setShowAll] = useState(false);
+  const [ink, setInk] = useState(saved.ink ?? "charcoal");
+  // Null in the column means "whatever the theme implies", so the picker opens on the set the
+  // invite is actually drawn in rather than on nothing.
+  const [set, setSet] = useState(stripSet(saved.stripSet, saved.themeId).id);
   const [open, setOpen] = useState<LayoutOption | null>(null);
 
   const { fits, rest } = designsFor(type);
@@ -62,6 +70,8 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
           neither of which is a form control the panel could read. */}
       <input type="hidden" name="type" value={type} />
       <input type="hidden" name="layout_id" value={layout} />
+      <input type="hidden" name="strip_set" value={set} />
+      <input type="hidden" name="ink" value={ink} />
 
       <section className="card">
         <h2 className="h2">{copy.host.partyTypeHeading}</h2>
@@ -96,10 +106,10 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
               onClick={() => setOpen(d)}
             >
               <span className="design-art">
-                <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} />
+                <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
               </span>
               <span className="n">{d.name}</span>
-              <span className="b">{d.line}</span>
+              {d.line && <span className="b">{d.line}</span>}
               {layout === d.id && <span className="tag">{copy.host.designChosen}</span>}
             </button>
           ))}
@@ -111,6 +121,51 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
         )}
         {rest.length > 0 && showAll && <p className="hint">{copy.host.designRestHint}</p>}
       </section>
+
+      {/* Only for the illustrated strip, because it is the only design these two do anything to.
+          Shown under the gallery rather than inside the design sheet: a host picking Diwali is
+          choosing the occasion, not inspecting a design, and it has to survive the sheet closing. */}
+      {layout === "strip" && (
+        <section className="card">
+          <h2 className="h2">{copy.host.stripHeading}</h2>
+          <p className="hint">{copy.host.stripHint}</p>
+
+          <p className="look-sub">{copy.host.stripSetLabel}</p>
+          <div className="sets">
+            {STRIP_SETS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className={`set ${set === s.id ? "on" : ""}`}
+                aria-pressed={set === s.id}
+                onClick={() => setSet(s.id)}
+                style={{ background: paperFor(ink), color: inkFor(ink) }}
+              >
+                <span className="trio">{s.trio.map((n, i) => <Mono key={i} name={n} size={30} />)}</span>
+                <span className="n">{s.name}</span>
+              </button>
+            ))}
+          </div>
+
+          <p className="look-sub">{copy.host.stripInkLabel}</p>
+          <div className="inks">
+            {STRIP_INKS.map((i) => (
+              <button
+                key={i.id}
+                type="button"
+                className={`swatch ${ink === i.id ? "on" : ""}`}
+                aria-pressed={ink === i.id}
+                aria-label={i.name}
+                title={i.name}
+                onClick={() => setInk(i.id)}
+                style={{ background: paperFor(i.id) }}
+              >
+                <span style={{ background: inkFor(i.id) }} />
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="card">
         <h2 className="h2">{copy.host.sectionsHeading}</h2>

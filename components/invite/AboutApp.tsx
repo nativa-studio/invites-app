@@ -80,7 +80,7 @@ export function AboutApp({ token, curious, pretend }: { token: string | null; cu
         {copy.about.summary}
         {/* The instruction is separate from the fact, and quieter, so the line reads as her
             saying something rather than as a button asking to be pressed. */}
-        <span className="peek">{copy.about.peek}</span>
+        <span className="more">{copy.about.peek}</span>
       </summary>
       <div className="inner">
         <p>{copy.about.body}</p>

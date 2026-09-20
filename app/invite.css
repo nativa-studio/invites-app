@@ -386,7 +386,7 @@
 .about > summary::-webkit-details-marker { display: none; }
 /* The fact she is telling them, then the instruction, quieter and smaller. Only the second one
    is underlined: underlining both made the whole thing read as a link with a subtitle. */
-.about > summary .peek { font-size: 12px; opacity: 0.8; text-decoration: underline; text-underline-offset: 4px; }
+.about > summary .more { font-size: 12px; opacity: 0.8; text-decoration: underline; text-underline-offset: 4px; }
 .about > summary:hover, .about[open] > summary { opacity: 1; }
 /* The wave. One tilt and back, half a second, fired once when it scrolls into view and never
    again. Transform only, so it costs one composited frame and moves nothing else on the page.

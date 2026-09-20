@@ -13,6 +13,7 @@ export type EventSummary = {
   layout_id: string | null;
   invite_image_path: string | null;
   theme_id: string | null;
+  ink: string | null;
   palette: import("@/lib/db/types").Palette | null;
   intro: string | null;
   yes: number;
@@ -44,7 +45,7 @@ export function EventCard({ e }: { e: EventSummary }) {
           once with the app's furniture and again with its own. The paper an event is printed on
           is the fastest way to recognise it in a list, so it gets the whole area. */}
       <span className={`evt-art${beige ? " beige" : ""}`} style={paletteVars(p)}>
-        <InviteThumb artwork={e.invite_image_path} title={e.title} intro={e.intro} themeId={e.theme_id} palette={e.palette} layout={e.layout_id ?? undefined} />
+        <InviteThumb artwork={e.invite_image_path} title={e.title} intro={e.intro} themeId={e.theme_id} palette={e.palette} layout={e.layout_id ?? undefined} ink={e.ink} />
       </span>
       <span className="evt-body">
         <span className="evt-title">{e.title}</span>

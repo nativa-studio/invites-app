@@ -8,7 +8,7 @@ export default async function EventList() {
   const supabase = await createClient();
   const { data: events } = await supabase
     .from("events")
-    .select("id, title, date, status, layout_id, invite_image_path, theme_id, palette, intro, ask_party_mode")
+    .select("id, title, date, status, layout_id, invite_image_path, theme_id, ink, palette, intro, ask_party_mode")
     .order("date", { ascending: true });
 
   // One query for every guest across the host's events, rather than one per card. A host has a

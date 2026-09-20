@@ -111,7 +111,16 @@ p { margin: 0; }
 
    The scene is laid out at those sizes and scaled at the end, because type does not shrink with a
    box unless the box is scaled, and every length in the guest stylesheet is a pixel count. */
+/* 0.18, not 0.221, and the number is not a taste. The design gallery is a grid of
+   repeat(auto-fill, minmax(150px, 1fr)), so the narrowest tile it can make has 126px of content
+   inside its padding and border. At 0.221 the picture is 150.3px wide, which on a 390px phone
+   sits in a 137px tile and hangs 13px past it: the envelope's edge lands on the tile's border and
+   reads as a picture cut in half. Measured at 360, 390, 412, 430, 455 and 520. 680 x 0.18 is
+   122.4, which fits the narrowest tile the grid can produce with room to spare at every width.
+   Only in the gallery: the event list gives its thumbnail a panel the width of the whole card,
+   where 0.221 has always fitted and a smaller picture would be a loss for no reason. */
 .ithumb { --thumb: 0.221; position: relative; display: block; width: calc(680px * var(--thumb)); height: calc(730px * var(--thumb)); }
+.designs .ithumb { --thumb: 0.18; }
 .ithumb-scene { position: absolute; left: 0; top: 0; width: 680px; height: 730px; transform: scale(var(--thumb)); transform-origin: top left; }
 .ithumb-scene.invite { min-height: 0; padding: 0; overflow: visible; background-image: none; }
 /* The page the invite is on comes with it: the suite's blue with its dots, which the invite class
@@ -259,14 +268,47 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
    the screen allows, with the picture on top and the name under it, which is the shape of every
    other thing you pick by eye in this app. */
 .designs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-.design { display: grid; gap: 3px; justify-items: start; text-align: left; padding: 11px; border: 1px solid var(--app-line-2); border-radius: 10px; background: var(--app-bg); cursor: pointer; font: inherit; color: inherit; min-width: 0; }
+/* align-content: start, so a tile with less to say keeps its words under its picture. The grid
+   stretches every tile in a row to the tallest one, and without this the spare height was shared
+   out between the rows inside it: the Pokemon tile, which has a name and no line under it, held
+   its name halfway down the card. */
+.design { display: grid; gap: 3px; align-content: start; justify-items: start; text-align: left; padding: 11px; border: 1px solid var(--app-line-2); border-radius: 10px; background: var(--app-bg); cursor: pointer; font: inherit; color: inherit; min-width: 0; }
 .design:hover { border-color: var(--app-mute); }
 /* Chosen is a heavier outline, not a fill: the picture is the colour on this card. */
 .design.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
-.design-art { display: block; width: 100%; margin-bottom: 5px; }
+/* Centred, because the picture no longer fills the tile and a picture pushed to one side of its
+   own card looks like a mistake. */
+.design-art { display: flex; justify-content: center; width: 100%; margin-bottom: 5px; }
 .design .n { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
-.design .b { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; }
+.design .b { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; overflow-wrap: anywhere; }
 .design .tag { margin-top: 4px; }
+
+/* The strip's two choices. Each set tile is drawn in the ink that is chosen right now, so picking
+   a colour repaints the whole row and a host sees the pair they are actually choosing rather than
+   two settings they have to hold in their head at once. */
+.look-sub { font-size: 13px; font-weight: 600; color: var(--app-mute); margin: 12px 0 2px; }
+.sets { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.set {
+  display: grid; gap: 5px; justify-items: center; padding: 10px 6px; border-radius: 10px;
+  border: 1px solid var(--app-line-2); cursor: pointer; font: inherit; min-width: 0;
+}
+.set:hover { border-color: var(--app-mute); }
+.set.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
+.set .trio { display: flex; gap: 3px; align-items: flex-end; }
+.set .n { font-size: 12.5px; font-weight: 600; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+/* A grid, not a wrapping row. Seven 44px circles in the 332px this card gives them wrapped six
+   and one, and the one left on its own reads as a mistake rather than as a palette. Four and
+   three is the same information, laid out on purpose. Measured. */
+.inks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; justify-items: center; max-width: 340px; }
+@media (min-width: 460px) { .inks { grid-template-columns: repeat(7, 1fr); } }
+/* 44px, because it is a target on a phone. The ink is the disc; the paper is the ring around it,
+   so the swatch shows the pair rather than the colour on its own. */
+.swatch {
+  width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--app-line-2);
+  display: grid; place-items: center; cursor: pointer; padding: 0;
+}
+.swatch > span { width: 22px; height: 22px; border-radius: 999px; display: block; }
+.swatch.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 2px var(--app-ink); }
 
 /* The drawer. It slides up from the bottom on a phone, which is where a hand is, and it never
    takes the whole screen: the invite stays visible above it so you can see what you are editing. */
@@ -536,3 +578,14 @@ fieldset.stack > legend { padding: 0; }
 /* A dish and whoever is bringing it, wrapping as one thing. max-width keeps a very long dish
    name breaking inside the pair rather than running off the side of the card. */
 .dishrun .pair { display: inline-block; max-width: 100%; }
+
+/* The illustrated strip's tile. No envelope and no characters, because it has neither: its cover
+   is three doodles over the title, so that is what stands here. Laid out at the tile's own size
+   rather than scaled down from 680px, since there is nothing here that has to match a card. */
+/* The tile is 122 by 131. Measured, because the first go was laid out at the invite's sizes and
+   the title ran off the right edge with the bunting cut in half. */
+.ithumb.strip-thumb { display: flex; align-items: center; justify-content: center; padding: 8px; }
+.strip-thumb-in { display: flex; flex-direction: column; align-items: center; gap: 7px; text-align: center; max-width: 100%; }
+.strip-thumb-in .trio { display: flex; gap: 4px; align-items: flex-end; }
+.strip-thumb-in .t { font-family: var(--font-hand); font-size: 14px; line-height: 1.1; letter-spacing: 0.03em; max-width: 100%; }
+.strip-thumb-in .b { font-size: 9px; line-height: 1.35; opacity: 0.75; max-width: 100%; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
