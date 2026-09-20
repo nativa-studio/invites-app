@@ -350,6 +350,81 @@ export async function assignPlateItem(eventId: string, itemId: string, guestId: 
   revalidateEvent(eventId);
 }
 
+// ---------- the shopping list ----------
+//
+// The trolley, not the invite. Everything here goes through the host's own session, so the
+// members policy on shopping_items is the whole check, the same as every other host table.
+//
+// A co-host at the shops and a host at home are both looking at this, so every write is scoped
+// to the event on both sides: an id from somewhere else writes nothing.
+
+export async function addShoppingItem(eventId: string, label: string, quantity: string) {
+  const clean = label.trim().slice(0, 80);
+  if (!clean) return;
+  const { supabase, uid } = await hostClient();
+  // New things go on the end of the list rather than the top: a host adding three items in a row
+  // expects them in the order they said them.
+  const { data: last } = await supabase
+    .from("shopping_items").select("sort").eq("event_id", eventId)
+    .order("sort", { ascending: false }).limit(1).maybeSingle();
+  await supabase.from("shopping_items").insert({
+    event_id: eventId,
+    label: clean,
+    quantity: quantity.trim().slice(0, 40) || null,
+    added_by: uid,
+    sort: (last?.sort ?? 0) + 1,
+  });
+  revalidateEvent(eventId);
+}
+
+export async function editShoppingItem(eventId: string, itemId: string, label: string, quantity: string) {
+  const clean = label.trim().slice(0, 80);
+  if (!clean) return;
+  const { supabase } = await hostClient();
+  await supabase.from("shopping_items")
+    .update({ label: clean, quantity: quantity.trim().slice(0, 40) || null })
+    .eq("id", itemId).eq("event_id", eventId);
+  revalidateEvent(eventId);
+}
+
+// In the trolley, or back out of it.
+//
+// Who bought it is recorded because this list is shared: "Tommy got the ice" is the difference
+// between two people buying ice and nobody buying it. Unticking clears the name as well as the
+// time, so the line never claims somebody bought a thing that is back on the list.
+export async function setShoppingGot(eventId: string, itemId: string, got: boolean) {
+  const { supabase, uid } = await hostClient();
+  await supabase.from("shopping_items")
+    .update(got ? { got: true, got_at: new Date().toISOString(), got_by: uid } : { got: false, got_at: null, got_by: null })
+    .eq("id", itemId).eq("event_id", eventId);
+  revalidateEvent(eventId);
+}
+
+export async function removeShoppingItem(eventId: string, itemId: string) {
+  const { supabase } = await hostClient();
+  await supabase.from("shopping_items").delete().eq("id", itemId).eq("event_id", eventId);
+  revalidateEvent(eventId);
+}
+
+// The order a host drags the list into is the order they walk a shop in, so it is stored rather
+// than recomputed. Written in one go, the same way the invite's sections are.
+export async function setShoppingOrder(eventId: string, ids: string[]) {
+  const { supabase } = await hostClient();
+  const rows = ids.slice(0, 200);
+  await Promise.all(rows.map((id, i) =>
+    supabase.from("shopping_items").update({ sort: i + 1 }).eq("id", id).eq("event_id", eventId),
+  ));
+  revalidateEvent(eventId);
+}
+
+// Clearing out what is already bought, which is what a host does on the way home rather than
+// unticking fourteen lines one at a time.
+export async function clearGotShopping(eventId: string) {
+  const { supabase } = await hostClient();
+  await supabase.from("shopping_items").delete().eq("event_id", eventId).eq("got", true);
+  revalidateEvent(eventId);
+}
+
 // Draft, live, saying thanks, put away. One tap from the badge in the header, which is where a
 // host reads the state, so the place that tells you is the place that changes it.
 const STATUSES = ["draft", "live", "thanks", "archived"];
