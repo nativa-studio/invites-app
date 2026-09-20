@@ -51,6 +51,25 @@ plate card and the gift card each exist three times, as the live one a guest act
 editor draws (`PreviewExtras.tsx`). Restyling one means changing three. Left that way on purpose:
 the duplication is cosmetic, and the copy that mattered is gone.
 
+## A layout's stylesheet gets `main.<name>`, never a bare class
+
+`InviteBody` imports every layout so it can dispatch to any of them, so **every layout's
+stylesheet loads on every invite page**. A bare class name at the top of one is not that layout's
+to take, and this has now gone wrong twice with the same shape:
+
+- `app/peek.css` declared `.peek { min-height: 100vh; ... }`. The About this app block had a
+  `<span class="peek">` in it. Every invite in the app, the suite and the lineup included, drew an
+  844 px empty cream panel at its foot and read the About card's colours out of the peek layout.
+- `app/strip.css` declared `.strip { --ink: ...; --red: var(--ink); ... }`. The celebration's
+  streamers are `<span class="flag pop c0 strip">`. On Gabriel's blue invite a third of the
+  bunting came out charcoal and cream, because each streamer was handed the strip's entire
+  one-ink token set.
+
+The second one was written by the session that had just fixed the first and written the comment
+warning about it. So: the root rule of a layout stylesheet names the element it is on
+(`main.strip`), and so does every descendant rule under it. Neither fault was visible to
+typecheck, to lint, or to a page that did not happen to have the other thing on it.
+
 ## A server screen cannot call a function out of a "use client" file
 
 Every export of a module marked `"use client"` is a client reference on the server, components and

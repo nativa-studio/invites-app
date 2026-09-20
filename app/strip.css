@@ -1,7 +1,14 @@
+/* `main.strip`, never a bare `.strip`, and this is the second time that has had to be said.
+   The celebration's streamers are `<span class="flag pop c0 strip">`: a bare `.strip` here handed
+   every one of them this design's whole token set, so on Gabriel's blue invite a third of the
+   bunting came out charcoal and cream instead of red, yellow and teal. Exactly the fault the
+   comment at the top of peek.css describes, written by the person who wrote that comment.
+   A layout's stylesheet gets its own element. There is no bare class name to spare. */
+
 /* The illustrated strip. One ink on paper, straight down the page, no cards and no envelope.
    The drawing is the dividing: three doodles over the title, a dashed rule between sections, a
    doodle against every line that has something to say. Ported from design/round1. */
-.strip {
+main.strip {
   /* The envelope's clip box is wider than the page on purpose, so the flap has room to stand
      open. Clip rather than hide: hidden would make this a scroll container and break the sticky
      pieces. Without it the page measured 408 across at a 390 viewport and scrolled sideways, the
@@ -18,12 +25,23 @@
   --yel: var(--ink);
   --forest: var(--ink);
   --crm: var(--paper);
+  /* The celebration, in one ink. Five flat tints between the ink and the paper, because ninety
+     triangles in one colour is not a party and four of the five borrowed colours were either
+     the paper or nothing at all. Spaced so the palest still stands off the page: at 22% of a
+     charcoal that is a light warm grey on cream, which reads as a flag at the back rather than
+     as a smudge. */
+  --flag-0: var(--ink);
+  --flag-1: color-mix(in srgb, var(--ink) 80%, var(--paper));
+  --flag-2: color-mix(in srgb, var(--ink) 58%, var(--paper));
+  --flag-3: color-mix(in srgb, var(--ink) 38%, var(--paper));
+  --flag-4: color-mix(in srgb, var(--ink) 22%, var(--paper));
+  --flag-edge: var(--ink);
   min-height: 100vh;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
 }
-.strip .page {
+main.strip .page {
   max-width: 430px;
   margin: 0 auto;
   display: flex;
@@ -32,12 +50,12 @@
   gap: 34px;
   padding: 36px 22px 56px;
 }
-.strip .greet { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; margin: 0; }
+main.strip .greet { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; margin: 0; }
 /* The cover is one block so it is one thing to tap in the editor, and the gaps inside it are its
    own rather than the page's, so it still reads as three separate lines.
    It is also the thing the envelope hands over, so it is a card: paper, an ink hairline and a
    corner. Nothing else on the page is boxed, and nothing else on the page arrives in an envelope. */
-.strip .cover {
+main.strip .cover {
   display: flex; flex-direction: column; align-items: center; gap: 26px; width: 100%;
   background: var(--paper); border: 2px solid var(--ink); border-radius: 8px;
   padding: 30px 22px 34px; box-sizing: border-box;
@@ -50,54 +68,54 @@
 /* The tap-to-open line sits on the page, not on the envelope, so it takes the page's ink. It was
    inheriting --crm, which on this design is the paper: paper on paper, and the one instruction a
    guest is given was invisible. The same fault the palette module exists to catch, one layer out. */
-.strip .stage .hint { color: var(--ink); font-family: var(--font-hand); }
-.strip .trio { display: flex; gap: 10px; justify-content: center; align-items: flex-end; }
-.strip h1 { font-family: var(--font-hand); font-size: 54px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
-.strip .label { font-family: var(--font-hand); font-size: 40px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
-.strip .para { font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; margin: 0; }
-.strip .rule { width: 120px; border-top: 2px dashed currentColor; opacity: 0.5; }
+main.strip .stage .hint { color: var(--ink); font-family: var(--font-hand); }
+main.strip .trio { display: flex; gap: 10px; justify-content: center; align-items: flex-end; }
+main.strip h1 { font-family: var(--font-hand); font-size: 54px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
+main.strip .label { font-family: var(--font-hand); font-size: 40px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
+main.strip .para { font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; margin: 0; }
+main.strip .rule { width: 120px; border-top: 2px dashed currentColor; opacity: 0.5; }
 /* A rule per section, and a section that draws nothing leaves its rule behind: Bring a plate is
    a part of the page whether or not the guest reading it has said yes, and on the group link it
    never draws at all. Two rules in a row is the page saying there was something here. Hidden
    rather than spaced away, so it takes its gap with it. */
-.strip .rule + .rule, .strip .page > .rule:last-child { display: none; }
-.strip section { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+main.strip .rule + .rule, main.strip .page > .rule:last-child { display: none; }
+main.strip section { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
 
 /* The pill, the one link on the page that looks like a control. */
-.strip .maps {
+main.strip .maps {
   display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px;
   border: 2px solid currentColor; border-radius: 999px; text-decoration: none; font-weight: 700;
   color: inherit;
 }
 
 /* The day: time, doodle, what happens. */
-.strip .stops { display: flex; flex-direction: column; gap: 18px; width: 100%; }
-.strip .stop { display: grid; grid-template-columns: 52px 44px 1fr; gap: 10px; align-items: start; }
-.strip .stop .t { font-family: var(--font-hand); font-size: 20px; text-align: right; padding-top: 8px; }
-.strip .stop .pic { display: flex; justify-content: center; }
-.strip .stop .n { font-family: var(--font-hand); font-size: 22px; line-height: 1; }
-.strip .stop .b { font-size: 15px; line-height: 1.45; opacity: 0.72; }
+main.strip .stops { display: flex; flex-direction: column; gap: 18px; width: 100%; }
+main.strip .stop { display: grid; grid-template-columns: 52px 44px 1fr; gap: 10px; align-items: start; }
+main.strip .stop .t { font-family: var(--font-hand); font-size: 20px; text-align: right; padding-top: 8px; }
+main.strip .stop .pic { display: flex; justify-content: center; }
+main.strip .stop .n { font-family: var(--font-hand); font-size: 22px; line-height: 1; }
+main.strip .stop .b { font-size: 15px; line-height: 1.45; opacity: 0.72; }
 
 /* The info booth and the updates: a doodle beside every line. */
-.strip .lines { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 320px; margin: 0 auto; }
+main.strip .lines { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 320px; margin: 0 auto; }
 /* The block is centred, the lines inside it are not: each line was as wide as its own sentence
    and centred in the column, so the doodles zig-zagged down the page instead of standing in one.
    Full width and a fixed slot for the picture puts them in a column, whatever the line says. */
-.strip .line { display: flex; gap: 12px; align-items: center; width: 100%; }
-.strip .line > svg { flex: 0 0 40px; }
-.strip .line > div { font-size: 16px; line-height: 1.45; flex: 1; }
+main.strip .line { display: flex; gap: 12px; align-items: center; width: 100%; }
+main.strip .line > svg { flex: 0 0 40px; }
+main.strip .line > div { font-size: 16px; line-height: 1.45; flex: 1; }
 
 /* Questions and photos at the end, side by side. */
-.strip .after { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; width: 100%; }
-.strip .after.one { grid-template-columns: 1fr; }
-.strip .after > div { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
-.strip .after .n { font-family: var(--font-hand); font-size: 22px; }
-.strip .after .b { font-size: 14px; opacity: 0.72; color: inherit; }
-.strip .after a.b { text-decoration: underline; }
+main.strip .after { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; width: 100%; }
+main.strip .after.one { grid-template-columns: 1fr; }
+main.strip .after > div { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+main.strip .after .n { font-family: var(--font-hand); font-size: 22px; }
+main.strip .after .b { font-size: 14px; opacity: 0.72; color: inherit; }
+main.strip .after a.b { text-decoration: underline; }
 
-.strip .signoff { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.strip .signoff .msg { font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; margin: 0; }
-.strip .signoff .from { font-size: 13px; opacity: 0.72; text-align: center; margin: 0; }
+main.strip .signoff { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+main.strip .signoff .msg { font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; margin: 0; }
+main.strip .signoff .from { font-size: 13px; opacity: 0.72; text-align: center; margin: 0; }
 
 /* The poster icons, wearing this layout's clothes.
    `icons.tsx` draws flat shapes filled with --sky, --yel, --crm, --red and --forest, with a
@@ -106,13 +124,13 @@
    drawings and sit beside the monoline ones.
    On the svg rather than on .strip, because --red is also the colour of an error message and the
    RSVP heading, and paper-coloured text is no text at all. */
-.strip svg { --sky: var(--paper); --yel: var(--paper); --crm: var(--paper); --red: var(--paper); --forest: var(--paper); }
+main.strip svg { --sky: var(--paper); --yel: var(--paper); --crm: var(--paper); --red: var(--paper); --forest: var(--paper); }
 
 /* The shared reply form, wearing this layout's clothes: no card, no tape, no tilt, no shadow. */
-.strip .pcard { background: transparent; border: 0; box-shadow: none; transform: none; padding: 0; max-width: none; gap: 14px; width: 100%; }
-.strip .pcard .tape { display: none; }
-.strip .rsvp-h { font-family: var(--font-hand); font-size: 56px; line-height: 1; letter-spacing: 0.04em; color: var(--ink); }
+main.strip .pcard { background: transparent; border: 0; box-shadow: none; transform: none; padding: 0; max-width: none; gap: 14px; width: 100%; }
+main.strip .pcard .tape { display: none; }
+main.strip .rsvp-h { font-family: var(--font-hand); font-size: 56px; line-height: 1; letter-spacing: 0.04em; color: var(--ink); }
 /* The bolts either side of the heading belong to the poster set, which this one is not in. */
-.strip .rsvp-h svg { display: none; }
-.strip .pbtn { border: 2px solid var(--ink); border-radius: 12px; max-width: 320px; min-height: 54px; font-weight: 700; }
-.strip .pbtn.primary { background: var(--ink); color: var(--paper); }
+main.strip .rsvp-h svg { display: none; }
+main.strip .pbtn { border: 2px solid var(--ink); border-radius: 12px; max-width: 320px; min-height: 54px; font-weight: 700; }
+main.strip .pbtn.primary { background: var(--ink); color: var(--paper); }
