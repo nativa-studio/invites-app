@@ -7,7 +7,7 @@ import type { PublicEvent } from "@/lib/db/types";
 // third from its own version with icons attached. Adding a line meant remembering all three.
 // Each line now carries what kind of thing it is, and a layout decides whether to draw a picture
 // beside it.
-export const NOTE_KINDS = ["siblings", "bring", "serve", "plate", "gifts", "photos", "other"] as const;
+export const NOTE_KINDS = ["siblings", "bring", "serve", "drinks", "plate", "gifts", "photos", "other"] as const;
 export type NoteKind = (typeof NOTE_KINDS)[number];
 export type Note = { kind: NoteKind; text: string };
 
@@ -24,6 +24,10 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // deciding whether to come rather than the moment for getting ready.
   if (e.what_to_bring) lines.push({ kind: "bring", text: e.what_to_bring });
   if (e.serve_text) lines.push({ kind: "serve", text: e.serve_text });
+  // Drinks sit straight after the food, because they are the same question asked again and a
+  // guest reading about the barbecue is already thinking about what is in the esky. Free text and
+  // no default: the line exists when the host has written one and not otherwise.
+  if (e.drinks_note?.trim()) lines.push({ kind: "drinks", text: e.drinks_note.trim() });
   // The invite's plate line and the board's own heading say different things on purpose. Here a
   // guest is deciding whether to come, so the line is what is being asked of them. The board says
   // claim something or add your own, and it is only on the page once they have said yes, which is
@@ -103,6 +107,7 @@ export const NOTE_NAMES: Record<NoteKind, string> = {
   siblings: "Siblings welcome",
   bring: "What to bring or wear",
   serve: "What you'll serve",
+  drinks: "Drinks",
   plate: "Bring a plate",
   gifts: "Gifts",
   photos: "Photos",

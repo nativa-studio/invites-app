@@ -47,6 +47,13 @@ export function Plate({ size = 48 }: P) {
 // What the host is serving. It was the plate above, which said the same thing twice and said
 // neither of them clearly: a plate is the symbol for a restaurant rather than for an afternoon
 // at somebody's house. A kettle barbecue is what is actually happening, and it reads at 44px.
+// Drinks. A tumbler rather than a wine glass or a mug: the line is as often a bring your own or a
+// soft drinks for the kids as it is anything alcoholic, and a wine glass makes a promise about
+// which the host has not made.
+export function Cup({ size = 48 }: P) {
+  return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M17 16h30l-4 36a4 4 0 0 1-4 4H25a4 4 0 0 1-4-4z" fill={S.fill} {...kl} /><path d="M19 28h26" stroke={S.navy} strokeWidth="3" fill="none" /><path d="M40 10 34 30" stroke={S.red} strokeWidth="4" strokeLinecap="round" fill="none" /></svg>);
+}
+
 export function Bbq({ size = 48 }: P) {
   return (<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><path d="M20 12c3-4 9-4 12 0" fill="none" stroke={S.navy} strokeWidth="3" strokeLinecap="round" /><path d="M12 30a20 20 0 0 1 40 0z" fill={S.red} {...kl} /><path d="M9 30h46" stroke={S.navy} strokeWidth="4" strokeLinecap="round" /><path d="M14 33h36l-5 13H19z" fill={S.crm} {...kl} /><g stroke={S.navy} strokeWidth="3" strokeLinecap="round"><path d="M21 46l-7 11M43 46l7 11M32 46v11" /></g></svg>);
 }

@@ -8,7 +8,7 @@ import { GIFT_OPTIONS, PHOTO_OPTIONS, PLATE_MODES, optionValues } from "@/lib/go
 export type SaveState = { saved?: boolean; error?: string; note?: string };
 
 // Artwork is stored as a path, and an empty choice clears it.
-const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "gift_note", "photos_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue", "yes_label", "no_label", "ask_note", "ask_name", "ask_phone", "ask_name_2", "ask_phone_2", "signoff_note"] as const;
+const TEXT = ["invite_image_path", "title", "host_line", "intro", "time_note", "venue", "address", "access_info", "parking", "host_phone", "serve_text", "what_to_bring", "drinks_note", "gift_note", "photos_note", "good_to_know", "plate_host_note", "text_template", "reminder_template", "share_title", "share_description", "custom_question", "accessibility_venue", "yes_label", "no_label", "ask_note", "ask_name", "ask_phone", "ask_name_2", "ask_phone_2", "signoff_note"] as const;
 const DATES = ["date", "rsvp_by"] as const;
 const TIMES = ["start_time", "end_time"] as const;
 // Gifts and photos take their allowed values from the list the editor offers, rather than from a

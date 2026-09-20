@@ -22,7 +22,7 @@ import { Reorder } from "./Reorder";
 
 
 export const KNOW_FIELDS = [
-  "siblings_welcome", "what_to_bring", "serve_text",
+  "siblings_welcome", "what_to_bring", "serve_text", "drinks_note",
   "gift_note", "group_gift_enabled", "photos_note", "good_to_know",
 ] as const;
 
@@ -41,6 +41,8 @@ export function KnowEditor({ e }: { e: EventRow }) {
         return <Field id="what_to_bring" label={NOTE_NAMES.bring} value={e.what_to_bring} hint='e.g. "Swimmers, a towel and a hat"' />;
       case "serve":
         return <Field id="serve_text" label={NOTE_NAMES.serve} value={e.serve_text} hint='e.g. "Afternoon tea, and cake at 4ish"' />;
+      case "drinks":
+        return <Field id="drinks_note" label={NOTE_NAMES.drinks} value={e.drinks_note ?? null} rows={2} hint={copy.host.drinksNoteFree} />;
       case "plate":
         // Settings live on the Potluck tab, with the board they belong to. This row is here so
         // the line can be moved up and down the invite with the others, and so a host looking
