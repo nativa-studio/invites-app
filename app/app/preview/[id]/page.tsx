@@ -90,8 +90,13 @@ export default async function Preview({
             same way as every other part: point at the card, change what it says. Off means no
             card, the same rule the rest of the invite follows, and the switch that turns them
             back on lives in the drawer and on their own tabs. */}
-        {row.plate_enabled && <PreviewPlate note={row.plate_host_note} mode={row.plate_mode} />}
-        {row.group_gift_enabled && <PreviewGift description={giftRow?.description ?? null} organiser={giftRow?.organiser ?? null} />}
+        {/* Drawn here even with the block switched off, marked as not being on the invite.
+            The switch that turns it back on lives in the drawer behind this card and nothing
+            else opens that drawer, so hiding it the way the guest's page does would leave a
+            host looking at a setting they could no longer reach. Trying it as a guest is the
+            view that tells the truth, and there it is gone. */}
+        {row.plate_enabled && <PreviewPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} />}
+        {row.group_gift_enabled && <PreviewGift description={giftRow?.description ?? null} organiser={giftRow?.organiser ?? null} off={row.gift_block === false} />}
       </>
     );
   // Picking means the host is editing, so the envelope starts open: a section they cannot see is

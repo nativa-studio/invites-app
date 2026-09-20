@@ -11,21 +11,21 @@ import { Gift as GiftIcon } from "@/components/art/icons";
 // data-section is the whole point of them. Without a card on the editing side there was nothing
 // to tap, so the one way to change what these say was to remember which tab they lived on. The
 // names match the entries in sections.tsx, the same as every other card.
-export function PreviewPlate({ note, mode }: { note: string | null; mode: string }) {
+export function PreviewPlate({ note, mode, off }: { note: string | null; mode: string; off?: boolean }) {
   return (
-    <div className="pcard tilt-r plate" data-section="plate">
+    <div className={`pcard tilt-r plate${off ? " off" : ""}`} data-section="plate">
       <div className="tape tl" />
       <div className="tape tr" />
       <div className="label red">{copy.plate.heading}</div>
       <p className="para">{note || (mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
-      <div className="small">{copy.host.previewPlate}</div>
+      <div className="small">{off ? copy.host.blockOff : copy.host.previewPlate}</div>
     </div>
   );
 }
 
-export function PreviewGift({ description, organiser }: { description: string | null; organiser: string | null }) {
+export function PreviewGift({ description, organiser, off }: { description: string | null; organiser: string | null; off?: boolean }) {
   return (
-    <div className="pcard cream gift" data-section="gift">
+    <div className={`pcard cream gift${off ? " off" : ""}`} data-section="gift">
       <div className="tape" />
       <div className="label red">{copy.gift.heading}</div>
       <GiftIcon size={36} />
@@ -35,7 +35,7 @@ export function PreviewGift({ description, organiser }: { description: string | 
           ? description ? copy.gift.running(organiser, description) : copy.gift.runningNoWhat(organiser)
           : description ? copy.gift.noOrganiser(description) : copy.gift.noOrganiserNoWhat}
       </p>
-      <div className="small">{copy.host.previewGift}</div>
+      <div className="small">{off ? copy.host.blockOff : copy.host.previewGift}</div>
     </div>
   );
 }

@@ -462,3 +462,8 @@
 /* Smaller at the corners than the single strip across the middle: two full width pieces of tape
    on one card reads as gift wrapping rather than as a note stuck to a wall. */
 .pcard .tape.tl, .pcard .tape.tr { width: 68px; height: 22px; }
+
+/* A block the host has switched off the invite, in the editing view only. Faded and flattened so
+   it reads as a setting rather than as part of the page, and still tappable, because the switch
+   that turns it back on is in the drawer behind it. */
+.pcard.off { opacity: 0.45; filter: saturate(0.35); }

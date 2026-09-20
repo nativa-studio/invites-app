@@ -248,6 +248,7 @@ export const copy = {
     plateEveryone: "It's a bring a plate afternoon, so please bring something for the table.",
   },
   host: {
+    blockOff: "Not on the invite. Guests only see the line in the info booth. Tap to put the block back.",
     previewPlate: "Guests claim a dish here once they have said yes.",
     previewGift: "Guests read how to chip in here once they have answered. The bank details come from whoever is organising it.",
     previewReply: "Tap to change what this asks, including the reply by date. To answer it the way a guest does, switch to Preview.",

@@ -17,12 +17,14 @@ import type { Plate } from "@/lib/guest/plate";
 // cannot be is interactive: there is nobody to claim a dish as. The caller renders them inert.
 export async function previewPlate(
   eventId: string,
-  e: { plate_enabled: boolean; plate_mode: string; plate_host_note: string | null },
+  e: { plate_enabled: boolean; plate_block?: boolean; plate_mode: string; plate_host_note: string | null },
   // Only the two columns the allergy count needs, so the caller can fetch two columns
   // rather than every guest row in full.
   guests: { status: string; dietary: string[] }[],
 ): Promise<Plate | null> {
-  if (!e.plate_enabled) return null;
+  // Both switches, the same pair get_plate checks, or trying it as a guest shows a board a
+  // guest would never be sent.
+  if (!e.plate_enabled || e.plate_block === false) return null;
   const items = await loadPlate(eventId);
   const yes = guests.filter((g) => g.status === "yes");
   const tally = yes.flatMap((g) => g.dietary).reduce<Record<string, number>>((m, d) => ({ ...m, [d]: (m[d] ?? 0) + 1 }), {});
@@ -44,8 +46,8 @@ export async function previewPlate(
   };
 }
 
-export async function previewGift(eventId: string, e: { group_gift_enabled: boolean }): Promise<Gift | null> {
-  if (!e.group_gift_enabled) return null;
+export async function previewGift(eventId: string, e: { group_gift_enabled: boolean; gift_block?: boolean }): Promise<Gift | null> {
+  if (!e.group_gift_enabled || e.gift_block === false) return null;
   const [gift, tally] = await Promise.all([loadGift(eventId), loadGiftTally(eventId)]);
   return {
     enabled: true,
