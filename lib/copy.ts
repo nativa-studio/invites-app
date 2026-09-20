@@ -41,7 +41,10 @@ export const copy = {
     // is not final, and it is theirs to change. The deadline still matters, so it sits under the
     // buttons, which is where somebody who has decided not to answer today will read it.
     nudge: "Your answer helps us plan. Come back here and update it if your plans change.",
-    replyBy: (date: string) => `Please reply by ${date} so we can get the numbers right.`,
+    // The date and nothing else. "so we can get the numbers right" was the reason for asking, and
+    // the line above the buttons now carries the reason ("helps us plan"), so saying it again
+    // underneath was the same sentence twice with the deadline buried in the middle of it.
+    replyBy: (date: string) => `Please reply by ${date}.`,
     yes: "Yes, we're coming",
     no: "Sorry, can't make it",
     yesQuiet: "I'll be there",
