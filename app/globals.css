@@ -372,6 +372,21 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .sum dt { color: var(--app-mute); }
 .sum dd { margin: 0; overflow-wrap: anywhere; }
 .sum dd.muted { color: var(--app-mute); }
+
+/* A list of things somebody wrote, on Tracking. No bullets and no grid: each line is a name and
+   a sentence, and they read as a list of people rather than a table of data. */
+.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 15px; line-height: 1.45; }
+.plain li { overflow-wrap: anywhere; }
+/* The activity feed, in its sheet. The time is under the line rather than beside it, because a
+   name plus a sentence plus a timestamp on one line wraps badly on a phone and the timestamp is
+   the least of the three. */
+.feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.feed li { display: grid; gap: 2px; border-left: 2px solid var(--app-line-2); padding-left: 12px; }
+.feed li .n { font-size: 15px; line-height: 1.4; overflow-wrap: anywhere; }
+.feed li .t { font-size: 12px; color: var(--app-mute); }
+/* The two that are somebody deciding, marked. The rest are steps along the way. */
+.feed li.yes { border-left-color: var(--app-on); }
+.feed li.no { border-left-color: var(--app-off); }
 /* Drag to reorder. touch-action none on the grip is what stops the page scrolling under a finger
    that is dragging a row; without it a phone takes the gesture for itself and the row never moves.
    The row being held is lifted so it reads as picked up rather than as a row that has gone odd. */
