@@ -48,7 +48,7 @@ export function InviteThumb({
     return (
       <span className="ithumb strip-thumb" style={{ background: paperFor(ink), color: inkFor(ink) }}>
         <span className="strip-thumb-in">
-          <span className="trio">{set.trio.map((n, i) => <Mono key={i} name={n} size={34} />)}</span>
+          <span className="trio">{set.trio.map((n, i) => <Mono key={i} name={n} size={28} />)}</span>
           <span className="t">{title}</span>
           {intro && <span className="b">{intro}</span>}
         </span>

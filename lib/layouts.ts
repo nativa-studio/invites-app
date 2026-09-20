@@ -1,7 +1,9 @@
 // The shapes an invite can take. One list, because two screens offer the same choice: the setup
 // flow, where a host picks a look before there is anything to preview, and the Layout tab, where
 // they change their mind against the real thing.
-export type LayoutOption = { id: string; name: string; line: string; suits: string[] };
+/** `line` is what the tile says under the name. Optional: a design whose name already says what
+ *  it is does not need a sentence repeating it. */
+export type LayoutOption = { id: string; name: string; line?: string; suits: string[] };
 
 // `suits` is which kinds of party a design is right for, and it is a judgement rather than a
 // rule: the suite is tape, tilted cards and characters standing in the corner, which is lovely
@@ -13,8 +15,7 @@ export type LayoutOption = { id: string; name: string; line: string; suits: stri
 export const LAYOUTS: LayoutOption[] = [
   {
     id: "suite",
-    name: "Stationery suite",
-    line: "Cards in an envelope that opens",
+    name: "Pokémon",
     suits: ["kids_party", "birthday", "gathering", "baby_shower"],
   },
   {

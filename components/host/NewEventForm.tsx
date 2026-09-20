@@ -50,7 +50,7 @@ export function NewEventForm() {
             <button key={l.id} type="button" className={`tile ${layout === l.id ? "on" : ""}`} aria-pressed={layout === l.id} onClick={() => { setLayout(l.id); setStep(2); }}>
               <LayoutThumb id={l.id} />
               <span className="tile-name">{l.name}</span>
-              <span className="tile-line">{l.line}</span>
+              {l.line && <span className="tile-line">{l.line}</span>}
             </button>
           ))}
         </div>

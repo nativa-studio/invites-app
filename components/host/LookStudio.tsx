@@ -109,7 +109,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
                 <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
               </span>
               <span className="n">{d.name}</span>
-              <span className="b">{d.line}</span>
+              {d.line && <span className="b">{d.line}</span>}
               {layout === d.id && <span className="tag">{copy.host.designChosen}</span>}
             </button>
           ))}
