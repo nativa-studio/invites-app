@@ -2,10 +2,9 @@
 import { claimGroupLink, getEventBySlug, submitRsvp } from "@/lib/guest/invite";
 import { isValidToken } from "@/lib/tokens";
 import { answerFromForm, formString } from "@/lib/rsvp-form";
-import { googleCalendarLink } from "@/lib/calendar";
+import { googleCalendarPath } from "@/lib/calendar";
 import { getPlate, type Plate } from "@/lib/guest/plate";
 import { getGift, type Gift } from "@/lib/guest/gift";
-import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import type { PublicGuest } from "@/lib/db/types";
 
 export type GroupState =
@@ -44,12 +43,11 @@ export async function groupRsvpAction(_prev: GroupState, fd: FormData): Promise<
   try {
     const guest = await submitRsvp(token, answer);
     const e = await getEventBySlug(slug);
-    const site = await getSiteUrl();
     return {
       ok: true,
       guest,
       token,
-      googleLink: e ? googleCalendarLink(e, inviteLink(site, token)) : null,
+      googleLink: e ? googleCalendarPath(e, token) : null,
       icsLink: `/i/${token}/invite.ics`,
       plate: guest.status === "yes" ? await getPlate(token) : null,
       gift: await getGift(token),

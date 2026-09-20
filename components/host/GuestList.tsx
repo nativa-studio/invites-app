@@ -209,6 +209,7 @@ export function GuestList({ eventId, guests, everyone, base, event, site }: Prop
               ? `${g.answered_by_host ? (g.status === "no" ? copy.host.trail.markedNo : copy.host.trail.markedYes) : copy.host.trail.replied} ${formatDateTime(g.replied_at)}`
               : null,
             g.reminded_at ? `${copy.host.trail.reminded} ${formatDateTime(g.reminded_at)}` : null,
+            g.calendar_at ? `${copy.host.trail.calendar} ${formatDateTime(g.calendar_at)}` : null,
           ].filter(Boolean).join(" · ");
           // Only the open panel's switch decides what goes out. A guest with nothing sent yet has
           // no switch, so it can only be the invite.

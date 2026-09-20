@@ -592,6 +592,10 @@ export const copy = {
       markedYes: "you marked them as coming",
       markedNo: "you marked them as not coming",
       reminded: "reminded",
+      // Not "added to calendar". What we know is that they took the file or opened Google with
+      // the event filled in, and a phone that previews the file and is tapped away from looks
+      // exactly the same from here. The word has to carry that.
+      calendar: "took the calendar file",
     },
   },
   templates: {
