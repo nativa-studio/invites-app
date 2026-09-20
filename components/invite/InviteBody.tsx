@@ -65,6 +65,7 @@ export function InviteBody({
         reply={announced}
         after={about}
         plate={plateCard ?? <PlateSlot />}
+        skipAnimation={skipAnimation}
       />
     );
   }

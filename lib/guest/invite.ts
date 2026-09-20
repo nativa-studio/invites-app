@@ -46,6 +46,9 @@ export type InviteCard = {
   /** Which design, so the card knows which paper its envelope is cut from. Added in 0012, so an
    *  older database sends nothing and the card falls back to the suite's red. */
   layout_id: string | null;
+  /** The one ink, for the design whose envelope is mixed rather than picked. Added in 0036, so
+   *  an older database sends nothing and the mix falls back to charcoal. */
+  ink?: string | null;
   invite_image_path: string | null;
 };
 

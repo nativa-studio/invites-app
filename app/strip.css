@@ -2,6 +2,11 @@
    The drawing is the dividing: three doodles over the title, a dashed rule between sections, a
    doodle against every line that has something to say. Ported from design/round1. */
 .strip {
+  /* The envelope's clip box is wider than the page on purpose, so the flap has room to stand
+     open. Clip rather than hide: hidden would make this a scroll container and break the sticky
+     pieces. Without it the page measured 408 across at a 390 viewport and scrolled sideways, the
+     moment this design got an envelope. Every other layout already carries this line. */
+  overflow-x: clip;
   /* The two the event chooses. Everything else on the page is one of these two. */
   --ink: #1F1B17;
   --paper: #FBF6EC;
@@ -29,8 +34,23 @@
 }
 .strip .greet { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; margin: 0; }
 /* The cover is one block so it is one thing to tap in the editor, and the gaps inside it are its
-   own rather than the page's, so it still reads as three separate lines. */
-.strip .cover { display: flex; flex-direction: column; align-items: center; gap: 26px; width: 100%; }
+   own rather than the page's, so it still reads as three separate lines.
+   It is also the thing the envelope hands over, so it is a card: paper, an ink hairline and a
+   corner. Nothing else on the page is boxed, and nothing else on the page arrives in an envelope. */
+.strip .cover {
+  display: flex; flex-direction: column; align-items: center; gap: 26px; width: 100%;
+  background: var(--paper); border: 2px solid var(--ink); border-radius: 8px;
+  padding: 30px 22px 34px; box-sizing: border-box;
+}
+
+/* Everything the envelope hands over, laid out the way the page lays out its own children. The
+   envelope wraps the invite once it opens, so the column that was .page's is this one's now. */
+.strip-body { display: flex; flex-direction: column; align-items: center; gap: 34px; width: 100%; }
+
+/* The tap-to-open line sits on the page, not on the envelope, so it takes the page's ink. It was
+   inheriting --crm, which on this design is the paper: paper on paper, and the one instruction a
+   guest is given was invisible. The same fault the palette module exists to catch, one layer out. */
+.strip .stage .hint { color: var(--ink); font-family: var(--font-hand); }
 .strip .trio { display: flex; gap: 10px; justify-content: center; align-items: flex-end; }
 .strip h1 { font-family: var(--font-hand); font-size: 54px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
 .strip .label { font-family: var(--font-hand); font-size: 40px; line-height: 1; text-align: center; letter-spacing: 0.04em; margin: 0; font-weight: 400; }
