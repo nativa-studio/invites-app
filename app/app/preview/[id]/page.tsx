@@ -50,13 +50,14 @@ export default async function Preview({
   // preview has no token to call the guest functions with. Only fetched when that view is on:
   // the editing view never draws them, and this is three queries.
   const row = event as EventRow;
-  const [{ data: allGuests }, gift, giftRow] = await Promise.all([
-    asGuest && row.plate_enabled ? supabase.from("guests").select("status, dietary").eq("event_id", id) : { data: null },
-    asGuest ? previewGift(id, row) : null,
+  const [plate, gift, giftRow] = await Promise.all([
+    // Both through the same functions a guest's invite goes through, so what this shows cannot
+    // disagree with what they get. See lib/db/preview-extras.ts.
+    asGuest ? previewPlate(id) : null,
+    asGuest ? previewGift(id) : null,
     // The editing view draws the gift card too, and it needs what a guest would read on it.
     !asGuest && row.group_gift_enabled ? giftLine(supabase, id) : null,
   ]);
-  const plate = asGuest ? await previewPlate(id, row, allGuests ?? []) : null;
   // The Layout tab previews what you are about to save, not what is saved. Anything it hands over
   // in the query string wins over the stored row, so a switch you have just flicked shows here
   // before you commit to it. Absent means use what is stored.

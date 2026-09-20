@@ -20,19 +20,19 @@ Read `docs/build-brief.md` before doing anything. It is the engineering brief fo
 
 Place information by the moment it is needed, not by what it is related to. Before putting anything on a screen, ask when the reader needs it. Deciding whether to come: date, time, place, who is hosting. Replying: the questions and nothing else. Coming: what to bring, parking, facilities, gifts. On the day: access details, timeline. After: thanks and photos. A detail never rides in a block above its moment just because it shares a topic with that block. Run this check over every screen before publishing, and say in the handover where anything borderline was placed and why.
 
-## The invite is drawn three times, so a new switch has three places to be honoured
+## The invite is drawn three times, and two of them must agree exactly
 
-Every setting that decides what a guest sees has to be checked in all three, and the checks are
-in different languages in different files. Adding one and testing the one you were thinking about
-is how a switch comes to save, say it saved, and change nothing.
+Every setting that decides what a guest sees is honoured in these places. Adding one and testing
+the one you were thinking about is how a switch comes to save, say it saved, and change nothing.
 
 1. **The guest's own page**, through the security-definer functions in `supabase/migrations/`.
-   `get_plate` and `get_gift` are the gates. This is the only one that is actually authoritative:
-   off here means the data is never sent, rather than sent and not drawn.
-2. **The host's preview, as a guest** (`?as=guest`), through `lib/db/preview-extras.ts`. It reads
-   the host's own rows because a preview has no token, so it repeats each gate by hand. If it
-   disagrees with the functions above, the host is being shown something a guest will never get,
-   which is worse than no preview at all.
+   `get_plate` and `get_gift` are the gates, and they are authoritative: off here means the data
+   is never sent, rather than sent and not drawn.
+2. **The host's preview, as a guest** (`?as=guest`), through `lib/db/preview-extras.ts`. Since
+   migration 0027 this is not a second implementation: `preview_plate` and `preview_gift` take an
+   event id, check the caller is a member, and call the same builders the guest functions call.
+   Keep it that way. It was a hand-written copy of the same rules in TypeScript, and both of the
+   data faults of 20 September lived in the gap between the two.
 3. **The host's preview, editing** (`?pick=1`), in `app/app/preview/[id]/page.tsx`. This one is
    deliberately *not* the same: a part switched off still draws here, faded, because the switch
    that turns it back on lives in the drawer behind that card and nothing else opens that drawer.
@@ -40,11 +40,16 @@ is how a switch comes to save, say it saved, and change nothing.
 
 The bug that wrote this rule: `plate_block` and `gift_block` were added, gated in 1, and missed in
 2 and 3. Marcia switched both blocks off, the database was correct and her guests were already
-getting nothing, and the preview she was checking in kept drawing them. The setting was right and
-the app looked broken.
+getting nothing, and the preview she was checking in kept drawing them.
 
 So: after adding any switch that hides part of the invite, load a real invite and both preview
 modes before saying it works. `npm run typecheck` and `npm run lint` cannot see any of this.
+
+Two things are still drawn from more than one file and will drift if nobody watches them: the
+plate card and the gift card each exist three times, as the live one a guest acts on
+(`PlateCard`, `GiftCard`), the announcement before the reply (`Announce.tsx`) and the one the
+editor draws (`PreviewExtras.tsx`). Restyling one means changing three. Left that way on purpose:
+the duplication is cosmetic, and the copy that mattered is gone.
 
 ## No guessing
 
