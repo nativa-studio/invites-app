@@ -1,6 +1,6 @@
 import { loadEvent, loadGuests } from "@/lib/db/host";
 import { loadActivity } from "@/lib/db/activity";
-import { counts } from "@/components/host/HeadCount";
+import { counts } from "@/lib/heads";
 import { ActivityDrawer } from "@/components/host/ActivityDrawer";
 import { copy } from "@/lib/copy";
 
