@@ -10,6 +10,21 @@ export async function getInvite(token: string): Promise<Invite | null> {
   return invite ? { ...invite, event: eventForRender(invite.event) } : null;
 }
 
+// Somebody has looked at their invite. Its own call, because reading an invite and recording that
+// it was read are two different things and get_invite used to do both: the page's generateMetadata
+// calls it, and generateMetadata is what a chat app runs when it fetches the link to draw a
+// preview card, so every guest was marked as having opened theirs seconds before it was sent.
+//
+// Never allowed to break the page it is measuring, and never awaited for anything the guest sees.
+export async function markOpened(token: string): Promise<void> {
+  if (!isValidToken(token)) return;
+  try {
+    await callGuestRpc<null>("mark_invite_opened", { p_token: token });
+  } catch {
+    // A database without migration 0032 has no function to call. The invite still opens.
+  }
+}
+
 export async function getEventBySlug(slug: string): Promise<PublicEvent | null> {
   if (!/^[a-z0-9-]{3,40}$/.test(slug)) return null;
   const data = await callGuestRpc<{ event: PublicEvent } | null>("get_event_by_slug", { p_slug: slug });

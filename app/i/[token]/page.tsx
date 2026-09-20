@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getInvite, getInviteCard } from "@/lib/guest/invite";
+import { headers } from "next/headers";
+import { looksLikeAPerson } from "@/lib/guest/is-a-person";
+import { getInvite, getInviteCard, markOpened } from "@/lib/guest/invite";
 import { getPlate } from "@/lib/guest/plate";
 import { getGift } from "@/lib/guest/gift";
 import { isCurious } from "@/lib/guest/about";
@@ -29,6 +31,14 @@ export default async function Page({ params, searchParams }: Params) {
   const { open, envelope, layout } = await searchParams;
   const invite = await getInvite(token);
   if (!invite) notFound();
+  // Marked here and nowhere else. generateMetadata above also reads the invite, and that is the
+  // call a chat app makes when it fetches the link for its preview card, so marking in there
+  // stamped every guest as having opened theirs while the share sheet was still open.
+  //
+  // Even here it is only a person: a preview fetcher that follows through to the page itself, or
+  // anything calling itself a bot, is not somebody reading their invitation. Same test the
+  // calendar tap uses. Not awaited: a guest is here for their invite, not for our bookkeeping.
+  if (looksLikeAPerson(await headers())) void markOpened(token);
   // Only fetched for a guest who is coming, since that is the only one who sees it. A host who
   // has never switched bring a plate on gets null back and no card.
   const [plate, gift, curious] = await Promise.all([
