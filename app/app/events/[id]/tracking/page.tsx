@@ -3,6 +3,7 @@ import { loadActivity } from "@/lib/db/activity";
 import { counts } from "@/lib/heads";
 import { ActivityDrawer } from "@/components/host/ActivityDrawer";
 import { copy } from "@/lib/copy";
+import { groupsOf } from "@/lib/group-colours";
 
 // Tracking: where the event is up to, in four answers.
 //
@@ -104,7 +105,7 @@ export default async function Tracking({ params }: { params: Promise<{ id: strin
           )}
       </section>
 
-      <ActivityDrawer feed={feed} />
+      <ActivityDrawer feed={feed} groups={groupsOf(guests)} />
     </>
   );
 }
