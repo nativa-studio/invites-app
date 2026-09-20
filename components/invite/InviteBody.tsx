@@ -45,6 +45,15 @@ export function InviteBody({
   );
   // Drawn once and handed to whichever layout runs, so neither can quietly not have it.
   const about = <AboutApp token={token ?? null} curious={curious ?? false} pretend={pretend} />;
+  // Only when the envelope did not play, which is exactly the guest who missed it: somebody who
+  // has already replied lands on the invite open. ?envelope=1 already existed and forces the
+  // animation on, so this is a link to the page they are on rather than anything new.
+  //
+  // A drag to replay was the other idea and is the wrong one on a phone: pulling down at the top
+  // of a page is the browser's own refresh, and a gesture nobody is told about is not a feature.
+  const replay = skipAnimation === true && token
+    ? <a className="replay" href="?envelope=1">{copy.envelope.again}</a>
+    : null;
   const id = layout ?? e.layout_id;
   if (id === "lineup") {
     return (
@@ -53,6 +62,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
+        replay={replay}
         skipAnimation={skipAnimation}
       />
     );
@@ -98,6 +108,7 @@ export function InviteBody({
     <main className="invite" style={paletteVars(p)}>
       <div className="wrap">
         <div className="greet">{greeting}</div>
+        {replay}
         <Envelope
             cover={<CoverCard e={e} />}
           openLabel={copy.envelope.open}
