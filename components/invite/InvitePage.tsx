@@ -12,14 +12,22 @@ import type { Gift } from "@/lib/guest/gift";
 // name on the envelope, their greeting, and their own reply form.
 export function InvitePage({ invite, token, plate, gift, curious, skipAnimation, layout }: { invite: Invite; token: string; plate?: Plate | null; gift?: Gift | null; curious?: boolean; skipAnimation?: boolean; layout?: Invite["event"]["layout_id"] }) {
   const { event: e, guest } = invite;
-  // Someone who has already replied lands on the invite open, so changing an answer does not
-  // mean sitting through the post again.
+  // The envelope plays every time, replied or not.
+  //
+  // It used to be skipped for anybody who had already answered, on the reasoning that changing
+  // an answer should not mean sitting through the post again. In practice the opening is the
+  // part people like: guests asked for it back, and the children want it over and over. Nobody
+  // is held up by it either, since the envelope opens the moment it is tapped and does not wait
+  // for its own timer.
+  //
+  // This replaced an Open it again line under the greeting, which did the same job from an
+  // awkward place.
   const answered = guest.status !== "pending";
   return (
     <InviteBody
       e={e}
       greeting={copy.greeting(firstName(guest.name))}
-      skipAnimation={skipAnimation ?? answered}
+      skipAnimation={skipAnimation}
       layout={layout}
       token={token}
       answered={answered}

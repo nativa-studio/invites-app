@@ -27,10 +27,6 @@ export const copy = {
   greetingGroup: "You're invited",
   envelope: {
     open: "Tap to open",
-    // For somebody coming back. A guest who has already replied lands on the invite open, which
-    // is right, and several of them then said they missed the envelope and wanted it again. One
-    // quiet line under the greeting, where they are already looking when the page loads.
-    again: "Open it again",
     // On the group link the envelope has no name to carry, so it is addressed to whoever opened it.
     eyebrowBirthday: "Trainer wanted",
   },
@@ -218,7 +214,7 @@ export const copy = {
     // The second line of the shut summary. It was "Have a look", which says there is something
     // here without saying why anybody would want it. This says what she actually wants back.
     peek: "Feedback welcome",
-    body: "Yes, really. It is my own thing, still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers.",
+    body: "Still a work in progress, and the hope is that it turns into something other families can use: anybody organising the everyday events and get-togethers.",
     what: "One place for the invite, the replies, the allergy information, the to do list, sharing the load with whoever else is organising, the potluck list and the group gift.",
     ask: "If you want to help me test it, put your hand up and I will be in touch before it launches.",
     up: "Sounds good",

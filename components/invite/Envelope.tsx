@@ -48,13 +48,6 @@ export function Envelope({ cover, children, openLabel, skipAnimation, mascot, bo
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Told to the rest of the page, so nothing else has to guess how long the opening takes or
-  // watch this component's class names for it. Open it again listens for this: a line offering
-  // to open the envelope again, printed over one that is still opening, would be nonsense.
-  useEffect(() => {
-    if (phase !== "done") return;
-    window.dispatchEvent(new CustomEvent("invite:open"));
-  }, [phase]);
 
   const cls = ["env-root", phase === "open" ? "open" : "", phase === "rise" ? "open rise" : "", phase === "out" ? "open rise out" : "", phase === "done" ? "done" : ""].join(" ");
   return (
