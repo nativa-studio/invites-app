@@ -5,10 +5,7 @@ import { GuestList } from "@/components/host/GuestList";
 import { GroupsPanel } from "@/components/host/GroupsPanel";
 import { HeadCount } from "@/components/host/HeadCount";
 import { FoodNeeds } from "@/components/host/FoodNeeds";
-import { ActivityDrawer } from "@/components/host/ActivityDrawer";
 import { GroupFilter } from "@/components/host/GroupFilter";
-import { loadActivity } from "@/lib/db/activity";
-import { groupsOf } from "@/lib/group-colours";
 import { inGroup, UNGROUPED } from "@/lib/groups";
 
 // Guests: everyone you are asking, how they are replying, and the links that reach them.
@@ -18,7 +15,10 @@ import { inGroup, UNGROUPED } from "@/lib/groups";
 // hold what has to be cooked around and what has happened. They are one job: who is asked, what
 // they said, and how to reach the ones who have not. The questions themselves moved to the
 // invite, where a guest meets them, and everything else is here, in the order it is wanted:
-// how many, what they need, how to reach them, the list itself, then the trail.
+// how many, what they need, how to reach them, then the list itself.
+//
+// The trail is not here. It answers "what has changed since I last looked", which is the Overview's
+// question, and it is drawn there by the one component that has ever drawn it.
 //
 // The counting tiles that used to open this screen are gone. They sat directly above the numbers
 // card, which answers the same question and shows its working, so the screen opened by saying the
@@ -37,7 +37,7 @@ export default async function Guests({
   const { id } = await params;
   const { group, filter } = await searchParams;
   const [e, all] = await Promise.all([loadEvent(id), loadGuests(id)]);
-  const [site, feed] = await Promise.all([getSiteUrl(), loadActivity(id, all)]);
+  const site = await getSiteUrl();
   const groupLink = `${site}/e/${e.slug}`;
   const chosen = group ?? "";
   const list = inGroup(all, chosen);
@@ -58,11 +58,6 @@ export default async function Guests({
       <GroupsPanel guests={all} base={groupLink} event={e} />
       <GuestList eventId={e.id} guests={list} everyone={all} base={here} event={{ title: e.title, date: e.date, text_template: e.text_template, reminder_template: e.reminder_template }} site={site} initialFilter={filter} />
 
-      {/* Last, and behind a button. It is the only thing on this screen that is a history rather
-          than a state, and a host opens it to answer "what has happened since I last looked"
-          after they have already read who is coming. Never filtered by group: it is a record of
-          the event, and a record with rows missing is worse than no record. */}
-      <ActivityDrawer feed={feed} groups={groupsOf(all)} />
     </>
   );
 }
