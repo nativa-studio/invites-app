@@ -250,6 +250,15 @@ export const copy = {
 
   sections: {
     details: "The details",
+    // Under the reply, before anybody has answered. The same words as the thank-you card uses,
+    // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
+    // grounds that an instruction sitting under Yes and No reads as a third thing to press. She
+    // picked naming the action, and the line underneath is what carries the warning.
+    holdTheDate: "Add to calendar",
+    // Marcia's own words, and they do the job in one line where mine took three. It names the
+    // action ("Add to calendar"), says the thing that matters ("does not count as a reply") and
+    // tells them where to come back to, all before a guest has stopped reading.
+    holdTheDateNote: "Add to calendar does not count as a reply, come back here to RSVP when ready.",
     day: "The day",
     afternoon: "The order of the afternoon",
     goodToKnow: "Info booth",
@@ -389,6 +398,17 @@ export const copy = {
     setSplitHint: "Off, guests give one number and there are no kids or adults anywhere: the counts, the guest list and the reply all follow this.",
     setGroupLink: "Group link open",
     setGroupLinkHint: "Anyone with the shared link can add themselves and reply. Personal links keep working either way. Close it once the list is final.",
+    ovRepliedWord: "replied",
+    ovSeeAll: "See all",
+    ovRemind: "Remind",
+    ovSendInvite: "Send invite",
+    ovRemindAll: (n: number) => `Remind everyone waiting (${n})`,
+    ovRecently: "Recently",
+    ovFullActivity: "Full activity",
+    ovNothingYet: "Nothing yet. This fills up once the links go out.",
+    ovFoodNeeds: "Food needs",
+    ovDiet: "Diet",
+    ovNoneYet: "Nothing yet",
     ovInvite: "The invite",
     ovSentTo: (sent: number, total: number) => `Sent to ${sent} of ${total}`,
     ovNotSent: "Not sent to anybody yet",
@@ -399,8 +419,6 @@ export const copy = {
     // than no number. It counts everyone who has not said no, using what guests answered where
     // they have answered and what the host pencilled in where they have not.
     ovOnListHint: "if everyone still waiting says yes",
-    ovReplies: "Replies",
-    ovReplied: (replied: number, total: number) => `${replied} of ${total} replied`,
     ovLegendYes: (n: number) => `${n} coming`,
     ovLegendNo: (n: number) => `${n} can't`,
     ovLegendWaiting: (n: number) => `${n} to reply`,
@@ -574,7 +592,11 @@ export const copy = {
     guestGroupSave: "Save",
     headsHeading: "How many",
     headsOpen: "The numbers",
-    headsBlurb: "Two counts that will not agree until everyone has replied. What you pencilled in when you added each household, and what your guests have actually said.",
+    // No idioms in here. "Pencilled in" means a number written in pencil, so it can be rubbed
+    // out: a guess you expect to change. It is ordinary English and it is still the wrong word
+    // for a screen, because the one person using this app stopped and asked what it meant. A
+    // host reading their own numbers should never have to work out a figure of speech first.
+    headsBlurb: "Two counts that will not agree until everyone has replied. The numbers you put in yourself when you added each household, and the numbers your guests have given back.",
     headsExpected: "From your guest list",
     headsExpectedShort: "Guest list",
     headsRepliedShort: "Replies",
@@ -586,8 +608,8 @@ export const copy = {
       all === 0
         ? "No guests yet."
         : from === 0
-          ? `Nothing pencilled in yet. Open a guest and put their numbers in, and this is what you are catering for before anyone replies.`
-          : `Pencilled in for ${from} of ${all} ${all === 1 ? "household" : "households"}.`,
+          ? `No numbers yet. Open a guest and put theirs in, and this is what you are catering for before anyone replies.`
+          : `You have put numbers in for ${from} of ${all} ${all === 1 ? "household" : "households"}.`,
     headsRepliedHint: (from: number, waiting: number) =>
       from === 0
         ? "Nobody has said yes yet."
@@ -706,7 +728,9 @@ export const copy = {
     plateRenameSave: "Save the name",
     plateRemove: "Remove",
     statusBlurb: "A draft is yours alone to look at. Live means the links work and guests can reply. Nothing is sent either way: you send the links yourself, from Guests.",
-    statusNames: { draft: "A draft", live: "Live", thanks: "Saying thanks", archived: "Archived" } as Record<string, string>,
+    // What a host would say out loud about where the event is up to. "A draft" and "Live" are
+    // words about the software; "Planning" and "Invites out" are words about the party.
+    statusNames: { draft: "Planning", live: "Invites out", thanks: "Thank yous", archived: "Closed" } as Record<string, string>,
     partsHeading: "Invite sections",
     partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first.",
     partSwitch: (name: string) => `${name}, on the invite`,

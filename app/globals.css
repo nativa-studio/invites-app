@@ -33,7 +33,26 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
 /* The app. Nothing in here carries the product's colours or its party typefaces. */
-.host { max-width: 720px; margin: 0 auto; padding: 20px 16px 64px; display: grid; gap: 18px; font-family: var(--app-font); color: var(--app-ink); }
+/* 960, not 720. The host app is used on a laptop as often as on a phone, and the design puts
+   three cards across: at 720 the third one wraps and every screen becomes a column of cards
+   twice as long as it needs to be. The page itself sits on the sunk grey so the white cards
+   read as cards. */
+.host { max-width: 960px; margin: 0 auto; padding: 24px 20px 80px; display: grid; gap: 18px; font-family: var(--app-font); color: var(--app-ink); }
+.host-shell { min-height: 100vh; background: var(--app-sunk); font-family: var(--app-font); color: var(--app-ink); }
+
+/* The bar stays put. Five tabs and a status on a long screen are worth nothing at the top of a
+   page you have scrolled to the bottom of, and the Plan tab in particular is where a host goes
+   from the middle of the guest list. */
+.host-bar { position: sticky; top: 0; z-index: 10; background: var(--app-bg); border-bottom: 1px solid var(--app-line); }
+.host-bar-in { max-width: 960px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+/* Where you are, as a trail rather than a Back button. Back goes to whatever you were looking
+   at, which from a guest's sheet is the guest list; Events always goes to the events list. */
+.crumbs { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 15px; }
+.crumbs a { color: var(--app-mute); text-decoration: none; flex: 0 0 auto; }
+.crumbs a:hover { color: var(--app-ink); }
+.crumbs span { color: var(--app-line-2); flex: 0 0 auto; }
+.crumbs b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* Every single column grid in the app gets minmax(0, 1fr) rather than the default auto track.
    An auto track sizes to its content, so one long label in one field widens its card, which
    widens the page, and the whole app scrolls sideways on a phone. Capping the track at the
@@ -43,6 +62,7 @@ p { margin: 0; }
 .host a { color: var(--app-ink); text-underline-offset: 2px; }
 .host :focus-visible { outline: 2px solid var(--app-ink); outline-offset: 2px; border-radius: 4px; }
 .host header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--app-line); }
+.host-shell .host { background: transparent; }
 .brand { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--app-ink); text-decoration: none; }
 .h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
 .h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; color: var(--app-ink); }
@@ -162,11 +182,11 @@ p { margin: 0; }
 /* The bar scrolls, because six tabs do not fit across a phone. `.more` is put on by the nav when
    there is something off the right edge, and fades the last few pixels so a half-cut tab reads as
    "there is more this way" rather than as a bug. */
-.evt-nav { display: flex; gap: 2px; min-width: 0; overflow-x: auto; border-bottom: 1px solid var(--app-line); margin: -4px 0 2px; scrollbar-width: none; scroll-behavior: smooth; }
+.evt-nav { max-width: 960px; margin: 0 auto; padding: 0 20px; display: flex; gap: 2px; min-width: 0; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; }
 .evt-nav.more { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent); }
 @media (prefers-reduced-motion: reduce) { .evt-nav { scroll-behavior: auto; } }
 .evt-nav::-webkit-scrollbar { display: none; }
-.evt-nav a { flex: 0 0 auto; padding: 9px 8px; font-size: 14px; font-weight: 600; color: var(--app-mute); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.evt-nav a { flex: 0 0 auto; padding: 10px 10px 11px; font-size: 14px; font-weight: 600; color: var(--app-mute); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; }
 .evt-nav a:hover { color: var(--app-ink); }
 .evt-nav a.on { color: var(--app-ink); border-bottom-color: var(--app-ink); }
 
@@ -623,56 +643,97 @@ fieldset.stack > legend { padding: 0; }
 .shop-row.got .shop-tick .l { text-decoration: line-through; color: var(--app-mute); }
 .shop-row .as-link { flex: 0 0 auto; font-size: 13.5px; }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   Overview: the screen an event opens on.
 
-   Built from the app's own furniture (.card, .btn, .muted) rather than a new
-   visual language. The only new shapes here are the ones the existing set has
-   no answer for: a tile that is mostly one big number, and one bar carrying
-   three counts.
-   ───────────────────────────────────────────────────────────────────────────── */
-
-/* The invite, whole-tile as a link. Its own paper behind it, the same way the
-   event list draws it, so an event is recognised by its own stock. */
-.ov-invite { display: grid; gap: 0; border: 1px solid var(--app-line); border-radius: 10px; overflow: hidden; text-decoration: none; }
-.ov-invite:hover { border-color: var(--app-line-2); }
-.ov-invite .evt-art { aspect-ratio: 16 / 9; }
-.ov-invite-foot { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 12px 14px; border-top: 1px solid var(--app-line); font-size: 14px; }
-.ov-invite-foot .muted { font-size: 14px; }
-.ov-invite-foot .as-link { margin-left: auto; }
-
-/* Three tiles that wrap to two and then one. minmax with a floor of 148px is
-   what stops the third tile going to a second row on its own at 390px while
-   the first two sit half empty. */
-.ov-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 10px; }
-.ov-tile { display: grid; align-content: start; gap: 2px; padding: 14px; border: 1px solid var(--app-line); border-radius: 10px; text-decoration: none; background: var(--app-bg); }
-.ov-tile:hover { border-color: var(--app-line-2); }
-.ov-tile.still:hover { border-color: var(--app-line); }
-.ov-tile .big { font-size: 26px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
-.ov-tile .lab { font-size: 13px; color: var(--app-mute); }
-.ov-tile .sub { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; margin-top: 2px; }
-
-/* One bar, three counts. The empty track is the third of them, not a gap: the
-   number a host is chasing is the one still to reply, and it has to have a
-   visible size rather than being the absence of the other two. */
-.ov-bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--app-line); }
-.ov-bar .seg.yes { background: var(--app-on); }
-.ov-bar .seg.no { background: var(--app-line-2); }
-
-.ov-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13.5px; }
-.ov-legend a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; text-decoration: none; color: var(--app-ink); }
-.ov-legend a:hover { text-decoration: underline; }
-.dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; display: inline-block; }
-.dot.yes { background: var(--app-on); }
-.dot.no { background: var(--app-line-2); }
-.dot.wait { background: var(--app-bg); box-shadow: inset 0 0 0 1.5px var(--app-line-2); }
-.plain li .dot { margin-right: 8px; vertical-align: baseline; }
-
-.ov-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.ov-chip { font-size: 12.5px; font-weight: 600; color: var(--app-mute); border: 1px solid var(--app-line-2); border-radius: 999px; padding: 5px 12px; }
-.ov-chip.on { background: var(--app-ink); border-color: var(--app-ink); color: var(--app-bg); }
 
 /* The one badge in the tab bar: replies still out. Inline in the tab rather than floating over
    its corner, because a floating badge on a scrolling bar clips against the next tab. */
 .nav-badge { margin-left: 6px; display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--app-ink); color: var(--app-bg); font-size: 11.5px; font-weight: 700; line-height: 1; vertical-align: 1px; }
 .evt-nav a.on .nav-badge { background: var(--app-ink); }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Overview.
+
+   One set of rules for both screens. Every grid here is auto-fit with a minimum
+   track, so a laptop gets the row of tiles and the three cards across that the
+   design shows, and a phone gets the same markup stacked, with no second
+   implementation to drift out of step with the first.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.tile { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 14px 16px; background: var(--app-bg); border: 1px solid var(--app-line); border-radius: 12px; text-decoration: none; color: var(--app-ink); }
+a.tile:hover { border-color: var(--app-ink); }
+.tile .n { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.tile .n b { font-size: 28px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+.tile .n b.none { font-size: 17px; }
+.tile .n .of { font-size: 14px; font-weight: 500; color: var(--app-mute); margin-left: -6px; }
+.tile .lab, .tile .sub { font-size: 13px; color: var(--app-mute); }
+.tile .faint { font-size: 12px; color: var(--app-hint, #9a9a96); line-height: 1.35; }
+/* The invite tile is the picture: it gets the padding of a frame, not of a card. */
+.tile.art { padding: 10px; gap: 8px; }
+.tile.art .evt-art { aspect-ratio: 6 / 5; border-radius: 8px; }
+.tile.art .cap { display: flex; flex-direction: column; gap: 1px; padding: 0 4px 2px; }
+.tile.art .cap b { font-size: 13px; font-weight: 600; }
+.tile.art .cap .sub { font-size: 12px; }
+
+/* One bar, three counts, and the empty track is the third of them rather than a
+   gap: the number a host is chasing has to have a visible size. */
+.bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--app-line); }
+.bar .seg.yes { background: var(--app-on); }
+.bar .seg.no { background: var(--app-line-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 12.5px; }
+.legend a { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; color: var(--app-mute); text-decoration: none; }
+.legend a:hover { color: var(--app-ink); text-decoration: underline; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; display: inline-block; background: var(--app-line-2); }
+.dot.yes { background: var(--app-on); }
+.dot.no { background: var(--app-line-2); }
+.dot.wait { background: var(--app-bg); box-shadow: inset 0 0 0 1.5px var(--app-line-2); }
+
+/* The status, as a label. The control is the badge in the bar above. */
+.tag.state { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; }
+.tag.state.live .dot { background: var(--app-on); }
+.tag.state.thanks .dot { background: #d9a520; }
+.tag.state.archived .dot { background: var(--app-ink); }
+
+.ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; align-items: start; }
+/* Three chips and a heading read as one line of facts, so the card is a strip
+   across the top rather than a third of a row. */
+.ov-grid .card.strip { grid-column: 1 / -1; flex-direction: row; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 18px; }
+.ov-grid .card.strip .lead { display: flex; align-items: center; gap: 10px; margin-right: auto; }
+.ov-grid .card.strip .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--app-line); border-radius: 999px; padding: 5px 11px; font-size: 13px; color: var(--app-mute); white-space: nowrap; }
+.chip.on { background: var(--app-ink); border-color: var(--app-ink); color: var(--app-bg); }
+
+/* Rows inside a card: a hairline between them, nothing above the first. */
+.rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.rows li { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--app-hairline, #f0f0ee); font-size: 14.5px; }
+.rows li:first-child { border-top: 0; padding-top: 2px; }
+.rows .pip { width: 32px; height: 32px; flex: 0 0 auto; border-radius: 50%; background: var(--app-sunk); display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; }
+.rows .who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.rows .who b { font-weight: 600; overflow-wrap: anywhere; }
+.rows .who .sub { font-size: 12px; color: var(--app-mute); }
+.btn.wide { margin-top: 12px; width: 100%; justify-content: center; }
+
+/* The five most recent things. Dot, sentence, time, and the time never wraps.
+   Called trail rather than feed: .feed is the activity drawer's, with a left rule
+   and a two-line row shape, and taking its name here inherited all of it. That is
+   the collision this repo has written into CLAUDE.md twice. */
+.rows.trail li { align-items: baseline; gap: 10px; }
+.rows.trail .what { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.rows.trail .what .tag { margin-left: 6px; padding: 1px 7px; font-size: 11px; white-space: nowrap; }
+.rows.trail .when { font-size: 12px; color: var(--app-hint, #9a9a96); white-space: nowrap; }
+.rows.trail li.yes .dot { background: var(--app-on); }
+.rows.trail li.no .dot { background: var(--app-line-2); }
+.rows.trail li.opened .dot, .rows.trail li.groupOpen .dot { background: #d9a520; }
+/* The group tag's colours live on .feed li .t .tag in the drawer. Restated here on
+   the element this list actually uses, rather than widening those selectors, so
+   neither list can take the other's row shape by accident. */
+.rows.trail .tag.g0 { background: #E3EDFA; border-color: #B9D1EE; color: var(--app-ink); }
+.rows.trail .tag.g1 { background: #E4F3E7; border-color: #BADDC2; color: var(--app-ink); }
+.rows.trail .tag.g2 { background: #FBE8E0; border-color: #EFC8B7; color: var(--app-ink); }
+.rows.trail .tag.g3 { background: #F6EFDD; border-color: #E2D3AE; color: var(--app-ink); }
+.rows.trail .tag.g4 { background: #EFE8F7; border-color: #D2C3E6; color: var(--app-ink); }
+
+.needs { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; margin: 0; font-size: 14.5px; }
+.needs dt { font-weight: 600; }
+.needs dt.warn { color: var(--app-off); }
+.needs dd { margin: 0; overflow-wrap: anywhere; }

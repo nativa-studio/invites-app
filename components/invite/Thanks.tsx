@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { copy } from "@/lib/copy";
 import { Bolt } from "@/components/art/icons";
 import { Celebrate } from "./Celebrate";
+import { CalendarButtons } from "./CalendarButtons";
 
 // What a guest sees once they have replied, wherever they replied from. The personal link and
 // the group link land on the same card, because by then the two are the same person.
@@ -45,13 +46,7 @@ export function ThanksCard({
     <div className={`pcard tilt-l reply${yes && landed ? " cheering" : ""}`} aria-live="polite" ref={card}>
       <div className="rsvp-h"><Bolt size={24} /> {yes ? copy.thanks.yesTitle : copy.thanks.noTitle} <Bolt size={24} /></div>
       <div className="para">{yes ? copy.thanks.yesBody() : copy.thanks.noBody(host)}</div>
-      {yes && dated && (
-        <div className="cal">
-          <div className="label sky">{copy.thanks.addToCalendar}</div>
-          {googleLink && <a className="pbtn small" href={googleLink} target="_blank" rel="noreferrer">{copy.thanks.google}</a>}
-          {icsLink && <a className="pbtn small" href={icsLink}>{copy.thanks.apple}</a>}
-        </div>
-      )}
+      {yes && dated && <CalendarButtons google={googleLink} ics={icsLink} label={copy.thanks.addToCalendar} />}
       {/* The way back, not a third thing to do. See .pbtn.quiet. The line above it is what makes
           it theirs: on its own, Change my answer reads as an undo for a slip, and a guest who
           meant every word of their yes has no reason to look at it. Naming the moment they would
