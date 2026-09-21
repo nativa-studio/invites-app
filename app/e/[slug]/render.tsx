@@ -4,7 +4,9 @@ import "@/app/invite.css";
 import { getEventBySlug } from "@/lib/guest/invite";
 import { getSiteUrl } from "@/lib/site-url";
 import { cardUrl, shareMetadata } from "@/lib/share-meta";
+import { headers } from "next/headers";
 import { copy } from "@/lib/copy";
+import { groupLinkOpened, looksLikeAPerson } from "@/lib/guest/group-open";
 import { GroupRsvp } from "@/components/invite/GroupRsvp";
 import { InviteBody, asLayout } from "@/components/invite/InviteBody";
 import { ReplyProvider } from "@/components/invite/ReplyState";
@@ -22,6 +24,13 @@ export async function groupLinkMetadata(slug: string): Promise<Metadata> {
 export async function renderGroupLink({ slug, group, layout }: { slug: string; group?: string; layout?: string }) {
   const e = await getEventBySlug(slug);
   if (!e) notFound();
+  // Somebody looked. Here rather than in generateMetadata, which is the half of this route that
+  // chat apps call when they draw a preview card: stamping there would say every guest opened the
+  // link the moment it was sent. looksLikeAPerson is the second guard, for the fetches that reach
+  // the page itself, and it is the same one the calendar tap uses.
+  //
+  // Awaited, but it cannot throw and it cannot block: the function swallows its own failures.
+  if (e.group_link_enabled && looksLikeAPerson(await headers())) await groupLinkOpened(slug, group);
   const reply = e.group_link_enabled
     ? <GroupRsvp slug={slug} group={group} event={e} />
     : <div className="pcard"><div className="label red">{copy.closed.title}</div><div className="para">{copy.closed.body}</div></div>;

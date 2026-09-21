@@ -396,6 +396,7 @@ export const copy = {
       no: (who: string) => `${who} can't come`,
       joined: (who: string) => `${who} came in via the group link`,
       calendar: (who: string) => `${who} tapped Add to calendar`,
+      groupOpen: (who: string) => `${who} opened the group link`,
       token: (who: string) => `${who} got a new link`,
       sent: (who: string) => `You sent ${who} their link`,
       opened: (who: string) => `${who} opened their invite`,
@@ -683,7 +684,13 @@ export const copy = {
       // and is tapped away from looks exactly the same from here. The tap is the part that was
       // actually observed, so the tap is what it says.
       calendar: "tapped Add to calendar",
+      // A group link belongs to nobody, so this line names the act and the group tag beside the
+      // time names the link. "Opened", not "looked at", because that is all a page load proves.
+      groupOpen: "opened the group link",
     },
+    // Who a line is about when it is about nobody. A group link belongs to no guest, so the feed
+    // says somebody did it rather than inventing a name or leaving the sentence without a subject.
+    someone: "Somebody",
   },
   templates: {
     text: "Hi {name}! You're invited to {title}{date}. Everything is here, and you can reply with one tap: {link}",
