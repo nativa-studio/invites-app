@@ -525,6 +525,10 @@ export const copy = {
     },
     // Under a reply in the activity, in the guest's own words where they wrote any. The prefixes
     // match the guest list so the same fact reads the same way in both places.
+    // A group link opened more than once today. One line, moved to the most recent open, with
+    // the count beside it: forty identical lines would push every real thing off the feed, and
+    // dropping all but the first told a host nothing was happening when it was.
+    openedTimes: (n: number) => `${n} times today`,
     saidAllergies: (s: string) => `Allergies: ${s}`,
     saidFood: (s: string) => `Food: ${s}`,
     saidNote: (s: string) => `\u201c${s}\u201d`,

@@ -48,6 +48,7 @@ export function ActivityDrawer({ feed, groups }: { feed: Happening[]; groups: st
                   <span className="t">
                     {formatDateTime(h.at)}
                     {h.group && <span className={`tag g${groupColour(h.group, groups)}`}>{h.group}</span>}
+                    {h.times && <span className="times">{copy.host.openedTimes(h.times)}</span>}
                   </span>
                 </li>
               ))}

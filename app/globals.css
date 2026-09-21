@@ -461,6 +461,9 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 /* The group, as a tag on the meta line. Smaller than the tag on an event card, because there is
    one per line here and a row of full sized pills would read as the point of the list. */
 .feed li .t .tag { padding: 1px 7px; font-size: 11px; }
+/* How many times a link has been opened today, beside its time. Plain type, not a tag: a tag is
+   how a group is named here, and a second pill on the line would read as a second group. */
+.feed li .t .times { color: var(--app-ink); font-weight: 600; }
 /* One colour per group, so a host working through the neighbours can find them down the page
    without reading a single name. The host app is otherwise almost colourless on purpose, and this
    is the exception that earns it: the colour is the only thing here doing a job at a glance.
@@ -736,7 +739,8 @@ a.tile:hover { border-color: var(--app-ink); }
    run of text and a note tacked onto the end of the sentence reads as part of it. */
 .rows.trail .what .said { display: block; font-size: 12.5px; line-height: 1.45; color: var(--app-mute); margin-top: 2px; }
 .rows.trail .what .said.warn { color: var(--app-ink); font-weight: 600; }
-.rows.trail .when { font-size: 12px; color: var(--app-hint, #9a9a96); white-space: nowrap; }
+.rows.trail .when { font-size: 12px; color: var(--app-hint, #9a9a96); white-space: nowrap; display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.rows.trail .when .times { color: var(--app-ink); font-weight: 600; }
 .rows.trail li.yes .dot { background: var(--app-on); }
 .rows.trail li.no .dot { background: var(--app-line-2); }
 .rows.trail li.opened .dot, .rows.trail li.groupOpen .dot { background: #d9a520; }
