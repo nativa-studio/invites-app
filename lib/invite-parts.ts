@@ -10,7 +10,10 @@
 // Bring a plate is one of those, and it sits after the info booth rather than directly under the
 // reply, where it used to be. Claiming a dish is a job for somebody who has read what the day
 // involves, not the next thing to do after answering.
-export const INVITE_PARTS = ["updates", "details", "reply", "day", "know", "plate", "after", "signoff"] as const;
+// Gifts sits after the plate and before the questions. Both are things a guest carries, so they
+// read as a pair, and both belong to somebody who has already decided to come: what to bring for
+// the table, then what to bring for the person.
+export const INVITE_PARTS = ["updates", "details", "reply", "day", "know", "plate", "gifts", "after", "signoff"] as const;
 export type InvitePart = (typeof INVITE_PARTS)[number];
 
 export const PART_NAMES: Record<InvitePart, string> = {
@@ -20,6 +23,7 @@ export const PART_NAMES: Record<InvitePart, string> = {
   day: "The order of the afternoon",
   know: "Info booth",
   plate: "Bring a plate",
+  gifts: "Gifts",
   after: "Questions",
   signoff: "The sign-off",
 };
@@ -33,6 +37,7 @@ export const PART_SWITCH: Partial<Record<InvitePart, string>> = {
   plate: "plate_enabled",
   day: "show_runsheet",
   know: "show_good_to_know",
+  gifts: "show_gifts",
   after: "show_after",
   signoff: "show_signoff",
 };

@@ -107,6 +107,39 @@ export function StripInvite({
 
     plate: plate ?? null,
 
+    // The strip draws its own gifts section rather than the suite's card.
+    //
+    // This is the one place in the app where drawing a thing twice is right. The strip is one ink
+    // on one paper with monoline drawings and no cards at all, so GiftsCard, which is a tilted
+    // cream card with two bits of tape on it, would arrive as a visitor from another invite. The
+    // content is the same three things in the same order and reads from the same columns; only
+    // the clothes differ.
+    gifts: e.show_gifts && (e.gift_note?.trim() || (e.wishlist ?? []).length > 0 || e.group_gift_enabled) ? (
+      <section data-section="gifts">
+        <p className="label">{copy.sections.gifts}</p>
+        {e.gift_note?.trim() && <p className="para">{e.gift_note.trim()}</p>}
+        {(e.wishlist ?? []).length > 0 && (
+          <div className="lines">
+            {(e.wishlist ?? []).map((w, i) => (
+              <div className="line" key={`${w.label}-${i}`}>
+                <Mono name="gift" size={40} />
+                <div>
+                  {w.url ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a> : w.label}
+                  {w.note && <span className="b"> {w.note}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {e.group_gift_enabled && (
+          <p className="para">
+            {e.group_gift_what?.trim() ? copy.gift.blockWhat(e.group_gift_what.trim()) : copy.gift.blockNoWhat}
+            {" "}{copy.gift.blockHow}
+          </p>
+        )}
+      </section>
+    ) : null,
+
     after: e.show_after ? (
       <section data-section="after">
         <div className={photos ? "after" : "after one"}>

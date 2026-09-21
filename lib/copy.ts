@@ -158,6 +158,12 @@ export const copy = {
   // every word here is about people paying each other, not about paying us.
   gift: {
     heading: "Group gift",
+    // On the gifts block, before anybody has replied. It names the gift and says where the rest
+    // of it lives, and deliberately does not carry the bank details: those are behind a token and
+    // a yes, on the card further down.
+    blockWhat: (what: string) => `Everyone is going in together on one present: ${what}.`,
+    blockNoWhat: "Everyone is going in together on one present.",
+    blockHow: "How to chip in comes with your reply.",
     // The organiser has not filled in their side yet, so there is nothing to ask anybody to do.
     afterYes: "How to chip in opens up once you have replied.",
     sorting: (who: string) => `${who} is sorting out the details. They'll be here soon.`,
@@ -250,6 +256,12 @@ export const copy = {
 
   sections: {
     details: "The details",
+    // The gifts block. "Gifts" rather than "Gift ideas" or "Registry": it is whatever the host
+    // decides to put in it, which may be a wish list, may be "no presents please", and may be
+    // both.
+    gifts: "Gifts",
+    wishlist: "Some ideas",
+    wishlistLink: "Have a look",
     // Under the reply, before anybody has answered. The same words as the thank-you card uses,
     // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
     // grounds that an instruction sitting under Yes and No reads as a third thing to press. She
@@ -409,6 +421,22 @@ export const copy = {
     ovFoodNeeds: "Food needs",
     ovDiet: "Diet",
     ovNoneYet: "Nothing yet",
+    // The wish list, as the host writes it.
+    wishHeading: "Wish list",
+    wishBlurb: "Things they would like. Guests read this, nobody claims anything, so two people can still buy the same thing. First is the one you would most like.",
+    wishAdd: "Add an idea",
+    wishEdit: "Edit",
+    wishRemove: "Remove",
+    wishNone: "Nothing on the list yet. The block still shows whatever you write about gifts.",
+    wishWhat: "What is it?",
+    wishWhatPlaceholder: "A balance bike",
+    wishNote: "A note (optional)",
+    wishNotePlaceholder: "Size 4, any colour but red",
+    wishNoteHint: "A size, a colour, anything that saves somebody guessing.",
+    wishLink: "A link (optional)",
+    wishLinkHint: "Where to see it. Guests get a Have a look button rather than the address.",
+    giftsBlock: "Give gifts their own block",
+    giftsBlockHint: "A block of its own on the invite for what you want to say about gifts, the wish list, and the group gift if one is running. Off, gifts stay as one line in the info booth.",
     ovInvite: "The invite",
     ovSentTo: (sent: number, total: number) => `Sent to ${sent} of ${total}`,
     ovNotSent: "Not sent to anybody yet",

@@ -10,6 +10,7 @@ import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, Update
 import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
 import { AnnounceGift, AnnouncePlate } from "./Announce";
+import { GiftsCard } from "./GiftsCard";
 import { UntilAnswered } from "./UntilAnswered";
 import { HoldTheDate } from "./CalendarButtons";
 import { PlateSlot } from "./PlateSlot";
@@ -127,6 +128,7 @@ export function InviteBody({
     // reading it has said yes, and nothing at all outside a reply provider, which is the editor
     // drawing the invite with nobody answering. There the editor passes its own card instead.
     plate: plateCard ?? <PlateSlot />,
+    gifts: e.show_gifts ? <GiftsCard e={e} /> : null,
     after: e.show_after ? <AskCard e={e} /> : null,
     // Absent means on: a database without migration 0008 does not send the column, and the
     // sign-off is a part every event gets rather than one to opt into.

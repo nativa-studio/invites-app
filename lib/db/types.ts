@@ -110,7 +110,19 @@ export type PublicEvent = {
   section_order: string[];
   runsheet: RunsheetStop[];
   updates: Update[];
+  /** The gifts block: the host's note, a wish list, and the group gift if there is one.
+   *
+   *  Optional and read as off when absent, the same way show_signoff is, so a database without
+   *  migration 0041 draws an invite with no gifts block rather than a broken one. */
+  show_gifts?: boolean | null;
+  wishlist?: WishlistItem[] | null;
+  /** What the group gift is, so the block can name it before anybody has replied. Where to send
+   *  the money stays behind get_gift, which takes a token and answers only after a yes. */
+  group_gift_what?: string | null;
 };
+
+/** One thing on the wish list. The host writes these; guests only read them. */
+export type WishlistItem = { label: string; note?: string | null; url?: string | null };
 
 export type GuestStatus = "pending" | "yes" | "no";
 
@@ -199,4 +211,7 @@ export type EventRow = PublicEvent & {
    *  not join it, and because a database without migration 0016 has no row to join. */
   gift_description?: string | null;
   gift_target?: number | null;
+  /** The wish list with its ids and sort, for the editor. The guest's copy is on PublicEvent and
+   *  has neither, because there is nothing for a guest to do to a row. */
+  wishlist?: { id: string; label: string; note: string | null; url: string | null; sort: number }[] | null;
 };

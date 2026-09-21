@@ -15,13 +15,23 @@ export const loadEvent = cache(async (id: string): Promise<EventRow> => {
   // join is left outer: an event with no gift row is the normal case, not an error.
   const { data } = await supabase
     .from("events")
-    .select("*, gift:group_gift(description, target)")
+    // The wish list rides along too, with its ids, because the invite editor edits by pointing at
+    // a card and the gifts card is drawn from these rows. The guest's copy comes through
+    // event_public_json instead and carries no ids: there is nothing for a guest to do to a row.
+    .select("*, gift:group_gift(description, target), wishlist:wishlist_items(id, label, note, url, sort)")
     .eq("id", id)
     .maybeSingle();
   if (!data) notFound();
   const g = (data as { gift?: { description: string | null; target: number | null } | { description: string | null; target: number | null }[] | null }).gift;
   const gift = Array.isArray(g) ? g[0] : g;
-  return { ...data, gift_description: gift?.description ?? null, gift_target: gift?.target ?? null } as EventRow;
+  const wl = (data as { wishlist?: { sort: number }[] | null }).wishlist ?? [];
+  return {
+    ...data,
+    gift_description: gift?.description ?? null,
+    gift_target: gift?.target ?? null,
+    // PostgREST does not order an embedded table, so it is sorted here rather than trusted.
+    wishlist: [...wl].sort((a, b) => a.sort - b.sort),
+  } as EventRow;
 });
 
 export const loadGuests = cache(async (id: string): Promise<GuestRow[]> => {
