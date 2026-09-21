@@ -32,7 +32,7 @@ export function AnnouncePlate({ e, answered }: { e: PublicEvent; answered?: bool
 export function AnnounceGift({ e, answered }: { e: PublicEvent; answered?: boolean }) {
   if (!e.group_gift_enabled || e.gift_block !== true || answered) return null;
   return (
-    <div className="pcard cream gift announce tilt-l" data-section="gift">
+    <div className="pcard cream gift announce tilt-l" data-section="gifts">
       <div className="tape cross" />
       <div className="tape over sky" />
       <div className="label red">{copy.gift.heading}</div>

@@ -5,6 +5,7 @@ import { askLine, signoffMessage } from "@/lib/ask-line";
 import { hostName } from "@/lib/format";
 import { KnowEditor, KNOW_FIELDS } from "@/components/host/KnowEditor";
 import { WishlistEditor } from "@/components/host/WishlistEditor";
+import { GroupGiftFields } from "@/components/host/GroupGiftFields";
 import { NOTE_NAMES, PLATE_MODES } from "@/lib/good-to-know";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
@@ -110,44 +111,20 @@ export const SECTIONS: Section[] = [
     title: "Gifts",
     blurb: "A block of its own for gifts: what you want to say, a wish list, and the group gift if one is running. The wish list is a list of ideas, not a registry, so nothing is claimed and two people can still buy the same thing.",
     show: { column: "show_gifts", label: copy.host.giftsBlock },
-    fields: ["gift_note", "group_gift_note"],
+    fields: ["gift_note", "group_gift_enabled", "gift_description", "group_gift_note", "gift_target", "gift_block"],
     render: (e) => (
       <>
         <Field id="gift_note" label={NOTE_NAMES.gifts} value={e.gift_note} rows={3} hint={copy.host.giftNoteFree} />
-        {/* Only when there is a group gift to write about. A box for a sentence about a thing
-            that is not happening is a box a host fills in and never sees, which is how a setting
-            comes to save, say it saved, and change nothing. */}
-        {e.group_gift_enabled && (
-          <Field
-            id="group_gift_note"
-            label={copy.host.groupGiftLine}
-            value={e.group_gift_note}
-            rows={2}
-            hint={copy.host.groupGiftLineHint}
-          />
-        )}
         {/* The wish list is rows in a table rather than a field on the event, so it saves itself
             as it is edited and does not ride in this panel's manifest. It is here rather than on
             a tab of its own because it is wording: a host writing what they want to say about
             gifts is in the same sitting as a host listing the things. */}
         <WishlistEditor eventId={e.id} items={e.wishlist ?? []} />
-      </>
-    ),
-  },
-  {
-    id: "gift",
-    title: "Group gift",
-    // Only the host's half is here. Where the money goes and the note to contributors belong to
-    // whoever is organising it, who is usually not the host, and they have their own page for it.
-    // Putting those fields in this drawer would have let a host type somebody else's bank details.
-    blurb: "One present from everyone. What it is and roughly what it might come to are yours. Where the money goes and the note to everyone belong to whoever is organising it, on the Gift tab or their own page.",
-    show: { column: "group_gift_enabled", label: copy.host.giftSwitch },
-    fields: ["gift_block", "gift_description", "gift_target"],
-    render: (e) => (
-      <>
-        <Switch id="gift_block" label={copy.host.giftBlock} value={e.gift_block !== false} hint={copy.host.giftBlockHint} />
-        <Field id="gift_description" label={copy.host.giftWhat} value={e.gift_description ?? null} hint={copy.host.giftWhatHint} />
-        <Field id="gift_target" label={copy.host.giftTarget} value={e.gift_target != null ? String(e.gift_target) : null} hint={copy.host.giftTargetHint} />
+        {/* The group gift, switch and all. It had a drawer of its own, reached by tapping a card
+            that only exists once the gift is on, with the switch on that same card: a setting a
+            host could only change from a place they could only reach by having already changed
+            it. Every field of it is here now, and both gift cards open this drawer. */}
+        <GroupGiftFields e={e} />
       </>
     ),
   },

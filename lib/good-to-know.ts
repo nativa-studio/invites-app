@@ -60,13 +60,20 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // The switch still writes a sentence when there is nothing to write over: a group gift that is
   // running and never mentioned is worse than a default sentence. So it fills a silence and
   // never edits a voice.
-  const giftNote = e.gift_note?.trim();
-  if (giftNote) {
-    lines.push({ kind: "gifts", text: giftNote });
-  } else if (e.group_gift_enabled) {
-    // Where to look depends on whether there is a block to look at. Off, the line is the whole
-    // of what a guest gets, so it must not send them to a card that is not there.
-    lines.push({ kind: "gifts", text: copy.lines.groupGift(e.gift_block !== false) });
+  //
+  // None of it when gifts have a block of their own. The block draws the same gift_note, the same
+  // wish list and the same group gift, so leaving the line here as well put one sentence on the
+  // invite twice, a few centimetres apart, in two different voices. The block is the fuller of
+  // the two and the switch that turns it on is a host saying gifts need more than a line.
+  if (!e.show_gifts) {
+    const giftNote = e.gift_note?.trim();
+    if (giftNote) {
+      lines.push({ kind: "gifts", text: giftNote });
+    } else if (e.group_gift_enabled) {
+      // Where to look depends on whether there is a block to look at. Off, the line is the whole
+      // of what a guest gets, so it must not send them to a card that is not there.
+      lines.push({ kind: "gifts", text: copy.lines.groupGift(e.gift_block !== false) });
+    }
   }
   if (e.photos_note?.trim()) lines.push({ kind: "photos", text: e.photos_note.trim() });
   if (e.good_to_know) lines.push({ kind: "other", text: e.good_to_know });
