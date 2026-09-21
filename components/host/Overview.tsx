@@ -40,18 +40,31 @@ export function Overview({
   // Everybody who has not said no, counted with what they actually answered where they have
   // answered and what the host pencilled in where they have not. It is a guess, and the caption
   // under it says so: a number that looks like a fact is worse than no number.
-  const onList = guests.filter((g) => g.status !== "no").reduce((n, g) => {
-    if (g.status === "yes") {
-      const split = (g.children ?? 0) + (g.adults ?? 0);
-      return n + (splitParty && split > 0 ? split : g.party_size ?? 1);
-    }
-    return n + (g.expected_children ?? 0) + (g.expected_adults ?? 0);
-  }, 0);
+  //
+  // Split the same way the coming tile is. The two tiles sit side by side and one of them
+  // breaking its total into kids and adults while the other does not reads as the second number
+  // meaning something different, which it does not: it is the same count over more people.
+  //
+  // The total is not kids plus adults. A guest who answered before the event started asking for
+  // a split has a party size and no breakdown, so their people land in the total and in neither
+  // half. Summing the halves would quietly lose them. Same rule as lib/heads.ts, on purpose.
+  const onList = guests.filter((g) => g.status !== "no").reduce(
+    (a, g) => {
+      const kids = g.status === "yes" ? g.children ?? 0 : g.expected_children ?? 0;
+      const adults = g.status === "yes" ? g.adults ?? 0 : g.expected_adults ?? 0;
+      const total = g.status === "yes" && !(splitParty && kids + adults > 0)
+        ? g.party_size ?? 1
+        : kids + adults;
+      return { kids: a.kids + kids, adults: a.adults + adults, total: a.total + total };
+    },
+    { kids: 0, adults: 0, total: 0 },
+  );
 
   const days = daysUntil(e.date);
   const p = paletteFor(e.palette, e.theme_id ?? "");
   const stock = stockFor(e.layout_id ?? undefined);
   const split = copy.host.split(c.replied.kids, c.replied.adults);
+  const onListSplit = copy.host.split(onList.kids, onList.adults);
 
   return (
     <>
@@ -92,8 +105,9 @@ export function Overview({
         </Link>
 
         <Link href={`${base}/guests`} className="ov-tile">
-          <span className="big">{onList}</span>
+          <span className="big">{onList.total}</span>
           <span className="lab">{copy.host.ovOnList}</span>
+          {onListSplit && <span className="sub">{onListSplit}</span>}
           <span className="sub">{copy.host.ovOnListHint}</span>
         </Link>
 
