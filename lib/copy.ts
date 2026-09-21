@@ -110,6 +110,16 @@ export const copy = {
     google: "Google Calendar",
     apple: "Apple or Outlook",
     changed: "Reply updated",
+    // Sits directly above Change my answer, because that button is the whole of what it is
+    // telling them about. A guest who has just said yes reads "Change my answer" as an undo for
+    // a mistake they have not made, so it looks like nothing to do with them. Naming the reason
+    // they would come back, a plan falling over in three weeks, is what makes it theirs.
+    changeHint: "If plans change, you can update your reply here any time.",
+    // The same thought in the calendar entry, where the invite link is a link away rather than
+    // the page they are on: "there", not "here". A guest who has put the party in their diary
+    // will next think about it from the diary, and a calendar entry is the one place a change of
+    // plan actually gets noticed.
+    calendarNote: "If plans change, you can update your reply there any time.",
   },
   // Bring a plate, as a guest reads it. The board is only ever seen by somebody who has said
   // yes, so none of this has to talk them into coming.
