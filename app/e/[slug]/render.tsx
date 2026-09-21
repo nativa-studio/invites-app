@@ -39,7 +39,16 @@ export async function renderGroupLink({ slug, group, layout }: { slug: string; g
   // The reply is the only thing that ever fills it, which is what makes the plate part appear.
   return (
     <ReplyProvider initial={{ token: "", status: "pending", plate: null, gift: null }}>
-      <InviteBody e={e} greeting={copy.greetingGroup} reply={reply} layout={asLayout(layout)} />
+      <InviteBody
+        e={e}
+        greeting={copy.greetingGroup}
+        reply={reply}
+        layout={asLayout(layout)}
+        // Nobody's diary is anybody's row here, so these point at the slug rather than a token
+        // and nothing is stamped. A group link belongs to no guest, which is the whole reason
+        // the routes are separate.
+        calendar={e.date ? { google: `/e/${slug}/calendar/google`, ics: `/e/${slug}/invite.ics` } : null}
+      />
     </ReplyProvider>
   );
 }

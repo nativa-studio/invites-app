@@ -250,6 +250,10 @@ export const copy = {
 
   sections: {
     details: "The details",
+    // On the details card, before anybody has replied. Not "Add to calendar", which is what the
+    // thank-you card says once the answer is in: at this point a guest has not decided, and the
+    // useful thing is holding the slot so they do not book over it while they find out.
+    holdTheDate: "Put it in your diary",
     day: "The day",
     afternoon: "The order of the afternoon",
     goodToKnow: "Info booth",

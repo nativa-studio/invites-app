@@ -23,7 +23,7 @@ import { PostInvite } from "./PostInvite";
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e, greeting, reply, layout, skipAnimation, token, curious, answered, pretend, plateCard,
+  e, greeting, reply, layout, skipAnimation, token, curious, answered, pretend, plateCard, calendar,
 }: {
   e: PublicEvent;
   greeting: string;
@@ -42,6 +42,10 @@ export function InviteBody({
   plateCard?: React.ReactNode;
   layout?: PublicEvent["layout_id"];
   skipAnimation?: boolean;
+  /** Add to calendar, on the details card, for a guest who has not replied yet. Each caller
+   *  builds its own pair because each has a different thing to point at: a guest's own token, a
+   *  group slug, or the host's preview, which must not stamp anybody. */
+  calendar?: { google: string | null; ics: string | null } | null;
 }) {
   // The two announcements sit immediately before the reply: the last thing a guest reads before
   // deciding, which is where news about what the day will involve belongs. Computed once, because
@@ -97,7 +101,7 @@ export function InviteBody({
   // stay independent of each other.
   const draw: Record<InvitePart, React.ReactNode> = {
     updates: <UpdatesCard e={e} />,
-    details: e.show_details ? <DetailsCard e={e} /> : null,
+    details: e.show_details ? <DetailsCard e={e} calendar={calendar} /> : null,
     // The two announcements sit immediately before the reply, not in the reorderable list. They
     // are the last thing a guest reads before deciding, which is where news about what the day
     // will involve belongs, and they are not parts a host arranges: each is tied to a feature

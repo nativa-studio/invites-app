@@ -137,6 +137,11 @@ export default async function Preview({
           reply={reply}
           layout={asLayout(layout)}
           pretend
+          // The host's own preview. It borrows a real guest's token for the greeting, so the
+          // Google button goes straight to Google rather than through our counting redirect, and
+          // the file carries preview=1. Either way round, a host looking at their own invite must
+          // not turn up on their own list as having added the party to their calendar.
+          calendar={e.date ? { google: googleCalendarLink(e, token ? inviteLink(await getSiteUrl(), token) : ""), ics: previewIcs } : null}
           plateCard={asGuest || !row.plate_enabled ? undefined
             : <PreviewPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} />}
           skipAnimation={pick === "1" && !asGuest ? true : undefined}
