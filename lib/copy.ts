@@ -574,7 +574,11 @@ export const copy = {
     guestGroupSave: "Save",
     headsHeading: "How many",
     headsOpen: "The numbers",
-    headsBlurb: "Two counts that will not agree until everyone has replied. What you pencilled in when you added each household, and what your guests have actually said.",
+    // No idioms in here. "Pencilled in" means a number written in pencil, so it can be rubbed
+    // out: a guess you expect to change. It is ordinary English and it is still the wrong word
+    // for a screen, because the one person using this app stopped and asked what it meant. A
+    // host reading their own numbers should never have to work out a figure of speech first.
+    headsBlurb: "Two counts that will not agree until everyone has replied. The numbers you put in yourself when you added each household, and the numbers your guests have given back.",
     headsExpected: "From your guest list",
     headsExpectedShort: "Guest list",
     headsRepliedShort: "Replies",
@@ -586,8 +590,8 @@ export const copy = {
       all === 0
         ? "No guests yet."
         : from === 0
-          ? `Nothing pencilled in yet. Open a guest and put their numbers in, and this is what you are catering for before anyone replies.`
-          : `Pencilled in for ${from} of ${all} ${all === 1 ? "household" : "households"}.`,
+          ? `No numbers yet. Open a guest and put theirs in, and this is what you are catering for before anyone replies.`
+          : `You have put numbers in for ${from} of ${all} ${all === 1 ? "household" : "households"}.`,
     headsRepliedHint: (from: number, waiting: number) =>
       from === 0
         ? "Nobody has said yes yet."
