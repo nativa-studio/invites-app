@@ -250,13 +250,11 @@ export const copy = {
 
   sections: {
     details: "The details",
-    // Under the reply, before anybody has answered. Not "Add to calendar", which is what the
-    // thank-you card says once the answer is in: at this point a guest has not decided, and the
-    // useful thing is holding the slot so they do not book over it while they find out.
-    //
-    // The question mark matters. It names the person this is for, which is the one who was about
-    // to close the page, and it cannot be read as an instruction to press instead of replying.
-    holdTheDate: "Still deciding?",
+    // Under the reply, before anybody has answered. The same words as the thank-you card uses,
+    // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
+    // grounds that an instruction sitting under Yes and No reads as a third thing to press. She
+    // picked naming the action, and the line underneath is what carries the warning.
+    holdTheDate: "Add to calendar",
     // Marcia's own words, and they do the job in one line where mine took three. It names the
     // action ("Add to calendar"), says the thing that matters ("does not count as a reply") and
     // tells them where to come back to, all before a guest has stopped reading.

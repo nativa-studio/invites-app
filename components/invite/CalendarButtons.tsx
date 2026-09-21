@@ -38,8 +38,9 @@ export function CalendarButtons({ google, ics, label }: {
 // their diary, and leaves believing they have replied. The host then chases somebody who thinks
 // they are coming, which is worse than never having offered it.
 //
-// So it is below the decision, it says what it is for ("still deciding"), and it says in one
-// line that it is not an answer.
+// So it is below the decision, it is quiet type rather than a card, and the line under the links
+// says in Marcia's own words that it is not an answer. That line is doing the work the heading
+// used to: the heading names the action, the note says what the action is not.
 export function HoldTheDate({ calendar }: { calendar?: { google: string | null; ics: string | null } | null }) {
   if (!calendar || (!calendar.google && !calendar.ics)) return null;
   return (
