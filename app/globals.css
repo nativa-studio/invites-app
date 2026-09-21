@@ -449,6 +449,14 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
 .feed li { display: grid; gap: 2px; border-left: 2px solid var(--app-line-2); padding-left: 12px; }
 .feed li .n { font-size: 15px; line-height: 1.4; overflow-wrap: anywhere; }
+/* What the guest wrote with the reply, indented under it. Quieter than the sentence and louder
+   than the timestamp, because it is the reason a host is reading the line: "Sarah said yes" is
+   news for a second, "Allergies: peanuts" is something to do. Allergies get the ink and a rule of
+   their own, the same weight the potluck banner gives them, so the one line here that is a safety
+   fact does not read like a dietary preference. */
+.feed li .said { font-size: 13px; line-height: 1.45; color: var(--app-mute); overflow-wrap: anywhere; }
+.feed li .said:first-of-type { margin-top: 2px; }
+.feed li .said.warn { color: var(--app-ink); font-weight: 600; }
 .feed li .t { font-size: 12px; color: var(--app-mute); display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 /* The group, as a tag on the meta line. Smaller than the tag on an event card, because there is
    one per line here and a row of full sized pills would read as the point of the list. */
@@ -694,7 +702,11 @@ a.tile:hover { border-color: var(--app-ink); }
 .tag.state.thanks .dot { background: #d9a520; }
 .tag.state.archived .dot { background: var(--app-ink); }
 
-.ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; align-items: start; }
+/* Two columns on a laptop, one on a phone. It was 290px, which fitted three across 960 and was
+   right while there were three cards. With Needs a nudge gone there are two, and three tracks
+   left a third of the row empty next to them. 340 is the width at which 960 stops holding three,
+   so the same auto-fit rule now pairs them. */
+.ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; align-items: start; }
 /* Three chips and a heading read as one line of facts, so the card is a strip
    across the top rather than a third of a row. */
 .ov-grid .card.strip { grid-column: 1 / -1; flex-direction: row; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 18px; }
@@ -720,6 +732,10 @@ a.tile:hover { border-color: var(--app-ink); }
 .rows.trail li { align-items: baseline; gap: 10px; }
 .rows.trail .what { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .rows.trail .what .tag { margin-left: 6px; padding: 1px 7px; font-size: 11px; white-space: nowrap; }
+/* Same lines as the drawer, on the five most recent. Blocks, not inline: .what is one wrapping
+   run of text and a note tacked onto the end of the sentence reads as part of it. */
+.rows.trail .what .said { display: block; font-size: 12.5px; line-height: 1.45; color: var(--app-mute); margin-top: 2px; }
+.rows.trail .what .said.warn { color: var(--app-ink); font-weight: 600; }
 .rows.trail .when { font-size: 12px; color: var(--app-hint, #9a9a96); white-space: nowrap; }
 .rows.trail li.yes .dot { background: var(--app-on); }
 .rows.trail li.no .dot { background: var(--app-line-2); }

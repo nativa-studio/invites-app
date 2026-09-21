@@ -523,6 +523,11 @@ export const copy = {
       opened: (who: string) => `${who} opened their invite`,
       reminded: (who: string) => `You reminded ${who}`,
     },
+    // Under a reply in the activity, in the guest's own words where they wrote any. The prefixes
+    // match the guest list so the same fact reads the same way in both places.
+    saidAllergies: (s: string) => `Allergies: ${s}`,
+    saidFood: (s: string) => `Food: ${s}`,
+    saidNote: (s: string) => `\u201c${s}\u201d`,
     food: (parts: string) => `Food: ${parts}.`,
     foodNotes: "Some notes too, see the guest list.",
     coming: "coming",
