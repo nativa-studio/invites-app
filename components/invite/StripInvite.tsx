@@ -134,7 +134,8 @@ export function StripInvite({
         )}
         {e.group_gift_enabled && (
           <p className="para">
-            {e.group_gift_what?.trim() ? copy.gift.blockWhat(e.group_gift_what.trim()) : copy.gift.blockNoWhat}
+            {e.group_gift_note?.trim()
+              || (e.group_gift_what?.trim() ? copy.gift.blockWhat(e.group_gift_what.trim()) : copy.gift.blockNoWhat)}
             {" "}{copy.gift.blockHow}
           </p>
         )}

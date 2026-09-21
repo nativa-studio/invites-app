@@ -39,6 +39,7 @@ export function GiftsCard({ e, off }: {
   // undefined means no group gift at all; null means one is running with nothing typed about it
   // yet, which is still worth saying.
   const hasGroup = group !== undefined;
+  const said = e.group_gift_note?.trim();
   if (!editing && !note && list.length === 0 && !hasGroup) return null;
 
   return (
@@ -82,7 +83,14 @@ export function GiftsCard({ e, off }: {
       {hasGroup && (
         <>
           <div className="rule" />
-          <p className="para">{group ? copy.gift.blockWhat(group) : copy.gift.blockNoWhat}</p>
+          {/* The host's words win outright. Nothing is appended to them, ever. That rule had to
+              be written into good-to-know.ts after the group gift started adding its own sentence
+              onto the end of whatever a host had typed, and an invite came out saying the same
+              thing twice in two voices. Empty, the app's sentence fills the silence: a group gift
+              that is running and never mentioned is worse than a default line. */}
+          <p className="para">
+            {said || (group ? copy.gift.blockWhat(group) : copy.gift.blockNoWhat)}
+          </p>
           <p className="small">{copy.gift.blockHow}</p>
         </>
       )}

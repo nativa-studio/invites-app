@@ -338,6 +338,10 @@ export const copy = {
     giftsOff: "Not on the invite. Tap to turn the gifts block on.",
     previewGifts: "Guests see this. Tap to change what it says or add to the wish list.",
     giftsEmpty: "Nothing written about gifts yet. Tap to add a line, a wish list, or both.",
+    // The host's own sentence about the group gift. The hint has to say what happens when it is
+    // empty, or a host leaves it blank expecting silence and gets the app's line instead.
+    groupGiftLine: "The group gift, in your words",
+    groupGiftLineHint: "Replaces the line the invite would write. Leave it empty and it says \u201cEveryone is going in together on one present\u201d with whatever the gift is.",
     previewPlate: "Guests claim a dish here once they have said yes.",
     previewGift: "Guests read how to chip in here once they have answered. The bank details come from whoever is organising it.",
     previewReply: "Tap to change what this asks, including the reply by date. To answer it the way a guest does, switch to Preview.",

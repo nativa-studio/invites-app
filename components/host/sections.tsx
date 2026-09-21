@@ -110,10 +110,22 @@ export const SECTIONS: Section[] = [
     title: "Gifts",
     blurb: "A block of its own for gifts: what you want to say, a wish list, and the group gift if one is running. The wish list is a list of ideas, not a registry, so nothing is claimed and two people can still buy the same thing.",
     show: { column: "show_gifts", label: copy.host.giftsBlock },
-    fields: ["gift_note"],
+    fields: ["gift_note", "group_gift_note"],
     render: (e) => (
       <>
         <Field id="gift_note" label={NOTE_NAMES.gifts} value={e.gift_note} rows={3} hint={copy.host.giftNoteFree} />
+        {/* Only when there is a group gift to write about. A box for a sentence about a thing
+            that is not happening is a box a host fills in and never sees, which is how a setting
+            comes to save, say it saved, and change nothing. */}
+        {e.group_gift_enabled && (
+          <Field
+            id="group_gift_note"
+            label={copy.host.groupGiftLine}
+            value={e.group_gift_note}
+            rows={2}
+            hint={copy.host.groupGiftLineHint}
+          />
+        )}
         {/* The wish list is rows in a table rather than a field on the event, so it saves itself
             as it is edited and does not ride in this panel's manifest. It is here rather than on
             a tab of its own because it is wording: a host writing what they want to say about
