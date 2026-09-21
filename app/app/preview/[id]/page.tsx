@@ -120,7 +120,7 @@ export default async function Preview({
     <>
       {full === "1" && (
         <>
-          <a className="preview-back" href={`/app/events/${id}`}>{copy.host.backToParty}</a>
+          <a className="preview-back" href={`/app/events/${id}/invite`}>{copy.host.backToParty}</a>
           {asGuest
             ? <a className="preview-mode" href={here({})}>{copy.host.backToEditing}</a>
             : <a className="preview-mode" href={here({ as: "guest" })}>{copy.host.tryAsGuest}</a>}

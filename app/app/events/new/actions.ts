@@ -47,5 +47,5 @@ export async function createEvent(_prev: NewEventState, fd: FormData): Promise<N
   if (settingsError) return { error: settingsError.message };
 
   revalidatePath("/app");
-  redirect(`/app/events/${id as string}/look?new=1`);
+  redirect(`/app/events/${id as string}/invite?new=1`);
 }

@@ -52,7 +52,13 @@ export function ThanksCard({
           {icsLink && <a className="pbtn small" href={icsLink}>{copy.thanks.apple}</a>}
         </div>
       )}
-      {/* The way back, not a third thing to do. See .pbtn.quiet. */}
+      {/* The way back, not a third thing to do. See .pbtn.quiet. The line above it is what makes
+          it theirs: on its own, Change my answer reads as an undo for a slip, and a guest who
+          meant every word of their yes has no reason to look at it. Naming the moment they would
+          actually come back, a plan falling over in three weeks, is the whole point of saying it
+          here rather than trusting them to guess. Tied to the button and not up in the body,
+          because it is only true while there is a button to tap. */}
+      <p className="small change-why">{copy.thanks.changeHint}</p>
       <button type="button" className="pbtn small quiet" onClick={onChange}>{copy.rsvp.change}</button>
     </div>
     </>

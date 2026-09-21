@@ -110,6 +110,16 @@ export const copy = {
     google: "Google Calendar",
     apple: "Apple or Outlook",
     changed: "Reply updated",
+    // Sits directly above Change my answer, because that button is the whole of what it is
+    // telling them about. A guest who has just said yes reads "Change my answer" as an undo for
+    // a mistake they have not made, so it looks like nothing to do with them. Naming the reason
+    // they would come back, a plan falling over in three weeks, is what makes it theirs.
+    changeHint: "If plans change, you can update your reply here any time.",
+    // The same thought in the calendar entry, where the invite link is a link away rather than
+    // the page they are on: "there", not "here". A guest who has put the party in their diary
+    // will next think about it from the diary, and a calendar entry is the one place a change of
+    // plan actually gets noticed.
+    calendarNote: "If plans change, you can update your reply there any time.",
   },
   // Bring a plate, as a guest reads it. The board is only ever seen by somebody who has said
   // yes, so none of this has to talk them into coming.
@@ -365,6 +375,60 @@ export const copy = {
     allergies: "Allergies:",
     // Tracking: the numbers, then the two things somebody has to read before they cook, then
     // everything that has happened.
+    // The Overview: the screen an event opens on, answering "where is this up to" before a host
+    // has to pick a tab. Every number on it is worked out from the guest list, and every one of
+    // them is a link to the part of the guest list it came from, because the next thing a host
+    // wants after a number is the names behind it.
+    // Settings: facts about the event as a whole. Each hint says what switching it does
+    // somewhere else, because none of these change the screen they are on.
+    setBlurb: "What this event has and who can answer it. Each of these changes the invite and what guests can do.",
+    setPlateHint: "Guests claim a dish on their invite once they have said yes, and you get a board of what is covered under Plan.",
+    setGiftHint: "One present everybody goes in on. The details show on the invite, and you can hand it to a guest to run.",
+    setSplitOn: "Children and adults separately",
+    setSplitOff: "One number",
+    setSplitHint: "Off, guests give one number and there are no kids or adults anywhere: the counts, the guest list and the reply all follow this.",
+    setGroupLink: "Group link open",
+    setGroupLinkHint: "Anyone with the shared link can add themselves and reply. Personal links keep working either way. Close it once the list is final.",
+    ovInvite: "The invite",
+    ovSentTo: (sent: number, total: number) => `Sent to ${sent} of ${total}`,
+    ovNotSent: "Not sent to anybody yet",
+    ovEdit: "Edit",
+    ovComing: "coming",
+    ovOnList: "on the list",
+    // Said out loud because the number is a guess and a number that looks like a fact is worse
+    // than no number. It counts everyone who has not said no, using what guests answered where
+    // they have answered and what the host pencilled in where they have not.
+    ovOnListHint: "if everyone still waiting says yes",
+    ovReplies: "Replies",
+    ovReplied: (replied: number, total: number) => `${replied} of ${total} replied`,
+    ovLegendYes: (n: number) => `${n} coming`,
+    ovLegendNo: (n: number) => `${n} can't`,
+    ovLegendWaiting: (n: number) => `${n} to reply`,
+    ovNobodyYet: "Nobody on the list yet. Add your guests and this fills in.",
+    // Days, as a host counts them, split into the number and the words under it so the tile is
+    // the same shape as the two beside it. "41 days to go" set at 26px is a sentence in a slot
+    // built for a number, and it wrapped onto two lines.
+    //
+    // Today and tomorrow have no number: "0 days to go" is not how anybody says today.
+    ovDaysBig: (n: number) => (n === 0 ? "Today" : n === 1 ? "Tomorrow" : n === -1 ? "Yesterday" : String(Math.abs(n))),
+    ovDaysLabel: (n: number) => (n === 0 || n === 1 || n === -1 ? "" : n > 0 ? "days to go" : "days ago"),
+    ovNoDate: "No date yet",
+    ovSettings: "Event settings",
+    ovChange: "Change",
+    ovOn: "on",
+    ovOff: "off",
+    ovPlateChip: "Bring a plate",
+    ovGiftChip: "Group gift",
+    ovSplitChip: "Kids and adults",
+    ovNudge: "Needs a nudge",
+    ovNudgeNone: "Everybody has answered. Nothing to chase.",
+    ovNudgeAll: (n: number) => `All ${n} still to reply`,
+    ovSent: "link sent",
+    ovOpened: "opened theirs",
+    ovUnsent: "no link sent yet",
+    ovRecently: "Recently",
+    ovFullActivity: "All activity",
+    ovNothingYet: "Nothing yet. This fills up once the links go out.",
     trackHeading: "Where it is up to",
     trackComing: "Coming",
     // The split, wherever a total is shown. Only worth printing when the event asked for it and

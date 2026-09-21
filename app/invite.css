@@ -108,6 +108,9 @@
    enough towards the navy to stay above 4.5 to 1 on the paper, measured rather than judged. */
 .pbtn.quiet { border-color: transparent; background: transparent; color: color-mix(in srgb, var(--navy) 80%, var(--paper)); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
 .pbtn:disabled { opacity: 0.6; cursor: default; }
+/* The hint and the button it explains are one thing, so they sit closer together than the card's
+   own 12px rhythm, and further from the answer above them. */
+.pcard .change-why { margin-top: 6px; margin-bottom: -6px; max-width: 250px; line-height: 1.45; }
 .pill-link { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--sky-ink); color: #fff; border: 3px solid var(--navy); font-family: var(--font-display); font-size: 17px; text-decoration: none; }
 /* The heading on the card a guest lands on once they have replied.
    Centred, which it was not: the row was a flex line with no justification, so a title that wrapped

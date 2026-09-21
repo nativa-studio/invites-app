@@ -28,7 +28,7 @@ export default async function EventLayout({ children, params }: { children: Reac
         <h1 className="h1">{e.title}</h1>
         {when && <p className="muted">{when}</p>}
       </div>
-      <EventNav id={id} />
+      <EventNav id={id} waiting={guests.filter((g) => g.status === "pending").length} />
       {children}
     </main>
   );

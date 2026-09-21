@@ -1,4 +1,3 @@
-import { copy } from "@/lib/copy";
 import type { GuestRow } from "@/lib/db/types";
 import { realAllergies } from "@/lib/allergies";
 
@@ -9,8 +8,10 @@ import { realAllergies } from "@/lib/allergies";
 // working out behind it. Two answers to one question, one of them a summary of the other. The card
 // stayed, since a host can open it and see where the number comes from.
 //
-// The food line is not a count of replies, it is a shopping list, and nothing else on the screen
-// carries it. So it is what is left here.
+// The one-line food summary that used to sit here went the same way when Tracking folded into
+// Guests: the two cards in FoodNeeds.tsx say it properly, with the names, and both Guests and the
+// Overview draw them. What is left is the counting itself, which the Plan tab still needs for the
+// allergy heads-up over the potluck board.
 export function foodSummary(guests: GuestRow[]) {
   const yes = guests.filter((g) => g.status === "yes");
   const tally = yes.flatMap((g) => g.dietary).reduce<Record<string, number>>((m, d) => ({ ...m, [d]: (m[d] ?? 0) + 1 }), {});
@@ -21,26 +22,4 @@ export function foodSummary(guests: GuestRow[]) {
   // read in a hurry.
   const allergies = realAllergies(yes);
   return { counts: Object.entries(tally), notes: yes.some((g) => g.dietary_note), allergies };
-}
-
-export function FoodNote({ guests }: { guests: GuestRow[] }) {
-  const { counts, notes, allergies } = foodSummary(guests);
-  if (!counts.length && !allergies.length) return null;
-  return (
-    <>
-      {/* First, and on its own line, because it is the one that is not about preference. */}
-      {allergies.length > 0 && (
-        <p className="notice warn">
-          {copy.host.allergies}{" "}
-          {allergies.map((g) => `${g.name}: ${g.allergies!.trim()}`).join(" · ")}
-        </p>
-      )}
-      {counts.length > 0 && (
-        <p className="notice">
-          {copy.host.food(counts.map(([kind, n]) => `${n} ${kind.toLowerCase()}`).join(", "))}
-          {notes ? ` ${copy.host.foodNotes}` : ""}
-        </p>
-      )}
-    </>
-  );
 }
