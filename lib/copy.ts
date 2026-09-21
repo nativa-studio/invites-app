@@ -62,7 +62,7 @@ export const copy = {
     yourName: "Name",
     // The reason moved out of the bracket and under the label, in the form's own small print,
     // because a label that runs to three lines stops looking like a label.
-    yourMobile: "Parent contact number and name",
+    yourMobile: "Adult name and contact number",
     yourMobileHint: "So you can receive any update",
     change: "Change my answer",
     keep: "Keep it",
