@@ -146,3 +146,23 @@ export function sentenceList(items: string[]): string {
   if (items.length <= 1) return items[0] ?? "";
   return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
+
+// How many sleeps. Counted in Brisbane, not in UTC and not in the browser.
+//
+// The server runs in UTC. A party on 1 November is "tomorrow" from about 2pm Brisbane on the 31st
+// if you subtract UTC dates, because by then it is still the 31st in London and the clock the
+// host is looking at says otherwise. Queensland has no daylight saving, so the offset is a flat
+// ten hours and this needs no timezone library.
+//
+// Null when there is no date, which is a real state: an event can exist for weeks before anyone
+// picks a day.
+const BRISBANE_OFFSET_MS = 10 * 60 * 60 * 1000;
+
+export function daysUntil(ymd: string | null | undefined): number | null {
+  if (!ymd) return null;
+  const then = asUtcDate(ymd);
+  if (!then) return null;
+  const nowInBrisbane = new Date(Date.now() + BRISBANE_OFFSET_MS);
+  const today = Date.UTC(nowInBrisbane.getUTCFullYear(), nowInBrisbane.getUTCMonth(), nowInBrisbane.getUTCDate());
+  return Math.round((then.getTime() - today) / 86_400_000);
+}

@@ -1,16 +1,11 @@
-import { copy } from "@/lib/copy";
-import { loadEvent } from "@/lib/db/host";
-import { LookPanel } from "@/components/host/panels/LookPanel";
+import { redirect } from "next/navigation";
 
-// Layout: the shape of the invite, its picture, and which parts of it show at all.
-export default async function Look({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ new?: string }> }) {
+// The template and the colours are part of the invite now.
+//
+// A redirect rather than a deletion: this address has been in a browser history, a bookmark and
+// a message. A tab that moved is not the same thing as a page that is gone, and a 404 cannot
+// tell a host which of the two happened.
+export default async function Moved({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { new: isNew } = await searchParams;
-  const e = await loadEvent(id);
-  return (
-    <>
-      {isNew === "1" && <p className="notice">{copy.host.newEventNext}</p>}
-      <LookPanel e={e} />
-    </>
-  );
+  redirect(`/app/events/${id}/invite`);
 }

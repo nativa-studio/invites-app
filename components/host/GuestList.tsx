@@ -14,10 +14,23 @@ import { EditGuest } from "./EditGuest";
 import { SetAnswer } from "./SetAnswer";
 import { useHasShare } from "./capabilities";
 
-type Props = { eventId: string; guests: GuestRow[]; everyone: GuestRow[]; base: string; event: TemplateEvent; site: string };
+type Filter = "all" | "yes" | "no" | "pending" | "unsent" | "nogroup";
 
-export function GuestList({ eventId, guests, everyone, base, event, site }: Props) {
-  const [filter, setFilter] = useState<"all" | "yes" | "no" | "pending" | "unsent" | "nogroup">("all");
+type Props = {
+  eventId: string; guests: GuestRow[]; everyone: GuestRow[]; base: string; event: TemplateEvent; site: string;
+  /** Which filter the list opens on, from ?filter= in the address. The Overview's counts link
+   *  straight to the names behind them, and landing on the whole list with a number in your head
+   *  and no filter set is the work the count was supposed to save. Anything unrecognised falls
+   *  back to everybody, so a stale link shows too much rather than nothing. */
+  initialFilter?: string;
+};
+
+const FILTERS = ["all", "yes", "no", "pending", "unsent", "nogroup"] as const;
+
+export function GuestList({ eventId, guests, everyone, base, event, site, initialFilter }: Props) {
+  const [filter, setFilter] = useState<Filter>(
+    (FILTERS as readonly string[]).includes(initialFilter ?? "") ? (initialFilter as Filter) : "all",
+  );
   // What the host has typed into Find a guest. Held here rather than in the address, because a
   // search is typing and a round trip per keystroke on one bar is not typing, it is waiting.
   const [typed, setTyped] = useState("");
@@ -178,7 +191,7 @@ export function GuestList({ eventId, guests, everyone, base, event, site }: Prop
       )}
 
       <div className="actions" role="tablist" aria-label="Filter guests">
-        {(["all", "yes", "no", "pending", "unsent", "nogroup"] as const).map((f) => (
+        {FILTERS.map((f) => (
           <button key={f} type="button" className="btn small" aria-pressed={searching ? f === "all" : filter === f} onClick={() => { setTyped(""); setFilter(f); }}>
             {f === "all" ? "All" : f === "yes" ? "Yes" : f === "no" ? "No" : f === "pending" ? "No reply" : f === "unsent" ? "Not sent" : copy.host.guestGroupNone}
           </button>

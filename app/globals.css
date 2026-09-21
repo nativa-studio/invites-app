@@ -622,3 +622,57 @@ fieldset.stack > legend { padding: 0; }
    accidental tap impossible to undo by eye. It falls to the bottom on the next load instead. */
 .shop-row.got .shop-tick .l { text-decoration: line-through; color: var(--app-mute); }
 .shop-row .as-link { flex: 0 0 auto; font-size: 13.5px; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Overview: the screen an event opens on.
+
+   Built from the app's own furniture (.card, .btn, .muted) rather than a new
+   visual language. The only new shapes here are the ones the existing set has
+   no answer for: a tile that is mostly one big number, and one bar carrying
+   three counts.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* The invite, whole-tile as a link. Its own paper behind it, the same way the
+   event list draws it, so an event is recognised by its own stock. */
+.ov-invite { display: grid; gap: 0; border: 1px solid var(--app-line); border-radius: 10px; overflow: hidden; text-decoration: none; }
+.ov-invite:hover { border-color: var(--app-line-2); }
+.ov-invite .evt-art { aspect-ratio: 16 / 9; }
+.ov-invite-foot { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 12px 14px; border-top: 1px solid var(--app-line); font-size: 14px; }
+.ov-invite-foot .muted { font-size: 14px; }
+.ov-invite-foot .as-link { margin-left: auto; }
+
+/* Three tiles that wrap to two and then one. minmax with a floor of 148px is
+   what stops the third tile going to a second row on its own at 390px while
+   the first two sit half empty. */
+.ov-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 10px; }
+.ov-tile { display: grid; align-content: start; gap: 2px; padding: 14px; border: 1px solid var(--app-line); border-radius: 10px; text-decoration: none; background: var(--app-bg); }
+.ov-tile:hover { border-color: var(--app-line-2); }
+.ov-tile.still:hover { border-color: var(--app-line); }
+.ov-tile .big { font-size: 26px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+.ov-tile .lab { font-size: 13px; color: var(--app-mute); }
+.ov-tile .sub { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; margin-top: 2px; }
+
+/* One bar, three counts. The empty track is the third of them, not a gap: the
+   number a host is chasing is the one still to reply, and it has to have a
+   visible size rather than being the absence of the other two. */
+.ov-bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--app-line); }
+.ov-bar .seg.yes { background: var(--app-on); }
+.ov-bar .seg.no { background: var(--app-line-2); }
+
+.ov-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13.5px; }
+.ov-legend a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; text-decoration: none; color: var(--app-ink); }
+.ov-legend a:hover { text-decoration: underline; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; display: inline-block; }
+.dot.yes { background: var(--app-on); }
+.dot.no { background: var(--app-line-2); }
+.dot.wait { background: var(--app-bg); box-shadow: inset 0 0 0 1.5px var(--app-line-2); }
+.plain li .dot { margin-right: 8px; vertical-align: baseline; }
+
+.ov-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ov-chip { font-size: 12.5px; font-weight: 600; color: var(--app-mute); border: 1px solid var(--app-line-2); border-radius: 999px; padding: 5px 12px; }
+.ov-chip.on { background: var(--app-ink); border-color: var(--app-ink); color: var(--app-bg); }
+
+/* The one badge in the tab bar: replies still out. Inline in the tab rather than floating over
+   its corner, because a floating badge on a scrolling bar clips against the next tab. */
+.nav-badge { margin-left: 6px; display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--app-ink); color: var(--app-bg); font-size: 11.5px; font-weight: 700; line-height: 1; vertical-align: 1px; }
+.evt-nav a.on .nav-badge { background: var(--app-ink); }
