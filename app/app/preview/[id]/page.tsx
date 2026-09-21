@@ -12,6 +12,7 @@ import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import { PickMode } from "@/components/host/PickMode";
 import { PreviewReply } from "@/components/invite/PreviewReply";
 import { PreviewGift, PreviewPlate } from "@/components/invite/PreviewExtras";
+import { GiftsCard } from "@/components/invite/GiftsCard";
 import { ReplyProvider } from "@/components/invite/ReplyState";
 import { TryReply } from "@/components/invite/TryReply";
 import { previewGift, previewPlate } from "@/lib/db/preview-extras";
@@ -142,6 +143,10 @@ export default async function Preview({
           // the file carries preview=1. Either way round, a host looking at their own invite must
           // not turn up on their own list as having added the party to their calendar.
           calendar={e.date ? { google: googleCalendarLink(e, token ? inviteLink(await getSiteUrl(), token) : ""), ics: previewIcs } : null}
+          // Editing only, never in try as a guest: there the invite has to be exactly what a
+          // guest gets, block and all. Passed whatever the switch says, because the switch itself
+          // is in the drawer behind this card.
+          giftsCard={asGuest ? undefined : <GiftsCard e={e} off={!row.show_gifts} />}
           plateCard={asGuest || !row.plate_enabled ? undefined
             : <PreviewPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} />}
           skipAnimation={pick === "1" && !asGuest ? true : undefined}

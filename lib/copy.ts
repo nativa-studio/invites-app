@@ -332,6 +332,12 @@ export const copy = {
   },
   host: {
     blockOff: "Not on the invite. Guests only see the line in the info booth. Tap to put the block back.",
+    // The gifts block in the editor, in its two states. Worded apart from the plate's because the
+    // consequence is different: switching the plate block off leaves a line in the info booth,
+    // and switching gifts off leaves a line only if the host wrote one.
+    giftsOff: "Not on the invite. Tap to turn the gifts block on.",
+    previewGifts: "Guests see this. Tap to change what it says or add to the wish list.",
+    giftsEmpty: "Nothing written about gifts yet. Tap to add a line, a wish list, or both.",
     previewPlate: "Guests claim a dish here once they have said yes.",
     previewGift: "Guests read how to chip in here once they have answered. The bank details come from whoever is organising it.",
     previewReply: "Tap to change what this asks, including the reply by date. To answer it the way a guest does, switch to Preview.",

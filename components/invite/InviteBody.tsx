@@ -25,7 +25,7 @@ import { PostInvite } from "./PostInvite";
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e, greeting, reply, layout, skipAnimation, token, curious, answered, pretend, plateCard, calendar,
+  e, greeting, reply, layout, skipAnimation, token, curious, answered, pretend, plateCard, giftsCard, calendar,
 }: {
   e: PublicEvent;
   greeting: string;
@@ -42,6 +42,9 @@ export function InviteBody({
   /** The editor's own drawing of the plate card, which is not a guest's and answers to no reply.
    *  Left out everywhere else, where the card comes from the guest's answer. */
   plateCard?: React.ReactNode;
+  /** The editor's own gifts card, which draws faded when the block is off so a host can tap it
+   *  and find the switch. Left out everywhere else, where the block draws from the event. */
+  giftsCard?: React.ReactNode;
   layout?: PublicEvent["layout_id"];
   skipAnimation?: boolean;
   /** Add to calendar, under the reply, for a guest who has not answered yet. Each caller builds
@@ -89,6 +92,7 @@ export function InviteBody({
         reply={announced}
         after={about}
         plate={plateCard ?? <PlateSlot />}
+        gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
     );
@@ -128,7 +132,7 @@ export function InviteBody({
     // reading it has said yes, and nothing at all outside a reply provider, which is the editor
     // drawing the invite with nobody answering. There the editor passes its own card instead.
     plate: plateCard ?? <PlateSlot />,
-    gifts: e.show_gifts ? <GiftsCard e={e} /> : null,
+    gifts: giftsCard ?? (e.show_gifts ? <GiftsCard e={e} /> : null),
     after: e.show_after ? <AskCard e={e} /> : null,
     // Absent means on: a database without migration 0008 does not send the column, and the
     // sign-off is a part every event gets rather than one to opt into.

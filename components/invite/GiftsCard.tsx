@@ -21,23 +21,34 @@ import { Gift as GiftIcon } from "@/components/art/icons";
 //
 // Nothing here is a button. The whole block is for reading, which is why it can sit on the invite
 // before anybody has answered without asking anything of them.
-export function GiftsCard({ e }: { e: PublicEvent }) {
+export function GiftsCard({ e, off }: {
+  e: PublicEvent;
+  /** Only the host's editor passes this, and passing it at all means "draw even with nothing in
+   *  you". A part switched off has to keep drawing there, faded, because the switch that turns it
+   *  back on lives in the drawer behind this card and nothing else opens that drawer. With no
+   *  note, no list and no group gift there would be nothing on the screen to tap, and the block
+   *  would be a feature a host could not find. That is the fault CLAUDE.md opens with. */
+  off?: boolean;
+}) {
+  const editing = off !== undefined;
   const note = e.gift_note?.trim();
   const list = e.wishlist ?? [];
   const group = e.group_gift_enabled ? (e.group_gift_what?.trim() || null) : undefined;
   // undefined means no group gift at all; null means one is running with nothing typed about it
   // yet, which is still worth saying.
   const hasGroup = group !== undefined;
-  if (!note && list.length === 0 && !hasGroup) return null;
+  if (!editing && !note && list.length === 0 && !hasGroup) return null;
 
   return (
-    <div className="pcard cream tilt-l gifts" data-section="gifts">
+    <div className={`pcard cream tilt-l gifts${off ? " off" : ""}`} data-section="gifts">
       <div className="tape cross" />
       <div className="tape over sky" />
       <div className="label red">{copy.sections.gifts}</div>
       <GiftIcon size={36} />
 
-      {note && <p className="para">{note}</p>}
+      {note
+        ? <p className="para">{note}</p>
+        : editing && <p className="para">{copy.host.giftsEmpty}</p>}
 
       {list.length > 0 && (
         <>
@@ -65,6 +76,10 @@ export function GiftsCard({ e }: { e: PublicEvent }) {
           <p className="small">{copy.gift.blockHow}</p>
         </>
       )}
+
+      {/* Only in the editor, and it says which of the two states this is: off and therefore
+          invisible to guests, or on and waiting for words. */}
+      {editing && <div className="small">{off ? copy.host.giftsOff : copy.host.previewGifts}</div>}
     </div>
   );
 }
