@@ -168,7 +168,10 @@ export function Overview({
                         have to open anything to find out somebody cannot eat nuts. */}
                     {h.said?.map((line, j) => <span key={j} className={`said${line.warn ? " warn" : ""}`}>{line.text}</span>)}
                   </span>
-                  <span className="when">{relativeTime(h.at)}</span>
+                  <span className="when">
+                    {h.times && <span className="times">{copy.host.openedTimes(h.times)}</span>}
+                    {relativeTime(h.at)}
+                  </span>
                 </li>
               ))}
             </ul>

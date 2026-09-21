@@ -32,6 +32,11 @@ export type Happening = {
    *  the guest row keeps one set of answers, so hanging today's words on last month's line would
    *  be putting a note against a decision it was never written about. */
   said?: Said[];
+  /** How many times a group link has been opened today, and only ever set on that kind. Shown
+   *  from two upwards: "someone opened it" and "someone opened it once" say the same thing, and
+   *  the second one says it more loudly. Absent on rows written before migration 0043, which
+   *  cannot know, and which therefore read as they always did. */
+  times?: number;
 };
 
 /** One line of what a guest wrote. `warn` is the allergy line and nothing else: it is the one
@@ -42,6 +47,7 @@ export type Said = { text: string; warn?: boolean };
 type Row = {
   kind: string;
   detail: string | null;
+  tally: number | null;
   at: string;
   guest: Named | Named[] | null;
 };
@@ -57,7 +63,7 @@ export const loadActivity = cache(async (eventId: string, guests: GuestRow[]): P
   const supabase = await createClient();
   const { data } = await supabase
     .from("activity")
-    .select("kind, detail, at, guest:guests(id, name, groups)")
+    .select("kind, detail, at, tally, guest:guests(id, name, groups)")
     .eq("event_id", eventId)
     .order("at", { ascending: false })
     .limit(120);
@@ -74,7 +80,10 @@ export const loadActivity = cache(async (eventId: string, guests: GuestRow[]): P
     // attribute it to, so it carries the link it was rather than a name, and the group tag beside
     // the time says which link. Handled before the name check, which every other kind must pass.
     if (row.kind === "group_open") {
-      out.push({ at: row.at, kind: "groupOpen", who: copy.host.someone, group: row.detail });
+      out.push({
+        at: row.at, kind: "groupOpen", who: copy.host.someone, group: row.detail,
+        ...(row.tally && row.tally > 1 ? { times: row.tally } : {}),
+      });
       continue;
     }
     // A guest who has since been removed takes their name with them, and a line about nobody is
