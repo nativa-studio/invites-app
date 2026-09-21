@@ -163,7 +163,7 @@ export function Overview({
                     <span className="pip" aria-hidden="true">{initial(g.name)}</span>
                     <span className="who">
                       <b>{g.name}</b>
-                      <span className="sub">{!g.sent_at ? copy.host.ovUnsent : g.opened_at ? copy.host.ovOpened : copy.host.ovSent}</span>
+                      <span className="sub">{nudgeState(g)}</span>
                     </span>
                     <Link href={`${base}/guests?filter=pending`} className="btn small">
                       {g.sent_at ? copy.host.ovRemind : copy.host.ovSendInvite}
@@ -230,6 +230,25 @@ export function Overview({
 // exist, which copy.host.split already decides.
 function splitLine(kids: number, adults: number): string {
   return copy.host.split(kids, adults).replace(", ", " / ");
+}
+
+// Where a guest who has not replied has got to.
+//
+// "Opened theirs" has to mean they opened the link you last sent, not that they opened one at
+// some point. Sending again overwrites sent_at and leaves opened_at where it was, so a guest who
+// read last week's message and never saw this week's was being reported as having opened it.
+//
+// Marcia caught it on Grandpa and Grandma: sent 21 September 18:32, opened 20 September 16:01.
+// A day before. The card said "opened theirs" and the activity feed, which is honest about
+// times, had their open sitting 26 hours below the send, off the bottom of the five it shows.
+// One of the two was wrong, and it was this one.
+function nudgeState(g: GuestRow): string {
+  if (!g.sent_at) return copy.host.ovUnsent;
+  if (!g.opened_at) return copy.host.ovSent;
+  const opened = new Date(g.opened_at).getTime();
+  const sent = new Date(g.sent_at).getTime();
+  if (Number.isNaN(opened) || Number.isNaN(sent)) return copy.host.ovSent;
+  return opened >= sent ? copy.host.ovOpened : copy.host.ovResent;
 }
 
 function initial(name: string): string {

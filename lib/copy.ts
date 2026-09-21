@@ -481,6 +481,10 @@ export const copy = {
     ovNudgeAll: (n: number) => `All ${n} still to reply`,
     ovSent: "link sent",
     ovOpened: "opened theirs",
+    // Sent again since they last opened one. Not the same as "opened theirs": what they read was
+    // the message before this one, and telling a host otherwise sends them off to chase somebody
+    // who has never seen the link they are chasing about.
+    ovResent: "sent again, not opened yet",
     ovUnsent: "no link sent yet",
     trackHeading: "Where it is up to",
     trackComing: "Coming",
