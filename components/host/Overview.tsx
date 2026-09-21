@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { copy } from "@/lib/copy";
-import { daysUntil, formatDateTime } from "@/lib/format";
+import { daysUntil } from "@/lib/format";
 import { counts } from "@/lib/heads";
 import type { GuestRow, PublicEvent } from "@/lib/db/types";
 import type { Happening } from "@/lib/db/activity";
@@ -8,6 +8,8 @@ import { paletteFor, paletteVars } from "@/components/art/palette";
 import { stockFor } from "@/lib/layouts";
 import { inkFor, paperFor } from "@/lib/strip-set";
 import { InviteThumb } from "./InviteThumb";
+import { ActivityDrawer } from "./ActivityDrawer";
+import { groupsOf } from "@/lib/group-colours";
 
 // Where the event is up to, before a host has to choose a tab.
 //
@@ -167,27 +169,18 @@ export function Overview({
         )}
       </section>
 
-      <section className="card">
-        <div className="card-head">
-          <h2 className="h2">{copy.host.ovRecently}</h2>
-          {feed.length > 0 && (
-            <Link href={`${base}/guests`} className="btn small">{copy.host.ovFullActivity}</Link>
-          )}
-        </div>
-        {feed.length === 0 ? (
-          <p className="muted">{copy.host.ovNothingYet}</p>
-        ) : (
-          <ul className="plain">
-            {feed.slice(0, 5).map((h, i) => (
-              <li key={`${h.at}-${i}`}>
-                <span className={`dot ${h.kind === "yes" ? "yes" : h.kind === "no" ? "no" : "wait"}`} />
-                {copy.host.did[h.kind](h.who)}
-                <span className="muted"> · {formatDateTime(h.at)}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {/* The trail, in the component that has always drawn it, rather than a second plainer
+          copy of the same feed.
+
+          There was one here for a day: five lines, no group tag, no per-kind styling. It is the
+          fault this project keeps making, written into CLAUDE.md twice already, and I made it
+          again: a thing drawn in two places drifts, and the second drawing is always the poorer
+          one because it is the one nobody is looking at while they work on the first.
+
+          The group tag is the part that was lost. It is what tells two Sarahs apart, and on a
+          group-link open it is the only thing on the line that says which link was opened, since
+          nobody's name is attached to it. */}
+      <ActivityDrawer feed={feed} groups={groupsOf(guests)} />
     </>
   );
 }

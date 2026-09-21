@@ -426,9 +426,6 @@ export const copy = {
     ovSent: "link sent",
     ovOpened: "opened theirs",
     ovUnsent: "no link sent yet",
-    ovRecently: "Recently",
-    ovFullActivity: "All activity",
-    ovNothingYet: "Nothing yet. This fills up once the links go out.",
     trackHeading: "Where it is up to",
     trackComing: "Coming",
     // The split, wherever a total is shown. Only worth printing when the event asked for it and
