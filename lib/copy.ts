@@ -56,13 +56,22 @@ export const copy = {
     no: "Sorry, can't make it",
     yesQuiet: "I'll be there",
     noQuiet: "I can't be there, but I'm thinking of you",
-    // "Name", not "Your name". The form is already addressed to the person filling it in, so the
-    // "your" on every label is a word each one spends saying who it is for when that was never in
-    // question. Both, because they are a pair and one of each reads like a mistake.
-    yourName: "Name",
-    // The reason moved out of the bracket and under the label, in the form's own small print,
-    // because a label that runs to three lines stops looking like a label.
-    yourMobile: "Parent contact number and name",
+    // Three boxes, and each one says which person it means.
+    //
+    // "Name" and "Adult name" side by side asked the same question twice as far as a reader was
+    // concerned. On a kids' party the guest is the child and the adult is whoever is bringing
+    // them, and nothing on the form said so. The envelope is the thing to point at, because the
+    // guest has already seen their own name written on it.
+    //
+    // The reason for each box sits under its label in the form's own small print rather than in
+    // brackets on the end of it: a label that runs to three lines stops looking like a label.
+    yourName: "Guest name",
+    yourNameHint: "The name the invite is addressed to",
+    // Two boxes, not one. Asked as one, whoever replied typed both into the phone field and the
+    // host got "Sarah 0412 345 678" where a number should be.
+    adultName: "Adult name",
+    adultNameHint: "If different from the guest",
+    yourMobile: "Contact number",
     yourMobileHint: "So you can receive any update",
     change: "Change my answer",
     keep: "Keep it",
@@ -387,6 +396,7 @@ export const copy = {
       no: (who: string) => `${who} can't come`,
       joined: (who: string) => `${who} came in via the group link`,
       calendar: (who: string) => `${who} tapped Add to calendar`,
+      groupOpen: (who: string) => `${who} opened the group link`,
       token: (who: string) => `${who} got a new link`,
       sent: (who: string) => `You sent ${who} their link`,
       opened: (who: string) => `${who} opened their invite`,
@@ -674,7 +684,13 @@ export const copy = {
       // and is tapped away from looks exactly the same from here. The tap is the part that was
       // actually observed, so the tap is what it says.
       calendar: "tapped Add to calendar",
+      // A group link belongs to nobody, so this line names the act and the group tag beside the
+      // time names the link. "Opened", not "looked at", because that is all a page load proves.
+      groupOpen: "opened the group link",
     },
+    // Who a line is about when it is about nobody. A group link belongs to no guest, so the feed
+    // says somebody did it rather than inventing a name or leaving the sentence without a subject.
+    someone: "Somebody",
   },
   templates: {
     text: "Hi {name}! You're invited to {title}{date}. Everything is here, and you can reply with one tap: {link}",

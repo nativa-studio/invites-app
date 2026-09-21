@@ -2,6 +2,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { copy } from "@/lib/copy";
 import { curiousAction, feedbackAction, type CuriousState, type FeedbackState } from "@/app/i/[token]/about-actions";
+import { useReply } from "./ReplyState";
 
 // About this app, at the foot of every invite.
 //
@@ -12,7 +13,18 @@ import { curiousAction, feedbackAction, type CuriousState, type FeedbackState } 
 // Discreet is the whole brief. Somebody opened this to find out about a party, not to read about
 // the software that drew it, and a product pitch above the sign-off would be taking a moment that
 // belongs to the host.
-export function AboutApp({ token, curious, pretend }: { token: string | null; curious: boolean; pretend?: boolean }) {
+export function AboutApp({ token: given, curious, pretend }: { token: string | null; curious: boolean; pretend?: boolean }) {
+  // On a group link nobody has a token when the page is drawn, so this card arrived with no way
+  // to record anything and showed its two paragraphs and nothing else: no ask, no hand up, no
+  // feedback box. The moment somebody replies there they do have a row, and the reply provider is
+  // already carrying it for the plate board further up the page. So take it from there when the
+  // server had none to give, which is the same trick and the same source of truth.
+  //
+  // Before anybody has replied there is still nothing, and that is not a gap to paper over: the
+  // hand up is a timestamp on a guest's own row, so offering the button to somebody who has no
+  // row would be a button with nowhere to write.
+  const ctx = useReply();
+  const token = given || ctx?.reply.token || null;
   const [state, act, pending] = useActionState<CuriousState, FormData>(
     curiousAction,
     { token: token ?? "", curious },
@@ -70,9 +82,11 @@ export function AboutApp({ token, curious, pretend }: { token: string | null; cu
     io.observe(el);
     return () => io.disconnect();
   }, []);
+  // The token goes in the form rather than being trusted to the state this was mounted with: on
+  // a group link it arrives after the first render. See curiousAction.
   const ask = (body: React.ReactNode) => (pretend
     ? <form onSubmit={(ev) => { ev.preventDefault(); setLocal((v) => !v); }}>{body}</form>
-    : <form action={act}>{body}</form>);
+    : <form action={act}><input type="hidden" name="token" value={token ?? ""} />{body}</form>);
 
   return (
     <details className={`about${wave ? " wave" : ""}`} ref={box} onToggle={() => setWave(false)}>

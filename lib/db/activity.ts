@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import type { GuestRow } from "./types";
+import { copy } from "@/lib/copy";
 
 // What has happened on this event, newest first.
 //
@@ -17,7 +18,7 @@ import type { GuestRow } from "./types";
 // are stamped once, merged and sorted. Nothing is counted twice, because no kind appears in both.
 export type Happening = {
   at: string;
-  kind: "yes" | "no" | "joined" | "calendar" | "token" | "sent" | "opened" | "reminded";
+  kind: "yes" | "no" | "joined" | "calendar" | "token" | "sent" | "opened" | "reminded" | "groupOpen";
   who: string;
   /** The group they are labelled with, for the tag beside the line. Null for anybody who has not
    *  been put in one, which shows nothing rather than the words "no group": the tag is there to
@@ -51,6 +52,13 @@ export const loadActivity = cache(async (eventId: string, guests: GuestRow[]): P
   const out: Happening[] = [];
   for (const row of (data ?? []) as Row[]) {
     const g = Array.isArray(row.guest) ? row.guest[0] : row.guest;
+    // Somebody opened a group link. The one kind here that belongs to nobody: there is no row to
+    // attribute it to, so it carries the link it was rather than a name, and the group tag beside
+    // the time says which link. Handled before the name check, which every other kind must pass.
+    if (row.kind === "group_open") {
+      out.push({ at: row.at, kind: "groupOpen", who: copy.host.someone, group: row.detail });
+      continue;
+    }
     // A guest who has since been removed takes their name with them, and a line about nobody is
     // worse than no line.
     const who = g?.name;
