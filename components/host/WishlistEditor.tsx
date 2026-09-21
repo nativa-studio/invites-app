@@ -15,15 +15,16 @@ import {
 // drag handle is there because the order is the host's point of view on it. First is the one they
 // would most like.
 //
-// Each row is three things and two of them are optional. A label on its own is a perfectly good
-// wish, and asking for a link and a note every time would make adding six things a chore.
+// Each row is a label and, if the host wants one, a link. There was a note field under each item
+// as well, showing under the name on the invite. It went: the block draws the list as a sentence
+// now, the way the plate card draws what is covered, and a sentence has nowhere to put a note.
+// A field whose result cannot be seen anywhere is the fault CLAUDE.md opens with.
 export function WishlistEditor({ eventId, items }: { eventId: string; items: HostWishlistItem[] }) {
   const [pending, start] = useTransition();
   const [order, setOrder] = useState<string[] | null>(null);
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<HostWishlistItem | null>(null);
   const [label, setLabel] = useState("");
-  const [note, setNote] = useState("");
   const [url, setUrl] = useState("");
 
   const byId = new Map(items.map((i) => [i.id, i]));
@@ -33,7 +34,6 @@ export function WishlistEditor({ eventId, items }: { eventId: string; items: Hos
 
   function open(item: HostWishlistItem | null) {
     setLabel(item?.label ?? "");
-    setNote(item?.note ?? "");
     setUrl(item?.url ?? "");
     if (item) setEditing(item); else setAdding(true);
   }
@@ -46,8 +46,8 @@ export function WishlistEditor({ eventId, items }: { eventId: string; items: Hos
     setEditing(null);
     start(() => {
       void (item
-        ? editWishlistItem(eventId, item.id, what, note, url)
-        : addWishlistItem(eventId, what, note, url));
+        ? editWishlistItem(eventId, item.id, what, url)
+        : addWishlistItem(eventId, what, url));
     });
   }
 
@@ -74,7 +74,6 @@ export function WishlistEditor({ eventId, items }: { eventId: string; items: Hos
               <div className="wish-row">
                 <span className="what">
                   <b>{item.label}</b>
-                  {item.note && <span className="sub">{item.note}</span>}
                   {item.url && <span className="sub link">{item.url}</span>}
                 </span>
                 <button type="button" className="as-link small" onClick={() => open(item)}>{copy.host.wishEdit}</button>
@@ -99,15 +98,6 @@ export function WishlistEditor({ eventId, items }: { eventId: string; items: Hos
                 onChange={(ev) => setLabel(ev.target.value)}
                 onKeyDown={(ev) => { if (ev.key === "Enter") save(); }}
               />
-            </div>
-            <div className="field">
-              <label htmlFor="wish_note">{copy.host.wishNote}</label>
-              <input
-                id="wish_note" type="text" value={note} autoComplete="off"
-                placeholder={copy.host.wishNotePlaceholder}
-                onChange={(ev) => setNote(ev.target.value)}
-              />
-              <span className="hint">{copy.host.wishNoteHint}</span>
             </div>
             <div className="field">
               <label htmlFor="wish_url">{copy.host.wishLink}</label>

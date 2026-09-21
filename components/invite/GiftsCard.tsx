@@ -1,3 +1,4 @@
+import React from "react";
 import { copy } from "@/lib/copy";
 import type { PublicEvent } from "@/lib/db/types";
 import { Gift as GiftIcon } from "@/components/art/icons";
@@ -11,9 +12,10 @@ import { Gift as GiftIcon } from "@/components/art/icons";
 // and nothing under it is worse than no block:
 //
 //   1. What the host wants to say about gifts. Their words, never edited, never appended to.
-//   2. The wish list, as tiles two to a row, the same shape the plate board uses. Marcia asked
-//      for rows rather than a long list for the same reason the dishes are tiles: eight things in
-//      a column is most of a phone screen, and eight things two-up is a third of one.
+//   2. The wish list, as one sentence, the way the plate card draws what is already covered. It
+//      was tiles with a note under each, which turned four ideas into most of a screen and made a
+//      wish list read like a set of instructions. A guest reads this once, to know roughly what
+//      would be welcome.
 //   3. The group gift, named. Only what it is and that it is happening. Where to send money and
 //      who has already chipped in live on the card after the reply, which takes a token and
 //      answers only for somebody who has said yes: a stranger opening a forwarded link should not
@@ -52,20 +54,28 @@ export function GiftsCard({ e, off }: {
 
       {list.length > 0 && (
         <>
-          {/* A heading only when there is something else above it to tell it apart from. On its
-              own under the card's own label it would be the same word twice. */}
-          {note && <div className="label sky small-label">{copy.sections.wishlist}</div>}
-          <ul className="wishtiles">
-            {list.map((w, i) => (
-              <li key={`${w.label}-${i}`}>
-                {/* A link only where the host gave one. The rest are things to read, and a tile
-                    that looks pressable and is not is worse than a plain one. */}
-                {w.url
-                  ? <a className="wishtile" href={w.url} target="_blank" rel="noreferrer">{face(w)}</a>
-                  : <span className="wishtile">{face(w)}</span>}
-              </li>
-            ))}
-          </ul>
+          {/* No rule above this one. The ideas follow straight on from whatever the host wrote,
+              because they are the same thought continued. The rule below separates that thought
+              from the group gift, which is a different one. */}
+          {/* A sentence, not a list of things to study. Same shape as What's covered on the
+              plate card, and for the same reason: a guest reads this once, to know roughly what
+              would be welcome, and it should take one line of reading and no decisions. It was
+              tiles with a note under each, which turned four ideas into most of a screen and made
+              a wish list look like a set of instructions. A link keeps its word underlined; the
+              rest is plain text. */}
+          <p className="ontable">
+            {copy.sections.wishlist}{" "}
+            <span className="names">
+              {list.map((w, i) => (
+                <React.Fragment key={`${w.label}-${i}`}>
+                  {w.url
+                    ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a>
+                    : w.label}
+                  {joiner(i, list.length)}
+                </React.Fragment>
+              ))}
+            </span>
+          </p>
         </>
       )}
 
@@ -84,12 +94,9 @@ export function GiftsCard({ e, off }: {
   );
 }
 
-function face(w: { label: string; note?: string | null; url?: string | null }) {
-  return (
-    <>
-      <span className="n">{w.label}</span>
-      {w.note && <span className="b">{w.note}</span>}
-      {w.url && <span className="go">{copy.sections.wishlistLink}</span>}
-    </>
-  );
+// ", " between, " and " before the last. The same shape sentenceList gives, written out here
+// because the labels can carry links and a joined string cannot.
+function joiner(i: number, n: number): string {
+  if (i >= n - 1) return "";
+  return i === n - 2 ? " and " : ", ";
 }

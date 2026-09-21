@@ -522,24 +522,24 @@ export async function postGiftUpdate(eventId: string, text: string) {
 //
 // Same shape as the shopping list's actions, and for the same reason: a list the host writes,
 // ordered by a sort they can change, with nothing a guest can write back to it.
-export async function addWishlistItem(eventId: string, label: string, note: string, url: string) {
+export async function addWishlistItem(eventId: string, label: string, url: string) {
   const what = label.trim();
   if (!what) return;
   const supabase = await createClient();
   const { data } = await supabase.from("wishlist_items").select("sort").eq("event_id", eventId).order("sort", { ascending: false }).limit(1).maybeSingle();
   const next = ((data?.sort as number | undefined) ?? -1) + 1;
   await supabase.from("wishlist_items").insert({
-    event_id: eventId, label: what, note: note.trim() || null, url: url.trim() || null, sort: next,
+    event_id: eventId, label: what, url: url.trim() || null, sort: next,
   });
   await revalidateEvent(eventId);
 }
 
-export async function editWishlistItem(eventId: string, itemId: string, label: string, note: string, url: string) {
+export async function editWishlistItem(eventId: string, itemId: string, label: string, url: string) {
   const what = label.trim();
   if (!what) return;
   const supabase = await createClient();
   await supabase.from("wishlist_items")
-    .update({ label: what, note: note.trim() || null, url: url.trim() || null })
+    .update({ label: what, url: url.trim() || null })
     .eq("id", itemId).eq("event_id", eventId);
   await revalidateEvent(eventId);
 }

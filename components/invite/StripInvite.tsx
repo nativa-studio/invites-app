@@ -122,17 +122,15 @@ export function StripInvite({
         <p className="label">{copy.sections.gifts}</p>
         {e.gift_note?.trim() && <p className="para">{e.gift_note.trim()}</p>}
         {(e.wishlist ?? []).length > 0 && (
-          <div className="lines">
-            {(e.wishlist ?? []).map((w, i) => (
-              <div className="line" key={`${w.label}-${i}`}>
-                <Mono name="gift" size={40} />
-                <div>
-                  {w.url ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a> : w.label}
-                  {w.note && <span className="b"> {w.note}</span>}
-                </div>
-              </div>
+          <p className="para ideas">
+            {copy.sections.wishlist}{" "}
+            {(e.wishlist ?? []).map((w, i, all) => (
+              <React.Fragment key={`${w.label}-${i}`}>
+                {w.url ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a> : w.label}
+                {i < all.length - 1 ? (i === all.length - 2 ? " and " : ", ") : ""}
+              </React.Fragment>
             ))}
-          </div>
+          </p>
         )}
         {e.group_gift_enabled && (
           <p className="para">
