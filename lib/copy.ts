@@ -257,7 +257,10 @@ export const copy = {
     // The question mark matters. It names the person this is for, which is the one who was about
     // to close the page, and it cannot be read as an instruction to press instead of replying.
     holdTheDate: "Still deciding?",
-    holdTheDateNote: "Pop the date in your diary while you check. It does not count as a reply, so come back and tell us either way.",
+    // Marcia's own words, and they do the job in one line where mine took three. It names the
+    // action ("Add to calendar"), says the thing that matters ("does not count as a reply") and
+    // tells them where to come back to, all before a guest has stopped reading.
+    holdTheDateNote: "Add to calendar does not count as a reply, come back here to RSVP when ready.",
     day: "The day",
     afternoon: "The order of the afternoon",
     goodToKnow: "Info booth",
