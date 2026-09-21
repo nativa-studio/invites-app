@@ -11,6 +11,7 @@ import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
 import { AnnounceGift, AnnouncePlate } from "./Announce";
 import { UntilAnswered } from "./UntilAnswered";
+import { HoldTheDate } from "./CalendarButtons";
 import { PlateSlot } from "./PlateSlot";
 import { LineupInvite } from "./LineupInvite";
 import { StripInvite } from "./StripInvite";
@@ -42,9 +43,9 @@ export function InviteBody({
   plateCard?: React.ReactNode;
   layout?: PublicEvent["layout_id"];
   skipAnimation?: boolean;
-  /** Add to calendar, on the details card, for a guest who has not replied yet. Each caller
-   *  builds its own pair because each has a different thing to point at: a guest's own token, a
-   *  group slug, or the host's preview, which must not stamp anybody. */
+  /** Add to calendar, under the reply, for a guest who has not answered yet. Each caller builds
+   *  its own pair because each has a different thing to point at: a guest's own token, a group
+   *  slug, or the host's preview, which must not stamp anybody. */
   calendar?: { google: string | null; ics: string | null } | null;
 }) {
   // The two announcements sit immediately before the reply: the last thing a guest reads before
@@ -59,6 +60,19 @@ export function InviteBody({
         <AnnounceGift e={e} answered={answered} />
       </UntilAnswered>
       {reply}
+      {/* Under the reply, never over it.
+      
+          The first attempt put these on the details card, which sits above the RSVP. Two large
+          buttons between the date and Yes or No read as the thing to press: a guest taps Google
+          Calendar, gets a calendar entry, and leaves believing they have answered. The host sees
+          no reply and chases somebody who thinks they are coming.
+          
+          So it is after the decision, and it is worded as the thing to do when you cannot make
+          one yet. It disappears the moment they answer, because the thank-you card carries the
+          same buttons and says the settled version of it. */}
+      <UntilAnswered>
+        <HoldTheDate calendar={calendar} />
+      </UntilAnswered>
     </>
   );
   // Drawn once and handed to whichever layout runs, so neither can quietly not have it.
@@ -101,7 +115,7 @@ export function InviteBody({
   // stay independent of each other.
   const draw: Record<InvitePart, React.ReactNode> = {
     updates: <UpdatesCard e={e} />,
-    details: e.show_details ? <DetailsCard e={e} calendar={calendar} /> : null,
+    details: e.show_details ? <DetailsCard e={e} /> : null,
     // The two announcements sit immediately before the reply, not in the reorderable list. They
     // are the last thing a guest reads before deciding, which is where news about what the day
     // will involve belongs, and they are not parts a host arranges: each is tied to a feature

@@ -29,3 +29,27 @@ export function CalendarButtons({ google, ics, label }: {
     </div>
   );
 }
+
+// The same two buttons, under the reply, for a guest who has not answered yet.
+//
+// Quieter than the reply on purpose, and worded so it cannot be mistaken for it. The first
+// version of this sat on the details card, above the RSVP, and two large buttons between the
+// date and Yes or No read as the thing to press: a guest taps Google Calendar, gets an entry in
+// their diary, and leaves believing they have replied. The host then chases somebody who thinks
+// they are coming, which is worse than never having offered it.
+//
+// So it is below the decision, it says what it is for ("still deciding"), and it says in one
+// line that it is not an answer.
+export function HoldTheDate({ calendar }: { calendar?: { google: string | null; ics: string | null } | null }) {
+  if (!calendar || (!calendar.google && !calendar.ics)) return null;
+  return (
+    <div className="hold">
+      <p className="q">{copy.sections.holdTheDate}</p>
+      <div className="row">
+        {calendar.google && <a className="pbtn small quiet" href={calendar.google} target="_blank" rel="noreferrer">{copy.thanks.google}</a>}
+        {calendar.ics && <a className="pbtn small quiet" href={calendar.ics}>{copy.thanks.apple}</a>}
+      </div>
+      <p className="note">{copy.sections.holdTheDateNote}</p>
+    </div>
+  );
+}

@@ -1,7 +1,6 @@
 import Image from "next/image";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { CalendarButtons } from "./CalendarButtons";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
 import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
@@ -68,12 +67,7 @@ export function WhenWhere({ e }: { e: PublicEvent }) {
   );
 }
 
-export function DetailsCard({ e, calendar }: {
-  e: PublicEvent;
-  /** Add to calendar, offered here rather than only after a yes. Null where there is nothing to
-   *  add to: an event with no date yet. */
-  calendar?: { google: string | null; ics: string | null } | null;
-}) {
+export function DetailsCard({ e }: { e: PublicEvent }) {
   const maps = mapsLink(e);
   return (
     <div className="pcard white tilt-r" data-section="details">
@@ -81,10 +75,6 @@ export function DetailsCard({ e, calendar }: {
       <div className="label red">{copy.sections.details}</div>
       <WhenWhere e={e} />
       {maps && <a className="pill-link" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a>}
-      {/* Under the date and the place, not above them. A guest reads when and where first and
-          only then thinks about their own diary, and a calendar button above the date is an
-          instruction before the fact it is about. */}
-      {calendar && <CalendarButtons google={calendar.google} ics={calendar.ics} label={copy.sections.holdTheDate} />}
     </div>
   );
 }

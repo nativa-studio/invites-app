@@ -250,10 +250,14 @@ export const copy = {
 
   sections: {
     details: "The details",
-    // On the details card, before anybody has replied. Not "Add to calendar", which is what the
+    // Under the reply, before anybody has answered. Not "Add to calendar", which is what the
     // thank-you card says once the answer is in: at this point a guest has not decided, and the
     // useful thing is holding the slot so they do not book over it while they find out.
-    holdTheDate: "Put it in your diary",
+    //
+    // The question mark matters. It names the person this is for, which is the one who was about
+    // to close the page, and it cannot be read as an instruction to press instead of replying.
+    holdTheDate: "Still deciding?",
+    holdTheDateNote: "Pop the date in your diary while you check. It does not count as a reply, so come back and tell us either way.",
     day: "The day",
     afternoon: "The order of the afternoon",
     goodToKnow: "Info booth",
