@@ -60,7 +60,10 @@ export const copy = {
     // "your" on every label is a word each one spends saying who it is for when that was never in
     // question. Both, because they are a pair and one of each reads like a mistake.
     yourName: "Name",
-    yourMobile: "Mobile (optional, so we can text you the details)",
+    // The reason moved out of the bracket and under the label, in the form's own small print,
+    // because a label that runs to three lines stops looking like a label.
+    yourMobile: "Parent contact number and name",
+    yourMobileHint: "So you can receive any update",
     change: "Change my answer",
     keep: "Keep it",
   },
