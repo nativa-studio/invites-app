@@ -33,7 +33,7 @@ export async function groupRsvpAction(_prev: GroupState, fd: FormData): Promise<
     const name = formString(fd, "name");
     if (name.length < 2) return { ok: false, error: "Please put your name in, so the host knows who replied." };
     try {
-      token = await claimGroupLink(slug, name, formString(fd, "phone"), formString(fd, "group") || null);
+      token = await claimGroupLink(slug, name, formString(fd, "phone"), formString(fd, "group") || null, formString(fd, "contact_name") || null);
     } catch (e) {
       const closed = e instanceof Error && e.message.includes("link closed");
       return { ok: false, error: closed ? "This link has been closed. Text the host and they'll send you your own." : "That didn't go through. Please try again." };

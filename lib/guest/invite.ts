@@ -101,10 +101,14 @@ export async function submitRsvp(token: string, input: RsvpInput): Promise<Publi
 //
 // The four argument function arrives in migration 0005. A database that has not had it yet still
 // claims the link; the label is the only thing lost, and the reply is the thing that matters.
-export async function claimGroupLink(slug: string, name: string, phone: string, group?: string | null): Promise<string> {
+export async function claimGroupLink(
+  slug: string, name: string, phone: string, group?: string | null, contactName?: string | null,
+): Promise<string> {
   const args = { p_slug: slug, p_name: name, p_phone: phone || null };
   try {
-    const data = await callGuestRpc<{ token: string }>("claim_group_link", { ...args, p_group: group || null });
+    const data = await callGuestRpc<{ token: string }>("claim_group_link", {
+      ...args, p_group: group || null, p_contact_name: contactName || null,
+    });
     return data.token;
   } catch (err) {
     if (!isMissingFunction(err)) throw err;

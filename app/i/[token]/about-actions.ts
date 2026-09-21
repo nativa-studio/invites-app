@@ -8,15 +8,21 @@ export type CuriousState = { token: string; curious: boolean; error?: boolean };
 // button says which way it is about to go, so the answer has to come back from the server rather
 // than be assumed by the page.
 //
-// The token rides in the state rather than the form, because this is the one control on the
-// invite with nothing else to submit.
-export async function curiousAction(prev: CuriousState): Promise<CuriousState> {
-  if (!isValidToken(prev.token)) return { ...prev, error: true };
+// The token rides in the form, not in the state. It used to ride in the state, on the reasoning
+// that this is the one control on the invite with nothing else to submit, and that was true until
+// the group link started supplying a token after the page had been drawn: useActionState keeps
+// the initial state it was given on the first render, so the token that arrived when somebody
+// replied never reached this, and the hand up failed silently on exactly the page it had just
+// been added to. Whether they are currently curious still comes from the state, because that is
+// this action's own answer coming back.
+export async function curiousAction(prev: CuriousState, fd: FormData): Promise<CuriousState> {
+  const token = String(fd.get("token") ?? "") || prev.token;
+  if (!isValidToken(token)) return { ...prev, error: true };
   try {
-    await setCurious(prev.token, !prev.curious);
-    return { token: prev.token, curious: !prev.curious };
+    await setCurious(token, !prev.curious);
+    return { token, curious: !prev.curious };
   } catch {
-    return { ...prev, error: true };
+    return { ...prev, token, error: true };
   }
 }
 

@@ -135,13 +135,19 @@ export function WhoQuestion() {
     <>
       <div className="q">
         <label htmlFor="name">{copy.rsvp.yourName}</label>
-        <input id="name" name="name" type="text" required autoComplete="name" />
+        <span className="hint" id="name-why">{copy.rsvp.yourNameHint}</span>
+        <input id="name" name="name" type="text" required autoComplete="name" aria-describedby="name-why" />
+      </div>
+      <div className="q">
+        <label htmlFor="contact_name">{copy.rsvp.adultName}</label>
+        <span className="hint" id="contact-why">{copy.rsvp.adultNameHint}</span>
+        <input id="contact_name" name="contact_name" type="text" autoComplete="name" aria-describedby="contact-why" />
       </div>
       <div className="q">
         <label htmlFor="phone">{copy.rsvp.yourMobile}</label>
-        {/* Under the label rather than inside it. The reason for the box is worth saying and is
-            not part of what the box is called, and in brackets on the end it pushed the label to
-            three lines on a phone. */}
+        {/* Under the pair rather than inside a label. The reason for asking is worth saying and
+            is not part of what either box is called, and on the end of a label in brackets it
+            pushed that label to three lines on a phone. */}
         <span className="hint" id="phone-why">{copy.rsvp.yourMobileHint}</span>
         <input id="phone" name="phone" type="tel" autoComplete="tel" aria-describedby="phone-why" />
       </div>
