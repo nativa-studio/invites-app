@@ -56,8 +56,11 @@ export const copy = {
     no: "Sorry, can't make it",
     yesQuiet: "I'll be there",
     noQuiet: "I can't be there, but I'm thinking of you",
-    yourName: "Your name",
-    yourMobile: "Your mobile (optional, so we can text you the details)",
+    // "Name", not "Your name". The form is already addressed to the person filling it in, so the
+    // "your" on every label is a word each one spends saying who it is for when that was never in
+    // question. Both, because they are a pair and one of each reads like a mistake.
+    yourName: "Name",
+    yourMobile: "Mobile (optional, so we can text you the details)",
     change: "Change my answer",
     keep: "Keep it",
   },
