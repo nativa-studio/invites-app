@@ -517,3 +517,42 @@ export async function postGiftUpdate(eventId: string, text: string) {
     .eq("event_id", eventId).eq("organiser_profile_id", uid);
   revalidateEvent(eventId);
 }
+
+// The wish list. A table, so each of these is a row rather than a field on the event.
+//
+// Same shape as the shopping list's actions, and for the same reason: a list the host writes,
+// ordered by a sort they can change, with nothing a guest can write back to it.
+export async function addWishlistItem(eventId: string, label: string, note: string, url: string) {
+  const what = label.trim();
+  if (!what) return;
+  const supabase = await createClient();
+  const { data } = await supabase.from("wishlist_items").select("sort").eq("event_id", eventId).order("sort", { ascending: false }).limit(1).maybeSingle();
+  const next = ((data?.sort as number | undefined) ?? -1) + 1;
+  await supabase.from("wishlist_items").insert({
+    event_id: eventId, label: what, note: note.trim() || null, url: url.trim() || null, sort: next,
+  });
+  await revalidateEvent(eventId);
+}
+
+export async function editWishlistItem(eventId: string, itemId: string, label: string, note: string, url: string) {
+  const what = label.trim();
+  if (!what) return;
+  const supabase = await createClient();
+  await supabase.from("wishlist_items")
+    .update({ label: what, note: note.trim() || null, url: url.trim() || null })
+    .eq("id", itemId).eq("event_id", eventId);
+  await revalidateEvent(eventId);
+}
+
+export async function removeWishlistItem(eventId: string, itemId: string) {
+  const supabase = await createClient();
+  await supabase.from("wishlist_items").delete().eq("id", itemId).eq("event_id", eventId);
+  await revalidateEvent(eventId);
+}
+
+export async function setWishlistOrder(eventId: string, ids: string[]) {
+  const supabase = await createClient();
+  await Promise.all(ids.map((id, i) =>
+    supabase.from("wishlist_items").update({ sort: i }).eq("id", id).eq("event_id", eventId)));
+  await revalidateEvent(eventId);
+}

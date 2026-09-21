@@ -4,7 +4,8 @@ import { copy } from "@/lib/copy";
 import { askLine, signoffMessage } from "@/lib/ask-line";
 import { hostName } from "@/lib/format";
 import { KnowEditor, KNOW_FIELDS } from "@/components/host/KnowEditor";
-import { PLATE_MODES } from "@/lib/good-to-know";
+import { WishlistEditor } from "@/components/host/WishlistEditor";
+import { NOTE_NAMES, PLATE_MODES } from "@/lib/good-to-know";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
 // data-section names the invite carries, so tapping a card on the preview finds its entry here.
@@ -101,6 +102,23 @@ export const SECTIONS: Section[] = [
         <Switch id="plate_block" label={copy.host.plateBlock} value={e.plate_block !== false} hint={copy.host.plateBlockHint} />
         <Choice id="plate_mode" label={copy.host.potluckMode} value={e.plate_mode} options={PLATE_MODES} hint={copy.host.potluckModeHint} />
         <Field id="plate_host_note" label={copy.host.potluckNote} value={e.plate_host_note} rows={2} hint={copy.host.potluckNoteHint} />
+      </>
+    ),
+  },
+  {
+    id: "gifts",
+    title: "Gifts",
+    blurb: "A block of its own for gifts: what you want to say, a wish list, and the group gift if one is running. The wish list is a list of ideas, not a registry, so nothing is claimed and two people can still buy the same thing.",
+    show: { column: "show_gifts", label: copy.host.giftsBlock },
+    fields: ["gift_note"],
+    render: (e) => (
+      <>
+        <Field id="gift_note" label={NOTE_NAMES.gifts} value={e.gift_note} rows={3} hint={copy.host.giftNoteFree} />
+        {/* The wish list is rows in a table rather than a field on the event, so it saves itself
+            as it is edited and does not ride in this panel's manifest. It is here rather than on
+            a tab of its own because it is wording: a host writing what they want to say about
+            gifts is in the same sitting as a host listing the things. */}
+        <WishlistEditor eventId={e.id} items={e.wishlist ?? []} />
       </>
     ),
   },

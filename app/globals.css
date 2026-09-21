@@ -737,3 +737,12 @@ a.tile:hover { border-color: var(--app-ink); }
 .needs dt { font-weight: 600; }
 .needs dt.warn { color: var(--app-off); }
 .needs dd { margin: 0; overflow-wrap: anywhere; }
+
+/* The wish list, in the editor. A row with its label, whatever the host added under it, and the
+   way in. Same shape as the shopping row, and its own class rather than shared, because the two
+   lists answer to different screens and a change to one must not restyle the other. */
+.wish-row { display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 4px 0; }
+.wish-row .what { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.wish-row .what b { font-weight: 600; overflow-wrap: anywhere; }
+.wish-row .what .sub { font-size: 13px; color: var(--app-mute); overflow-wrap: anywhere; }
+.wish-row .what .sub.link { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
