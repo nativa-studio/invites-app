@@ -389,6 +389,17 @@ export const copy = {
     setSplitHint: "Off, guests give one number and there are no kids or adults anywhere: the counts, the guest list and the reply all follow this.",
     setGroupLink: "Group link open",
     setGroupLinkHint: "Anyone with the shared link can add themselves and reply. Personal links keep working either way. Close it once the list is final.",
+    ovRepliedWord: "replied",
+    ovSeeAll: "See all",
+    ovRemind: "Remind",
+    ovSendInvite: "Send invite",
+    ovRemindAll: (n: number) => `Remind everyone waiting (${n})`,
+    ovRecently: "Recently",
+    ovFullActivity: "Full activity",
+    ovNothingYet: "Nothing yet. This fills up once the links go out.",
+    ovFoodNeeds: "Food needs",
+    ovDiet: "Diet",
+    ovNoneYet: "Nothing yet",
     ovInvite: "The invite",
     ovSentTo: (sent: number, total: number) => `Sent to ${sent} of ${total}`,
     ovNotSent: "Not sent to anybody yet",
@@ -399,8 +410,6 @@ export const copy = {
     // than no number. It counts everyone who has not said no, using what guests answered where
     // they have answered and what the host pencilled in where they have not.
     ovOnListHint: "if everyone still waiting says yes",
-    ovReplies: "Replies",
-    ovReplied: (replied: number, total: number) => `${replied} of ${total} replied`,
     ovLegendYes: (n: number) => `${n} coming`,
     ovLegendNo: (n: number) => `${n} can't`,
     ovLegendWaiting: (n: number) => `${n} to reply`,
@@ -710,7 +719,9 @@ export const copy = {
     plateRenameSave: "Save the name",
     plateRemove: "Remove",
     statusBlurb: "A draft is yours alone to look at. Live means the links work and guests can reply. Nothing is sent either way: you send the links yourself, from Guests.",
-    statusNames: { draft: "A draft", live: "Live", thanks: "Saying thanks", archived: "Archived" } as Record<string, string>,
+    // What a host would say out loud about where the event is up to. "A draft" and "Live" are
+    // words about the software; "Planning" and "Invites out" are words about the party.
+    statusNames: { draft: "Planning", live: "Invites out", thanks: "Thank yous", archived: "Closed" } as Record<string, string>,
     partsHeading: "Invite sections",
     partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first.",
     partSwitch: (name: string) => `${name}, on the invite`,

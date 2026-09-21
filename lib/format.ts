@@ -2,6 +2,7 @@
 // they are formatted as UTC calendar dates to avoid timezone drift.
 
 const LOCALE = "en-AU";
+const TZ = "Australia/Brisbane";
 
 function asUtcDate(ymd: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return null;
@@ -165,4 +166,27 @@ export function daysUntil(ymd: string | null | undefined): number | null {
   const nowInBrisbane = new Date(Date.now() + BRISBANE_OFFSET_MS);
   const today = Date.UTC(nowInBrisbane.getUTCFullYear(), nowInBrisbane.getUTCMonth(), nowInBrisbane.getUTCDate());
   return Math.round((then.getTime() - today) / 86_400_000);
+}
+
+// "2h ago", "Yesterday", "Sat", "12 Sept". How a feed reads.
+//
+// An absolute timestamp on every line is right in the full trail, where a host is working out
+// what happened when. On a card showing the last five things it is noise: nobody reads "21 Sept,
+// 3:47 pm" and thinks anything except "recently", and five of them down the side of a card is a
+// column of numbers nobody looks at.
+//
+// Days of the week only inside the last week, because "Tuesday" two months ago is a riddle.
+export function relativeTime(iso: string | null | undefined, now = Date.now()): string {
+  if (!iso) return "";
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+  const mins = Math.round((now - then) / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.round(hours / 24);
+  if (days === 1) return "Yesterday";
+  if (days < 7) return new Intl.DateTimeFormat(LOCALE, { weekday: "short", timeZone: TZ }).format(new Date(then));
+  return new Intl.DateTimeFormat(LOCALE, { day: "numeric", month: "short", timeZone: TZ }).format(new Date(then));
 }

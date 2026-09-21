@@ -1,29 +1,26 @@
 import Link from "next/link";
 import { copy } from "@/lib/copy";
-import { daysUntil } from "@/lib/format";
+import { daysUntil, relativeTime } from "@/lib/format";
 import { counts } from "@/lib/heads";
 import type { GuestRow, PublicEvent } from "@/lib/db/types";
 import type { Happening } from "@/lib/db/activity";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { stockFor } from "@/lib/layouts";
 import { inkFor, paperFor } from "@/lib/strip-set";
+import { groupColour, groupsOf } from "@/lib/group-colours";
+import { realAllergies } from "@/lib/allergies";
 import { InviteThumb } from "./InviteThumb";
-import { ActivityDrawer } from "./ActivityDrawer";
-import { groupsOf } from "@/lib/group-colours";
 
 // Where the event is up to, before a host has to choose a tab.
 //
-// An event used to open on the invite editor, which answers "what does this look like". That is
-// the right question in the week you make it and the wrong one for every week after, when the
-// question is how many are coming and who has not answered. So the invite moved one tap away
-// and this took the address.
+// A row of numbers, then the cards. The numbers are the question a host opens the app with, and
+// every one of them is a link to the names behind it: a count on its own is a dead end, and
+// making somebody read "3 to reply" and then go and set a filter is the work the count was
+// supposed to save.
 //
-// Every number here is a link to the names behind it. A count on its own is a dead end: a host
-// who reads "9 to reply" wants the nine, and making them find the guest list and set a filter to
-// get there is the same work the count was supposed to save.
-//
-// Nothing on this screen can be edited. Everything is worked out from the guest list, and the
-// way to change any of it is to change the guest it came from.
+// The row is five tiles that wrap, so the same markup is a row on a laptop and a stack on a
+// phone. Nothing here is edited. Everything is worked out from the guest list, and the way to
+// change any of it is to change the guest it came from.
 export function Overview({
   e, guests, feed,
 }: { e: PublicEvent & { id: string }; guests: GuestRow[]; feed: Happening[] }) {
@@ -36,25 +33,20 @@ export function Overview({
   const waiting = guests.filter((g) => g.status === "pending");
   const replied = yes.length + no.length;
   const sent = guests.filter((g) => g.sent_at).length;
+  const all = guests.length;
 
-  // Everybody who has not said no, counted with what they actually answered where they have
-  // answered and what the host pencilled in where they have not. It is a guess, and the caption
-  // under it says so: a number that looks like a fact is worse than no number.
+  // Everybody who has not said no, counted with what they answered where they have answered and
+  // what the host put in where they have not. The caption says so: a number that looks like a
+  // fact is worse than no number.
   //
-  // Split the same way the coming tile is. The two tiles sit side by side and one of them
-  // breaking its total into kids and adults while the other does not reads as the second number
-  // meaning something different, which it does not: it is the same count over more people.
-  //
-  // The total is not kids plus adults. A guest who answered before the event started asking for
-  // a split has a party size and no breakdown, so their people land in the total and in neither
-  // half. Summing the halves would quietly lose them. Same rule as lib/heads.ts, on purpose.
+  // The total is not kids plus adults. A guest who answered before the event started asking for a
+  // split has a party size and no breakdown, so their people belong in the total and in neither
+  // half. Same rule as lib/heads.ts, on purpose.
   const onList = guests.filter((g) => g.status !== "no").reduce(
     (a, g) => {
       const kids = g.status === "yes" ? g.children ?? 0 : g.expected_children ?? 0;
       const adults = g.status === "yes" ? g.adults ?? 0 : g.expected_adults ?? 0;
-      const total = g.status === "yes" && !(splitParty && kids + adults > 0)
-        ? g.party_size ?? 1
-        : kids + adults;
+      const total = g.status === "yes" && !(splitParty && kids + adults > 0) ? g.party_size ?? 1 : kids + adults;
       return { kids: a.kids + kids, adults: a.adults + adults, total: a.total + total };
     },
     { kids: 0, adults: 0, total: 0 },
@@ -63,146 +55,187 @@ export function Overview({
   const days = daysUntil(e.date);
   const p = paletteFor(e.palette, e.theme_id ?? "");
   const stock = stockFor(e.layout_id ?? undefined);
-  const split = copy.host.split(c.replied.kids, c.replied.adults);
-  const onListSplit = copy.host.split(onList.kids, onList.adults);
+  const groups = groupsOf(guests);
+  const pct = (n: number) => (all === 0 ? 0 : (n / all) * 100);
+  const allergies = realAllergies(yes);
+  const diet = Object.entries(
+    yes.flatMap((g) => g.dietary).reduce<Record<string, number>>((m, d) => ({ ...m, [d]: (m[d] ?? 0) + 1 }), {}),
+  ).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 
   return (
     <>
-      {/* The invite itself, at the top, because it is the thing the event is. Whole tile is the
-          link: a thumbnail with a separate Edit link beside it gives a host two targets for one
-          intention on a screen they are holding one handed. */}
-      <Link href={`${base}/invite`} className="ov-invite">
-        <span
-          className={`evt-art${stock === "beige" ? " beige" : ""}${stock === "ink" ? " ink" : ""}`}
-          style={stock === "ink"
-            ? ({ "--ink": inkFor(e.ink), "--paper": paperFor(e.ink) } as React.CSSProperties)
-            : paletteVars(p)}
-        >
-          <InviteThumb
-            artwork={e.invite_image_path}
-            title={e.title}
-            intro={e.intro}
-            themeId={e.theme_id}
-            palette={e.palette}
-            layout={e.layout_id ?? undefined}
-            ink={e.ink}
-          />
-        </span>
-        <span className="ov-invite-foot">
-          <b>{copy.host.ovInvite}</b>
-          <span className="muted">
-            {guests.length === 0 || sent === 0 ? copy.host.ovNotSent : copy.host.ovSentTo(sent, guests.length)}
+      <div className="tiles">
+        {/* The invite itself, first, because it is the thing the event is. The whole tile is the
+            link: a thumbnail with a separate Edit beside it gives a host two targets for one
+            intention. */}
+        <Link href={`${base}/invite`} className="tile art">
+          <span
+            className={`evt-art${stock === "beige" ? " beige" : ""}${stock === "ink" ? " ink" : ""}`}
+            style={stock === "ink"
+              ? ({ "--ink": inkFor(e.ink), "--paper": paperFor(e.ink) } as React.CSSProperties)
+              : paletteVars(p)}
+          >
+            <InviteThumb
+              artwork={e.invite_image_path} title={e.title} intro={e.intro} themeId={e.theme_id}
+              palette={e.palette} layout={e.layout_id ?? undefined} ink={e.ink}
+            />
           </span>
-          <span className="as-link">{copy.host.ovEdit}</span>
-        </span>
-      </Link>
-
-      <div className="ov-tiles">
-        <Link href={`${base}/guests?filter=yes`} className="ov-tile">
-          <span className="big">{c.replied.total}</span>
-          <span className="lab">{copy.host.ovComing}</span>
-          {split && <span className="sub">{split}</span>}
+          <span className="cap">
+            <b>{copy.host.ovInvite}</b>
+            <span className="sub">
+              {all === 0 || sent === 0 ? copy.host.ovNotSent : `${copy.host.ovSentTo(sent, all)} · ${copy.host.ovEdit}`}
+            </span>
+          </span>
         </Link>
 
-        <Link href={`${base}/guests`} className="ov-tile">
-          <span className="big">{onList.total}</span>
-          <span className="lab">{copy.host.ovOnList}</span>
-          {onListSplit && <span className="sub">{onListSplit}</span>}
-          <span className="sub">{copy.host.ovOnListHint}</span>
+        <Link href={`${base}/guests?filter=yes`} className="tile">
+          <span className="n"><b>{c.replied.total}</b> <span className="lab">{copy.host.ovComing}</span></span>
+          <span className="sub">{splitLine(c.replied.kids, c.replied.adults)}</span>
         </Link>
 
-        {/* Not a link. The status is changed from the badge in the header, which is the one
-            place it lives, and the days are a fact about the calendar with nothing behind them. */}
-        <div className="ov-tile still">
-          <span className="big">{days === null ? "" : copy.host.ovDaysBig(days)}</span>
-          <span className="lab">{days === null ? copy.host.ovNoDate : copy.host.ovDaysLabel(days)}</span>
+        {/* Replies is a tile rather than a card of its own. It is one number with its working
+            shown, not a section. The empty track is the third count: the number a host is
+            chasing has to have a visible size, not be the absence of the other two. */}
+        <div className="tile">
+          <span className="n">
+            <b>{replied}</b><span className="of"> / {all}</span> <span className="lab">{copy.host.ovRepliedWord}</span>
+          </span>
+          <div className="bar" role="img" aria-label={`${yes.length} coming, ${no.length} can't make it, ${waiting.length} still to reply`}>
+            <span className="seg yes" style={{ width: `${pct(yes.length)}%` }} />
+            <span className="seg no" style={{ width: `${pct(no.length)}%` }} />
+          </div>
+          <div className="legend">
+            <Link href={`${base}/guests?filter=yes`}><i className="dot yes" />{copy.host.ovLegendYes(yes.length)}</Link>
+            <Link href={`${base}/guests?filter=no`}><i className="dot no" />{copy.host.ovLegendNo(no.length)}</Link>
+            <Link href={`${base}/guests?filter=pending`}><i className="dot wait" />{copy.host.ovLegendWaiting(waiting.length)}</Link>
+          </div>
+        </div>
+
+        <Link href={`${base}/guests`} className="tile">
+          <span className="n"><b>{onList.total}</b> <span className="lab">{copy.host.ovOnList}</span></span>
+          <span className="sub">{splitLine(onList.kids, onList.adults)}</span>
+          <span className="faint">{copy.host.ovOnListHint}</span>
+        </Link>
+
+        {/* The status as a label, not a second control. It is changed from the badge in the bar
+            above, which is on every screen, and two controls for one setting is the shape of
+            every expensive mistake on this project. */}
+        <div className="tile">
+          <span className={`tag state ${e.status ?? "draft"}`}>
+            <i className="dot" />{copy.host.statusNames[e.status ?? "draft"] ?? e.status}
+          </span>
+          <span className="n">
+            {days === null
+              ? <b className="none">{copy.host.ovNoDate}</b>
+              : <><b>{copy.host.ovDaysBig(days)}</b> <span className="lab">{copy.host.ovDaysLabel(days)}</span></>}
+          </span>
         </div>
       </div>
 
-      <section className="card">
-        <div className="card-head">
-          <h2 className="h2">{copy.host.ovReplies}</h2>
-          <span className="muted">{copy.host.ovReplied(replied, guests.length)}</span>
-        </div>
-        {guests.length === 0 ? (
-          <p className="muted">{copy.host.ovNobodyYet}</p>
-        ) : (
-          <>
-            {/* One bar, three parts, and the empty track is the third one rather than a gap.
-                "Still to reply" is the number a host is actually chasing, so it has to be a
-                visible size on the bar and not the absence of the other two. */}
-            <div
-              className="ov-bar"
-              role="img"
-              aria-label={`${yes.length} coming, ${no.length} can't make it, ${waiting.length} still to reply`}
-            >
-              <span className="seg yes" style={{ width: `${(yes.length / guests.length) * 100}%` }} />
-              <span className="seg no" style={{ width: `${(no.length / guests.length) * 100}%` }} />
-            </div>
-            <div className="ov-legend">
-              <Link href={`${base}/guests?filter=yes`}><span className="dot yes" />{copy.host.ovLegendYes(yes.length)}</Link>
-              <Link href={`${base}/guests?filter=no`}><span className="dot no" />{copy.host.ovLegendNo(no.length)}</Link>
-              <Link href={`${base}/guests?filter=pending`}><span className="dot wait" />{copy.host.ovLegendWaiting(waiting.length)}</Link>
-            </div>
-          </>
-        )}
-      </section>
+      <div className="ov-grid">
+        <section className="card strip">
+          <div className="lead">
+            <h2 className="h2">{copy.host.ovSettings}</h2>
+            <Link href={`${base}/settings`} className="as-link">{copy.host.ovChange}</Link>
+          </div>
+          <div className="chips">
+            <Chip label={copy.host.ovPlateChip} on={e.plate_enabled} />
+            <Chip label={copy.host.ovGiftChip} on={e.group_gift_enabled} />
+            <Chip label={copy.host.ovSplitChip} on={splitParty} />
+          </div>
+        </section>
 
-      <section className="card">
-        <div className="card-head">
-          <h2 className="h2">{copy.host.ovSettings}</h2>
-          <Link href={`${base}/settings`} className="btn small">{copy.host.ovChange}</Link>
-        </div>
-        <div className="ov-chips">
-          <Chip label={copy.host.ovPlateChip} on={e.plate_enabled} />
-          <Chip label={copy.host.ovGiftChip} on={e.group_gift_enabled} />
-          <Chip label={copy.host.ovSplitChip} on={splitParty} />
-        </div>
-      </section>
-
-      <section className="card">
-        <div className="card-head">
-          <h2 className="h2">{copy.host.ovNudge}</h2>
-          {waiting.length > 0 && (
-            <Link href={`${base}/guests?filter=pending`} className="btn small">{copy.host.ovNudgeAll(waiting.length)}</Link>
+        <section className="card">
+          <div className="card-head">
+            <h2 className="h2">{copy.host.ovNudge}</h2>
+            {waiting.length > 0 && <Link href={`${base}/guests?filter=pending`} className="as-link">{copy.host.ovSeeAll}</Link>}
+          </div>
+          {waiting.length === 0 ? (
+            <p className="muted">{copy.host.ovNudgeNone}</p>
+          ) : (
+            <>
+              <ul className="rows">
+                {/* Three, not all of them. This card says there is chasing to do; the chasing
+                    happens on the guest list, where the text and WhatsApp buttons already are,
+                    so Remind goes straight there rather than growing a second way to send. */}
+                {waiting.slice(0, 3).map((g) => (
+                  <li key={g.id}>
+                    <span className="pip" aria-hidden="true">{initial(g.name)}</span>
+                    <span className="who">
+                      <b>{g.name}</b>
+                      <span className="sub">{!g.sent_at ? copy.host.ovUnsent : g.opened_at ? copy.host.ovOpened : copy.host.ovSent}</span>
+                    </span>
+                    <Link href={`${base}/guests?filter=pending`} className="btn small">
+                      {g.sent_at ? copy.host.ovRemind : copy.host.ovSendInvite}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href={`${base}/guests?filter=pending`} className="btn wide">{copy.host.ovRemindAll(waiting.length)}</Link>
+            </>
           )}
-        </div>
-        {waiting.length === 0 ? (
-          <p className="muted">{copy.host.ovNudgeNone}</p>
-        ) : (
-          <ul className="plain">
-            {/* Three, not all of them. This is the card that says there is chasing to do; the
-                chasing itself happens on the guest list, where the text buttons are. */}
-            {waiting.slice(0, 3).map((g) => (
-              <li key={g.id}>
-                <b>{g.name}</b>
-                <span className="muted"> · {!g.sent_at ? copy.host.ovUnsent : g.opened_at ? copy.host.ovOpened : copy.host.ovSent}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+        </section>
 
-      {/* The trail, in the component that has always drawn it, rather than a second plainer
-          copy of the same feed.
+        <section className="card">
+          <div className="card-head">
+            <h2 className="h2">{copy.host.ovRecently}</h2>
+            {feed.length > 0 && <Link href={`${base}/guests`} className="as-link">{copy.host.ovFullActivity}</Link>}
+          </div>
+          {feed.length === 0 ? (
+            <p className="muted">{copy.host.ovNothingYet}</p>
+          ) : (
+            <ul className="rows trail">
+              {feed.slice(0, 5).map((h, i) => (
+                <li key={`${h.at}-${i}`} className={h.kind}>
+                  <i className="dot" aria-hidden="true" />
+                  <span className="what">
+                    {copy.host.did[h.kind](h.who)}
+                    {/* The group tag stays. It is what tells two Sarahs apart, and on a
+                        group-link open it is the only thing on the line that says which link was
+                        opened, since the row belongs to nobody. */}
+                    {h.group && <span className={`tag g${groupColour(h.group, groups)}`}>{h.group}</span>}
+                  </span>
+                  <span className="when">{relativeTime(h.at)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
 
-          There was one here for a day: five lines, no group tag, no per-kind styling. It is the
-          fault this project keeps making, written into CLAUDE.md twice already, and I made it
-          again: a thing drawn in two places drifts, and the second drawing is always the poorer
-          one because it is the one nobody is looking at while they work on the first.
-
-          The group tag is the part that was lost. It is what tells two Sarahs apart, and on a
-          group-link open it is the only thing on the line that says which link was opened, since
-          nobody's name is attached to it. */}
-      <ActivityDrawer feed={feed} groups={groupsOf(guests)} />
+        <section className="card">
+          <h2 className="h2">{copy.host.ovFoodNeeds}</h2>
+          <dl className="needs">
+            {/* Allergies first and named. It is the one thing here somebody has to act on rather
+                than read past, so it is never summed into a count beside the diets. */}
+            <dt className="warn">{copy.host.trackAllergies}</dt>
+            <dd>
+              {allergies.length === 0
+                ? <span className="muted">{copy.host.ovNoneYet}</span>
+                : allergies.map((g) => `${g.name} (${g.allergies?.trim()})`).join(", ")}
+            </dd>
+            <dt>{copy.host.ovDiet}</dt>
+            <dd>
+              {diet.length === 0
+                ? <span className="muted">{copy.host.ovNoneYet}</span>
+                : diet.map(([chip, n]) => `${n} ${chip.toLowerCase()}`).join(", ")}
+            </dd>
+          </dl>
+        </section>
+      </div>
     </>
   );
 }
 
+// "5 kids / 5 adults". The slash is the design's, and the line only appears when both halves
+// exist, which copy.host.split already decides.
+function splitLine(kids: number, adults: number): string {
+  return copy.host.split(kids, adults).replace(", ", " / ");
+}
+
+function initial(name: string): string {
+  return (name.trim()[0] ?? "?").toUpperCase();
+}
+
 function Chip({ label, on }: { label: string; on: boolean | null }) {
-  return (
-    <span className={`ov-chip${on ? " on" : ""}`}>
-      {label} · {on ? copy.host.ovOn : copy.host.ovOff}
-    </span>
-  );
+  return <span className={`chip${on ? " on" : ""}`}>{label} · {on ? copy.host.ovOn : copy.host.ovOff}</span>;
 }
