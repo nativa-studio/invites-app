@@ -564,20 +564,16 @@
 .invite .hold .row .pbtn { min-height: 40px; font-size: 15px; color: var(--on-sky); text-decoration-color: color-mix(in srgb, var(--on-sky) 55%, transparent); }
 .invite .hold .note { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--on-sky); opacity: 0.85; }
 
-/* Gifts: the wish list, as one sentence.
+/* Gifts: the wish list.
    
-   The same shape the plate card uses for what is covered, restated here rather than shared,
-   because the two cards answer to different features and a change to one must not quietly
-   restyle the other. It was tiles with a note under each: four ideas came to most of a phone
-   screen and a wish list read like a set of instructions. */
-.gifts .ontable {
-  margin: 0; width: 100%; text-align: center; font-family: var(--font-hand); font-size: 15px;
-  letter-spacing: 0.04em; line-height: 1.7; text-transform: uppercase;
-}
-.gifts .ontable .names { color: var(--sky-ink); }
-/* A link keeps its word underlined. Nothing else in the sentence is one, so it needs no more
-   than that to be found. */
-.gifts .ontable a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 2px; }
+   A label on its own line and the ideas under it in reading type. It was tiles first, which made
+   four ideas most of a screen, and then the plate card's one-line footnote, which lost the list
+   inside a single uppercase run. This is the middle: a sentence, but one that looks like the few
+   things it is. */
+.gifts .small-label { font-size: 19px; margin-top: 2px; }
+.gifts .ideas { max-width: 290px; }
+/* A link keeps its word underlined. Nothing else in the sentence is one, so that is enough. */
+.gifts .ideas a { color: var(--sky-ink); text-underline-offset: 3px; text-decoration-thickness: 2px; }
 .gifts .rule { width: 46px; height: 10px; border-radius: 3px; }
 
 /* The strip says it in its own one ink, and the ideas sentence sits quietly under the note. */

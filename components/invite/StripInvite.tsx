@@ -122,8 +122,9 @@ export function StripInvite({
         <p className="label">{copy.sections.gifts}</p>
         {e.gift_note?.trim() && <p className="para">{e.gift_note.trim()}</p>}
         {(e.wishlist ?? []).length > 0 && (
+          <>
+          <p className="label">{copy.sections.wishlist}</p>
           <p className="para ideas">
-            {copy.sections.wishlist}{" "}
             {(e.wishlist ?? []).map((w, i, all) => (
               <React.Fragment key={`${w.label}-${i}`}>
                 {w.url ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a> : w.label}
@@ -131,6 +132,7 @@ export function StripInvite({
               </React.Fragment>
             ))}
           </p>
+          </>
         )}
         {e.group_gift_enabled && (
           <p className="para">

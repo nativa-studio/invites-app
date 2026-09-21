@@ -12,10 +12,11 @@ import { Gift as GiftIcon } from "@/components/art/icons";
 // and nothing under it is worse than no block:
 //
 //   1. What the host wants to say about gifts. Their words, never edited, never appended to.
-//   2. The wish list, as one sentence, the way the plate card draws what is already covered. It
-//      was tiles with a note under each, which turned four ideas into most of a screen and made a
-//      wish list read like a set of instructions. A guest reads this once, to know roughly what
-//      would be welcome.
+//   2. The wish list, as one sentence under its own label. It was tiles with a note under each,
+//      which turned four ideas into most of a screen and read like a set of instructions; then it
+//      was the plate card's footnote line, which went too far the other way and lost the list
+//      inside a single uppercase run. A guest reads this once, to know roughly what would be
+//      welcome, and it should look like the few things it is.
 //   3. The group gift, named. Only what it is and that it is happening. Where to send money and
 //      who has already chipped in live on the card after the reply, which takes a token and
 //      answers only for somebody who has said yes: a stranger opening a forwarded link should not
@@ -64,18 +65,23 @@ export function GiftsCard({ e, off }: {
               tiles with a note under each, which turned four ideas into most of a screen and made
               a wish list look like a set of instructions. A link keeps its word underlined; the
               rest is plain text. */}
-          <p className="ontable">
-            {copy.sections.wishlist}{" "}
-            <span className="names">
-              {list.map((w, i) => (
-                <React.Fragment key={`${w.label}-${i}`}>
-                  {w.url
-                    ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a>
-                    : w.label}
-                  {joiner(i, list.length)}
-                </React.Fragment>
-              ))}
-            </span>
+          {/* The label on its own line, the ideas under it in reading type.
+          
+              First go ran them together in one uppercase hand-font line, copied from the plate
+              card's "What's covered". That works there because it is a footnote about other
+              people's dishes. Here the list is what the block is for, and shrinking it to a
+              footnote lost it: "SOME IDEAS A BALANCE BIKE, BOOKS, DUPLO AND A SWIMMING TOWEL"
+              reads as one long shout, not as a list of four things. */}
+          <div className="label sky small-label">{copy.sections.wishlist}</div>
+          <p className="para ideas">
+            {list.map((w, i) => (
+              <React.Fragment key={`${w.label}-${i}`}>
+                {w.url
+                  ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a>
+                  : w.label}
+                {joiner(i, list.length)}
+              </React.Fragment>
+            ))}
           </p>
         </>
       )}
