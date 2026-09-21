@@ -564,23 +564,18 @@
 .invite .hold .row .pbtn { min-height: 40px; font-size: 15px; color: var(--on-sky); text-decoration-color: color-mix(in srgb, var(--on-sky) 55%, transparent); }
 .invite .hold .note { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--on-sky); opacity: 0.85; }
 
-/* Gifts: the wish list, as tiles two to a row.
+/* Gifts: the wish list.
    
-   The same shape the plate board uses, and for the same reason: eight things in a column is most
-   of a phone screen and eight things two up is a third of one. Not the same class, though. The
-   dishes are buttons a guest presses and these are things to read, and sharing .dishtile would
-   mean every change to one silently restyled the other. */
-.gifts .wishtiles { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.gifts .wishtile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 68px; height: 100%; padding: 10px 12px; box-sizing: border-box; border: 2.5px solid var(--navy); border-radius: 14px; background: var(--paper); text-align: center; text-decoration: none; color: var(--navy); }
-.gifts a.wishtile { border-style: dashed; }
-.gifts a.wishtile:hover { background: color-mix(in srgb, var(--yel) 35%, var(--paper)); }
-.gifts .wishtile .n { font-family: var(--font-display); font-size: 16px; line-height: 1.15; overflow-wrap: anywhere; }
-.gifts .wishtile .b { font-size: 12px; opacity: 0.75; line-height: 1.3; }
-.gifts .wishtile .go { font-family: var(--font-hand); font-size: 14px; letter-spacing: 0.04em; color: var(--red); text-transform: uppercase; }
-.gifts .small-label { font-size: 19px; }
-/* One tile on its own row stretches the full width rather than sitting half empty beside a gap. */
-.gifts .wishtiles li:only-child { grid-column: 1 / -1; }
+   A label on its own line and the ideas under it in reading type. It was tiles first, which made
+   four ideas most of a screen, and then the plate card's one-line footnote, which lost the list
+   inside a single uppercase run. This is the middle: a sentence, but one that looks like the few
+   things it is. */
+.gifts .small-label { font-size: 19px; margin-top: 2px; }
+.gifts .ideas { max-width: 290px; }
+/* A link keeps its word underlined. Nothing else in the sentence is one, so that is enough. */
+.gifts .ideas a { color: var(--sky-ink); text-underline-offset: 3px; text-decoration-thickness: 2px; }
+.gifts .rule { width: 46px; height: 10px; border-radius: 3px; }
 
-/* The strip draws its own, in its own language: a line with a doodle, like every other line it
-   has. Only the link needs saying, since nothing else in the strip is one. */
-main.strip [data-section="gifts"] .line a { color: inherit; text-underline-offset: 3px; }
+/* The strip says it in its own one ink, and the ideas sentence sits quietly under the note. */
+main.strip [data-section="gifts"] .ideas { opacity: 0.85; }
+main.strip [data-section="gifts"] a { color: inherit; text-underline-offset: 3px; }

@@ -119,6 +119,9 @@ export type PublicEvent = {
   /** What the group gift is, so the block can name it before anybody has replied. Where to send
    *  the money stays behind get_gift, which takes a token and answers only after a yes. */
   group_gift_what?: string | null;
+  /** The host's own sentence about the group gift, on the gifts block. Set, it replaces the one
+   *  the app would write and nothing is added to it. Empty, the app's fills the silence. */
+  group_gift_note?: string | null;
 };
 
 /** One thing on the wish list. The host writes these; guests only read them. */

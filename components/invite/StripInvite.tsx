@@ -27,7 +27,7 @@ function Rule() {
 }
 
 export function StripInvite({
-  event: e, greeting, reply, after, plate, skipAnimation,
+  event: e, greeting, reply, after, plate, gifts, skipAnimation,
 }: {
   event: PublicEvent;
   greeting: string;
@@ -36,6 +36,9 @@ export function StripInvite({
   after?: React.ReactNode;
   /** Bring a plate, drawn by whoever owns the guest's answer. */
   plate?: React.ReactNode;
+  /** The editor's gifts card, which draws faded when the block is off. Given, it wins over the
+   *  strip's own, because a host editing needs something to tap whatever the switch says. */
+  gifts?: React.ReactNode;
   skipAnimation?: boolean;
 }) {
   const set = stripSet(e.strip_set, e.theme_id);
@@ -114,31 +117,32 @@ export function StripInvite({
     // cream card with two bits of tape on it, would arrive as a visitor from another invite. The
     // content is the same three things in the same order and reads from the same columns; only
     // the clothes differ.
-    gifts: e.show_gifts && (e.gift_note?.trim() || (e.wishlist ?? []).length > 0 || e.group_gift_enabled) ? (
+    gifts: gifts ?? (e.show_gifts && (e.gift_note?.trim() || (e.wishlist ?? []).length > 0 || e.group_gift_enabled) ? (
       <section data-section="gifts">
         <p className="label">{copy.sections.gifts}</p>
         {e.gift_note?.trim() && <p className="para">{e.gift_note.trim()}</p>}
         {(e.wishlist ?? []).length > 0 && (
-          <div className="lines">
-            {(e.wishlist ?? []).map((w, i) => (
-              <div className="line" key={`${w.label}-${i}`}>
-                <Mono name="gift" size={40} />
-                <div>
-                  {w.url ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a> : w.label}
-                  {w.note && <span className="b"> {w.note}</span>}
-                </div>
-              </div>
+          <>
+          <p className="label">{copy.sections.wishlist}</p>
+          <p className="para ideas">
+            {(e.wishlist ?? []).map((w, i, all) => (
+              <React.Fragment key={`${w.label}-${i}`}>
+                {w.url ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a> : w.label}
+                {i < all.length - 1 ? (i === all.length - 2 ? " and " : ", ") : ""}
+              </React.Fragment>
             ))}
-          </div>
+          </p>
+          </>
         )}
         {e.group_gift_enabled && (
           <p className="para">
-            {e.group_gift_what?.trim() ? copy.gift.blockWhat(e.group_gift_what.trim()) : copy.gift.blockNoWhat}
+            {e.group_gift_note?.trim()
+              || (e.group_gift_what?.trim() ? copy.gift.blockWhat(e.group_gift_what.trim()) : copy.gift.blockNoWhat)}
             {" "}{copy.gift.blockHow}
           </p>
         )}
       </section>
-    ) : null,
+    ) : null),
 
     after: e.show_after ? (
       <section data-section="after">

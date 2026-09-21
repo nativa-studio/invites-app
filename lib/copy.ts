@@ -332,6 +332,16 @@ export const copy = {
   },
   host: {
     blockOff: "Not on the invite. Guests only see the line in the info booth. Tap to put the block back.",
+    // The gifts block in the editor, in its two states. Worded apart from the plate's because the
+    // consequence is different: switching the plate block off leaves a line in the info booth,
+    // and switching gifts off leaves a line only if the host wrote one.
+    giftsOff: "Not on the invite. Tap to turn the gifts block on.",
+    previewGifts: "Guests see this. Tap to change what it says or add to the wish list.",
+    giftsEmpty: "Nothing written about gifts yet. Tap to add a line, a wish list, or both.",
+    // The host's own sentence about the group gift. The hint has to say what happens when it is
+    // empty, or a host leaves it blank expecting silence and gets the app's line instead.
+    groupGiftLine: "The group gift, in your words",
+    groupGiftLineHint: "Replaces the line the invite would write. Leave it empty and it says \u201cEveryone is going in together on one present\u201d with whatever the gift is.",
     previewPlate: "Guests claim a dish here once they have said yes.",
     previewGift: "Guests read how to chip in here once they have answered. The bank details come from whoever is organising it.",
     previewReply: "Tap to change what this asks, including the reply by date. To answer it the way a guest does, switch to Preview.",
@@ -471,6 +481,10 @@ export const copy = {
     ovNudgeAll: (n: number) => `All ${n} still to reply`,
     ovSent: "link sent",
     ovOpened: "opened theirs",
+    // Sent again since they last opened one. Not the same as "opened theirs": what they read was
+    // the message before this one, and telling a host otherwise sends them off to chase somebody
+    // who has never seen the link they are chasing about.
+    ovResent: "sent again, not opened yet",
     ovUnsent: "no link sent yet",
     trackHeading: "Where it is up to",
     trackComing: "Coming",
@@ -509,6 +523,11 @@ export const copy = {
       opened: (who: string) => `${who} opened their invite`,
       reminded: (who: string) => `You reminded ${who}`,
     },
+    // Under a reply in the activity, in the guest's own words where they wrote any. The prefixes
+    // match the guest list so the same fact reads the same way in both places.
+    saidAllergies: (s: string) => `Allergies: ${s}`,
+    saidFood: (s: string) => `Food: ${s}`,
+    saidNote: (s: string) => `\u201c${s}\u201d`,
     food: (parts: string) => `Food: ${parts}.`,
     foodNotes: "Some notes too, see the guest list.",
     coming: "coming",

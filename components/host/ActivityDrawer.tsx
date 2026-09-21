@@ -37,6 +37,11 @@ export function ActivityDrawer({ feed, groups }: { feed: Happening[]; groups: st
               {feed.map((h, i) => (
                 <li key={`${h.at}-${i}`} className={h.kind}>
                   <span className="n">{copy.host.did[h.kind](h.who)}</span>
+                  {/* What they wrote with the reply, under the reply. It used to live only on
+                      the guest list, which meant reading "Sarah said yes" here and then going
+                      somewhere else to find out she had told you about a nut allergy. The one
+                      thing a host has to act on was the one thing this screen left out. */}
+                  {h.said?.map((line, j) => <span key={j} className={`said${line.warn ? " warn" : ""}`}>{line.text}</span>)}
                   {/* The group beside the time rather than in the sentence, so the line still
                       reads as a sentence. It is there to tell which Sarah, and a host who works
                       through the neighbours on Tuesday can find them without reading the names. */}

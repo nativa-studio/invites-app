@@ -147,37 +147,6 @@ export function Overview({
 
         <section className="card">
           <div className="card-head">
-            <h2 className="h2">{copy.host.ovNudge}</h2>
-            {waiting.length > 0 && <Link href={`${base}/guests?filter=pending`} className="as-link">{copy.host.ovSeeAll}</Link>}
-          </div>
-          {waiting.length === 0 ? (
-            <p className="muted">{copy.host.ovNudgeNone}</p>
-          ) : (
-            <>
-              <ul className="rows">
-                {/* Three, not all of them. This card says there is chasing to do; the chasing
-                    happens on the guest list, where the text and WhatsApp buttons already are,
-                    so Remind goes straight there rather than growing a second way to send. */}
-                {waiting.slice(0, 3).map((g) => (
-                  <li key={g.id}>
-                    <span className="pip" aria-hidden="true">{initial(g.name)}</span>
-                    <span className="who">
-                      <b>{g.name}</b>
-                      <span className="sub">{!g.sent_at ? copy.host.ovUnsent : g.opened_at ? copy.host.ovOpened : copy.host.ovSent}</span>
-                    </span>
-                    <Link href={`${base}/guests?filter=pending`} className="btn small">
-                      {g.sent_at ? copy.host.ovRemind : copy.host.ovSendInvite}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <Link href={`${base}/guests?filter=pending`} className="btn wide">{copy.host.ovRemindAll(waiting.length)}</Link>
-            </>
-          )}
-        </section>
-
-        <section className="card">
-          <div className="card-head">
             <h2 className="h2">{copy.host.ovRecently}</h2>
             {feed.length > 0 && <Link href={`${base}/guests`} className="as-link">{copy.host.ovFullActivity}</Link>}
           </div>
@@ -194,6 +163,10 @@ export function Overview({
                         group-link open it is the only thing on the line that says which link was
                         opened, since the row belongs to nobody. */}
                     {h.group && <span className={`tag g${groupColour(h.group, groups)}`}>{h.group}</span>}
+                    {/* Allergies, food and their note, under the reply they came with. Same as
+                        the drawer, because a host reading the five most recent things should not
+                        have to open anything to find out somebody cannot eat nuts. */}
+                    {h.said?.map((line, j) => <span key={j} className={`said${line.warn ? " warn" : ""}`}>{line.text}</span>)}
                   </span>
                   <span className="when">{relativeTime(h.at)}</span>
                 </li>
@@ -230,10 +203,6 @@ export function Overview({
 // exist, which copy.host.split already decides.
 function splitLine(kids: number, adults: number): string {
   return copy.host.split(kids, adults).replace(", ", " / ");
-}
-
-function initial(name: string): string {
-  return (name.trim()[0] ?? "?").toUpperCase();
 }
 
 function Chip({ label, on }: { label: string; on: boolean | null }) {
