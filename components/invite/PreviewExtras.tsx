@@ -25,7 +25,7 @@ export function PreviewPlate({ note, mode, off }: { note: string | null; mode: s
 
 export function PreviewGift({ description, organiser, off }: { description: string | null; organiser: string | null; off?: boolean }) {
   return (
-    <div className={`pcard cream gift tilt-l${off ? " off" : ""}`} data-section="gift">
+    <div className={`pcard cream gift tilt-l${off ? " off" : ""}`} data-section="gifts">
       <div className="tape cross" />
       <div className="tape over sky" />
       <div className="label red">{copy.gift.heading}</div>

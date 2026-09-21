@@ -715,6 +715,11 @@ a.tile:hover { border-color: var(--app-ink); }
 .ov-grid .card.strip { grid-column: 1 / -1; flex-direction: row; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 18px; }
 .ov-grid .card.strip .lead { display: flex; align-items: center; gap: 10px; margin-right: auto; }
 .ov-grid .card.strip .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+/* A break inside an edit panel, between two things a host does in the same drawer for different
+   reasons. Named for the host app rather than borrowed: .rule is the invite's, a short fat yellow
+   bar on a postcard, and it draws as nothing at all out here. A class from one stylesheet taken
+   into another is the fault CLAUDE.md records twice, and this is the harmless direction of it. */
+.sheet-body .panel-split { height: 1px; background: var(--app-line); margin: 20px 0 4px; }
 .chip { border: 1px solid var(--app-line); border-radius: 999px; padding: 5px 11px; font-size: 13px; color: var(--app-mute); white-space: nowrap; }
 .chip.on { background: var(--app-ink); border-color: var(--app-ink); color: var(--app-bg); }
 

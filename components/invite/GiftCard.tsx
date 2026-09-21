@@ -35,7 +35,7 @@ export function GiftCard({ token, gift, pretend }: { token: string; gift: Gift; 
     // Cream, crossed tape, the heading in red above the present. Deliberately not the plate's
     // card: they sit one under the other and telling them apart at a glance is worth more than
     // making them a matched set.
-    <div className="pcard cream gift tilt-l" data-section="gift">
+    <div className="pcard cream gift tilt-l" data-section="gifts">
       {/* Two bits of tape crossed over, not the single centred strip the details and info cards
           wear. The plate and the gift sit one under the other, both cards of news about what to
           bring, and they were telling themselves apart on their heading alone. The plate gets a
