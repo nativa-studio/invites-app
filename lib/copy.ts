@@ -261,6 +261,11 @@ export const copy = {
     // both.
     gifts: "Gifts",
     wishlist: "Some ideas",
+    // Over the named present on the gifts block, the same way Some ideas sits over the wish list.
+    // Only drawn when the host has written their own sentence about the group gift: without one
+    // the app's sentence names the present itself, and a label over a line that already says
+    // "one present" would be the heading and the sentence saying the same thing.
+    groupGift: "The group gift",
     wishlistLink: "Have a look",
     // Under the reply, before anybody has answered. The same words as the thank-you card uses,
     // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
@@ -769,7 +774,7 @@ export const copy = {
     plateBlock: "Also give it a card in the invite",
     plateBlockHint: "On, guests get a card under their reply where they claim a dish. Off, the invite only mentions it at the info booth and you collect it yourself.",
     giftBlock: "Also give it a card in the invite",
-    giftBlockHint: "A second card, above the reply, saying a group gift is happening. Off, the gifts block is the only mention before somebody answers. Either way, everyone who answers gets how to chip in after their reply.",
+    giftBlockHint: "A second card, above the reply, saying a group gift is happening. Only used while the gifts block is off: on, the block says it itself and this card would be the same news twice. Either way, everyone who answers gets how to chip in after their reply.",
     plateClaimed: "Being brought",
     plateNeeded: "Still to be claimed",
     plateAllClaimed: "Every item has somebody bringing it.",

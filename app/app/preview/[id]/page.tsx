@@ -121,7 +121,10 @@ export default async function Preview({
             else opens that drawer, so hiding it the way the guest's page does would leave a
             host looking at a setting they could no longer reach. Trying it as a guest is the
             view that tells the truth, and there it is gone. */}
-        {row.group_gift_enabled && <PreviewGift description={giftRow?.description ?? null} organiser={giftRow?.organiser ?? null} off={row.gift_block === false} />}
+        {/* Only while the gifts block is off. On, the block carries the group gift itself, and
+            two cards about the same present, a screen apart, is what Marcia was looking at when
+            she went hunting for the block and found this instead. */}
+        {row.group_gift_enabled && !row.show_gifts && <PreviewGift description={giftRow?.description ?? null} organiser={giftRow?.organiser ?? null} off={row.gift_block === false} />}
       </>
     );
   // Picking means the host is editing, so the envelope starts open: a section they cannot see is

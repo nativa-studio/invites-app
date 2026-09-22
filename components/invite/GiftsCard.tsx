@@ -97,6 +97,25 @@ export function GiftsCard({ e, off }: {
           <p className="para">
             {said || (group ? copy.gift.blockWhat(group) : copy.gift.blockNoWhat)}
           </p>
+          {/* What the present actually is, under a label of its own, the same shape Some ideas
+              gives the wish list.
+          
+              Only when the host wrote their own sentence. Their words replace the app's, and the
+              app's is the one that names the present, so writing your own quietly cost you the
+              one fact a guest needs before chipping in: Marcia's block said "you can also chip in
+              to the big gifts" and never said what they were. Without a sentence of her own,
+              blockWhat above already names it, and a label over that line would be the heading
+              and the sentence saying the same thing.
+          
+              A line of its own rather than appended to what she wrote, which is the rule this
+              card has carried since the group gift started editing a host's voice. A label and a
+              line under it is not an edit. */}
+          {said && group && (
+            <>
+              <div className="label sky small-label">{copy.sections.groupGift}</div>
+              <p className="para ideas">{group}</p>
+            </>
+          )}
           <p className="small">{copy.gift.blockHow}</p>
         </>
       )}
