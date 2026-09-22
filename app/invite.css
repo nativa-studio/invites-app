@@ -575,6 +575,30 @@
 /* A link keeps its word underlined. Nothing else in the sentence is one, so that is enough. */
 .gifts .ideas a { color: var(--sky-ink); text-underline-offset: 3px; text-decoration-thickness: 2px; }
 .gifts .rule { width: 46px; height: 10px; border-radius: 3px; }
+/* Some ideas and The group gift, each shut until its title is tapped.
+   The caret is the whole affordance, so it has to be there before the tap: a title that opens and
+   looks exactly like a title that does not is a title nobody taps. It turns on open, which is the
+   only movement on this card. */
+.gifts .gift-part { width: 100%; }
+/* Centred with the rest of the card. flex rather than inline-flex: an inline box ignores an auto
+   margin, so the first go sat hard left under centred paragraphs. */
+.gifts .gift-part > summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: center; align-items: center;
+  gap: 8px; margin-top: 14px;
+}
+.gifts .gift-part > summary::-webkit-details-marker { display: none; }
+.gifts .gift-part > summary::after {
+  content: ""; width: 8px; height: 8px; flex: 0 0 auto;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px); transition: transform 140ms ease;
+}
+.gifts .gift-part[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+@media (prefers-reduced-motion: reduce) { .gifts .gift-part > summary::after { transition: none; } }
+/* The first thing inside sits under the title rather than against it. */
+.gifts .gift-part > :not(summary):first-of-type { margin-top: 6px; }
+/* And what the present is gets air under the host's sentence, or the two run together as one
+   paragraph and the name of the gift reads as the tail of her words. */
+.gifts .gift-part > .para + .para { margin-top: 10px; }
 
 /* The strip says it in its own one ink, and the ideas sentence sits quietly under the note. */
 main.strip [data-section="gifts"] .ideas { opacity: 0.85; }
