@@ -39,16 +39,16 @@ export function GiftsContent({ e, editing }: {
         : editing && <p className="para">{copy.host.giftsEmpty}</p>}
 
       {list.length > 0 && (
-        <>
-          {/* No rule above this one. The ideas follow straight on from whatever the host wrote,
-              because they are the same thought continued. The rule below separates that thought
-              from the group gift, which is a different one. */}
-          {/* A sentence, not a list of things to study. Same shape as What's covered on the
-              plate card, and for the same reason: a guest reads this once, to know roughly what
-              would be welcome, and it should take one line of reading and no decisions. The
-              label sits on its own line and the ideas under it in reading type: run together in
-              one uppercase line they read as a single long shout rather than a few things. */}
-          <div className="label sky small-label">{copy.sections.wishlist}</div>
+        // Shut to begin with. The block runs long once a host has filled it in, and the two parts
+        // below the opening sentence are both optional detail: what they would like, and whether
+        // there is a group thing. A guest deciding what to bring opens the one they want. Native
+        // details and summary, so it works with no JavaScript, takes the keyboard, and does not
+        // make this a client component.
+        <details className="gift-part">
+          <summary className="label sky small-label">{copy.sections.wishlist}</summary>
+          {/* A sentence, not a list of things to study. Same shape as What's covered on the plate
+              card, and for the same reason: a guest reads this once, to know roughly what would
+              be welcome, and it should take one line of reading and no decisions. */}
           <p className="para ideas">
             {list.map((w, i) => (
               <React.Fragment key={`${w.label}-${i}`}>
@@ -59,12 +59,15 @@ export function GiftsContent({ e, editing }: {
               </React.Fragment>
             ))}
           </p>
-        </>
+        </details>
       )}
 
       {group !== undefined && (
-        <>
-          <div className="rule" />
+        <details className="gift-part">
+          <summary className="label sky small-label">{copy.sections.groupGift}</summary>
+          {/* Everything about the group gift under its own title, including the host's sentence,
+              which used to sit above the title where it read as part of the opening paragraph
+              rather than as the start of this part. */}
           {/* The host's words win outright. Nothing is appended to them, ever. That rule had to
               be written in after the group gift started adding its own sentence onto the end of
               whatever a host had typed, and an invite came out saying the same thing twice in two
@@ -73,27 +76,13 @@ export function GiftsContent({ e, editing }: {
           <p className="para">
             {said || (group ? copy.gift.blockWhat(group) : copy.gift.blockNoWhat)}
           </p>
-          {/* What the present actually is, under a label of its own, the same shape Some ideas
-              gives the wish list.
-
-              Only when the host wrote their own sentence. Their words replace the app's, and the
-              app's is the one that names the present, so writing your own quietly cost you the
-              one fact a guest needs before chipping in: Marcia's block said "you can also chip in
-              to the big gifts" and never said what they were. Without a sentence of her own,
-              blockWhat above already names it, and a label over that line would be the heading
-              and the sentence saying the same thing.
-
-              A line of its own rather than appended to what she wrote, which is the rule this
-              block has carried since the group gift last started editing a host's voice. A label
-              and a line under it is not an edit. */}
-          {said && group && (
-            <>
-              <div className="label sky small-label">{copy.sections.groupGift}</div>
-              <p className="para ideas">{group}</p>
-            </>
-          )}
+          {/* What the present actually is. Only when the host wrote their own sentence: theirs
+              replaces the app's, and the app's is the one that names the present, so writing your
+              own quietly cost a guest the one fact they need before chipping in. Without a
+              sentence of their own, blockWhat above already names it. */}
+          {said && group && <p className="para ideas">{group}</p>}
           <p className="small">{copy.gift.blockHow}</p>
-        </>
+        </details>
       )}
     </>
   );
