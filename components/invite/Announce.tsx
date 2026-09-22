@@ -29,7 +29,18 @@ export function AnnouncePlate({ e, answered }: { e: PublicEvent; answered?: bool
   );
 }
 
+// The group gift, announced on its own card before the reply.
+//
+// Nothing when gifts have a block of their own. The block says the same thing, in the host's own
+// words where they have written any, at the moment a guest is reading about gifts. Two cards a
+// screen apart, both headed for the same present, is the invite talking to itself, and it is the
+// same fault the info booth's gifts line had. The block wins because it is the fuller of the two
+// and because turning it on is a host saying gifts need more than a mention.
+//
+// So gift_block, the switch behind this card, only decides anything while the block is off. Its
+// hint in the drawer says so.
 export function AnnounceGift({ e, answered }: { e: PublicEvent; answered?: boolean }) {
+  if (e.show_gifts) return null;
   if (!e.group_gift_enabled || e.gift_block !== true || answered) return null;
   return (
     <div className="pcard cream gift announce tilt-l" data-section="gifts">

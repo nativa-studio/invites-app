@@ -135,11 +135,22 @@ export function StripInvite({
           </>
         )}
         {e.group_gift_enabled && (
-          <p className="para">
-            {e.group_gift_note?.trim()
-              || (e.group_gift_what?.trim() ? copy.gift.blockWhat(e.group_gift_what.trim()) : copy.gift.blockNoWhat)}
-            {" "}{copy.gift.blockHow}
-          </p>
+          <>
+            <p className="para">
+              {e.group_gift_note?.trim()
+                || (e.group_gift_what?.trim() ? copy.gift.blockWhat(e.group_gift_what.trim()) : copy.gift.blockNoWhat)}
+              {" "}{copy.gift.blockHow}
+            </p>
+            {/* What the present is, named, when the host's own sentence has replaced the app's.
+                The same rule and the same reason as GiftsCard: their words are the one that
+                stops naming it, and that is the one fact a guest needs before chipping in. */}
+            {e.group_gift_note?.trim() && e.group_gift_what?.trim() && (
+              <>
+                <p className="label">{copy.sections.groupGift}</p>
+                <p className="para">{e.group_gift_what.trim()}</p>
+              </>
+            )}
+          </>
         )}
       </section>
     ) : null),
