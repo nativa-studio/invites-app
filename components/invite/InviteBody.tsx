@@ -9,7 +9,7 @@ import { orderedParts, type InvitePart } from "@/lib/invite-parts";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
-import { AnnounceGift, AnnouncePlate } from "./Announce";
+import { AnnouncePlate } from "./Announce";
 import { GiftsCard } from "./GiftsCard";
 import { UntilAnswered } from "./UntilAnswered";
 import { HoldTheDate } from "./CalendarButtons";
@@ -58,7 +58,7 @@ export function InviteBody({
   // deal: the group gift's own card stands down because the block will say it, and so, since the
   // info booth stopped carrying a gifts line, does everything else. A layout with no block would
   // have had gifts vanish from the invite altogether rather than move.
-  // The two announcements sit immediately before the reply: the last thing a guest reads before
+  // The plate announcement sits immediately before the reply: the last thing a guest reads before
   // deciding, which is where news about what the day will involve belongs. Computed once, because
   // the lineup layout takes its own reply and would otherwise quietly not have them.
   const announced = (
@@ -67,7 +67,6 @@ export function InviteBody({
           answers after that. See UntilAnswered. */}
       <UntilAnswered>
         <AnnouncePlate e={e} answered={answered} />
-        <AnnounceGift e={e} answered={answered} />
       </UntilAnswered>
       {reply}
       {/* Under the reply, never over it.

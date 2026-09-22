@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { copy } from "@/lib/copy";
 import type { EventRow } from "@/lib/db/types";
-import { Field, Switch } from "./fields";
+import { Field } from "./fields";
 
 // The whole of a group gift, in the gifts drawer.
 //
@@ -41,9 +41,6 @@ export function GroupGiftFields({ e }: { e: EventRow }) {
             under what the present is, because it is the same thought said in the host's voice. */}
         <Field id="group_gift_note" label={copy.host.groupGiftLine} value={e.group_gift_note} rows={2} hint={copy.host.groupGiftLineHint} />
         <Field id="gift_target" label={copy.host.giftTarget} value={e.gift_target != null ? String(e.gift_target) : null} hint={copy.host.giftTargetHint} />
-        {/* Last, because it is about a second card rather than about the gift. Everyone who
-            answers gets how to chip in either way; this is only whether the undecided are told. */}
-        <Switch id="gift_block" label={copy.host.giftBlock} value={e.gift_block !== false} hint={copy.host.giftBlockHint} />
       </div>
     </>
   );

@@ -11,7 +11,7 @@ import { googleCalendarLink } from "@/lib/calendar";
 import { getSiteUrl, inviteLink } from "@/lib/site-url";
 import { PickMode } from "@/components/host/PickMode";
 import { PreviewReply } from "@/components/invite/PreviewReply";
-import { PreviewGift, PreviewPlate } from "@/components/invite/PreviewExtras";
+import { PreviewPlate } from "@/components/invite/PreviewExtras";
 import { GiftsCard } from "@/components/invite/GiftsCard";
 import { ReplyProvider } from "@/components/invite/ReplyState";
 import { TryReply } from "@/components/invite/TryReply";
@@ -63,13 +63,11 @@ export default async function Preview({
   // preview has no token to call the guest functions with. Only fetched when that view is on:
   // the editing view never draws them, and this is three queries.
   const row = event as EventRow;
-  const [plate, gift, giftRow] = await Promise.all([
+  const [plate, gift] = await Promise.all([
     // Both through the same functions a guest's invite goes through, so what this shows cannot
     // disagree with what they get. See lib/db/preview-extras.ts.
     asGuest ? previewPlate(id) : null,
     asGuest ? previewGift(id) : null,
-    // The editing view draws the gift card too, and it needs what a guest would read on it.
-    !asGuest && row.group_gift_enabled ? giftLine(supabase, id) : null,
   ]);
   // The Layout tab previews what you are about to save, not what is saved. Anything it hands over
   // in the query string wins over the stored row, so a switch you have just flicked shows here
@@ -121,10 +119,6 @@ export default async function Preview({
             else opens that drawer, so hiding it the way the guest's page does would leave a
             host looking at a setting they could no longer reach. Trying it as a guest is the
             view that tells the truth, and there it is gone. */}
-        {/* Only while the gifts block is off. On, the block carries the group gift itself, and
-            two cards about the same present, a screen apart, is what Marcia was looking at when
-            she went hunting for the block and found this instead. */}
-        {row.group_gift_enabled && !row.show_gifts && <PreviewGift description={giftRow?.description ?? null} organiser={giftRow?.organiser ?? null} off={row.gift_block === false} />}
       </>
     );
   // Picking means the host is editing, so the envelope starts open: a section they cannot see is
@@ -188,23 +182,4 @@ function unsaved(show: string | undefined): Partial<EventRow> {
     for (const [key, column] of Object.entries(SECTIONS)) patch[column] = on.has(key);
   }
   return patch as Partial<EventRow>;
-}
-
-// What the gift card says, for the editing view: what the present is, and the first name of
-// whoever is running it, whether that is a guest or one of the hosts.
-async function giftLine(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  id: string,
-): Promise<{ description: string | null; organiser: string | null } | null> {
-  const { data } = await supabase
-    .from("group_gift")
-    .select("description, guest:guests!group_gift_organiser_guest_id_fkey(name), host:profiles!group_gift_organiser_profile_id_fkey(name)")
-    .eq("event_id", id)
-    .maybeSingle();
-  if (!data) return null;
-  const one = <T,>(v: T | T[] | null): T | null => (Array.isArray(v) ? v[0] ?? null : v);
-  const g = one(data.guest as { name: string } | { name: string }[] | null);
-  const h = one(data.host as { name: string } | { name: string }[] | null);
-  const name = g?.name ?? h?.name ?? null;
-  return { description: data.description, organiser: name ? firstName(name) : null };
 }

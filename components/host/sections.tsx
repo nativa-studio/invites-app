@@ -111,7 +111,7 @@ export const SECTIONS: Section[] = [
     title: "Gifts",
     blurb: "A block of its own for gifts: what you want to say, a wish list, and the group gift if one is running. The wish list is a list of ideas, not a registry, so nothing is claimed and two people can still buy the same thing.",
     show: { column: "show_gifts", label: copy.host.giftsBlock },
-    fields: ["gift_note", "group_gift_enabled", "gift_description", "group_gift_note", "gift_target", "gift_block"],
+    fields: ["gift_note", "group_gift_enabled", "gift_description", "group_gift_note", "gift_target"],
     render: (e) => (
       <>
         <Field id="gift_note" label={copy.sections.gifts} value={e.gift_note} rows={3} hint={copy.host.giftNoteFree} />

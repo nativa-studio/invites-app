@@ -1,5 +1,4 @@
 import { copy } from "@/lib/copy";
-import { Gift as GiftIcon } from "@/components/art/icons";
 
 // The plate board and the gift block, as the host's preview draws them while editing.
 //
@@ -19,23 +18,6 @@ export function PreviewPlate({ note, mode, off }: { note: string | null; mode: s
       <div className="label red">{copy.plate.heading}</div>
       <p className="para">{note || (mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
       <div className="small">{off ? copy.host.blockOff : copy.host.previewPlate}</div>
-    </div>
-  );
-}
-
-export function PreviewGift({ description, organiser, off }: { description: string | null; organiser: string | null; off?: boolean }) {
-  return (
-    <div className={`pcard cream gift tilt-l${off ? " off" : ""}`} data-section="gifts">
-      <div className="tape cross" />
-      <div className="tape over sky" />
-      <div className="label red">{copy.gift.heading}</div>
-      <GiftIcon size={36} />
-      <p className="para">
-        {organiser
-          ? description ? copy.gift.running(organiser, description) : copy.gift.runningNoWhat(organiser)
-          : description ? copy.gift.noOrganiser(description) : copy.gift.noOrganiserNoWhat}
-      </p>
-      <div className="small">{off ? copy.host.blockOff : copy.host.previewGift}</div>
     </div>
   );
 }
