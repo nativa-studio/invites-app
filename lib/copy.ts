@@ -436,6 +436,11 @@ export const copy = {
     wishBlurb: "Things they would like. Guests read this, nobody claims anything, so two people can still buy the same thing. First is the one you would most like.",
     wishAdd: "Add an idea",
     wishEdit: "Edit",
+    // What the button at the foot of the edit sheet says. Not "Edit": that is the name of the
+    // sheet you are already inside, so the one control that finishes the job read as a label
+    // rather than a thing to press, and there appeared to be no way to keep the change. Every
+    // other sheet in the host app names the action, and this one now does too.
+    wishSave: "Save",
     wishRemove: "Remove",
     wishNone: "Nothing on the list yet. The block still shows whatever you write about gifts.",
     wishWhat: "What is it?",

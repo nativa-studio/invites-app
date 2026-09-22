@@ -89,14 +89,34 @@ export function WishlistEditor({ eventId, items }: { eventId: string; items: Hos
           dirty={Boolean(label.trim())}
           onClose={() => { setAdding(false); setEditing(null); }}
         >
-          <div className="sheet-body">
+          {/* This sheet is drawn inside the gifts drawer's form, because that is where the wish
+              list lives on the screen. So it has to keep its keystrokes to itself, twice over.
+              Both were measured by pressing the keys, not reasoned about:
+
+              Enter in either box submitted the gifts form. In this session that only showed up as
+              a POST, since the action rejects without a signed-in host, but with a real host it
+              saves the drawer, closes it, and takes the half-typed idea with it.
+
+              And any keystroke marked the drawer dirty, so closing it afterwards asked whether to
+              discard work that had already saved itself. The list writes its own rows the moment
+              you press the button, and none of its boxes is a field of the event. */}
+          <div
+            className="sheet-body"
+            onKeyDown={(ev) => {
+              if (ev.key !== "Enter") return;
+              if ((ev.target as HTMLElement).tagName !== "INPUT") return;
+              ev.preventDefault();
+              save();
+            }}
+            onInput={(ev) => ev.stopPropagation()}
+            onChange={(ev) => ev.stopPropagation()}
+          >
             <div className="field">
               <label htmlFor="wish_label">{copy.host.wishWhat}</label>
               <input
                 id="wish_label" type="text" value={label} autoFocus autoComplete="off"
                 placeholder={copy.host.wishWhatPlaceholder}
                 onChange={(ev) => setLabel(ev.target.value)}
-                onKeyDown={(ev) => { if (ev.key === "Enter") save(); }}
               />
             </div>
             <div className="field">
@@ -110,7 +130,7 @@ export function WishlistEditor({ eventId, items }: { eventId: string; items: Hos
             </div>
             <div className="actions">
               <button type="button" className="btn primary" onClick={save} disabled={pending || !label.trim()}>
-                {editing ? copy.host.wishEdit : copy.host.wishAdd}
+                {editing ? copy.host.wishSave : copy.host.wishAdd}
               </button>
               {editing && (
                 <button
