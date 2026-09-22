@@ -2,6 +2,7 @@ import React from "react";
 import "@/app/strip.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
+import { GiftsContent, hasGifts } from "./GiftsContent";
 import { orderedNotes } from "@/lib/good-to-know";
 import { orderedParts, type InvitePart } from "@/lib/invite-parts";
 import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
@@ -117,41 +118,14 @@ export function StripInvite({
     // cream card with two bits of tape on it, would arrive as a visitor from another invite. The
     // content is the same three things in the same order and reads from the same columns; only
     // the clothes differ.
-    gifts: gifts ?? (e.show_gifts && (e.gift_note?.trim() || (e.wishlist ?? []).length > 0 || e.group_gift_enabled) ? (
-      <section data-section="gifts">
+    // The strip draws its own gifts section rather than the suite's card: one ink on one paper
+    // with monoline drawings and no cards at all, so GiftsCard, a tilted cream card with two bits
+    // of tape on it, would arrive as a visitor from another invite. Only the container differs.
+    // What it says comes from GiftsContent, the same as every other layout.
+    gifts: gifts ?? (e.show_gifts && hasGifts(e) ? (
+      <section data-section="gifts" className="gifts">
         <p className="label">{copy.sections.gifts}</p>
-        {e.gift_note?.trim() && <p className="para">{e.gift_note.trim()}</p>}
-        {(e.wishlist ?? []).length > 0 && (
-          <>
-          <p className="label">{copy.sections.wishlist}</p>
-          <p className="para ideas">
-            {(e.wishlist ?? []).map((w, i, all) => (
-              <React.Fragment key={`${w.label}-${i}`}>
-                {w.url ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a> : w.label}
-                {i < all.length - 1 ? (i === all.length - 2 ? " and " : ", ") : ""}
-              </React.Fragment>
-            ))}
-          </p>
-          </>
-        )}
-        {e.group_gift_enabled && (
-          <>
-            <p className="para">
-              {e.group_gift_note?.trim()
-                || (e.group_gift_what?.trim() ? copy.gift.blockWhat(e.group_gift_what.trim()) : copy.gift.blockNoWhat)}
-              {" "}{copy.gift.blockHow}
-            </p>
-            {/* What the present is, named, when the host's own sentence has replaced the app's.
-                The same rule and the same reason as GiftsCard: their words are the one that
-                stops naming it, and that is the one fact a guest needs before chipping in. */}
-            {e.group_gift_note?.trim() && e.group_gift_what?.trim() && (
-              <>
-                <p className="label">{copy.sections.groupGift}</p>
-                <p className="para">{e.group_gift_what.trim()}</p>
-              </>
-            )}
-          </>
-        )}
+        <GiftsContent e={e} />
       </section>
     ) : null),
 

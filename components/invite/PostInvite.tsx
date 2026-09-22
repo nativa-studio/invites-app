@@ -8,6 +8,8 @@ import { paletteFor, paletteVars } from "@/components/art/palette";
 import { castFor, type PeekChar } from "@/lib/peek-cast";
 import { AskCard, DayCard, DetailsCard, KnowCard, UpdatesCard } from "./Cards";
 import { PostEnvelope } from "./PostEnvelope";
+import { GiftsCard } from "./GiftsCard";
+import { hasGifts } from "./GiftsContent";
 
 // In the post: the stationery suite with the peek characters. An envelope that opens, always,
 // with a card inside drawn at the size a card is when it fits that envelope. After the
@@ -62,8 +64,13 @@ function CoverCard({ e, hero, greeting }: { e: PublicEvent; hero?: PeekChar; gre
 }
 
 export function PostInvite({
-  event: e, greeting, addressee, reply, skipAnimation,
-}: { event: PublicEvent; greeting: string; addressee: string; reply: React.ReactNode; skipAnimation?: boolean }) {
+  event: e, greeting, addressee, reply, gifts, skipAnimation,
+}: {
+  event: PublicEvent; greeting: string; addressee: string; reply: React.ReactNode;
+  /** The editor's own gifts block, which draws faded when it is off. */
+  gifts?: React.ReactNode;
+  skipAnimation?: boolean;
+}) {
   const p = paletteFor(e.palette, e.theme_id);
   const cast = castFor(e.invite_image_path);
 
@@ -84,6 +91,12 @@ export function PostInvite({
           <Slot who={cast.reply} side="right" order={2} lift>{reply}</Slot>
           {e.show_runsheet && e.runsheet.length > 0 && <Slot who={cast.day} side="left" order={3}><DayCard e={e} /></Slot>}
           {e.show_good_to_know && <Slot who={cast.know} side="right" order={4}><KnowCard e={e} /></Slot>}
+          {/* Gifts. This layout is cards in slots, so it takes the suite's card unchanged rather
+              than dressing the content itself. Added when the info booth stopped carrying a
+              gifts line. */}
+          {gifts
+            ? <Slot side="left" order={5}>{gifts}</Slot>
+            : e.show_gifts && hasGifts(e) && <Slot side="left" order={5}><GiftsCard e={e} /></Slot>}
           {e.show_after && <Slot side="left" order={5}><AskCard e={e} /></Slot>}
 
         </div>
