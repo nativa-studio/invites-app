@@ -16,6 +16,7 @@ import { GiftsCard } from "@/components/invite/GiftsCard";
 import { ReplyProvider } from "@/components/invite/ReplyState";
 import { TryReply } from "@/components/invite/TryReply";
 import { previewGift, previewPlate } from "@/lib/db/preview-extras";
+import { loadEvent } from "@/lib/db/host";
 
 // The host's own look at their invite. Reads the event row straight from the table, so it works
 // on a draft and before a single guest exists, and it never touches a guest's opened flag the
@@ -38,8 +39,18 @@ export default async function Preview({
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   const asGuest = as === "guest";
   const supabase = await createClient();
-  const { data: event } = await supabase.from("events").select("*").eq("id", id).maybeSingle();
-  if (!event) notFound();
+  // loadEvent rather than a plain select, because the gifts block is not drawn from the events
+  // row alone: the wish list is its own table and what the present is lives on group_gift, and
+  // loadEvent already joins both for the editor.
+  //
+  // This was the fault. The preview fetched select("*"), so the block drew the host's sentence
+  // about gifts, no ideas at all, and a group gift that named nothing, while the guest's page,
+  // which reads the same three things through event_public_json, drew all of it. Switching the
+  // group gift on therefore looked exactly like it had wiped the wish list. Nothing had been
+  // written over: the preview had never been given it.
+  //
+  // This is the rule CLAUDE.md opens with, and this is its third outing.
+  const event = await loadEvent(id);
   // The runsheet and the updates are not columns on this row. A guest reads them through the
   // RPC, which builds them from these two tables, so the preview has to fetch them itself or a
   // layout that shows the order of the afternoon has nothing to count.
@@ -63,7 +74,14 @@ export default async function Preview({
   // The Layout tab previews what you are about to save, not what is saved. Anything it hands over
   // in the query string wins over the stored row, so a switch you have just flicked shows here
   // before you commit to it. Absent means use what is stored.
-  const e = eventForRender({ ...(event as EventRow), ...unsaved(show) }, {
+  const e = eventForRender({
+    ...(event as EventRow),
+    // The two names for the same thing. A guest's payload calls the present group_gift_what;
+    // the host row, which joins the table it actually lives on, calls it gift_description.
+    group_gift_what: row.gift_description ?? null,
+    wishlist: row.wishlist ?? [],
+    ...unsaved(show),
+  }, {
     runsheet: (stops ?? []) as RunsheetStop[],
     updates: (updates ?? []) as Update[],
   });
