@@ -4,7 +4,7 @@ import { copy } from "@/lib/copy";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
 import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
-import { ICONS, Bolt, Bubble, Camera, Clock, Gift, Pin, Bbq, Cup, Plate, Cap, Cake, Kids, Shower, Sun, Towel } from "@/components/art/icons";
+import { ICONS, Bolt, Bubble, Camera, Clock, Pin, Bbq, Cup, Plate, Cap, Cake, Kids, Shower, Sun, Towel } from "@/components/art/icons";
 import { orderedNotes, type NoteKind } from "@/lib/good-to-know";
 
 export function mapsLink(e: PublicEvent): string | null {
@@ -114,7 +114,6 @@ function noteIcon(kind: NoteKind, text: string): React.ReactNode {
   if (kind === "serve") return /bbq|barbecue|barbeque|sausage|grill|spit/i.test(text) ? <Bbq /> : /cake/i.test(text) ? <Cake /> : <Bbq />;
   if (kind === "drinks") return <Cup />;
   if (kind === "plate") return <Plate />;
-  if (kind === "gifts") return <Gift />;
   if (kind === "photos") return <Camera />;
   // Anything else the host has written. The speech bubble is the fallback, but a note about
   // showers gets a shower: it is the commonest thing to end up in this box after a pool party,

@@ -21,9 +21,12 @@ import { Reorder } from "./Reorder";
 // and this is where you fill them.
 
 
+// No gift_note and no group_gift_enabled. Both are edited on the gifts block's own drawer, and a
+// panel that declares a field it no longer draws saves empty over it: the fault the manifest
+// exists to prevent, arrived at from the other end.
 export const KNOW_FIELDS = [
   "siblings_welcome", "what_to_bring", "serve_text", "drinks_note",
-  "gift_note", "group_gift_enabled", "photos_note", "good_to_know",
+  "photos_note", "good_to_know",
 ] as const;
 
 export function KnowEditor({ e }: { e: EventRow }) {
@@ -48,21 +51,6 @@ export function KnowEditor({ e }: { e: EventRow }) {
         // the line can be moved up and down the invite with the others, and so a host looking
         // for it is told where it went rather than finding a second copy of it.
         return <p className="hint">{copy.host.plateElsewhere}</p>;
-      case "gifts":
-        // What the host writes is what the invite says. It was a dropdown of preset wordings with
-        // a note tacked on the end, which is a guess at what somebody wants to say and leaves a
-        // host who wants to say something close but not identical nowhere to put it. Every
-        // event's preset became its starting text in migration 0021, so nothing changed under
-        // anybody.
-        //
-        // The group gift stays a switch beside it, because it is a fact about the event rather
-        // than a sentence, and the invite joins the two into one line.
-        return (
-          <>
-            <Field id="gift_note" label={NOTE_NAMES.gifts} value={e.gift_note} rows={2} hint={copy.host.giftNoteFree} />
-            <Switch id="group_gift_enabled" label={copy.host.giftSwitch} value={e.group_gift_enabled} hint={copy.host.giftAlongside} />
-          </>
-        );
       case "photos":
         return <Field id="photos_note" label={NOTE_NAMES.photos} value={e.photos_note ?? null} rows={2} hint={copy.host.photosNoteFree} />;
       case "other":

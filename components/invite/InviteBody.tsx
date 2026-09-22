@@ -21,16 +21,6 @@ import { StripInvite } from "./StripInvite";
 import { PeekInvite } from "./PeekInvite";
 import { PostInvite } from "./PostInvite";
 
-// The layouts with no gifts block. Named the other way round on purpose: everything that is not
-// one of these falls through to the stationery suite, including an event saved under a layout
-// that has since been deleted, and the suite draws the block. Listing the ones that do would
-// have quietly dropped gifts from those invites.
-//
-// Kept beside the dispatch below rather than in lib/layouts, because it is a fact about this
-// file: it is true exactly while these three branches return before the part list is built. Give
-// one of them a gifts slot and take it off this list.
-const NO_GIFTS_BLOCK = new Set(["peek", "post", "lineup"]);
-
 // Every layout, in one place. The personal link, the group link and the host's own preview all
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
@@ -63,17 +53,11 @@ export function InviteBody({
   calendar?: { google: string | null; ics: string | null } | null;
 }) {
   const id = layout ?? chosen.layout_id;
-  // Three of the five layouts have no gifts block: peek, post and lineup return above the part
-  // list and never receive one. Everything that stands down because the block will say it, the
-  // info booth's gifts line and the group gift's own card, reads show_gifts to decide, so on
-  // those three an event with the block switched on would have had gifts vanish from the invite
-  // altogether: no block to draw them and both of the older mentions gone.
-  //
-  // Answered once, here, off the same id the dispatch below uses, so a layout cannot have the
-  // switch mean one thing to the page and another to a line inside it. Everything downstream
-  // sees show_gifts false on a layout that cannot draw a block, which is exactly what those
-  // invites looked like before the block existed.
-  const e: PublicEvent = NO_GIFTS_BLOCK.has(id ?? "") ? { ...chosen, show_gifts: false } : chosen;
+  const e = chosen;
+  // Every layout draws a gifts block. It was three of five for a while, and that mattered a great
+  // deal: the group gift's own card stands down because the block will say it, and so, since the
+  // info booth stopped carrying a gifts line, does everything else. A layout with no block would
+  // have had gifts vanish from the invite altogether rather than move.
   // The two announcements sit immediately before the reply: the last thing a guest reads before
   // deciding, which is where news about what the day will involve belongs. Computed once, because
   // the lineup layout takes its own reply and would otherwise quietly not have them.
@@ -103,8 +87,8 @@ export function InviteBody({
   );
   // Drawn once and handed to whichever layout runs, so neither can quietly not have it.
   const about = <AboutApp token={token ?? null} curious={curious ?? false} pretend={pretend} />;
-  if (id === "peek") return <PeekInvite event={e} greeting={greeting} reply={announced} />;
-  if (id === "post") return <PostInvite event={e} greeting={greeting} addressee={greeting} reply={announced} skipAnimation={skipAnimation} />;
+  if (id === "peek") return <PeekInvite event={e} greeting={greeting} reply={announced} gifts={giftsCard} />;
+  if (id === "post") return <PostInvite event={e} greeting={greeting} addressee={greeting} reply={announced} gifts={giftsCard} skipAnimation={skipAnimation} />;
   if (id === "strip") {
     return (
       <StripInvite
@@ -126,6 +110,7 @@ export function InviteBody({
         reply={announced}
         after={about}
         plate={plateCard ?? <PlateSlot />}
+        gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
     );

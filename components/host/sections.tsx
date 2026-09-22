@@ -6,7 +6,7 @@ import { hostName } from "@/lib/format";
 import { KnowEditor, KNOW_FIELDS } from "@/components/host/KnowEditor";
 import { WishlistEditor } from "@/components/host/WishlistEditor";
 import { GroupGiftFields } from "@/components/host/GroupGiftFields";
-import { NOTE_NAMES, PLATE_MODES } from "@/lib/good-to-know";
+import { PLATE_MODES } from "@/lib/good-to-know";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
 // data-section names the invite carries, so tapping a card on the preview finds its entry here.
@@ -114,7 +114,7 @@ export const SECTIONS: Section[] = [
     fields: ["gift_note", "group_gift_enabled", "gift_description", "group_gift_note", "gift_target", "gift_block"],
     render: (e) => (
       <>
-        <Field id="gift_note" label={NOTE_NAMES.gifts} value={e.gift_note} rows={3} hint={copy.host.giftNoteFree} />
+        <Field id="gift_note" label={copy.sections.gifts} value={e.gift_note} rows={3} hint={copy.host.giftNoteFree} />
         {/* The wish list is rows in a table rather than a field on the event, so it saves itself
             as it is edited and does not ride in this panel's manifest. It is here rather than on
             a tab of its own because it is wording: a host writing what they want to say about

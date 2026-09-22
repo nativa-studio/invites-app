@@ -3,6 +3,7 @@ import "@/app/lineup.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { orderedNotes } from "@/lib/good-to-know";
+import { GiftsContent, hasGifts } from "./GiftsContent";
 import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
 import { askLine, askPhoneSuffix, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
@@ -22,7 +23,7 @@ const DOTS = ["#EFB93C", "#7FAF95", "#93C7D6", "#E8763C", "#E0553F", "#3F6B57"];
 // on a panel rather than bare on the page, so there is something for the envelope to hand over.
 // Everything below follows once it has opened.
 export function LineupInvite({
-  event: e, greeting, reply, after, plate, skipAnimation,
+  event: e, greeting, reply, after, plate, gifts, skipAnimation,
 }: {
   event: PublicEvent;
   greeting: string;
@@ -32,6 +33,8 @@ export function LineupInvite({
   after?: React.ReactNode;
   /** Bring a plate, which this layout puts after the info booth like the suite does. */
   plate?: React.ReactNode;
+  /** The editor's own gifts block, which draws faded when it is off. */
+  gifts?: React.ReactNode;
   skipAnimation?: boolean;
 }) {
   const age = e.title.match(/turning (\d+)/i)?.[1];
@@ -115,6 +118,16 @@ export function LineupInvite({
           )}
 
           {plate}
+
+          {/* Gifts, after the plate, the order the suite uses: both are things a guest carries,
+              so they read as a pair. Added when the info booth stopped carrying a gifts line,
+              which would otherwise have taken gifts off this layout altogether. */}
+          {gifts ?? (e.show_gifts && hasGifts(e) ? (
+            <section data-section="gifts" className="gifts">
+              <p className="label">{copy.sections.gifts}</p>
+              <GiftsContent e={e} />
+            </section>
+          ) : null)}
 
           {/* Who to ask, and the one thing to remember on the way out. Two cells, a symbol over a
               name over a line, the same pair the suite ends on, so the two layouts ask the same

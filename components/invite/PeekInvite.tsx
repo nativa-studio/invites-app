@@ -3,6 +3,7 @@ import "@/app/peek.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { goodToKnow } from "@/lib/good-to-know";
+import { GiftsContent, hasGifts } from "./GiftsContent";
 import { formatInviteDate, formatTime, formatTimeRange, hostName } from "@/lib/format";
 import { castFor, type PeekChar } from "@/lib/peek-cast";
 import { mapsLink, WhenWhere } from "./Cards";
@@ -40,7 +41,11 @@ function Peeker({ who, side }: { who: PeekChar | undefined; side: "left" | "righ
 
 // The layout itself, with the reply passed in: a personal link hands it the RSVP, the group
 // link hands it the "Who's this from?" form. Same page either way.
-export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; greeting: string; reply: React.ReactNode }) {
+export function PeekInvite({ event: e, greeting, reply, gifts }: {
+  event: PublicEvent; greeting: string; reply: React.ReactNode;
+  /** The editor's own gifts block, which draws faded when it is off. */
+  gifts?: React.ReactNode;
+}) {
   const host = hostName(e.host_line);
   const age = e.title.match(/turning (\d+)/i)?.[1];
   const maps = mapsLink(e);
@@ -123,6 +128,17 @@ export function PeekInvite({ event: e, greeting, reply }: { event: PublicEvent; 
             </div>
           </section>
         )}
+
+        {/* Gifts, in peek's own clothes. It had none until the info booth stopped carrying a
+            gifts line: before that a host on this layout still got their sentence, in the booth,
+            and taking the line away without adding this would have made gifts vanish from three
+            of the five layouts at once. */}
+        {gifts ?? (e.show_gifts && hasGifts(e) ? (
+          <section className="s blush gifts" data-section="gifts">
+            <p className="label">{copy.sections.gifts}</p>
+            <GiftsContent e={e} />
+          </section>
+        ) : null)}
 
 
         {/* Peek had no updates and photos section at all, so its switch on the Layout tab did

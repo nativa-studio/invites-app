@@ -7,7 +7,10 @@ import type { PublicEvent } from "@/lib/db/types";
 // third from its own version with icons attached. Adding a line meant remembering all three.
 // Each line now carries what kind of thing it is, and a layout decides whether to draw a picture
 // beside it.
-export const NOTE_KINDS = ["siblings", "bring", "serve", "drinks", "plate", "gifts", "photos", "other"] as const;
+// No "gifts". They have a block of their own now and are not a line here, so they are not a
+// line to order either. A stale "gifts" left in a host's saved know_order is dropped by
+// orderedNotes the way any unknown kind is, which is why nothing had to be backfilled.
+export const NOTE_KINDS = ["siblings", "bring", "serve", "drinks", "plate", "photos", "other"] as const;
 export type NoteKind = (typeof NOTE_KINDS)[number];
 export type Note = { kind: NoteKind; text: string };
 
@@ -65,16 +68,17 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // wish list and the same group gift, so leaving the line here as well put one sentence on the
   // invite twice, a few centimetres apart, in two different voices. The block is the fuller of
   // the two and the switch that turns it on is a host saying gifts need more than a line.
-  if (!e.show_gifts) {
-    const giftNote = e.gift_note?.trim();
-    if (giftNote) {
-      lines.push({ kind: "gifts", text: giftNote });
-    } else if (e.group_gift_enabled) {
-      // Where to look depends on whether there is a block to look at. Off, the line is the whole
-      // of what a guest gets, so it must not send them to a card that is not there.
-      lines.push({ kind: "gifts", text: copy.lines.groupGift(e.gift_block !== false) });
-    }
-  }
+  // Gifts are not a line here any more. They have a block of their own, which holds the same
+  // sentence plus the wish list and the group gift, and a paragraph about presents sitting in a
+  // list of practical facts (sun smart, BYO drinks, showers available) was never the same kind of
+  // thing as the facts around it.
+  //
+  // It used to stand down only while the block was on, which left a host editing their invite
+  // reading the same sentence twice, once here and once on the block below. Marcia: "remove the
+  // top one, that should not exist."
+  //
+  // Nothing replaces it. An event that wants to say something about gifts switches the block on,
+  // and one that does not says nothing, which is what an empty gift_note already meant.
   if (e.photos_note?.trim()) lines.push({ kind: "photos", text: e.photos_note.trim() });
   if (e.good_to_know) lines.push({ kind: "other", text: e.good_to_know });
   return lines;
@@ -116,7 +120,6 @@ export const NOTE_NAMES: Record<NoteKind, string> = {
   serve: "What you'll serve",
   drinks: "Drinks",
   plate: "Bring a plate",
-  gifts: "Gifts",
   photos: "Photos",
   other: "Other notes",
 };
