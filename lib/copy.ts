@@ -260,12 +260,11 @@ export const copy = {
     // decides to put in it, which may be a wish list, may be "no presents please", and may be
     // both.
     gifts: "Gifts",
-    wishlist: "Some ideas",
-    // Over the named present on the gifts block, the same way Some ideas sits over the wish list.
-    // Only drawn when the host has written their own sentence about the group gift: without one
-    // the app's sentence names the present itself, and a label over a line that already says
-    // "one present" would be the heading and the sentence saying the same thing.
-    groupGift: "The group gift",
+    // The two titles inside the gifts block, each opening what is under it. One word apiece now:
+    // they sit one above the other, a tap apart, and "Some ideas" and "The group gift" carried
+    // three syllables of throat-clearing between them for no gain. Marcia's call.
+    wishlist: "Ideas",
+    groupGift: "Group gift",
     wishlistLink: "Have a look",
     // Under the reply, before anybody has answered. The same words as the thank-you card uses,
     // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
