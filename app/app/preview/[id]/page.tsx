@@ -59,15 +59,28 @@ export default async function Preview({
     supabase.from("updates").select("body, posted_at").eq("event_id", id).order("posted_at", { ascending: false }),
     supabase.from("guests").select("name, token").eq("event_id", id).limit(1).maybeSingle(),
   ]);
-  // The plate and the gift, for the "as a guest" view. Read from the host's own rows, because a
-  // preview has no token to call the guest functions with. Only fetched when that view is on:
-  // the editing view never draws them, and this is three queries.
+  // The plate and the gift. Read from the host's own rows, because a preview has no token to call
+  // the guest functions with.
+  //
+  // The gift is fetched in both views, the editing one included. Without it the gifts block in the
+  // editor fell back to the line saying how to chip in comes with your reply, which stopped being
+  // true the day the money moved inside the block and out from behind the RSVP. So the host was
+  // reading a promise on their own invite that no guest is made any more: the two drawings of the
+  // same block disagreeing, which is the fault CLAUDE.md opens with. Marcia: "show how to chip in
+  // on invite."
+  //
+  // Nothing is written from the editing view. The provider below is marked pretend, so the tick
+  // and the untick move on the screen and touch no row, the same as they do in try as a guest.
+  //
+  // The plate stays behind that view, because the editor draws its own plate card from
+  // PreviewExtras rather than the guest's board, and a query nobody reads is a query not worth
+  // making.
   const row = event as EventRow;
   const [plate, gift] = await Promise.all([
     // Both through the same functions a guest's invite goes through, so what this shows cannot
     // disagree with what they get. See lib/db/preview-extras.ts.
     asGuest ? previewPlate(id) : null,
-    asGuest ? previewGift(id) : null,
+    previewGift(id),
   ]);
   // The Layout tab previews what you are about to save, not what is saved. Anything it hands over
   // in the query string wins over the stored row, so a switch you have just flicked shows here
@@ -144,8 +157,10 @@ export default async function Preview({
       )}
       {pick === "1" && !asGuest && <PickMode />}
       {/* The answer lives here in try as a guest, so the plate part below the info booth draws
-          itself the way it does on a real invite. Editing draws its own card instead and answers
-          to no reply, so it needs no provider at all. */}
+          itself the way it does on a real invite. Editing draws its own plate card instead and
+          answers to no reply, but it still gets the gift: chipping in no longer waits for an
+          answer, so there is nothing about it left for the editor to hold back. Pretend on both,
+          which is what keeps a host trying their own invite off their own guest list. */}
       <ReplyProvider initial={{ token: token ?? "", status: "pending", plate: null, gift, pretend: true }}>
         <InviteBody
           e={e}
