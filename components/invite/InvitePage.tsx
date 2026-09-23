@@ -40,7 +40,7 @@ export function InvitePage({ invite, token, plate, gift, curious, skipAnimation,
       // The board goes to the reply rather than to the layout. Where it belongs depends on the
       // answer, and the answer changes in the browser after this has rendered, so the reply is
       // the only thing that knows.
-      reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarPath(e, token)} icsLink={`/i/${token}/invite.ics`} plate={plate} gift={gift} />}
+      reply={<Rsvp token={token} event={e} guest={guest} googleLink={googleCalendarPath(e, token)} icsLink={`/i/${token}/invite.ics`} plate={plate} />}
     />
     </ReplyProvider>
   );

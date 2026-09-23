@@ -177,8 +177,19 @@ export const copy = {
     suggested: (amount: string) => `${amount} is plenty, and less is fine.`,
     by: (date: string) => `Chip in by ${date}`,
     howTo: "How to chip in",
-    reference: (ref: string, who: string) => `Put "${ref}" in the reference so ${who} knows it's you.`,
-    referenceNoName: (ref: string) => `Put "${ref}" in the reference.`,
+    // What the reference is for, said as what it gets you rather than as what it tells the
+    // organiser. "so Marcia knows it's you" is the organiser's bookkeeping; being on the card is
+    // the thing the guest wanted. Marcia's wording, and it also drops the organiser's name from a
+    // line that read badly when the name was a word like "Us".
+    reference: (ref: string) => `Put "${ref}" in the reference so your name is added to the card.`,
+    // The button on the group gift, and the panel behind it. Shut to begin with: bank details
+    // sitting open under a birthday invitation read like a bill.
+    chipIn: "Chip in",
+    copy: "Copy",
+    copied: "Copied",
+    // The clipboard is refused outside a secure context and in some in-app browsers. The details
+    // are still on the screen to read, so this says what happened and asks for nothing.
+    copyFailed: "Copy it by hand",
     update: "Latest",
     countNone: "Nobody has chipped in yet. Be the first.",
     count: (n: number) => (n === 1 ? "1 person has chipped in." : `${n} people have chipped in.`),

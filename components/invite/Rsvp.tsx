@@ -8,10 +8,8 @@ import { rsvpAction, type RsvpState } from "@/app/i/[token]/actions";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
-import { GiftCard } from "./GiftCard";
 import { useReply } from "./ReplyState";
 import type { Plate } from "@/lib/guest/plate";
-import type { Gift } from "@/lib/guest/gift";
 
 type Props = {
   token: string;
@@ -23,11 +21,14 @@ type Props = {
    *  is drawn further down the invite, by its own part, which reads that provider. */
   plate?: Plate | null;
   /** The gift block as it stood on load, which is a block at all only for a guest who had
-   *  already answered. Answering here brings a fresher one back with the reply. */
-  gift?: Gift | null;
+   *  already answered. Answering here brings a fresher one back with the reply.
+   *
+   *  Not a prop any more: chipping in is a button inside the gifts block, and it reads the gift
+   *  off the provider, which the page fills from the server and the effect below refreshes the
+   *  moment a reply lands. */
 };
 
-export function Rsvp({ token, event: e, guest, googleLink, icsLink, gift }: Props) {
+export function Rsvp({ token, event: e, guest, googleLink, icsLink }: Props) {
   const [state, formAction, pending] = useActionState<RsvpState, FormData>(rsvpAction, { ok: false });
   const [choice, setChoice] = useState<"" | "yes" | "no">("");
   // "Change my answer" is tied to the state it was clicked from, so a fresh submission closes it again.
@@ -50,10 +51,9 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink, gift }: Prop
   }, [state, report, token]);
 
   if (answered && !editing) {
-    // Whichever gift is the newer one: the reply's, if they have just answered, otherwise the
-    // one the page was rendered with. The plate is no longer here: it is a part of the invite in
-    // its own right, further down the page, and reads the answer from the provider.
-    const present = state.ok ? state.gift : gift;
+    // Neither board is drawn here any more. The plate is its own part below the info booth, and
+    // chipping in is a button inside the gifts block. Both read the answer from the provider,
+    // which the effect above fills the moment a reply lands.
     return (
       <>
         <ThanksCard
@@ -65,8 +65,6 @@ export function Rsvp({ token, event: e, guest, googleLink, icsLink, gift }: Prop
           onChange={() => { setEditingFrom(state); setChoice(""); }}
           landed={state.ok}
         />
-        {/* Either answer, unlike the plate: somebody who cannot come may still want to chip in. */}
-        {present?.enabled && <GiftCard token={token} gift={present} />}
       </>
     );
   }
