@@ -191,7 +191,9 @@ export const copy = {
     // are still on the screen to read, so this says what happened and asks for nothing.
     copyFailed: "Copy it by hand",
     update: "Latest",
-    countNone: "Nobody has chipped in yet. Be the first.",
+    // Only once somebody has. "Nobody has chipped in yet. Be the first." went with the card
+    // it was on: it is a nudge, and a nudge about money on a birthday invitation is the one
+    // thing this was never going to do. Silence is the honest version of nobody.
     count: (n: number) => (n === 1 ? "1 person has chipped in." : `${n} people have chipped in.`),
     tick: "I've chipped in",
     ticked: "You've chipped in. Thank you.",
@@ -542,6 +544,15 @@ export const copy = {
       sent: (who: string) => `You sent ${who} their link`,
       opened: (who: string) => `${who} opened their invite`,
       reminded: (who: string) => `You reminded ${who}`,
+      // The gifts block, opened. A host could see that somebody opened their invite and that
+      // somebody replied, and nothing in between: whether anybody was reading the wish list at
+      // all is the question behind "should I have bothered".
+      tapIdeas: (who: string) => `${who} looked at the ideas`,
+      tapGroupGift: (who: string) => `${who} looked at the group gift`,
+      tapChipIn: (who: string) => `${who} opened how to chip in`,
+      // Said rather than done: no money moves through the app, and a host reading this should
+      // not think it has.
+      chippedIn: (who: string) => `${who} says they've chipped in`,
     },
     // Under a reply in the activity, in the guest's own words where they wrote any. The prefixes
     // match the guest list so the same fact reads the same way in both places.

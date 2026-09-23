@@ -1,5 +1,5 @@
 "use server";
-import { chipIn, getGift, unchip, type Gift } from "@/lib/guest/gift";
+import { chipIn, getGift, unchip, type Gift, noteGiftTap } from "@/lib/guest/gift";
 import { isValidToken } from "@/lib/tokens";
 import { copy } from "@/lib/copy";
 
@@ -31,4 +31,11 @@ export async function giftAction(_prev: GiftState, fd: FormData): Promise<GiftSt
         : copy.gift.failed,
     };
   }
+}
+
+// A tap on Ideas, Group gift or Chip in. Fire and forget: the client does not wait for it and
+// there is nothing to show if it fails, which is why it returns nothing at all rather than a
+// state the caller would have to hold.
+export async function tapAction(token: string, what: "ideas" | "group" | "chip"): Promise<void> {
+  await noteGiftTap(token, what);
 }

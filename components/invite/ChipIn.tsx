@@ -4,7 +4,7 @@ import Link from "next/link";
 import { copy } from "@/lib/copy";
 import { formatMoney, formatShortDate } from "@/lib/format";
 import type { Gift } from "@/lib/guest/gift";
-import { giftAction, type GiftState } from "@/app/i/[token]/gift-actions";
+import { giftAction, tapAction, type GiftState } from "@/app/i/[token]/gift-actions";
 import { useReply } from "./ReplyState";
 
 // Chipping in, inside the gifts block, behind a button.
@@ -28,11 +28,15 @@ export function ChipInSlot() {
   // No provider is the host's editor drawing the invite with nobody answering. A guest who has
   // not replied gets the same line they always did: the money is behind their answer.
   if (!ctx) return <p className="small">{copy.gift.blockHow}</p>;
-  const { token, status, gift, pretend } = ctx.reply;
-  if (!gift?.enabled) return null;
-  // Either answer, unlike the plate. Not being able to come and wanting to chip in are different
-  // things, and somebody who said no is often the keenest to send something.
-  if (status === "pending") return <p className="small">{copy.gift.blockHow}</p>;
+  const { token, gift, pretend } = ctx.reply;
+  // No reply needed. Money was kept behind the RSVP while this was a card shoved under it, where
+  // it interrupted somebody deciding whether to come. It is a quiet line inside the gifts block
+  // now, behind a button, so it asks nothing of anybody who has not gone looking for it, and
+  // somebody who wants to send something before they know their own plans can.
+  //
+  // Any answer or none, unlike the plate. Not being able to come and wanting to chip in are
+  // different things, and somebody who has said no is often the keenest to send something.
+  if (!gift?.enabled) return <p className="small">{copy.gift.blockHow}</p>;
   return <ChipIn token={token} gift={gift} pretend={pretend} />;
 }
 
@@ -63,7 +67,16 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
       <div className="chip-open">
         {/* Quiet. It is an optional disclosure on a card that is otherwise reading matter, and
             a full width red button inside it was the loudest thing on the invite. */}
-        <button type="button" className="pbtn small quiet" onClick={() => setOpen(true)}>{copy.gift.chipIn}</button>
+        <button
+          type="button"
+          className="pbtn small quiet"
+          onClick={() => {
+            setOpen(true);
+            if (token && !pretend) void tapAction(token, "chip");
+          }}
+        >
+          {copy.gift.chipIn}
+        </button>
         {g.chipped_in && <p className="small done">{copy.gift.ticked}</p>}
         {organiser}
       </div>
@@ -94,7 +107,10 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
         <p className="latest"><span className="ql">{copy.gift.update}</span> {g.latest_update}</p>
       )}
 
-      <p className="small">{g.chipped_count === 0 ? copy.gift.countNone : copy.gift.count(g.chipped_count)}</p>
+      {/* Only once somebody has. "Nobody has chipped in yet. Be the first." is a nudge, and a
+          nudge about money on a birthday invitation is the one thing this card was never going to
+          do. Silence is the honest version of nobody. */}
+      {g.chipped_count > 0 && <p className="small">{copy.gift.count(g.chipped_count)}</p>}
 
       {g.chipped_in ? (
         <form {...(pretend
