@@ -251,6 +251,12 @@
    for the ideas rather than the bank. */
 .gifts .chip-open, .gifts .chip-panel { display: grid; justify-items: center; gap: 10px; width: 100%; margin-top: 12px; }
 .gifts .chip-panel { gap: 12px; }
+/* The tick and its undo, centred on the card rather than on the form around them.
+   The form is only as wide as its widest child, which is the thank-you line, so a narrower
+   button inside it sat at that line's left edge: measured 18px left of the card's middle, which
+   is exactly the amount that reads as a mistake without reading as a layout. Full width and
+   centre the children, so the button lines up with everything above it whatever it says. */
+.gifts .chip-panel form { display: grid; justify-items: center; gap: 8px; width: 100%; }
 /* The PayID and the thing that copies it, on one line, the symbol at the end where every other
    app puts it. The details take the room they need and the symbol keeps its own width, so a BSB
    over two lines pushes the symbol down rather than squashing itself. */

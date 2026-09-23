@@ -191,10 +191,6 @@ export const copy = {
     // are still on the screen to read, so this says what happened and asks for nothing.
     copyFailed: "Copy it by hand",
     update: "Latest",
-    // Only once somebody has. "Nobody has chipped in yet. Be the first." went with the card
-    // it was on: it is a nudge, and a nudge about money on a birthday invitation is the one
-    // thing this was never going to do. Silence is the honest version of nobody.
-    count: (n: number) => (n === 1 ? "1 person has chipped in." : `${n} people have chipped in.`),
     tick: "I've chipped in",
     ticked: "You've chipped in. Thank you.",
     untick: "Actually, I haven't",

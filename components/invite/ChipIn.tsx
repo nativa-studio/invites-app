@@ -102,11 +102,11 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
         <p className="latest"><span className="ql">{copy.gift.update}</span> {g.latest_update}</p>
       )}
 
-      {/* Only once somebody has. "Nobody has chipped in yet. Be the first." is a nudge, and a
-          nudge about money on a birthday invitation is the one thing this card was never going to
-          do. Silence is the honest version of nobody. */}
-      {g.chipped_count > 0 && <p className="small">{copy.gift.count(g.chipped_count)}</p>}
-
+      {/* No count. "1 person has chipped in" is the organiser's bookkeeping read out to a guest
+          who has just been shown a PayID, and both of the numbers it can say are wrong to put
+          there: a small one reads as nobody is doing this, a big one as everybody has and you
+          have not. Who has chipped in is on the organiser's own page, where it is somebody's job
+          rather than somebody's business. */}
       {g.chipped_in ? (
         <form {...(pretend
           ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => { ev.preventDefault(); setLocal((v) => ({ ...v, chipped_in: false, chipped_count: Math.max(0, v.chipped_count - 1) })); } }
