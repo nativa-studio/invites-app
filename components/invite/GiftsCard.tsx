@@ -30,8 +30,15 @@ export function GiftsCard({ e, off }: {
     <div className={`pcard cream tilt-l gifts${off ? " off" : ""}`} data-section="gifts">
       <div className="tape cross" />
       <div className="tape over sky" />
-      <div className="label red">{copy.sections.gifts}</div>
-      <GiftIcon size={36} />
+      {/* The present is the heading. "Gifts" sat above it saying in a word what the picture
+          already says, on a card whose first sentence is about gifts anyway. Marcia: "remove the
+          word gift keep only the gift symbol."
+      
+          The name moves onto the symbol rather than going away. Every icon in this set is
+          aria-hidden, being decoration beside a label, so dropping the label would have left this
+          card with nothing to announce itself by: a screen reader would meet an unnamed box. The
+          span is what carries the name now, which is the literal truth of what happened here. */}
+      <span role="img" aria-label={copy.sections.gifts}><GiftIcon size={36} /></span>
 
       <GiftsContent e={e} editing={editing} />
 
