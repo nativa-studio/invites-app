@@ -251,9 +251,19 @@
    for the ideas rather than the bank. */
 .gifts .chip-open, .gifts .chip-panel { display: grid; justify-items: center; gap: 10px; width: 100%; margin-top: 12px; }
 .gifts .chip-panel { gap: 12px; }
-/* Copy, under the details it copies rather than beside them: a BSB and an account number wrap on
-   a phone, and a button sharing that line pushes them into three. */
-.gifts .howto .copy { justify-self: start; margin-top: 4px; }
+/* The PayID and the thing that copies it, on one line, the symbol at the end where every other
+   app puts it. The details take the room they need and the symbol keeps its own width, so a BSB
+   over two lines pushes the symbol down rather than squashing itself. */
+.gifts .pay-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; width: 100%; }
+/* A symbol with no word on it still has to be a target. 44px is the smallest square a thumb finds
+   reliably, and the icon inside it is 20. */
+.gifts .copy {
+  flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin: -10px -8px -10px 0;
+  border: 0; background: none; padding: 0; cursor: pointer;
+  color: color-mix(in srgb, var(--navy) 70%, var(--paper));
+}
+.gifts .copy:hover { color: var(--navy); }
 
 /* The organiser's page. Cards down a column, nothing tilted: it is a job to work through rather
    than an invite to enjoy, and a tilted form is harder to fill in on a phone. */

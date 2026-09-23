@@ -61,7 +61,9 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
   if (!open) {
     return (
       <div className="chip-open">
-        <button type="button" className="pbtn primary" onClick={() => setOpen(true)}>{copy.gift.chipIn}</button>
+        {/* Quiet. It is an optional disclosure on a card that is otherwise reading matter, and
+            a full width red button inside it was the loudest thing on the invite. */}
+        <button type="button" className="pbtn small quiet" onClick={() => setOpen(true)}>{copy.gift.chipIn}</button>
         {g.chipped_in && <p className="small done">{copy.gift.ticked}</p>}
         {organiser}
       </div>
@@ -77,10 +79,14 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
       {g.chip_in_by && <p className="small">{copy.gift.by(formatShortDate(g.chip_in_by))}</p>}
 
       <div className="howto">
-        <span className="ql">{copy.gift.howTo}</span>
-        {/* Whitespace kept, because bank details are four lines and a BSB is not a sentence. */}
-        <p className="pay">{g.pay_details}</p>
-        <Copy what={g.pay_details ?? ""} />
+        {/* No "How to chip in" over it. The box is inside Group gift, behind a button marked Chip
+            in, and holds a line beginning PayID: three labels deep for one short line of bank
+            details, and the last of the three said nothing the other two had not. */}
+        <div className="pay-row">
+          {/* Whitespace kept, because bank details are four lines and a BSB is not a sentence. */}
+          <p className="pay">{g.pay_details}</p>
+          <Copy what={g.pay_details ?? ""} />
+        </div>
         {g.pay_reference && <p className="small">{copy.gift.reference(g.pay_reference)}</p>}
       </div>
 
@@ -118,7 +124,9 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
           <button className="pbtn primary" type="submit" disabled={pending}>{copy.gift.send}</button>
         </form>
       ) : (
-        <button type="button" className="pbtn primary" onClick={() => setSaying(true)}>{copy.gift.tick}</button>
+        // Quiet too: telling the organiser you have paid them is a note, not the moment the
+        // money moves. Done, which actually writes it, keeps the weight.
+        <button type="button" className="pbtn small quiet" onClick={() => setSaying(true)}>{copy.gift.tick}</button>
       )}
 
       {state.error && <div className="err" role="alert">{state.error}</div>}
@@ -130,19 +138,28 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
 // One tap to take the PayID away with you.
 //
 // Reading a phone number off one app and typing it into your bank is where a digit gets dropped,
-// and a dropped digit in a PayID is somebody else's money. The button says what happened rather
-// than flashing: "Copied" stays until the next tap, because a confirmation that vanishes before
-// you look up from the keyboard has confirmed nothing.
+// and a dropped digit in a PayID is somebody else's money.
 //
-// Wrapped, because the clipboard is refused outside a secure context and in some in-app browsers.
-// Refused, the button says so and the details are still on the screen to read.
+// The symbol every other app uses for this, beside the thing it copies, rather than a button
+// reading "Copy": a word is a thing to read and this is a thing to recognise. It becomes a tick
+// when it has worked, the same convention again, and the tick stays until the next tap, because
+// a confirmation that fades before you look up from the keyboard has confirmed nothing.
+//
+// The name is on the button rather than in it, since there is no text to read it from. It says
+// what will happen, then what happened, so a screen reader is not handed a nameless button.
+//
+// Wrapped, because the clipboard is refused outside a secure context and in some in-app
+// browsers. Refused, the label says to copy it by hand and the details are still on the screen.
 function Copy({ what }: { what: string }) {
   const [said, setSaid] = useState<"" | "done" | "no">("");
   if (!what) return null;
+  const label = said === "done" ? copy.gift.copied : said === "no" ? copy.gift.copyFailed : copy.gift.copy;
   return (
     <button
       type="button"
-      className="pbtn small copy"
+      className="copy"
+      aria-label={label}
+      title={label}
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(what);
@@ -152,7 +169,12 @@ function Copy({ what }: { what: string }) {
         }
       }}
     >
-      {said === "done" ? copy.gift.copied : said === "no" ? copy.gift.copyFailed : copy.gift.copy}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        {said === "done"
+          ? <path d="M20 6 9 17l-5-5" />
+          : <><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></>}
+      </svg>
     </button>
   );
 }
