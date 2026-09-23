@@ -29,7 +29,19 @@ const CHOICES: Record<string, readonly string[]> = {
   ask_party_mode: ["single", "split"],
   status: ["draft", "live", "thanks", "archived"],
 };
-const SWITCHES = ["siblings_welcome", "ask_names", "ask_allergies", "ask_dietary", "ask_accessibility", "ask_emergency", "plate_enabled", "plate_block", "gift_block", "group_link_enabled", "save_the_date", "group_gift_enabled", "show_details", "show_runsheet", "show_good_to_know", "show_after", "show_signoff"] as const;
+// Every boolean a panel can send. A switch missing from this list is written nowhere: the form
+// sends it, the action walks a list it is not on, and the row keeps what it had while the screen
+// says Saving and then Saved. show_gifts was missing from the day the gifts block was added, so
+// Give gifts their own block had never once worked. Marcia ticked it, saved, and got the card
+// back still saying "Not on the invite".
+const SWITCHES = ["siblings_welcome", "ask_names", "ask_allergies", "ask_dietary", "ask_accessibility", "ask_emergency", "plate_enabled", "plate_block", "gift_block", "group_link_enabled", "save_the_date", "group_gift_enabled", "show_details", "show_gifts", "show_runsheet", "show_good_to_know", "show_after", "show_signoff"] as const;
+
+// Everything the buckets above between them know how to write, plus the two that live on
+// group_gift. Nothing else can be saved, so nothing else should be declared.
+const HANDLED: ReadonlySet<string> = new Set<string>([
+  ...TEXT, ...DATES, ...TIMES, ...Object.keys(CHOICES), ...SWITCHES,
+  "gift_description", "gift_target",
+]);
 
 // Every form says which fields it owns, in a hidden `_fields` input, and only those are written.
 //
@@ -58,6 +70,12 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
   const supabase = await createClient();
   const { data: claims } = await supabase.auth.getClaims();
   if (!claims?.claims) return { error: "Please sign in again." };
+
+  // A field a panel declares and this action cannot write is the fault the manifest exists to
+  // prevent, arrived at from the other end: the host is told it saved and nothing moved. Caught
+  // here and named, so the next one costs a sentence rather than a fortnight of somebody flicking
+  // a switch that does nothing.
+  const unhandled = [...own].filter((k) => !HANDLED.has(k)).sort();
 
   const patch: Record<string, unknown> = {};
   for (const k of TEXT) if (own.has(k)) patch[k] = String(fd.get(k) ?? "").trim() || null;
@@ -116,7 +134,9 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
     if (giftError) missed.push("gift_description");
   }
 
-  const note = missed.length ? copy.host.savedWithout(missed) : undefined;
+  const note = [...missed, ...unhandled].length
+    ? copy.host.savedWithout([...missed, ...unhandled])
+    : undefined;
   revalidateEvent(id);
   return { saved: true, note };
 }
