@@ -48,9 +48,6 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
   const [local, setLocal] = useState<Gift>(gift);
   const g = pretend ? local : state.gift ?? gift;
   const [open, setOpen] = useState(false);
-  // The amount box opens on tapping the tick rather than sitting there, because the amount is
-  // optional and an open box with a cursor in it does not read as optional.
-  const [saying, setSaying] = useState(false);
 
   const organiser = g.is_organiser
     ? <Link className="pbtn small" href={`/i/${token}/organiser`}>{copy.organiser.title}</Link>
@@ -83,12 +80,10 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
     );
   }
 
-  const amount = formatMoney(g.suggested_amount);
-
   return (
     <div className="chip-panel">
       {g.message && <p className="para">{g.message}</p>}
-      {g.suggested_amount != null && <p className="small">{copy.gift.suggested(amount)}</p>}
+      {g.suggested_amount != null && <p className="small">{copy.gift.suggested(formatMoney(g.suggested_amount))}</p>}
       {g.chip_in_by && <p className="small">{copy.gift.by(formatShortDate(g.chip_in_by))}</p>}
 
       <div className="howto">
@@ -114,35 +109,27 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
 
       {g.chipped_in ? (
         <form {...(pretend
-          ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => { ev.preventDefault(); setLocal((v) => ({ ...v, chipped_in: false, my_amount: null, chipped_count: Math.max(0, v.chipped_count - 1) })); } }
+          ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => { ev.preventDefault(); setLocal((v) => ({ ...v, chipped_in: false, chipped_count: Math.max(0, v.chipped_count - 1) })); } }
           : { action: act })}>
           <input type="hidden" name="token" value={token} />
           <input type="hidden" name="what" value="unchip" />
-          <p className="done">{copy.gift.ticked}{g.my_amount != null && ` ${formatMoney(g.my_amount)}.`}</p>
+          <p className="done">{copy.gift.ticked}</p>
           <button className="pbtn small" type="submit" disabled={pending}>{copy.gift.untick}</button>
         </form>
-      ) : saying ? (
-        <form className="chipin" {...(pretend
-          ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => {
-              ev.preventDefault();
-              const raw = String(new FormData(ev.currentTarget).get("amount") ?? "").replace(/[^0-9.]/g, "");
-              const said = raw === "" || Number.isNaN(Number(raw)) ? null : Number(raw);
-              setLocal((v) => ({ ...v, chipped_in: true, my_amount: said, chipped_count: v.chipped_count + 1 }));
-            } }
+      ) : (
+        /* One tap, no second step. It asked How much, optional, with a Done under it: a form to
+           fill in to say you had already done the thing, and the one field on it was one the
+           guest did not have to answer and the host could not rely on. What the tick is for is
+           the organiser knowing who to stop asking, and that does not need a number. */
+        <form {...(pretend
+          ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => { ev.preventDefault(); setLocal((v) => ({ ...v, chipped_in: true, chipped_count: v.chipped_count + 1 })); } }
           : { action: act })}>
           <input type="hidden" name="token" value={token} />
           <input type="hidden" name="what" value="chip" />
-          <div className="q">
-            <label htmlFor="amount">{copy.gift.amountLabel}</label>
-            <input id="amount" name="amount" type="text" inputMode="decimal" autoComplete="off" placeholder={amount || "$20"} />
-            <span className="hint">{copy.gift.amountHint}</span>
-          </div>
-          <button className="pbtn primary" type="submit" disabled={pending}>{copy.gift.send}</button>
+          {/* Quiet: telling the organiser you have paid them is a note, not the moment the money
+              moves, and the money moved in somebody's banking app a minute ago. */}
+          <button className="pbtn small quiet" type="submit" disabled={pending}>{copy.gift.tick}</button>
         </form>
-      ) : (
-        // Quiet too: telling the organiser you have paid them is a note, not the moment the
-        // money moves. Done, which actually writes it, keeps the weight.
-        <button type="button" className="pbtn small quiet" onClick={() => setSaying(true)}>{copy.gift.tick}</button>
       )}
 
       {state.error && <div className="err" role="alert">{state.error}</div>}
