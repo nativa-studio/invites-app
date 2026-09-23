@@ -84,3 +84,14 @@ export const saveGift = (token: string, v: {
 
 export const postGiftUpdate = (token: string, text: string) =>
   callGuestRpc<GiftBoard>("gift_post_update", { p_token: token, p_text: text });
+
+/** A guest opened one of the parts of the gifts block. Measuring only: it never throws and never
+ *  blocks the page, the same rule the calendar tap and the group link open follow. */
+export async function noteGiftTap(token: string, what: "ideas" | "group" | "chip"): Promise<void> {
+  if (!isValidToken(token)) return;
+  try {
+    await callGuestRpc<null>("note_gift_tap", { p_token: token, p_what: what });
+  } catch {
+    // Measuring is not worth failing for.
+  }
+}

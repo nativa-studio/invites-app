@@ -19,7 +19,8 @@ import { saysNoAllergy } from "@/lib/allergies";
 // are stamped once, merged and sorted. Nothing is counted twice, because no kind appears in both.
 export type Happening = {
   at: string;
-  kind: "yes" | "no" | "joined" | "calendar" | "token" | "sent" | "opened" | "reminded" | "groupOpen";
+  kind: "yes" | "no" | "joined" | "calendar" | "token" | "sent" | "opened" | "reminded" | "groupOpen"
+    | "tapIdeas" | "tapGroupGift" | "tapChipIn" | "chippedIn";
   who: string;
   /** The group they are labelled with, for the tag beside the line. Null for anybody who has not
    *  been put in one, which shows nothing rather than the words "no group": the tag is there to
@@ -53,6 +54,16 @@ type Row = {
 };
 
 type Named = { id: string; name: string; groups: string[] | null };
+
+/** What a guest did inside the gifts block. Three of them are a tap on one of its parts, counted
+ *  and moved rather than repeated, the way a group link open is; the fourth is somebody saying
+ *  they have paid, which happens once and is deleted if they take it back. */
+const GIFT_KINDS: Record<string, Happening["kind"] | undefined> = {
+  tap_ideas: "tapIdeas",
+  tap_group_gift: "tapGroupGift",
+  tap_chip_in: "tapChipIn",
+  chipped_in: "chippedIn",
+};
 
 // One group per guest in the app, even though the column holds a list: the picker on a guest's
 // row sets one. First is therefore the one, and a guest who somehow carries two is labelled with
@@ -94,11 +105,17 @@ export const loadActivity = cache(async (eventId: string, guests: GuestRow[]): P
       ? (row.detail === "yes" ? "yes" : row.detail === "no" ? "no" : null)
       : row.kind === "joined" || row.kind === "calendar" || row.kind === "token"
         ? (row.kind as Happening["kind"])
-        : null;
+        // The gifts block, opened. The database names these for the column they are stored in;
+        // the feed names them for the sentence it writes.
+        : GIFT_KINDS[row.kind] ?? null;
     if (!kind) continue;
     const reply = kind === "yes" || kind === "no";
     const said = reply && g && !noted.has(g.id) ? (noted.add(g.id), saidBy(byId.get(g.id))) : [];
-    out.push({ at: row.at, kind, who, group: groupOf(g), ...(said.length ? { said } : {}) });
+    out.push({
+      at: row.at, kind, who, group: groupOf(g),
+      ...(said.length ? { said } : {}),
+      ...(row.tally && row.tally > 1 ? { times: row.tally } : {}),
+    });
   }
 
   for (const g of guests) {

@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { tapAction } from "@/app/i/[token]/gift-actions";
+import { useReply } from "./ReplyState";
 
 // Ideas and Group gift, side by side, one open at a time.
 //
@@ -21,6 +23,13 @@ export function GiftParts({ parts }: {
 }) {
   const shown = parts.filter((p) => p.panel);
   const [open, setOpen] = useState<string | null>(null);
+  // Only on the way open, and only for somebody holding their own link. Shutting a part is not a
+  // thing a host needs to know, the group link has no token until somebody replies, and the
+  // editor has no provider at all. Fire and forget: nothing on the screen waits for it, and a
+  // measurement that can hold up an invitation is worse than no measurement.
+  const ctx = useReply();
+  const token = ctx?.reply.token ?? "";
+  const pretend = ctx?.reply.pretend;
   if (shown.length === 0) return null;
   const here = shown.find((p) => p.key === open);
 
@@ -34,7 +43,11 @@ export function GiftParts({ parts }: {
             className={`label sky small-label tab${open === p.key ? " on" : ""}`}
             aria-expanded={open === p.key}
             aria-controls="gift-part-panel"
-            onClick={() => setOpen(open === p.key ? null : p.key)}
+            onClick={() => {
+              const next = open === p.key ? null : p.key;
+              setOpen(next);
+              if (next && token && !pretend) void tapAction(token, p.key as "ideas" | "group");
+            }}
           >
             {p.label}
           </button>
