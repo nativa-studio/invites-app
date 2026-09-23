@@ -7,7 +7,6 @@ import type { PublicEvent } from "@/lib/db/types";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
-import { GiftCard } from "./GiftCard";
 import { useReply } from "./ReplyState";
 import type { Plate } from "@/lib/guest/plate";
 import type { Gift } from "@/lib/guest/gift";
@@ -73,7 +72,6 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
             one screen built to answer "what do my guests actually get" the one screen where a
             host could not find out. There is no guest row and no token here, so the claiming and
             the ticking happen in the page and are gone when it reloads. */}
-        {gift?.enabled && <GiftCard token={PREVIEW_TOKEN} gift={gift} pretend />}
       </>
     );
   }

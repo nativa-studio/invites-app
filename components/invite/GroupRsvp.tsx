@@ -8,7 +8,6 @@ import { groupRsvpAction, type GroupState } from "@/app/e/[slug]/actions";
 import { Bolt } from "@/components/art/icons";
 import { NoteQuestion, WhoQuestion, YesQuestions } from "./Questions";
 import { ThanksCard } from "./Thanks";
-import { GiftCard } from "./GiftCard";
 import { useReply } from "./ReplyState";
 
 // The reply on a group link. The same card a guest with their own link answers on, asking the
@@ -32,7 +31,6 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
   }, [state, report]);
 
   if (replied && !editing) {
-    const gift = state.ok ? state.gift : null;
     return (
       <>
         <ThanksCard
@@ -44,9 +42,6 @@ export function GroupRsvp({ slug, group, event: e }: { slug: string; group?: str
           onChange={() => { setEditingFrom(state); setChoice(""); }}
           landed={state.ok}
         />
-        {/* The plate is drawn further down the invite, by its own part. The gift stays here: it
-            is for either answer, since somebody who cannot come may still want to chip in. */}
-        {gift?.enabled && state.ok && <GiftCard token={state.token} gift={gift} />}
       </>
     );
   }

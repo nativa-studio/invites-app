@@ -1,6 +1,7 @@
 import React from "react";
 import { copy } from "@/lib/copy";
 import type { PublicEvent } from "@/lib/db/types";
+import { ChipInSlot } from "./ChipIn";
 
 // What the gifts block says, once, for every layout that draws one.
 //
@@ -81,7 +82,12 @@ export function GiftsContent({ e, editing }: {
               own quietly cost a guest the one fact they need before chipping in. Without a
               sentence of their own, blockWhat above already names it. */}
           {said && group && <p className="para ideas">{group}</p>}
-          <p className="small">{copy.gift.blockHow}</p>
+          {/* The money, one tap inside the block it belongs to. It decides for itself what to
+              show: the button once a guest has answered and the organiser has said where the
+              money goes, and otherwise the line saying it comes with their reply. One slot, so
+              a guest can never be told the details come later while a button offering them sits
+              underneath. */}
+          <ChipInSlot />
         </details>
       )}
     </>

@@ -146,7 +146,7 @@ export default async function Preview({
       {/* The answer lives here in try as a guest, so the plate part below the info booth draws
           itself the way it does on a real invite. Editing draws its own card instead and answers
           to no reply, so it needs no provider at all. */}
-      <ReplyProvider initial={{ token: token ?? "", status: "pending", plate: null, gift: null, pretend: true }}>
+      <ReplyProvider initial={{ token: token ?? "", status: "pending", plate: null, gift, pretend: true }}>
         <InviteBody
           e={e}
           greeting={greeting}

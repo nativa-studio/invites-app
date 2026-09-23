@@ -1,0 +1,158 @@
+"use client";
+import { useActionState, useState } from "react";
+import Link from "next/link";
+import { copy } from "@/lib/copy";
+import { formatMoney, formatShortDate } from "@/lib/format";
+import type { Gift } from "@/lib/guest/gift";
+import { giftAction, type GiftState } from "@/app/i/[token]/gift-actions";
+import { useReply } from "./ReplyState";
+
+// Chipping in, inside the gifts block, behind a button.
+//
+// It was a card of its own under the reply. That put the group gift on the invite twice: the
+// block announced it and named the present, and then a second card a screen down said the same
+// thing again with the bank details under it. Marcia: "delete the stand alone chip in block, add
+// a button on chip in where the person clicks and they see the block with the how to chip in
+// info."
+//
+// So this is the one place the group gift lives, and the money is one tap inside it. Shut to
+// begin with for the same reason the rest of the block is: somebody reading about the present is
+// not necessarily reaching for their phone banking, and bank details sitting open under a
+// birthday invitation read like a bill.
+//
+// Nothing here is fetched. The gift arrives with the guest's own reply through ReplyState, the
+// same way the plate board does, which is what lets this sit in the gifts block rather than
+// under the reply that knows the answer.
+export function ChipInSlot() {
+  const ctx = useReply();
+  // No provider is the host's editor drawing the invite with nobody answering. A guest who has
+  // not replied gets the same line they always did: the money is behind their answer.
+  if (!ctx) return <p className="small">{copy.gift.blockHow}</p>;
+  const { token, status, gift, pretend } = ctx.reply;
+  if (!gift?.enabled) return null;
+  // Either answer, unlike the plate. Not being able to come and wanting to chip in are different
+  // things, and somebody who said no is often the keenest to send something.
+  if (status === "pending") return <p className="small">{copy.gift.blockHow}</p>;
+  return <ChipIn token={token} gift={gift} pretend={pretend} />;
+}
+
+function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?: boolean }) {
+  const [state, act, pending] = useActionState<GiftState, FormData>(giftAction, { gift });
+  // The host trying their own invite: the tick works and nothing is written. Same rule as the
+  // plate board, and the reason it is not simply switched off is that a host checking their own
+  // invite wants to see what a guest sees, working.
+  const [local, setLocal] = useState<Gift>(gift);
+  const g = pretend ? local : state.gift ?? gift;
+  const [open, setOpen] = useState(false);
+  // The amount box opens on tapping the tick rather than sitting there, because the amount is
+  // optional and an open box with a cursor in it does not read as optional.
+  const [saying, setSaying] = useState(false);
+
+  const organiser = g.is_organiser
+    ? <Link className="pbtn small" href={`/i/${token}/organiser`}>{copy.organiser.title}</Link>
+    : null;
+
+  // Nothing to ask anybody to do until the organiser has said where the money goes. The organiser
+  // still gets their own link, because nothing else leads to the page where they fill that in.
+  if (!g.ready) {
+    return organiser ?? <p className="small">{g.organiser ? copy.gift.sorting(g.organiser) : copy.gift.sortingNoName}</p>;
+  }
+
+  if (!open) {
+    return (
+      <div className="chip-open">
+        <button type="button" className="pbtn primary" onClick={() => setOpen(true)}>{copy.gift.chipIn}</button>
+        {g.chipped_in && <p className="small done">{copy.gift.ticked}</p>}
+        {organiser}
+      </div>
+    );
+  }
+
+  const amount = formatMoney(g.suggested_amount);
+
+  return (
+    <div className="chip-panel">
+      {g.message && <p className="para">{g.message}</p>}
+      {g.suggested_amount != null && <p className="small">{copy.gift.suggested(amount)}</p>}
+      {g.chip_in_by && <p className="small">{copy.gift.by(formatShortDate(g.chip_in_by))}</p>}
+
+      <div className="howto">
+        <span className="ql">{copy.gift.howTo}</span>
+        {/* Whitespace kept, because bank details are four lines and a BSB is not a sentence. */}
+        <p className="pay">{g.pay_details}</p>
+        <Copy what={g.pay_details ?? ""} />
+        {g.pay_reference && <p className="small">{copy.gift.reference(g.pay_reference)}</p>}
+      </div>
+
+      {g.latest_update && (
+        <p className="latest"><span className="ql">{copy.gift.update}</span> {g.latest_update}</p>
+      )}
+
+      <p className="small">{g.chipped_count === 0 ? copy.gift.countNone : copy.gift.count(g.chipped_count)}</p>
+
+      {g.chipped_in ? (
+        <form {...(pretend
+          ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => { ev.preventDefault(); setLocal((v) => ({ ...v, chipped_in: false, my_amount: null, chipped_count: Math.max(0, v.chipped_count - 1) })); } }
+          : { action: act })}>
+          <input type="hidden" name="token" value={token} />
+          <input type="hidden" name="what" value="unchip" />
+          <p className="done">{copy.gift.ticked}{g.my_amount != null && ` ${formatMoney(g.my_amount)}.`}</p>
+          <button className="pbtn small" type="submit" disabled={pending}>{copy.gift.untick}</button>
+        </form>
+      ) : saying ? (
+        <form className="chipin" {...(pretend
+          ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => {
+              ev.preventDefault();
+              const raw = String(new FormData(ev.currentTarget).get("amount") ?? "").replace(/[^0-9.]/g, "");
+              const said = raw === "" || Number.isNaN(Number(raw)) ? null : Number(raw);
+              setLocal((v) => ({ ...v, chipped_in: true, my_amount: said, chipped_count: v.chipped_count + 1 }));
+            } }
+          : { action: act })}>
+          <input type="hidden" name="token" value={token} />
+          <input type="hidden" name="what" value="chip" />
+          <div className="q">
+            <label htmlFor="amount">{copy.gift.amountLabel}</label>
+            <input id="amount" name="amount" type="text" inputMode="decimal" autoComplete="off" placeholder={amount || "$20"} />
+            <span className="hint">{copy.gift.amountHint}</span>
+          </div>
+          <button className="pbtn primary" type="submit" disabled={pending}>{copy.gift.send}</button>
+        </form>
+      ) : (
+        <button type="button" className="pbtn primary" onClick={() => setSaying(true)}>{copy.gift.tick}</button>
+      )}
+
+      {state.error && <div className="err" role="alert">{state.error}</div>}
+      {organiser}
+    </div>
+  );
+}
+
+// One tap to take the PayID away with you.
+//
+// Reading a phone number off one app and typing it into your bank is where a digit gets dropped,
+// and a dropped digit in a PayID is somebody else's money. The button says what happened rather
+// than flashing: "Copied" stays until the next tap, because a confirmation that vanishes before
+// you look up from the keyboard has confirmed nothing.
+//
+// Wrapped, because the clipboard is refused outside a secure context and in some in-app browsers.
+// Refused, the button says so and the details are still on the screen to read.
+function Copy({ what }: { what: string }) {
+  const [said, setSaid] = useState<"" | "done" | "no">("");
+  if (!what) return null;
+  return (
+    <button
+      type="button"
+      className="pbtn small copy"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(what);
+          setSaid("done");
+        } catch {
+          setSaid("no");
+        }
+      }}
+    >
+      {said === "done" ? copy.gift.copied : said === "no" ? copy.gift.copyFailed : copy.gift.copy}
+    </button>
+  );
+}

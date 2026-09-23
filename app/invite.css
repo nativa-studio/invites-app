@@ -237,15 +237,23 @@
    The how-to-pay block is boxed because it is the one part a guest will come back to with their
    banking app open, and because bank details are four lines rather than a sentence: pre-wrap
    keeps the BSB on its own line instead of running it into the account number. */
-.gift .howto, .gift .latest {
+.gifts .howto, .gifts .latest {
   width: 100%; margin: 0; padding: 12px 14px; border-radius: 10px;
   border: 2px solid var(--navy); background: color-mix(in srgb, var(--crm) 55%, var(--paper));
   display: grid; gap: 4px; text-align: left;
 }
-.gift .latest { background: color-mix(in srgb, var(--yel) 30%, var(--paper)); }
-.gift .pay { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15.5px; line-height: 1.45; }
-.gift .done { margin: 0; font-family: var(--font-display); font-size: 17px; }
-.gift .chipin { display: grid; gap: 12px; width: 100%; }
+.gifts .latest { background: color-mix(in srgb, var(--yel) 30%, var(--paper)); }
+.gifts .pay { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15.5px; line-height: 1.45; }
+.gifts .done { margin: 0; font-family: var(--font-display); font-size: 17px; }
+.gifts .chipin { display: grid; gap: 12px; width: 100%; }
+/* Chipping in, inside the group gift. Shut behind a button, because bank details sitting open
+   under a birthday invitation read like a bill, and because most people opening this have come
+   for the ideas rather than the bank. */
+.gifts .chip-open, .gifts .chip-panel { display: grid; justify-items: center; gap: 10px; width: 100%; margin-top: 12px; }
+.gifts .chip-panel { gap: 12px; }
+/* Copy, under the details it copies rather than beside them: a BSB and an account number wrap on
+   a phone, and a button sharing that line pushes them into three. */
+.gifts .howto .copy { justify-self: start; margin-top: 4px; }
 
 /* The organiser's page. Cards down a column, nothing tilted: it is a job to work through rather
    than an invite to enjoy, and a tilted form is harder to fill in on a phone. */
