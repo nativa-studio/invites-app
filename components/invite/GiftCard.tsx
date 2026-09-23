@@ -28,6 +28,17 @@ export function GiftCard({ token, gift, pretend }: { token: string; gift: Gift; 
   const [saying, setSaying] = useState(false);
 
   if (!g.enabled) return null;
+  // Nothing here until the organiser has said where the money goes. Until then this card carried
+  // the announcement a second time and a line saying the details were being sorted, which is a
+  // gift card with nothing on it sitting a screen below the gifts block that already said all of
+  // it. Marcia, looking at her own invite: "remove second gift block from after rsvp."
+  //
+  // The organiser still gets it, because the link to their own page is on this card and nothing
+  // else leads there. Hiding it from them would be hiding the way to fill in the very details
+  // that bring it back.
+  //
+  // Here rather than at the three places that draw this card, so the three cannot disagree.
+  if (!g.ready && !g.is_organiser) return null;
   const who = g.organiser;
   const amount = formatMoney(g.suggested_amount);
 
