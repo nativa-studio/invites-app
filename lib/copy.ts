@@ -358,7 +358,7 @@ export const copy = {
     // The only words about editing on the invite itself, and nobody sees them: it is the name a
     // screen reader reads out for the pencil, since a picture of a pencil has none.
     editThis: (what: string) => `Change ${what.toLowerCase()}`,
-    inviteHint: "This is your guests' invite, working. Press yes, open the blocks, try the buttons: nothing here is saved and nobody is counted. The pencil on a part is where you change it.",
+    inviteHint: "This is your guests' invite, working. Press yes, open the blocks, try the buttons: nothing here is saved and nobody is counted. The pencil on a part is where you change it, and Preview opens it full size with the envelope, the way it arrives.",
     tryWho: "you",
     partyTypeHeading: "Kind of party",
     partyTypeBlurb: "It decides which designs are offered first, and it set the reply's questions when you started. Changing it now only changes what is offered: every setting you have touched stays as you left it.",
@@ -377,6 +377,10 @@ export const copy = {
     newEventNext: "Your invite exists. Pick how it looks, then fill in the details and add your guests.",
     previewHint: "Exactly what a guest opens, on their phone. Nothing you tap here is counted.",
     openFull: "Open full size",
+    // Beside Sections, above the invite. Not a mode: the screen below it is already the guest's
+    // invite, and this is the same thing full size with the envelope still shut, which is the one
+    // part of what a guest gets that a working frame in a host screen cannot show.
+    previewFull: "Preview",
     // The illustrated strip's own two choices, shown only when it is the design in use.
     stripHeading: "Pictures and ink",
     stripHint: "The three drawings at the top of the invite, and the one colour everything is drawn in.",
