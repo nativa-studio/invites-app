@@ -8,31 +8,30 @@ import { InviteParts } from "./InviteParts";
 import { EditDrawer } from "./EditDrawer";
 import { Sheet } from "./Sheet";
 
-// The invite, and a way to edit it by pointing at it.
+// The invite, in the one place there is.
 //
-// The preview runs in a frame in pick mode, so a tap anywhere inside it sends back the name of
-// the part that was tapped. That opens a drawer holding just that part's wording and its show or
-// hide switch. Saving writes only those fields, then the frame reloads so what you are looking at
-// is what you just saved.
+// The frame holds the guest's invite, working. Press yes and the questions come, open the gifts
+// block, tap the address: it all does what it does for a guest, and none of it is saved. The one
+// thing on it that is not a guest's is the pencil in the corner of each part. Tap that and the
+// frame sends back which part it was, which opens a drawer holding that part's wording and its
+// show or hide switch. Saving writes only those fields, then the frame reloads, so what you are
+// looking at is what you just saved.
+//
+// There used to be four ways to look at this: editing, where every tap meant "change this" and
+// nothing on the invite could be used; Preview, where nothing could be changed; full size, in a
+// tab of its own; and a guest's real link. Marcia: "it's just too many options, it's a bit
+// confusing. I just want one place where the invite is." One screen, one control on it.
 //
 // Editing by pointing beats a tab of forty fields because the question answers itself: you do not
-// have to know that "what to bring" is the line that reads Wear, you tap the line that reads Wear.
-//
-// The same frame has a second setting: Preview, which is the invite as a guest gets it. Pick mode swallows every tap, which is right
-// while you are editing and wrong the moment you want to know what the thing you have built
-// actually does. As a guest nothing is tappable for editing, the envelope opens the way theirs
-// does, and the reply is the guest's own form: press yes, answer the questions, read the thank
-// you. Only the saving is held back, because a host is not a guest on their own list.
+// have to know that "what to bring" is the line that reads Wear, you tap the pencil on the line
+// that reads Wear.
 export function InviteEditor({ e }: { e: EventRow }) {
   const [open, setOpen] = useState<Section | null>(null);
   const [version, setVersion] = useState(0);
-  const [asGuest, setAsGuest] = useState(false);
   const [parts, setParts] = useState(false);
   const router = useRouter();
-  const src = asGuest
-    ? `/app/preview/${e.id}?as=guest&v=${version}`
-    : `/app/preview/${e.id}?pick=1&v=${version}`;
-  const full = asGuest ? `/app/preview/${e.id}?full=1&as=guest` : `/app/preview/${e.id}?full=1`;
+  // v is the reload: a save bumps it and the frame remounts on what was just written.
+  const src = `/app/preview/${e.id}?edit=1&v=${version}`;
 
   useEffect(() => {
     function onMessage(ev: MessageEvent) {
@@ -53,35 +52,17 @@ export function InviteEditor({ e }: { e: EventRow }) {
 
   return (
     <>
-      {/* Two ways to look at the same page, side by side, because the difference between them is
-          the difference between changing the invite and finding out what it does. Switching
-          remounts the frame, which is what makes the envelope open again on the way in. */}
-      <div className="modes" role="group" aria-label={copy.host.modeLabel}>
-        <button type="button" className={`mode ${asGuest ? "" : "on"}`} aria-pressed={!asGuest} onClick={() => setAsGuest(false)}>
-          {copy.host.modeEdit}
-        </button>
-        <button type="button" className={`mode ${asGuest ? "on" : ""}`} aria-pressed={asGuest} onClick={() => setAsGuest(true)}>
-          {copy.host.modeGuest}
-        </button>
-      </div>
-      <p className="hint">{asGuest ? copy.host.modeGuestHint : copy.host.modeEditHint}</p>
-      {/* Everything you can do to the invite is above the invite. The sections list and full size
-          both used to sit under the frame, which is a whole phone screen of scrolling away, and
-          both are things you reach for while looking at the thing they act on.
-          Sections while changing it, Start again while previewing, full size in both. */}
+      <p className="hint">{copy.host.inviteHint}</p>
+      {/* Tapping a pencil reaches every part that is on the invite, and none of the parts that
+          are not. This list reaches all of them, and is also the only place a part can be moved,
+          since there is no gap on the invite to tap to say "put it here". In a sheet, because it
+          is seven rows of switches and handles that a host opens on purpose and then shuts. */}
       <div className="actions">
-        {asGuest
-          ? <button type="button" className="btn small" onClick={() => setVersion((v) => v + 1)}>{copy.host.modeAgain}</button>
-          : <button type="button" className="btn small" onClick={() => setParts(true)}>{copy.host.partsOpen}</button>}
-        <a className="btn small" href={full} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
+        <button type="button" className="btn small" onClick={() => setParts(true)}>{copy.host.partsOpen}</button>
       </div>
       <div className="screen phone">
         <iframe key={src} src={src} title="Your invite" />
       </div>
-      {/* Tapping the invite reaches every part that is on it, and none of the parts that are not.
-          This list reaches all of them, and is also the only place a part can be moved, since
-          there is no gap on the invite to tap to say "put it here". In a sheet, because it is
-          seven rows of switches and handles that a host opens on purpose and then shuts. */}
       {parts && (
         <Sheet title={copy.host.partsHeading} blurb={copy.host.partsBlurb} onClose={() => setParts(false)}>
           <div className="sheet-body">

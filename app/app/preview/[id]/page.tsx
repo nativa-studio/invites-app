@@ -9,10 +9,10 @@ import { InviteBody, asLayout } from "@/components/invite/InviteBody";
 import { eventForRender } from "@/lib/db/events";
 import { googleCalendarLink } from "@/lib/calendar";
 import { getSiteUrl, inviteLink } from "@/lib/site-url";
-import { PickMode } from "@/components/host/PickMode";
-import { PreviewReply } from "@/components/invite/PreviewReply";
-import { PreviewPlate } from "@/components/invite/PreviewExtras";
+import { Pencils } from "@/components/host/Pencils";
+import { HostPlate } from "@/components/invite/HostPlate";
 import { GiftsCard } from "@/components/invite/GiftsCard";
+import { hasGifts } from "@/components/invite/GiftsContent";
 import { ReplyProvider } from "@/components/invite/ReplyState";
 import { TryReply } from "@/components/invite/TryReply";
 import { previewGift, previewPlate, previewWishes } from "@/lib/db/preview-extras";
@@ -23,21 +23,27 @@ import { loadEvent } from "@/lib/db/host";
 // way opening a real link would. Row level security does the guarding: the query returns nothing
 // unless the person signed in owns the event.
 //
-// It comes two ways. Editing, where a tap on any part names that part so the screen holding the
-// frame can open its drawer, and the reply is drawn rather than wired. And as a guest, where
-// nothing is tappable and the reply is the guest's own form, answers and thank you and calendar
-// buttons included, with only the last step held back because there is nobody to save it against.
+// One screen, not four. It used to come two ways, editing and as a guest, and the editing one had
+// a full size of its own, so a host had four things to choose between before they could change a
+// word. Marcia: "it's just too many options, it's a bit confusing."
+//
+// So this is the guest's invite, working: the reply is their own form, the blocks open, the
+// buttons go where they go, and only the saving is held back, because a host is not a guest on
+// their own list. ?edit=1 adds one thing to it, a pencil on each part, and takes one away, the
+// envelope, which a host does not want to sit through after every save.
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
-type Query = { layout?: string; show?: string; pick?: string; full?: string; as?: string };
+type Query = { layout?: string; show?: string; edit?: string; full?: string };
 
 export default async function Preview({
   params, searchParams,
 }: { params: Promise<{ id: string }>; searchParams: Promise<Query> }) {
   const { id } = await params;
-  const { layout, show, pick, full, as } = await searchParams;
+  const { layout, show, edit, full } = await searchParams;
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
-  const asGuest = as === "guest";
+  // The host's own invite, with the pencils on. Without it this route is the invite and nothing
+  // else, which is what the design sheet and the layout thumbnails show.
+  const editing = edit === "1";
   const supabase = await createClient();
   // loadEvent rather than a plain select, because the gifts block is not drawn from the events
   // row alone: the wish list is its own table and what the present is lives on group_gift, and
@@ -59,32 +65,24 @@ export default async function Preview({
     supabase.from("updates").select("body, posted_at").eq("event_id", id).order("posted_at", { ascending: false }),
     supabase.from("guests").select("name, token").eq("event_id", id).limit(1).maybeSingle(),
   ]);
-  // The plate and the gift. Read from the host's own rows, because a preview has no token to call
-  // the guest functions with.
+  // The plate, the gift and the crossings out, all three through the same functions a guest's
+  // invite goes through, so what this shows cannot disagree with what they get. Read from the
+  // host's own rows, because a preview has no token to call the guest functions with. See
+  // lib/db/preview-extras.ts.
   //
-  // The gift is fetched in both views, the editing one included. Without it the gifts block in the
-  // editor fell back to the line saying how to chip in comes with your reply, which stopped being
-  // true the day the money moved inside the block and out from behind the RSVP. So the host was
-  // reading a promise on their own invite that no guest is made any more: the two drawings of the
-  // same block disagreeing, which is the fault CLAUDE.md opens with. Marcia: "show how to chip in
-  // on invite."
+  // All three, always, now that there is one screen. Two of them used to be fetched only for the
+  // as-a-guest view, and the gifts block on the editing one therefore fell back to a line saying
+  // how to chip in comes with the reply, which had stopped being true. Two drawings of one block
+  // disagreeing is the fault CLAUDE.md opens with, and the surest way to stop it is to have one
+  // drawing.
   //
-  // Nothing is written from the editing view. The provider below is marked pretend, so the tick
-  // and the untick move on the screen and touch no row, the same as they do in try as a guest.
-  //
+  // Nothing is written from here. The provider below is marked pretend, so a tick moves on the
+  // screen and touches no row.
   // The plate stays behind that view, because the editor draws its own plate card from
   // PreviewExtras rather than the guest's board, and a query nobody reads is a query not worth
   // making.
   const row = event as EventRow;
-  const [plate, gift, wishes] = await Promise.all([
-    // All three through the same functions a guest's invite goes through, so what this shows
-    // cannot disagree with what they get. See lib/db/preview-extras.ts.
-    asGuest ? previewPlate(id) : null,
-    previewGift(id),
-    // Both views, like the gift. A host looking at their own list has to see the crossings out,
-    // since crossing one off is the thing they are about to do from the drawer behind this card.
-    previewWishes(id),
-  ]);
+  const [plate, gift, wishes] = await Promise.all([previewPlate(id), previewGift(id), previewWishes(id)]);
   // The Layout tab previews what you are about to save, not what is saved. Anything it hands over
   // in the query string wins over the stored row, so a switch you have just flicked shows here
   // before you commit to it. Absent means use what is stored.
@@ -112,58 +110,30 @@ export default async function Preview({
   // not leave a mark on somebody else's row. The Google button stays pointed straight at Google
   // for the same reason, rather than at our counting redirect.
   const previewIcs = token ? `/i/${token}/invite.ics?preview=1` : null;
-  const reply = asGuest
-    ? (
-      <TryReply
-        e={e}
-        who={who ?? copy.host.tryWho}
-        googleLink={googleCalendarLink(e, token ? inviteLink(await getSiteUrl(), token) : "")}
-        icsLink={previewIcs}
-        plate={plate}
-        gift={gift}
-      />
-    )
-    : (
-      <>
-        <PreviewReply e={e} who={who} />
-        {/* Drawn, and tappable, so the two parts of the invite guests write to can be edited the
-            same way as every other part: point at the card, change what it says. Off means no
-            card, the same rule the rest of the invite follows, and the switch that turns them
-            back on lives in the drawer and on their own tabs. */}
-        {/* Drawn here even with the block switched off, marked as not being on the invite.
-            The switch that turns it back on lives in the drawer behind this card and nothing
-            else opens that drawer, so hiding it the way the guest's page does would leave a
-            host looking at a setting they could no longer reach. Trying it as a guest is the
-            view that tells the truth, and there it is gone. */}
-      </>
-    );
-  // Picking means the host is editing, so the envelope starts open: a section they cannot see is
-  // a section they cannot tap. Trying it as a guest is the opposite: the envelope is half of what
-  // a guest gets, so it opens the way theirs does.
-  //
+  // The guest's own form, always. It is the one part of the invite whose whole point is what it
+  // does, and a drawn copy of it could not be pressed: a host wanting to know what their own
+  // questions felt like had to switch modes to find out. Press yes here and the questions come,
+  // the thank you comes, the plate board appears. None of it is saved and nobody is counted.
+  const reply = (
+    <TryReply
+      e={e}
+      who={who ?? copy.host.tryWho}
+      googleLink={googleCalendarLink(e, token ? inviteLink(await getSiteUrl(), token) : "")}
+      icsLink={previewIcs}
+      plate={plate}
+      gift={gift}
+    />
+  );
   // Opened full size, this is a whole page with no chrome on it, so there was no way out except
   // the browser's own back, which a phone hides once you scroll. The frames that show this same
   // route inside the host screens do not ask for it, and must not have it.
-  const here = (q: Record<string, string>) => {
-    const p = new URLSearchParams({ full: "1", ...(layout ? { layout } : {}), ...(show != null ? { show } : {}), ...q });
-    return `/app/preview/${id}?${p}`;
-  };
   return (
     <>
-      {full === "1" && (
-        <>
-          <a className="preview-back" href={`/app/events/${id}/invite`}>{copy.host.backToParty}</a>
-          {asGuest
-            ? <a className="preview-mode" href={here({})}>{copy.host.backToEditing}</a>
-            : <a className="preview-mode" href={here({ as: "guest" })}>{copy.host.tryAsGuest}</a>}
-        </>
-      )}
-      {pick === "1" && !asGuest && <PickMode />}
-      {/* The answer lives here in try as a guest, so the plate part below the info booth draws
-          itself the way it does on a real invite. Editing draws its own plate card instead and
-          answers to no reply, but it still gets the gift: chipping in no longer waits for an
-          answer, so there is nothing about it left for the editor to hold back. Pretend on both,
-          which is what keeps a host trying their own invite off their own guest list. */}
+      {full === "1" && <a className="preview-back" href={`/app/events/${id}/invite`}>{copy.host.backToParty}</a>}
+      {editing && <Pencils />}
+      {/* The answer lives here, so the plate part below the info booth draws itself the way it
+          does on a real invite. Pretend, which is what keeps a host trying their own invite off
+          their own guest list. */}
       <ReplyProvider initial={{ token: token ?? "", status: "pending", plate: null, gift, wishes, pretend: true }}>
         <InviteBody
           e={e}
@@ -176,13 +146,25 @@ export default async function Preview({
           // the file carries preview=1. Either way round, a host looking at their own invite must
           // not turn up on their own list as having added the party to their calendar.
           calendar={e.date ? { google: googleCalendarLink(e, token ? inviteLink(await getSiteUrl(), token) : ""), ics: previewIcs } : null}
-          // Editing only, never in try as a guest: there the invite has to be exactly what a
-          // guest gets, block and all. Passed whatever the switch says, because the switch itself
-          // is in the drawer behind this card.
-          giftsCard={asGuest ? undefined : <GiftsCard e={e} off={!row.show_gifts} />}
-          plateCard={asGuest || !row.plate_enabled ? undefined
-            : <PreviewPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} />}
-          skipAnimation={pick === "1" && !asGuest ? true : undefined}
+          // Two blocks a host can lose sight of, and only while editing. Everywhere else this
+          // route is exactly what a guest gets.
+          //
+          // The gifts block: handed over only when there would otherwise be no card, which means
+          // a block switched off or one with nothing written in it yet. On, with words in it, the
+          // guest's own card draws and the pencil sits on that. A part with no card has no
+          // pencil, and the switch that brings it back is behind that pencil.
+          giftsCard={editing && (!row.show_gifts || !hasGifts(e))
+            ? <GiftsCard e={e} off={!row.show_gifts} /> : undefined}
+          // The plate: the same problem for a different reason. A guest sees the board after
+          // saying yes, and a host has not. HostPlate draws the stand-in until they press yes on
+          // their own invite, and the real board after it.
+          plateCard={editing && row.plate_enabled
+            ? <HostPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} />
+            : undefined}
+          // No envelope while editing. It is a lovely three seconds the first time and a toll to
+          // pay after every save. A guest's own link is where it is watched, and the design sheet
+          // has a Play it again beside each layout.
+          skipAnimation={editing ? true : undefined}
         />
       </ReplyProvider>
     </>
