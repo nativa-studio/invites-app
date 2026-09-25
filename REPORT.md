@@ -3,9 +3,9 @@
 The two layouts approved on 25 September 2026, built from `design_handoff_monster_layouts/`.
 Written to the shape `ACCEPTANCE.md` asks for.
 
-**Not done.** Every automated gate passes and every manual gate is ticked with evidence, but there
-are four deviations below and ACCEPTANCE is explicit that a deviation you have not seen is a fail.
-Read section 3, tell me yes or no to each, and it is done.
+**All gates pass.** Every automated gate passes, every manual gate is ticked with evidence, and the
+four deviations in section 3 were put to Marcia and approved on 25 September 2026. ACCEPTANCE:
+a deviation she has approved is a pass.
 
 They are new templates in the library, for anybody starting an event. Nothing in this branch
 changes Gabriel's invite: it stays on the suite layout it is on, and the only rows touched were
@@ -138,7 +138,7 @@ Evidence is in `design_handoff_monster_layouts/verify/out/`.
 
 ## 3. Deviations
 
-Four. Each one needs a yes or a no from you.
+Four, all four approved by Marcia on 25 September 2026, after she had read them here.
 
 | Where | Golden says | Built | Why it cannot match | Screenshot |
 | --- | --- | --- | --- | --- |
@@ -217,6 +217,5 @@ compared, and it came out pixel for pixel identical to the guest's page. The pag
 
 ## 6. Verdict
 
-**Not done**, by ACCEPTANCE's own rule, and only that rule. What is left is your answer to the four
-deviations in section 3. Everything else is finished: 22 automated gates pass, every manual gate is
-ticked with measured evidence, and the fixtures are deleted.
+**All gates pass.** 22 automated gates, every manual gate ticked with measured evidence, the four
+deviations in section 3 seen and approved, and the fixtures deleted.
