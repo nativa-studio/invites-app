@@ -80,7 +80,13 @@ export function Envelope({ cover, children, openLabel, skipAnimation, mascot, bo
           <div className="seal">{seal ?? <Bolt size={30} />}</div>
         </div>
         <div className="hint">{openLabel}</div>
-        <button type="button" className="tap" aria-label={openLabel} onClick={open} disabled={phase !== ""} />
+        {/* Gone once the envelope is open, rather than hidden. The stage it sits in is
+            display:none by then, which leaves a button in the page with a height of zero: dead
+            weight for anything walking the document, and a control under the minimum touch size
+            for anything measuring one. There is nothing left to tap. */}
+        {phase !== "done" && (
+          <button type="button" className="tap" aria-label={openLabel} onClick={open} disabled={phase !== ""} />
+        )}
       </div>
       <div className={bodyClassName}>
         {phase === "done" && cover}

@@ -43,6 +43,20 @@ export const LAYOUTS: LayoutOption[] = [
   // is somebody's artwork, which is lovely for a fourth birthday and leaves a housewarming or a
   // memorial with an empty frame. This one draws its own cover from the event's theme, so it
   // suits every type and is the only one that suits an event nobody has made pictures for.
+  // The two Monsters designs, approved 25 September 2026. Two shapes of the same theme: bands is
+  // full-bleed colour with the characters standing on it, file is a staff pass and a clipboard.
+  {
+    id: "bands",
+    name: "Fur bands",
+    line: "Colour bands, the characters on top",
+    suits: ["kids_party", "birthday"],
+  },
+  {
+    id: "file",
+    name: "Staff file",
+    line: "A staff pass and a clipboard",
+    suits: ["kids_party", "birthday"],
+  },
   {
     id: "strip",
     name: "Illustrated strip",
@@ -59,9 +73,9 @@ export const LAYOUTS: LayoutOption[] = [
 // fixed paper at all: it is one ink on a tint of that ink, chosen per event, so its envelope is
 // mixed from the same two colours rather than picked from a list. Everything that draws an
 // envelope therefore has to handle a stock whose colours it will not know until it has the event.
-export type Stock = "red" | "beige" | "ink";
+export type Stock = "red" | "beige" | "ink" | "fur" | "manila";
 
-const STOCK: Record<string, Stock> = { suite: "red", lineup: "beige", strip: "ink" };
+const STOCK: Record<string, Stock> = { suite: "red", lineup: "beige", strip: "ink", bands: "fur", file: "manila" };
 
 export function stockFor(layout: string | null | undefined): Stock {
   return STOCK[layout ?? ""] ?? "red";

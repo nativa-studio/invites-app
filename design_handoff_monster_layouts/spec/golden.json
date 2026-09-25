@@ -1,0 +1,3252 @@
+{
+ "_meta": {
+  "approved": "2026-09-25",
+  "viewport": 390,
+  "note": "Boxes are CSS px relative to the layout root (main), or to the section for sectionBox. Text boxes are the tight bounds of the text itself (DOM Range), so they do not depend on which element holds the text."
+ },
+ "1b Fur bands": {
+  "size": {
+   "w": 390,
+   "h": 2674
+  },
+  "background": "rgb(241, 221, 186)",
+  "sectionOrder": [
+   "cover",
+   "details",
+   "reply",
+   "day",
+   "know",
+   "after",
+   "signoff"
+  ],
+  "sections": [
+   {
+    "section": "cover",
+    "box": {
+     "x": 0,
+     "y": 49,
+     "w": 390,
+     "h": 584
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "backgroundSize": "auto",
+    "padding": "26px 22px 0px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "details",
+    "box": {
+     "x": 0,
+     "y": 633,
+     "w": 390,
+     "h": 253.6
+    },
+    "background": "rgb(151, 201, 61)",
+    "backgroundSize": "auto",
+    "padding": "42px 24px 58px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "reply",
+    "box": {
+     "x": 0,
+     "y": 886.6,
+     "w": 390,
+     "h": 603
+    },
+    "background": "rgb(106, 63, 160)",
+    "backgroundSize": "auto",
+    "padding": "64px 24px 40px",
+    "color": "rgb(255, 255, 255)",
+    "radius": "0px"
+   },
+   {
+    "section": "day",
+    "box": {
+     "x": 0,
+     "y": 1489.6,
+     "w": 390,
+     "h": 399.8
+    },
+    "background": "rgb(255, 249, 238)",
+    "backgroundSize": "auto",
+    "padding": "42px 24px 40px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "know",
+    "box": {
+     "x": 0,
+     "y": 1889.4,
+     "w": 390,
+     "h": 346.8
+    },
+    "background": "rgb(53, 169, 184)",
+    "backgroundImage": "radial-gradient(circle at 70% 25%, rgba(106, 63, 160, 0.38) 0px, rgba(106, 63, 160, 0.38) 16px, rgba(0, 0, 0, 0) 17px), radial-gradient(circle at 25% 70%, rgba(106, 63, 160, 0.38) 0px, rgba(106, 63, 160, 0.38) 11px, rgba(0, 0, 0, 0) 12px)",
+    "backgroundSize": "140px 120px, 100px 110px",
+    "padding": "42px 24px 40px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "after",
+    "box": {
+     "x": 0,
+     "y": 2236.2,
+     "w": 390,
+     "h": 203
+    },
+    "background": "rgb(151, 201, 61)",
+    "backgroundSize": "auto",
+    "padding": "40px 18px 34px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "signoff",
+    "box": {
+     "x": 0,
+     "y": 2439.2,
+     "w": 390,
+     "h": 234.6
+    },
+    "background": "rgb(31, 37, 48)",
+    "backgroundSize": "auto",
+    "padding": "50px 24px 30px",
+    "color": "rgb(243, 228, 198)",
+    "radius": "0px"
+   }
+  ],
+  "texts": [
+   {
+    "text": "Hi Mia, you're invited",
+    "section": "page",
+    "box": {
+     "x": 108.4,
+     "y": 28,
+     "w": 173.3,
+     "h": 21
+    },
+    "sectionBox": {
+     "x": 108.4,
+     "y": 28,
+     "w": 173.3,
+     "h": 21
+    },
+    "font": "Patrick Hand SC",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "2.1px",
+    "transform": "uppercase",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Scarer wanted",
+    "section": "cover",
+    "box": {
+     "x": 118.4,
+     "y": 75,
+     "w": 153.1,
+     "h": 27
+    },
+    "sectionBox": {
+     "x": 118.4,
+     "y": 26,
+     "w": 153.1,
+     "h": 27
+    },
+    "font": "Patrick Hand SC",
+    "size": "20px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "2.4px",
+    "transform": "uppercase",
+    "color": "rgb(59, 31, 99)",
+    "align": "start"
+   },
+   {
+    "text": "Gabriel is turning 4",
+    "section": "cover",
+    "box": {
+     "x": 57.9,
+     "y": 120,
+     "w": 274.2,
+     "h": 112
+    },
+    "sectionBox": {
+     "x": 57.9,
+     "y": 71,
+     "w": 274.2,
+     "h": 112
+    },
+    "font": "Luckiest Guy",
+    "size": "56px",
+    "weight": "400",
+    "lineHeight": "56px",
+    "letterSpacing": "0.56px",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "A pool party! Come for a swim, a light spread and cake. All the family welcome.",
+    "section": "cover",
+    "box": {
+     "x": 48.4,
+     "y": 245,
+     "w": 293.2,
+     "h": 46
+    },
+    "sectionBox": {
+     "x": 48.4,
+     "y": 196,
+     "w": 293.2,
+     "h": 46
+    },
+    "font": "Nunito",
+    "size": "16px",
+    "weight": "400",
+    "lineHeight": "24px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "The details",
+    "section": "details",
+    "box": {
+     "x": 116.7,
+     "y": 673,
+     "w": 156.7,
+     "h": 38
+    },
+    "sectionBox": {
+     "x": 116.7,
+     "y": 40,
+     "w": 156.7,
+     "h": 38
+    },
+    "font": "Lilita One",
+    "size": "34px",
+    "weight": "400",
+    "lineHeight": "34px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Sunday 1 November, from 2pm, come when you can",
+    "section": "details",
+    "box": {
+     "x": 92,
+     "y": 725,
+     "w": 241.8,
+     "h": 46.8
+    },
+    "sectionBox": {
+     "x": 92,
+     "y": 92,
+     "w": 241.8,
+     "h": 46.8
+    },
+    "font": "Nunito",
+    "size": "17px",
+    "weight": "400",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Our place",
+    "section": "details",
+    "box": {
+     "x": 92,
+     "y": 794.7,
+     "w": 73.7,
+     "h": 23
+    },
+    "sectionBox": {
+     "x": 92,
+     "y": 161.7,
+     "w": 73.7,
+     "h": 23
+    },
+    "font": "Nunito",
+    "size": "17px",
+    "weight": "400",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Open in Maps",
+    "section": "details",
+    "box": {
+     "x": 177.7,
+     "y": 794.7,
+     "w": 108.8,
+     "h": 23
+    },
+    "sectionBox": {
+     "x": 177.7,
+     "y": 161.7,
+     "w": 108.8,
+     "h": 23
+    },
+    "font": "Nunito",
+    "size": "17px",
+    "weight": "700",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start",
+    "decoration": "underline"
+   },
+   {
+    "text": "RSVP",
+    "section": "reply",
+    "box": {
+     "x": 148,
+     "y": 947.6,
+     "w": 94.1,
+     "h": 46
+    },
+    "sectionBox": {
+     "x": 148,
+     "y": 61,
+     "w": 94.1,
+     "h": 46
+    },
+    "font": "Lilita One",
+    "size": "40px",
+    "weight": "400",
+    "lineHeight": "40px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(255, 255, 255)",
+    "align": "start"
+   },
+   {
+    "text": "Can make it?",
+    "section": "reply",
+    "box": {
+     "x": 120,
+     "y": 1001.6,
+     "w": 150,
+     "h": 31
+    },
+    "sectionBox": {
+     "x": 120,
+     "y": 115,
+     "w": 150,
+     "h": 31
+    },
+    "font": "Patrick Hand SC",
+    "size": "23px",
+    "weight": "400",
+    "lineHeight": "29.9px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(255, 255, 255)",
+    "align": "center"
+   },
+   {
+    "text": "Mia",
+    "section": "reply",
+    "box": {
+     "x": 164.1,
+     "y": 1001.6,
+     "w": 27.3,
+     "h": 31
+    },
+    "sectionBox": {
+     "x": 164.1,
+     "y": 115,
+     "w": 27.3,
+     "h": 31
+    },
+    "font": "Patrick Hand SC",
+    "size": "23px",
+    "weight": "400",
+    "lineHeight": "29.9px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(198, 235, 133)",
+    "align": "center"
+   },
+   {
+    "text": "Your answer helps us plan. Come back here and update it if your plans change.",
+    "section": "reply",
+    "box": {
+     "x": 49.2,
+     "y": 1045.5,
+     "w": 291.5,
+     "h": 42.5
+    },
+    "sectionBox": {
+     "x": 49.2,
+     "y": 158.9,
+     "w": 291.5,
+     "h": 42.5
+    },
+    "font": "Nunito",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "22.5px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(255, 255, 255)",
+    "align": "center"
+   },
+   {
+    "text": "Yes, we're coming",
+    "section": "reply",
+    "box": {
+     "x": 110.5,
+     "y": 1127,
+     "w": 168.9,
+     "h": 25
+    },
+    "sectionBox": {
+     "x": 110.5,
+     "y": 240.4,
+     "w": 168.9,
+     "h": 25
+    },
+    "font": "Lilita One",
+    "size": "22px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Sorry, can't make it",
+    "section": "reply",
+    "box": {
+     "x": 103.2,
+     "y": 1209,
+     "w": 183.5,
+     "h": 25
+    },
+    "sectionBox": {
+     "x": 103.2,
+     "y": 322.4,
+     "w": 183.5,
+     "h": 25
+    },
+    "font": "Lilita One",
+    "size": "22px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Please reply by 25 October.",
+    "section": "reply",
+    "box": {
+     "x": 114.4,
+     "y": 1265.5,
+     "w": 161.1,
+     "h": 18
+    },
+    "sectionBox": {
+     "x": 114.4,
+     "y": 378.9,
+     "w": 161.1,
+     "h": 18
+    },
+    "font": "Nunito",
+    "size": "13px",
+    "weight": "400",
+    "lineHeight": "18.85px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(255, 255, 255)",
+    "align": "center"
+   },
+   {
+    "text": "Add to calendar",
+    "section": "reply",
+    "box": {
+     "x": 135,
+     "y": 1330.3,
+     "w": 120,
+     "h": 27
+    },
+    "sectionBox": {
+     "x": 135,
+     "y": 443.7,
+     "w": 120,
+     "h": 27
+    },
+    "font": "Patrick Hand SC",
+    "size": "20px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(255, 255, 255)",
+    "align": "center"
+   },
+   {
+    "text": "Google Calendar",
+    "section": "reply",
+    "box": {
+     "x": 55.2,
+     "y": 1376.8,
+     "w": 104.6,
+     "h": 17
+    },
+    "sectionBox": {
+     "x": 55.2,
+     "y": 490.2,
+     "w": 104.6,
+     "h": 17
+    },
+    "font": "Lilita One",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(255, 255, 255)",
+    "align": "center",
+    "decoration": "underline"
+   },
+   {
+    "text": "Apple or Outlook",
+    "section": "reply",
+    "box": {
+     "x": 228.2,
+     "y": 1376.8,
+     "w": 108.7,
+     "h": 17
+    },
+    "sectionBox": {
+     "x": 228.2,
+     "y": 490.2,
+     "w": 108.7,
+     "h": 17
+    },
+    "font": "Lilita One",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(255, 255, 255)",
+    "align": "center",
+    "decoration": "underline"
+   },
+   {
+    "text": "Add to calendar does not count as a reply, come back here to RSVP when ready.",
+    "section": "reply",
+    "box": {
+     "x": 60.9,
+     "y": 1413.3,
+     "w": 268.1,
+     "h": 35.1
+    },
+    "sectionBox": {
+     "x": 60.9,
+     "y": 526.7,
+     "w": 268.1,
+     "h": 35.1
+    },
+    "font": "Nunito",
+    "size": "12.5px",
+    "weight": "400",
+    "lineHeight": "18.125px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(255, 255, 255)",
+    "align": "center"
+   },
+   {
+    "text": "The order of the afternoon",
+    "section": "day",
+    "box": {
+     "x": 81.9,
+     "y": 1529.6,
+     "w": 226.2,
+     "h": 72
+    },
+    "sectionBox": {
+     "x": 81.9,
+     "y": 40,
+     "w": 226.2,
+     "h": 72
+    },
+    "font": "Lilita One",
+    "size": "34px",
+    "weight": "400",
+    "lineHeight": "34px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "2pm",
+    "section": "day",
+    "box": {
+     "x": 41.2,
+     "y": 1645.9,
+     "w": 33.6,
+     "h": 21
+    },
+    "sectionBox": {
+     "x": 41.2,
+     "y": 156.3,
+     "w": 33.6,
+     "h": 21
+    },
+    "font": "Lilita One",
+    "size": "18px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Arrive",
+    "section": "day",
+    "box": {
+     "x": 150,
+     "y": 1614.6,
+     "w": 51.8,
+     "h": 22
+    },
+    "sectionBox": {
+     "x": 150,
+     "y": 125,
+     "w": 51.8,
+     "h": 22
+    },
+    "font": "Lilita One",
+    "size": "19px",
+    "weight": "400",
+    "lineHeight": "20.9px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Come when you can. Swimmers on under clothes saves a lot of time.",
+    "section": "day",
+    "box": {
+     "x": 150,
+     "y": 1638.5,
+     "w": 200.1,
+     "h": 58.2
+    },
+    "sectionBox": {
+     "x": 150,
+     "y": 148.9,
+     "w": 200.1,
+     "h": 58.2
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "19.6px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "2:15pm",
+    "section": "day",
+    "box": {
+     "x": 30.3,
+     "y": 1731.8,
+     "w": 55.4,
+     "h": 21
+    },
+    "sectionBox": {
+     "x": 30.3,
+     "y": 242.2,
+     "w": 55.4,
+     "h": 21
+    },
+    "font": "Lilita One",
+    "size": "18px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Swim",
+    "section": "day",
+    "box": {
+     "x": 150,
+     "y": 1710.3,
+     "w": 44.5,
+     "h": 22
+    },
+    "sectionBox": {
+     "x": 150,
+     "y": 220.7,
+     "w": 44.5,
+     "h": 22
+    },
+    "font": "Lilita One",
+    "size": "19px",
+    "weight": "400",
+    "lineHeight": "20.9px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Grown-ups in or poolside, whichever you like.",
+    "section": "day",
+    "box": {
+     "x": 150,
+     "y": 1734.1,
+     "w": 162.6,
+     "h": 38.6
+    },
+    "sectionBox": {
+     "x": 150,
+     "y": 244.6,
+     "w": 162.6,
+     "h": 38.6
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "19.6px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "4pm",
+    "section": "day",
+    "box": {
+     "x": 40.5,
+     "y": 1807.9,
+     "w": 35,
+     "h": 21
+    },
+    "sectionBox": {
+     "x": 40.5,
+     "y": 318.3,
+     "w": 35,
+     "h": 21
+    },
+    "font": "Lilita One",
+    "size": "18px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Cake",
+    "section": "day",
+    "box": {
+     "x": 150,
+     "y": 1786.3,
+     "w": 39.3,
+     "h": 22
+    },
+    "sectionBox": {
+     "x": 150,
+     "y": 296.8,
+     "w": 39.3,
+     "h": 22
+    },
+    "font": "Lilita One",
+    "size": "19px",
+    "weight": "400",
+    "lineHeight": "20.9px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Candles, a song, and cake for everyone.",
+    "section": "day",
+    "box": {
+     "x": 150,
+     "y": 1810.2,
+     "w": 182.3,
+     "h": 38.6
+    },
+    "sectionBox": {
+     "x": 150,
+     "y": 320.6,
+     "w": 182.3,
+     "h": 38.6
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "19.6px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Info booth",
+    "section": "know",
+    "box": {
+     "x": 119.4,
+     "y": 1929.4,
+     "w": 151.2,
+     "h": 38
+    },
+    "sectionBox": {
+     "x": 119.4,
+     "y": 40,
+     "w": 151.2,
+     "h": 38
+    },
+    "font": "Lilita One",
+    "size": "34px",
+    "weight": "400",
+    "lineHeight": "34px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Siblings welcome, just include them in your numbers.",
+    "section": "know",
+    "box": {
+     "x": 87,
+     "y": 1981.4,
+     "w": 257.2,
+     "h": 45.2
+    },
+    "sectionBox": {
+     "x": 87,
+     "y": 92,
+     "w": 257.2,
+     "h": 45.2
+    },
+    "font": "Nunito",
+    "size": "16px",
+    "weight": "400",
+    "lineHeight": "23.2px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Swimmers, a towel and a hat",
+    "section": "know",
+    "box": {
+     "x": 87,
+     "y": 2050.2,
+     "w": 208.2,
+     "h": 22
+    },
+    "sectionBox": {
+     "x": 87,
+     "y": 160.8,
+     "w": 208.2,
+     "h": 22
+    },
+    "font": "Nunito",
+    "size": "16px",
+    "weight": "400",
+    "lineHeight": "23.2px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "A light spread, and cake at 4",
+    "section": "know",
+    "box": {
+     "x": 87,
+     "y": 2104.2,
+     "w": 204.2,
+     "h": 22
+    },
+    "sectionBox": {
+     "x": 87,
+     "y": 214.8,
+     "w": 204.2,
+     "h": 22
+    },
+    "font": "Nunito",
+    "size": "16px",
+    "weight": "400",
+    "lineHeight": "23.2px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Bring something for the table if you feel inspired. No pressure at all.",
+    "section": "know",
+    "box": {
+     "x": 87,
+     "y": 2149.8,
+     "w": 253.8,
+     "h": 45.2
+    },
+    "sectionBox": {
+     "x": 87,
+     "y": 260.4,
+     "w": 253.8,
+     "h": 45.2
+    },
+    "font": "Nunito",
+    "size": "16px",
+    "weight": "400",
+    "lineHeight": "23.2px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Questions",
+    "section": "after",
+    "box": {
+     "x": 54.7,
+     "y": 2330.2,
+     "w": 95.5,
+     "h": 25
+    },
+    "sectionBox": {
+     "x": 54.7,
+     "y": 94,
+     "w": 95.5,
+     "h": 25
+    },
+    "font": "Lilita One",
+    "size": "22px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Text Gabriel's mum and dad",
+    "section": "after",
+    "box": {
+     "x": 28.5,
+     "y": 2361.2,
+     "w": 148.1,
+     "h": 38
+    },
+    "sectionBox": {
+     "x": 28.5,
+     "y": 125,
+     "w": 148.1,
+     "h": 38
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Photos",
+    "section": "after",
+    "box": {
+     "x": 255.4,
+     "y": 2330.2,
+     "w": 64.1,
+     "h": 25
+    },
+    "sectionBox": {
+     "x": 255.4,
+     "y": 94,
+     "w": 64.1,
+     "h": 25
+    },
+    "font": "Lilita One",
+    "size": "22px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Please no social media",
+    "section": "after",
+    "box": {
+     "x": 216.2,
+     "y": 2361.2,
+     "w": 142.6,
+     "h": 19
+    },
+    "sectionBox": {
+     "x": 216.2,
+     "y": 125,
+     "w": 142.6,
+     "h": 19
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "We look forward to celebrating with you",
+    "section": "signoff",
+    "box": {
+     "x": 98.9,
+     "y": 2542.2,
+     "w": 192.1,
+     "h": 68.8
+    },
+    "sectionBox": {
+     "x": 98.9,
+     "y": 103,
+     "w": 192.1,
+     "h": 68.8
+    },
+    "font": "Patrick Hand SC",
+    "size": "26px",
+    "weight": "400",
+    "lineHeight": "33.8px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(243, 228, 198)",
+    "align": "center"
+   },
+   {
+    "text": "With love from Gabriel's mum and dad",
+    "section": "signoff",
+    "box": {
+     "x": 81.2,
+     "y": 2620.8,
+     "w": 227.6,
+     "h": 23
+    },
+    "sectionBox": {
+     "x": 81.2,
+     "y": 181.6,
+     "w": 227.6,
+     "h": 23
+    },
+    "font": "Patrick Hand SC",
+    "size": "17px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(198, 235, 133)",
+    "align": "center"
+   }
+  ],
+  "controls": [
+   {
+    "text": "Open in Maps",
+    "section": "details",
+    "box": {
+     "x": 177.7,
+     "y": 784.6,
+     "w": 108.8,
+     "h": 44
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "color": "rgb(31, 37, 48)",
+    "borderTop": "0px none rgb(31, 37, 48)",
+    "borderBottom": "0px none rgb(31, 37, 48)",
+    "radius": "0px",
+    "font": "Nunito",
+    "size": "17px",
+    "weight": "700",
+    "textDecoration": "underline"
+   },
+   {
+    "text": "Yes, we're coming",
+    "section": "reply",
+    "box": {
+     "x": 35,
+     "y": 1107.5,
+     "w": 320,
+     "h": 64
+    },
+    "background": "rgb(151, 201, 61)",
+    "backgroundImage": "radial-gradient(circle at 18% 35%, rgba(31, 37, 48, 0.14) 0px, rgba(31, 37, 48, 0.14) 5px, rgba(0, 0, 0, 0) 6px), radial-gradient(circle at 82% 60%, rgba(31, 37, 48, 0.14) 0px, rgba(31, 37, 48, 0.14) 4px, rgba(0, 0, 0, 0) 5px)",
+    "color": "rgb(31, 37, 48)",
+    "borderTop": "4px solid rgb(31, 37, 48)",
+    "borderBottom": "4px solid rgb(31, 37, 48)",
+    "radius": "32px / 38px 38px 26px 26px",
+    "shadow": "rgb(31, 37, 48) 0px 6px 0px 0px",
+    "font": "Lilita One",
+    "size": "22px",
+    "weight": "400",
+    "textDecoration": "none"
+   },
+   {
+    "text": "Sorry, can't make it",
+    "section": "reply",
+    "box": {
+     "x": 35,
+     "y": 1189.5,
+     "w": 320,
+     "h": 64
+    },
+    "background": "rgb(53, 169, 184)",
+    "backgroundImage": "radial-gradient(circle at 16% 60%, rgba(106, 63, 160, 0.45) 0px, rgba(106, 63, 160, 0.45) 6px, rgba(0, 0, 0, 0) 7px), radial-gradient(circle at 86% 35%, rgba(106, 63, 160, 0.45) 0px, rgba(106, 63, 160, 0.45) 5px, rgba(0, 0, 0, 0) 6px)",
+    "color": "rgb(31, 37, 48)",
+    "borderTop": "4px solid rgb(31, 37, 48)",
+    "borderBottom": "4px solid rgb(31, 37, 48)",
+    "radius": "32px / 38px 38px 26px 26px",
+    "shadow": "rgb(31, 37, 48) 0px 6px 0px 0px",
+    "font": "Lilita One",
+    "size": "22px",
+    "weight": "400",
+    "textDecoration": "none"
+   },
+   {
+    "text": "Google Calendar",
+    "section": "reply",
+    "box": {
+     "x": 55.2,
+     "y": 1363.3,
+     "w": 104.6,
+     "h": 44
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "radius": "0px",
+    "font": "Lilita One",
+    "size": "15px",
+    "weight": "400",
+    "textDecoration": "underline"
+   },
+   {
+    "text": "Apple or Outlook",
+    "section": "reply",
+    "box": {
+     "x": 228.2,
+     "y": 1363.3,
+     "w": 108.7,
+     "h": 44
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "radius": "0px",
+    "font": "Lilita One",
+    "size": "15px",
+    "weight": "400",
+    "textDecoration": "underline"
+   }
+  ],
+  "images": [
+   {
+    "src": "mike-sulley.png",
+    "section": "cover",
+    "box": {
+     "x": 25,
+     "y": 290,
+     "w": 340,
+     "h": 325
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<circle cx=\"32\" cy=\"32\" r=\"22\"/><path d=\"M32 18v14l10 6\"/></",
+    "section": "details",
+    "box": {
+     "x": 40,
+     "y": 728.8,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M32 56s16-14 16-28a16 16 0 0 0-32 0c0 14 16 28 16 2",
+    "section": "details",
+    "box": {
+     "x": 40,
+     "y": 786.6,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M12 56V20M52 56V20M12 22c14-10 26-10 40 0M20 56V30M",
+    "section": "day",
+    "box": {
+     "x": 96,
+     "y": 1632.4,
+     "w": 48,
+     "h": 48
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<ellipse cx=\"32\" cy=\"34\" rx=\"22\" ry=\"12\"/><ellipse cx=\"32\" c",
+    "section": "day",
+    "box": {
+     "x": 96,
+     "y": 1718.3,
+     "w": 48,
+     "h": 48
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M12 38h40v16H12z\"/><path d=\"M12 38c0-7 40-7 40 0\"/>",
+    "section": "day",
+    "box": {
+     "x": 96,
+     "y": 1794.4,
+     "w": 48,
+     "h": 48
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<circle cx=\"22\" cy=\"18\" r=\"7\"/><circle cx=\"44\" cy=\"24\" r=\"5\"",
+    "section": "know",
+    "box": {
+     "x": 35,
+     "y": 1984.6,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<circle cx=\"32\" cy=\"32\" r=\"11\"/><path d=\"M32 8v7M32 49v7M8 3",
+    "section": "know",
+    "box": {
+     "x": 35,
+     "y": 2041.8,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M12 38h40v16H12z\"/><path d=\"M12 38c0-7 40-7 40 0\"/>",
+    "section": "know",
+    "box": {
+     "x": 35,
+     "y": 2095.8,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<circle cx=\"35\" cy=\"32\" r=\"18\"/><circle cx=\"35\" cy=\"32\" r=\"1",
+    "section": "know",
+    "box": {
+     "x": 35,
+     "y": 2153,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M12 14h40v26H30l-10 10V40h-8z\"/><path d=\"M20 24h24M",
+    "section": "after",
+    "box": {
+     "x": 78.5,
+     "y": 2276.2,
+     "w": 48,
+     "h": 48
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<rect x=\"10\" y=\"20\" width=\"44\" height=\"30\" rx=\"4\"/><circle c",
+    "section": "after",
+    "box": {
+     "x": 263.5,
+     "y": 2276.2,
+     "w": 48,
+     "h": 48
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   }
+  ]
+ },
+ "1c Staff file": {
+  "size": {
+   "w": 390,
+   "h": 2832
+  },
+  "background": "rgb(53, 169, 184)",
+  "sectionOrder": [
+   "cover",
+   "details",
+   "reply",
+   "day",
+   "know",
+   "after",
+   "signoff"
+  ],
+  "sections": [
+   {
+    "section": "cover",
+    "box": {
+     "x": 16,
+     "y": 46,
+     "w": 358,
+     "h": 605.3
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "backgroundSize": "auto",
+    "padding": "0px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "details",
+    "box": {
+     "x": 29,
+     "y": 726.3,
+     "w": 332,
+     "h": 254.5
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "backgroundSize": "auto",
+    "padding": "22px 18px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "reply",
+    "box": {
+     "x": 29,
+     "y": 982.8,
+     "w": 332,
+     "h": 508.8
+    },
+    "background": "rgba(151, 201, 61, 0.16)",
+    "backgroundSize": "auto",
+    "padding": "22px 18px 24px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "day",
+    "box": {
+     "x": 29,
+     "y": 1493.6,
+     "w": 332,
+     "h": 380.8
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "backgroundSize": "auto",
+    "padding": "22px 18px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "know",
+    "box": {
+     "x": 29,
+     "y": 1876.4,
+     "w": 332,
+     "h": 448
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "backgroundSize": "auto",
+    "padding": "22px 18px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "after",
+    "box": {
+     "x": 29,
+     "y": 2326.4,
+     "w": 332,
+     "h": 167
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "backgroundSize": "auto",
+    "padding": "22px 10px 14px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   },
+   {
+    "section": "signoff",
+    "box": {
+     "x": 29,
+     "y": 2495.4,
+     "w": 332,
+     "h": 266
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "backgroundSize": "auto",
+    "padding": "26px 18px 30px",
+    "color": "rgb(31, 37, 48)",
+    "radius": "0px"
+   }
+  ],
+  "texts": [
+   {
+    "text": "Hi Mia, you're invited",
+    "section": "page",
+    "box": {
+     "x": 108.4,
+     "y": 13,
+     "w": 173.3,
+     "h": 21
+    },
+    "sectionBox": {
+     "x": 108.4,
+     "y": 13,
+     "w": 173.3,
+     "h": 21
+    },
+    "font": "Patrick Hand SC",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "2.1px",
+    "transform": "uppercase",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Scarer wanted",
+    "section": "cover",
+    "box": {
+     "x": 108.9,
+     "y": 179.9,
+     "w": 164.2,
+     "h": 31.3
+    },
+    "sectionBox": {
+     "x": 92.9,
+     "y": 133.9,
+     "w": 164.2,
+     "h": 31.3
+    },
+    "font": "Patrick Hand SC",
+    "size": "20px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "3.2px",
+    "transform": "uppercase",
+    "color": "rgb(255, 255, 255)",
+    "align": "start"
+   },
+   {
+    "text": "Gabriel is turning 4",
+    "section": "cover",
+    "box": {
+     "x": 104.6,
+     "y": 447.5,
+     "w": 187,
+     "h": 82.7
+    },
+    "sectionBox": {
+     "x": 88.6,
+     "y": 401.5,
+     "w": 187,
+     "h": 82.7
+    },
+    "font": "Luckiest Guy",
+    "size": "38px",
+    "weight": "400",
+    "lineHeight": "39.9px",
+    "letterSpacing": "0.38px",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "A pool party! Come for a swim, a light spread and cake. All the family welcome.",
+    "section": "cover",
+    "box": {
+     "x": 73.3,
+     "y": 539.4,
+     "w": 254.1,
+     "h": 69.1
+    },
+    "sectionBox": {
+     "x": 57.3,
+     "y": 493.4,
+     "w": 254.1,
+     "h": 69.1
+    },
+    "font": "Nunito",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "22.5px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "01",
+    "section": "details",
+    "box": {
+     "x": 47,
+     "y": 764.3,
+     "w": 18.3,
+     "h": 16
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 38,
+     "w": 18.3,
+     "h": 16
+    },
+    "font": "Nunito",
+    "size": "12px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "1.92px",
+    "transform": "uppercase",
+    "color": "rgb(27, 111, 124)",
+    "align": "start"
+   },
+   {
+    "text": "The details",
+    "section": "details",
+    "box": {
+     "x": 75.3,
+     "y": 748.3,
+     "w": 108,
+     "h": 36
+    },
+    "sectionBox": {
+     "x": 46.3,
+     "y": 22,
+     "w": 108,
+     "h": 36
+    },
+    "font": "Patrick Hand SC",
+    "size": "27px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(74, 40, 120)",
+    "align": "start"
+   },
+   {
+    "text": "Sunday 1 November, from 2pm, come when you can",
+    "section": "details",
+    "box": {
+     "x": 99,
+     "y": 796.3,
+     "w": 226.3,
+     "h": 55.3
+    },
+    "sectionBox": {
+     "x": 70,
+     "y": 70,
+     "w": 226.3,
+     "h": 55.3
+    },
+    "font": "Patrick Hand SC",
+    "size": "21px",
+    "weight": "400",
+    "lineHeight": "26.25px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Our place",
+    "section": "details",
+    "box": {
+     "x": 99,
+     "y": 863.7,
+     "w": 75.1,
+     "h": 29
+    },
+    "sectionBox": {
+     "x": 70,
+     "y": 137.4,
+     "w": 75.1,
+     "h": 29
+    },
+    "font": "Patrick Hand SC",
+    "size": "21px",
+    "weight": "400",
+    "lineHeight": "26.25px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Open in Maps",
+    "section": "details",
+    "box": {
+     "x": 87,
+     "y": 925.3,
+     "w": 114.9,
+     "h": 19
+    },
+    "sectionBox": {
+     "x": 58,
+     "y": 199,
+     "w": 114.9,
+     "h": 19
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "1.12px",
+    "transform": "uppercase",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "02",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1020.8,
+     "w": 18.3,
+     "h": 16
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 38,
+     "w": 18.3,
+     "h": 16
+    },
+    "font": "Nunito",
+    "size": "12px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "1.92px",
+    "transform": "uppercase",
+    "color": "rgb(27, 111, 124)",
+    "align": "start"
+   },
+   {
+    "text": "RSVP",
+    "section": "reply",
+    "box": {
+     "x": 75.3,
+     "y": 1004.8,
+     "w": 70.6,
+     "h": 35
+    },
+    "sectionBox": {
+     "x": 46.3,
+     "y": 22,
+     "w": 70.6,
+     "h": 35
+    },
+    "font": "Lilita One",
+    "size": "30px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(106, 63, 160)",
+    "align": "start"
+   },
+   {
+    "text": "Can make it?",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1050.8,
+     "w": 144,
+     "h": 30
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 68,
+     "w": 144,
+     "h": 30
+    },
+    "font": "Patrick Hand SC",
+    "size": "22px",
+    "weight": "400",
+    "lineHeight": "28.6px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Mia",
+    "section": "reply",
+    "box": {
+     "x": 89.5,
+     "y": 1050.8,
+     "w": 26.1,
+     "h": 30
+    },
+    "sectionBox": {
+     "x": 60.5,
+     "y": 68,
+     "w": 26.1,
+     "h": 30
+    },
+    "font": "Patrick Hand SC",
+    "size": "22px",
+    "weight": "400",
+    "lineHeight": "28.6px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(27, 111, 124)",
+    "align": "start"
+   },
+   {
+    "text": "Your answer helps us plan. Come back here and update it if your plans change.",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1093.4,
+     "w": 291.5,
+     "h": 42.5
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 110.6,
+     "w": 291.5,
+     "h": 42.5
+    },
+    "font": "Nunito",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "22.5px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Yes, we're coming",
+    "section": "reply",
+    "box": {
+     "x": 103,
+     "y": 1160.9,
+     "w": 146.4,
+     "h": 32
+    },
+    "sectionBox": {
+     "x": 74,
+     "y": 178.1,
+     "w": 146.4,
+     "h": 32
+    },
+    "font": "Patrick Hand SC",
+    "size": "24px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "left"
+   },
+   {
+    "text": "Sorry, can't make it",
+    "section": "reply",
+    "box": {
+     "x": 103,
+     "y": 1230.9,
+     "w": 173.6,
+     "h": 32
+    },
+    "sectionBox": {
+     "x": 74,
+     "y": 248.1,
+     "w": 173.6,
+     "h": 32
+    },
+    "font": "Patrick Hand SC",
+    "size": "24px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "left"
+   },
+   {
+    "text": "Please reply by 25 October.",
+    "section": "reply",
+    "box": {
+     "x": 106.5,
+     "y": 1293.7,
+     "w": 222.1,
+     "h": 38.4
+    },
+    "sectionBox": {
+     "x": 77.5,
+     "y": 310.9,
+     "w": 222.1,
+     "h": 38.4
+    },
+    "font": "Patrick Hand SC",
+    "size": "17px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "1.02px",
+    "transform": "uppercase",
+    "color": "rgb(106, 63, 160)",
+    "align": "start"
+   },
+   {
+    "text": "Add to calendar",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1352.4,
+     "w": 120,
+     "h": 27
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 369.6,
+     "w": 120,
+     "h": 27
+    },
+    "font": "Patrick Hand SC",
+    "size": "20px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Google Calendar",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1395.4,
+     "w": 117.1,
+     "h": 20
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 412.6,
+     "w": 117.1,
+     "h": 20
+    },
+    "font": "Nunito",
+    "size": "15px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start",
+    "decoration": "underline"
+   },
+   {
+    "text": "Apple or Outlook",
+    "section": "reply",
+    "box": {
+     "x": 182.1,
+     "y": 1395.4,
+     "w": 121.1,
+     "h": 20
+    },
+    "sectionBox": {
+     "x": 153.1,
+     "y": 412.6,
+     "w": 121.1,
+     "h": 20
+    },
+    "font": "Nunito",
+    "size": "15px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start",
+    "decoration": "underline"
+   },
+   {
+    "text": "Add to calendar does not count as a reply, come back here to RSVP when ready.",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1431.4,
+     "w": 268.1,
+     "h": 35.1
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 448.6,
+     "w": 268.1,
+     "h": 35.1
+    },
+    "font": "Nunito",
+    "size": "12.5px",
+    "weight": "400",
+    "lineHeight": "18.125px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "03",
+    "section": "day",
+    "box": {
+     "x": 47,
+     "y": 1531.6,
+     "w": 18.3,
+     "h": 16
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 38,
+     "w": 18.3,
+     "h": 16
+    },
+    "font": "Nunito",
+    "size": "12px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "1.92px",
+    "transform": "uppercase",
+    "color": "rgb(27, 111, 124)",
+    "align": "start"
+   },
+   {
+    "text": "The order of the afternoon",
+    "section": "day",
+    "box": {
+     "x": 75.3,
+     "y": 1515.6,
+     "w": 161.4,
+     "h": 72
+    },
+    "sectionBox": {
+     "x": 46.3,
+     "y": 22,
+     "w": 161.4,
+     "h": 72
+    },
+    "font": "Patrick Hand SC",
+    "size": "27px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(74, 40, 120)",
+    "align": "start"
+   },
+   {
+    "text": "2pm",
+    "section": "day",
+    "box": {
+     "x": 47,
+     "y": 1609.6,
+     "w": 31.8,
+     "h": 20
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 116,
+     "w": 31.8,
+     "h": 20
+    },
+    "font": "Lilita One",
+    "size": "17px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(106, 63, 160)",
+    "align": "start"
+   },
+   {
+    "text": "Arrive",
+    "section": "day",
+    "box": {
+     "x": 157,
+     "y": 1606.6,
+     "w": 51.8,
+     "h": 22
+    },
+    "sectionBox": {
+     "x": 128,
+     "y": 113,
+     "w": 51.8,
+     "h": 22
+    },
+    "font": "Lilita One",
+    "size": "19px",
+    "weight": "400",
+    "lineHeight": "20.9px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Come when you can. Swimmers on under clothes saves a lot of time.",
+    "section": "day",
+    "box": {
+     "x": 157,
+     "y": 1628.5,
+     "w": 175,
+     "h": 59.6
+    },
+    "sectionBox": {
+     "x": 128,
+     "y": 134.9,
+     "w": 175,
+     "h": 59.6
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "20.3px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "2:15pm",
+    "section": "day",
+    "box": {
+     "x": 47,
+     "y": 1711.4,
+     "w": 52.3,
+     "h": 20
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 217.8,
+     "w": 52.3,
+     "h": 20
+    },
+    "font": "Lilita One",
+    "size": "17px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(106, 63, 160)",
+    "align": "start"
+   },
+   {
+    "text": "Swim",
+    "section": "day",
+    "box": {
+     "x": 157,
+     "y": 1708.4,
+     "w": 44.5,
+     "h": 22
+    },
+    "sectionBox": {
+     "x": 128,
+     "y": 214.8,
+     "w": 44.5,
+     "h": 22
+    },
+    "font": "Lilita One",
+    "size": "19px",
+    "weight": "400",
+    "lineHeight": "20.9px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Grown-ups in or poolside, whichever you like.",
+    "section": "day",
+    "box": {
+     "x": 157,
+     "y": 1730.3,
+     "w": 162.6,
+     "h": 39.3
+    },
+    "sectionBox": {
+     "x": 128,
+     "y": 236.7,
+     "w": 162.6,
+     "h": 39.3
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "20.3px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "4pm",
+    "section": "day",
+    "box": {
+     "x": 47,
+     "y": 1792.9,
+     "w": 33,
+     "h": 20
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 299.3,
+     "w": 33,
+     "h": 20
+    },
+    "font": "Lilita One",
+    "size": "17px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(106, 63, 160)",
+    "align": "start"
+   },
+   {
+    "text": "Cake",
+    "section": "day",
+    "box": {
+     "x": 157,
+     "y": 1789.9,
+     "w": 39.3,
+     "h": 22
+    },
+    "sectionBox": {
+     "x": 128,
+     "y": 296.3,
+     "w": 39.3,
+     "h": 22
+    },
+    "font": "Lilita One",
+    "size": "19px",
+    "weight": "400",
+    "lineHeight": "20.9px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Candles, a song, and cake for everyone.",
+    "section": "day",
+    "box": {
+     "x": 157,
+     "y": 1811.8,
+     "w": 182.3,
+     "h": 39.3
+    },
+    "sectionBox": {
+     "x": 128,
+     "y": 318.2,
+     "w": 182.3,
+     "h": 39.3
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "20.3px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "04",
+    "section": "know",
+    "box": {
+     "x": 47,
+     "y": 1914.4,
+     "w": 18.3,
+     "h": 16
+    },
+    "sectionBox": {
+     "x": 18,
+     "y": 38,
+     "w": 18.3,
+     "h": 16
+    },
+    "font": "Nunito",
+    "size": "12px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "1.92px",
+    "transform": "uppercase",
+    "color": "rgb(27, 111, 124)",
+    "align": "start"
+   },
+   {
+    "text": "Info booth",
+    "section": "know",
+    "box": {
+     "x": 75.3,
+     "y": 1898.4,
+     "w": 103,
+     "h": 36
+    },
+    "sectionBox": {
+     "x": 46.3,
+     "y": 22,
+     "w": 103,
+     "h": 36
+    },
+    "font": "Patrick Hand SC",
+    "size": "27px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(74, 40, 120)",
+    "align": "start"
+   },
+   {
+    "text": "Siblings welcome, just include them in your numbers.",
+    "section": "know",
+    "box": {
+     "x": 60.4,
+     "y": 2006.1,
+     "w": 115.7,
+     "h": 74.7
+    },
+    "sectionBox": {
+     "x": 31.4,
+     "y": 129.7,
+     "w": 115.7,
+     "h": 74.7
+    },
+    "font": "Patrick Hand SC",
+    "size": "18px",
+    "weight": "400",
+    "lineHeight": "22.5px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Swimmers, a towel and a hat",
+    "section": "know",
+    "box": {
+     "x": 213,
+     "y": 2006.6,
+     "w": 104.4,
+     "h": 50.7
+    },
+    "sectionBox": {
+     "x": 184,
+     "y": 130.2,
+     "w": 104.4,
+     "h": 50.7
+    },
+    "font": "Patrick Hand SC",
+    "size": "18px",
+    "weight": "400",
+    "lineHeight": "22.5px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "A light spread, and cake at 4",
+    "section": "know",
+    "box": {
+     "x": 60.8,
+     "y": 2164.7,
+     "w": 95.7,
+     "h": 49.4
+    },
+    "sectionBox": {
+     "x": 31.8,
+     "y": 288.3,
+     "w": 95.7,
+     "h": 49.4
+    },
+    "font": "Patrick Hand SC",
+    "size": "18px",
+    "weight": "400",
+    "lineHeight": "22.5px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Bring something for the table if you feel inspired. No pressure at all.",
+    "section": "know",
+    "box": {
+     "x": 213,
+     "y": 2164.6,
+     "w": 111.6,
+     "h": 117.8
+    },
+    "sectionBox": {
+     "x": 184,
+     "y": 288.3,
+     "w": 111.6,
+     "h": 117.8
+    },
+    "font": "Patrick Hand SC",
+    "size": "18px",
+    "weight": "400",
+    "lineHeight": "22.5px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Questions",
+    "section": "after",
+    "box": {
+     "x": 70.8,
+     "y": 2398.4,
+     "w": 86.4,
+     "h": 31
+    },
+    "sectionBox": {
+     "x": 41.8,
+     "y": 72,
+     "w": 86.4,
+     "h": 31
+    },
+    "font": "Patrick Hand SC",
+    "size": "23px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(74, 40, 120)",
+    "align": "center"
+   },
+   {
+    "text": "Text Gabriel's mum and dad",
+    "section": "after",
+    "box": {
+     "x": 40,
+     "y": 2435.4,
+     "w": 148.1,
+     "h": 38
+    },
+    "sectionBox": {
+     "x": 11,
+     "y": 109,
+     "w": 148.1,
+     "h": 38
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Photos",
+    "section": "after",
+    "box": {
+     "x": 246.2,
+     "y": 2398.4,
+     "w": 59.6,
+     "h": 31
+    },
+    "sectionBox": {
+     "x": 217.2,
+     "y": 72,
+     "w": 59.6,
+     "h": 31
+    },
+    "font": "Patrick Hand SC",
+    "size": "23px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(74, 40, 120)",
+    "align": "center"
+   },
+   {
+    "text": "Please no social media",
+    "section": "after",
+    "box": {
+     "x": 204.7,
+     "y": 2435.4,
+     "w": 142.6,
+     "h": 19
+    },
+    "sectionBox": {
+     "x": 175.7,
+     "y": 109,
+     "w": 142.6,
+     "h": 19
+    },
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "We look forward to celebrating with you",
+    "section": "signoff",
+    "box": {
+     "x": 97.7,
+     "y": 2564,
+     "w": 193.7,
+     "h": 77.3
+    },
+    "sectionBox": {
+     "x": 68.7,
+     "y": 68.6,
+     "w": 193.7,
+     "h": 77.3
+    },
+    "font": "Patrick Hand SC",
+    "size": "26px",
+    "weight": "400",
+    "lineHeight": "32.5px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "With love from Gabriel's mum and dad",
+    "section": "signoff",
+    "box": {
+     "x": 95.7,
+     "y": 2643.5,
+     "w": 202.2,
+     "h": 50.9
+    },
+    "sectionBox": {
+     "x": 66.7,
+     "y": 148.1,
+     "w": 202.2,
+     "h": 50.9
+    },
+    "font": "Patrick Hand SC",
+    "size": "17px",
+    "weight": "400",
+    "lineHeight": "22.1px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(74, 40, 120)",
+    "align": "center"
+   }
+  ],
+  "controls": [
+   {
+    "text": "Open in Maps",
+    "section": "details",
+    "box": {
+     "x": 47,
+     "y": 910.8,
+     "w": 170.9,
+     "h": 48
+    },
+    "background": "rgb(255, 255, 255)",
+    "color": "rgb(31, 37, 48)",
+    "borderTop": "2px dashed rgb(31, 37, 48)",
+    "borderBottom": "2px dashed rgb(31, 37, 48)",
+    "radius": "4px",
+    "font": "Nunito",
+    "size": "14px",
+    "weight": "700",
+    "textDecoration": "none"
+   },
+   {
+    "text": "Yes, we're coming",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1149.4,
+     "w": 296,
+     "h": 58
+    },
+    "background": "rgba(151, 201, 61, 0.45)",
+    "color": "rgb(31, 37, 48)",
+    "borderTop": "0px none rgb(31, 37, 48)",
+    "borderBottom": "3px solid rgb(31, 37, 48)",
+    "radius": "3px",
+    "font": "Patrick Hand SC",
+    "size": "24px",
+    "weight": "400",
+    "textDecoration": "none"
+   },
+   {
+    "text": "Sorry, can't make it",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1219.4,
+     "w": 296,
+     "h": 58
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "color": "rgb(31, 37, 48)",
+    "borderTop": "0px none rgb(31, 37, 48)",
+    "borderBottom": "3px solid rgb(31, 37, 48)",
+    "radius": "3px",
+    "font": "Patrick Hand SC",
+    "size": "24px",
+    "weight": "400",
+    "textDecoration": "none"
+   },
+   {
+    "text": "Google Calendar",
+    "section": "reply",
+    "box": {
+     "x": 47,
+     "y": 1383.4,
+     "w": 117.1,
+     "h": 44
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "color": "rgb(31, 37, 48)",
+    "borderTop": "0px none rgb(31, 37, 48)",
+    "borderBottom": "0px none rgb(31, 37, 48)",
+    "radius": "0px",
+    "font": "Nunito",
+    "size": "15px",
+    "weight": "700",
+    "textDecoration": "underline"
+   },
+   {
+    "text": "Apple or Outlook",
+    "section": "reply",
+    "box": {
+     "x": 182.1,
+     "y": 1383.4,
+     "w": 121.1,
+     "h": 44
+    },
+    "background": "rgba(0, 0, 0, 0)",
+    "color": "rgb(31, 37, 48)",
+    "borderTop": "0px none rgb(31, 37, 48)",
+    "borderBottom": "0px none rgb(31, 37, 48)",
+    "radius": "0px",
+    "font": "Nunito",
+    "size": "15px",
+    "weight": "700",
+    "textDecoration": "underline"
+   }
+  ],
+  "images": [
+   {
+    "src": "89ef22e407288341bfdd38816200e884-76408eae.jpg",
+    "section": "cover",
+    "box": {
+     "x": 100.4,
+     "y": 244.6,
+     "w": 188.8,
+     "h": 188.8
+    },
+    "objectFit": "cover",
+    "objectPosition": "50% 90%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<circle cx=\"32\" cy=\"32\" r=\"22\"/><path d=\"M32 18v14l10 6\"/></",
+    "section": "details",
+    "box": {
+     "x": 47,
+     "y": 806.5,
+     "w": 36,
+     "h": 36
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M32 56s16-14 16-28a16 16 0 0 0-32 0c0 14 16 28 16 2",
+    "section": "details",
+    "box": {
+     "x": 47,
+     "y": 860.8,
+     "w": 36,
+     "h": 36
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M12 56V20M52 56V20M12 22c14-10 26-10 40 0M20 56V30M",
+    "section": "day",
+    "box": {
+     "x": 107,
+     "y": 1601.6,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<ellipse cx=\"32\" cy=\"34\" rx=\"22\" ry=\"12\"/><ellipse cx=\"32\" c",
+    "section": "day",
+    "box": {
+     "x": 107,
+     "y": 1703.4,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M12 38h40v16H12z\"/><path d=\"M12 38c0-7 40-7 40 0\"/>",
+    "section": "day",
+    "box": {
+     "x": 107,
+     "y": 1784.9,
+     "w": 40,
+     "h": 40
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<circle cx=\"22\" cy=\"18\" r=\"7\"/><circle cx=\"44\" cy=\"24\" r=\"5\"",
+    "section": "know",
+    "box": {
+     "x": 58.8,
+     "y": 1973.6,
+     "w": 31.3,
+     "h": 31.3
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<circle cx=\"32\" cy=\"32\" r=\"11\"/><path d=\"M32 8v7M32 49v7M8 3",
+    "section": "know",
+    "box": {
+     "x": 214.7,
+     "y": 1970.6,
+     "w": 30.9,
+     "h": 30.9
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M12 38h40v16H12z\"/><path d=\"M12 38c0-7 40-7 40 0\"/>",
+    "section": "know",
+    "box": {
+     "x": 61.9,
+     "y": 2128.7,
+     "w": 30.6,
+     "h": 30.6
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<circle cx=\"35\" cy=\"32\" r=\"18\"/><circle cx=\"35\" cy=\"32\" r=\"1",
+    "section": "know",
+    "box": {
+     "x": 212,
+     "y": 2130.7,
+     "w": 30.8,
+     "h": 30.8
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<path d=\"M12 14h40v26H30l-10 10V40h-8z\"/><path d=\"M20 24h24M",
+    "section": "after",
+    "box": {
+     "x": 92,
+     "y": 2348.4,
+     "w": 44,
+     "h": 44
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   },
+   {
+    "src": "icon:<rect x=\"10\" y=\"20\" width=\"44\" height=\"30\" rx=\"4\"/><circle c",
+    "section": "after",
+    "box": {
+     "x": 254,
+     "y": 2348.4,
+     "w": 44,
+     "h": 44
+    },
+    "objectFit": "fill",
+    "objectPosition": "50% 50%",
+    "borderRadius": "0px"
+   }
+  ]
+ },
+ "2a Fur bands back": {
+  "size": {
+   "w": 390,
+   "h": 439
+  },
+  "background": "rgb(241, 221, 186)",
+  "sectionOrder": [],
+  "sections": [],
+  "texts": [
+   {
+    "text": "Hi Mia, you're invited",
+    "section": "page",
+    "box": {
+     "x": 108.4,
+     "y": 28,
+     "w": 173.3,
+     "h": 21
+    },
+    "sectionBox": {
+     "x": 108.4,
+     "y": 28,
+     "w": 173.3,
+     "h": 21
+    },
+    "font": "Patrick Hand SC",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "2.1px",
+    "transform": "uppercase",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Tap to open",
+    "section": "page",
+    "box": {
+     "x": 143.6,
+     "y": 362,
+     "w": 102.8,
+     "h": 27
+    },
+    "sectionBox": {
+     "x": 143.6,
+     "y": 362,
+     "w": 102.8,
+     "h": 27
+    },
+    "font": "Patrick Hand SC",
+    "size": "20px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "1.6px",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   }
+  ],
+  "controls": [],
+  "images": [
+   {
+    "src": "mike-sulley.png",
+    "section": "page",
+    "box": {
+     "x": 250.6,
+     "y": 191.5,
+     "w": 110.7,
+     "h": 107
+    },
+    "objectFit": "cover",
+    "objectPosition": "50% 60%",
+    "borderRadius": "14px",
+    "transform": "matrix(0.997564, -0.0697565, 0.0697565, 0.997564, 0, 0)"
+   }
+  ]
+ },
+ "2c Staff file back": {
+  "size": {
+   "w": 390,
+   "h": 439
+  },
+  "background": "rgb(53, 169, 184)",
+  "sectionOrder": [],
+  "sections": [],
+  "texts": [
+   {
+    "text": "Hi Mia, you're invited",
+    "section": "page",
+    "box": {
+     "x": 108.4,
+     "y": 28,
+     "w": 173.3,
+     "h": 21
+    },
+    "sectionBox": {
+     "x": 108.4,
+     "y": 28,
+     "w": 173.3,
+     "h": 21
+    },
+    "font": "Patrick Hand SC",
+    "size": "15px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "2.1px",
+    "transform": "uppercase",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   },
+   {
+    "text": "Tap to open",
+    "section": "page",
+    "box": {
+     "x": 143.6,
+     "y": 362,
+     "w": 102.8,
+     "h": 27
+    },
+    "sectionBox": {
+     "x": 143.6,
+     "y": 362,
+     "w": 102.8,
+     "h": 27
+    },
+    "font": "Patrick Hand SC",
+    "size": "20px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "1.6px",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "center"
+   }
+  ],
+  "controls": [],
+  "images": [
+   {
+    "src": "89ef22e407288341bfdd38816200e884-76408eae.jpg",
+    "section": "page",
+    "box": {
+     "x": 261.3,
+     "y": 217.5,
+     "w": 90.7,
+     "h": 87
+    },
+    "objectFit": "cover",
+    "objectPosition": "50% 94%",
+    "borderRadius": "0px"
+   }
+  ]
+ },
+ "2b Fur bands front": {
+  "size": {
+   "w": 1200,
+   "h": 630
+  },
+  "background": "rgba(0, 0, 0, 0)",
+  "sectionOrder": [],
+  "sections": [],
+  "texts": [
+   {
+    "text": "4",
+    "section": "page",
+    "box": {
+     "x": 1000.4,
+     "y": 168.6,
+     "w": 25.2,
+     "h": 44.8
+    },
+    "sectionBox": {
+     "x": 1000.4,
+     "y": 168.6,
+     "w": 25.2,
+     "h": 44.8
+    },
+    "font": "Luckiest Guy",
+    "size": "44px",
+    "weight": "400",
+    "lineHeight": "44px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Mia",
+    "section": "page",
+    "box": {
+     "x": 190.6,
+     "y": 375.3,
+     "w": 207.5,
+     "h": 125.3
+    },
+    "sectionBox": {
+     "x": 190.6,
+     "y": 375.3,
+     "w": 207.5,
+     "h": 125.3
+    },
+    "font": "Luckiest Guy",
+    "size": "120px",
+    "weight": "400",
+    "lineHeight": "120px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   }
+  ],
+  "controls": [],
+  "images": [
+   {
+    "src": "mike-sulley.png",
+    "section": "page",
+    "box": {
+     "x": 753.1,
+     "y": 252.7,
+     "w": 293.9,
+     "h": 284.6
+    },
+    "objectFit": "cover",
+    "objectPosition": "50% 60%",
+    "borderRadius": "20px"
+   }
+  ]
+ },
+ "2d Staff file front": {
+  "size": {
+   "w": 1200,
+   "h": 630
+  },
+  "background": "rgba(0, 0, 0, 0)",
+  "sectionOrder": [],
+  "sections": [],
+  "texts": [
+   {
+    "text": "To",
+    "section": "page",
+    "box": {
+     "x": 241,
+     "y": 151,
+     "w": 33.7,
+     "h": 27
+    },
+    "sectionBox": {
+     "x": 241,
+     "y": 151,
+     "w": 33.7,
+     "h": 27
+    },
+    "font": "Nunito",
+    "size": "20px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "3.2px",
+    "transform": "uppercase",
+    "color": "rgb(94, 68, 24)",
+    "align": "start"
+   },
+   {
+    "text": "Floor",
+    "section": "page",
+    "box": {
+     "x": 521,
+     "y": 151,
+     "w": 82.8,
+     "h": 27
+    },
+    "sectionBox": {
+     "x": 521,
+     "y": 151,
+     "w": 82.8,
+     "h": 27
+    },
+    "font": "Nunito",
+    "size": "20px",
+    "weight": "700",
+    "lineHeight": "normal",
+    "letterSpacing": "3.2px",
+    "transform": "uppercase",
+    "color": "rgb(94, 68, 24)",
+    "align": "start"
+   },
+   {
+    "text": "Floor manager",
+    "section": "page",
+    "box": {
+     "x": 241,
+     "y": 196,
+     "w": 177,
+     "h": 46
+    },
+    "sectionBox": {
+     "x": 241,
+     "y": 196,
+     "w": 177,
+     "h": 46
+    },
+    "font": "Patrick Hand SC",
+    "size": "34px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgba(31, 37, 48, 0.55)",
+    "align": "start",
+    "decoration": "line-through"
+   },
+   {
+    "text": "Scare floor F",
+    "section": "page",
+    "box": {
+     "x": 521,
+     "y": 196,
+     "w": 162.4,
+     "h": 46
+    },
+    "sectionBox": {
+     "x": 521,
+     "y": 196,
+     "w": 162.4,
+     "h": 46
+    },
+    "font": "Patrick Hand SC",
+    "size": "34px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgba(31, 37, 48, 0.55)",
+    "align": "start",
+    "decoration": "line-through"
+   },
+   {
+    "text": "Door 4",
+    "section": "page",
+    "box": {
+     "x": 241,
+     "y": 257,
+     "w": 80.9,
+     "h": 46
+    },
+    "sectionBox": {
+     "x": 241,
+     "y": 257,
+     "w": 80.9,
+     "h": 46
+    },
+    "font": "Patrick Hand SC",
+    "size": "34px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgba(31, 37, 48, 0.55)",
+    "align": "start",
+    "decoration": "line-through"
+   },
+   {
+    "text": "Door vault",
+    "section": "page",
+    "box": {
+     "x": 521,
+     "y": 257,
+     "w": 138.9,
+     "h": 46
+    },
+    "sectionBox": {
+     "x": 521,
+     "y": 257,
+     "w": 138.9,
+     "h": 46
+    },
+    "font": "Patrick Hand SC",
+    "size": "34px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgba(31, 37, 48, 0.55)",
+    "align": "start",
+    "decoration": "line-through"
+   },
+   {
+    "text": "Mia",
+    "section": "page",
+    "box": {
+     "x": 241,
+     "y": 308,
+     "w": 52.1,
+     "h": 60
+    },
+    "sectionBox": {
+     "x": 241,
+     "y": 308,
+     "w": 52.1,
+     "h": 60
+    },
+    "font": "Patrick Hand SC",
+    "size": "44px",
+    "weight": "400",
+    "lineHeight": "48.4px",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(74, 40, 120)",
+    "align": "start"
+   },
+   {
+    "text": "Gabriel's party",
+    "section": "page",
+    "box": {
+     "x": 521,
+     "y": 318,
+     "w": 182.4,
+     "h": 46
+    },
+    "sectionBox": {
+     "x": 521,
+     "y": 318,
+     "w": 182.4,
+     "h": 46
+    },
+    "font": "Patrick Hand SC",
+    "size": "34px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "transform": "none",
+    "color": "rgb(31, 37, 48)",
+    "align": "start"
+   },
+   {
+    "text": "Scarer wanted",
+    "section": "page",
+    "box": {
+     "x": 764.7,
+     "y": 80.7,
+     "w": 300.5,
+     "h": 94.6
+    },
+    "sectionBox": {
+     "x": 764.7,
+     "y": 80.7,
+     "w": 300.5,
+     "h": 94.6
+    },
+    "font": "Patrick Hand SC",
+    "size": "40px",
+    "weight": "400",
+    "lineHeight": "normal",
+    "letterSpacing": "4px",
+    "transform": "uppercase",
+    "color": "rgb(106, 63, 160)",
+    "align": "start"
+   }
+  ],
+  "controls": [],
+  "images": [
+   {
+    "src": "89ef22e407288341bfdd38816200e884-76408eae.jpg",
+    "section": "page",
+    "box": {
+     "x": 806.1,
+     "y": 292.8,
+     "w": 240.5,
+     "h": 240.5
+    },
+    "objectFit": "cover",
+    "objectPosition": "50% 94%",
+    "borderRadius": "0px"
+   }
+  ]
+ }
+}

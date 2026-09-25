@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The design handoff package. Its reference HTML, its prototype support script and the
+    // fidelity suite are Marcia's approval as delivered, and ACCEPTANCE.md forbids editing them,
+    // so they are not ours to lint. Nothing in here is shipped: the suite is run by hand and the
+    // rest is read, not imported.
+    "design_handoff_monster_layouts/**",
   ]),
 ]);
 

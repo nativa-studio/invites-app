@@ -16,6 +16,8 @@ import { HoldTheDate } from "./CalendarButtons";
 import { PlateSlot } from "./PlateSlot";
 import { LineupInvite } from "./LineupInvite";
 import { StripInvite } from "./StripInvite";
+import { BandsInvite } from "./BandsInvite";
+import { FileInvite } from "./FileInvite";
 // Recovered for Marcia to look at and point. Nothing is offered to a host until she does: these
 // are reachable by ?layout= only, which is what the design picker already uses to flick through.
 import { PeekInvite } from "./PeekInvite";
@@ -85,7 +87,39 @@ export function InviteBody({
     </>
   );
   // Drawn once and handed to whichever layout runs, so neither can quietly not have it.
-  const about = <AboutApp token={token ?? null} curious={curious ?? false} pretend={pretend} />;
+  //
+  // Switched off here rather than inside each layout, because a layout that forgot would be an
+  // advertisement at the foot of somebody's invitation. Absent means on: every event that existed
+  // before migration 0046 keeps the block it has today.
+  const about = e.show_about === false
+    ? null
+    : <AboutApp token={token ?? null} curious={curious ?? false} pretend={pretend} />;
+  if (id === "bands") {
+    return (
+      <BandsInvite
+        event={e}
+        greeting={greeting}
+        reply={announced}
+        after={about}
+        plate={plateCard ?? <PlateSlot />}
+        gifts={giftsCard}
+        skipAnimation={skipAnimation}
+      />
+    );
+  }
+  if (id === "file") {
+    return (
+      <FileInvite
+        event={e}
+        greeting={greeting}
+        reply={announced}
+        after={about}
+        plate={plateCard ?? <PlateSlot />}
+        gifts={giftsCard}
+        skipAnimation={skipAnimation}
+      />
+    );
+  }
   if (id === "peek") return <PeekInvite event={e} greeting={greeting} reply={announced} gifts={giftsCard} />;
   if (id === "post") return <PostInvite event={e} greeting={greeting} addressee={greeting} reply={announced} gifts={giftsCard} skipAnimation={skipAnimation} />;
   if (id === "strip") {
@@ -180,7 +214,7 @@ export function InviteBody({
   );
 }
 
-export const LAYOUTS = ["suite", "lineup", "peek", "post", "strip"] as const;
+export const LAYOUTS = ["suite", "lineup", "peek", "post", "strip", "bands", "file"] as const;
 
 export function asLayout(v: string | undefined): PublicEvent["layout_id"] | undefined {
   return (LAYOUTS as readonly string[]).includes(v ?? "") ? (v as PublicEvent["layout_id"]) : undefined;

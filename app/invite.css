@@ -402,6 +402,124 @@
    open envelope. */
 .env.still .flap { transform: perspective(900px) rotateX(180deg); transition: none; }
 .env.still .flap .front { opacity: 0; animation: none; }
+
+/* ---------------------------------------------------------------------------------------------
+   Two more stocks: fur, for Fur bands, and manila, for Staff file.
+
+   Compound selectors only (`.env.fur`, never a bare `.fur`), the same rule the layout stylesheets
+   follow, because this file is loaded on every invite page. Every value comes from
+   design_handoff_monster_layouts/reference/*-envelope-back.html and spec/golden-envelopes.json.
+   --------------------------------------------------------------------------------------------- */
+
+/* Both designs draw the envelope the same size and in the same place: a 358 by 350 stage 30px
+   under the greeting, with a 358 by 200 envelope 30px into it. */
+main.bands .stage, main.file .stage { width: 100%; max-width: 358px; height: 350px; margin-top: 30px; }
+/* Staff file's page is a flex column with a 30px gap of its own, so the stage must not add a
+   second one. Fur bands' page is a plain block and the margin is where its 30px comes from. */
+main.file .stage { margin-top: 0; }
+main.bands .env.fur, main.file .env.manila { top: 30px; height: 200px; }
+/* The invite itself, waiting behind the sealed envelope, the same way the suite waits. */
+main.bands .bands-body, main.file .file-body { opacity: 0; transition: opacity .5s; }
+main.bands .env-root.done .bands-body, main.file .env-root.done .file-body { opacity: 1; }
+
+/* Fur: spotted teal paper, a dark lip at the point of the flap, the pair as a sticker in the
+   corner and one eye for a seal. */
+.env.fur .back {
+  background-color: #5CC0CC;
+  background-image:
+    radial-gradient(circle at 30% 40%, #7A52B0 0, #7A52B0 9px, transparent 10px),
+    radial-gradient(circle at 70% 72%, #7A52B0 0, #7A52B0 6px, transparent 7px);
+  background-size: 46px 46px, 34px 34px;
+  filter: drop-shadow(0 12px 12px rgba(31, 37, 48, 0.3));
+}
+.env.fur .pocket { filter: none; }
+.env.fur .pocket .sides { background: #2B8A97; }
+.env.fur .pocket .edge { background: #35A9B8; opacity: 0.6; }
+.env.fur .flap .front { background: #237580; }
+/* The rim is the flap's spotted face here, not a rim: inset 5px at the foot so the darker front
+   shows as a lip along the point. */
+.env.fur .flap .rim {
+  inset: 0 0 5px;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background-color: #35A9B8;
+  background-image:
+    radial-gradient(circle at 30% 40%, #6A3FA0 0, #6A3FA0 10px, transparent 11px),
+    radial-gradient(circle at 70% 72%, #6A3FA0 0, #6A3FA0 7px, transparent 8px);
+  background-size: 46px 46px, 34px 34px;
+}
+.env.fur .flap .backface {
+  background-color: #5CC0CC;
+  background-image:
+    radial-gradient(circle at 30% 40%, #7A52B0 0, #7A52B0 9px, transparent 10px),
+    radial-gradient(circle at 70% 72%, #7A52B0 0, #7A52B0 6px, transparent 7px);
+  background-size: 46px 46px, 34px 34px;
+}
+/* The characters as a sticker stuck on the corner, not printed on the paper. */
+.env.fur .cast {
+  right: 16px; bottom: 14px; width: 104px; height: 100px;
+  box-sizing: border-box; border: 5px solid #fff; border-radius: 14px; background: #fff;
+  object-fit: cover; object-position: 50% 60%;
+  transform: rotate(-4deg); box-shadow: 0 6px 10px -4px rgba(31, 37, 48, 0.45);
+}
+.env.fur .seal { background: #fff; border-color: #1F2530; box-shadow: 0 2px 0 rgba(31, 37, 48, 0.3); }
+/* The characters as a sticker on the corner of the envelope, drawn from --cast rather than from
+   an element: the same picture is the cover of the invite inside, and two elements with one
+   filename is a trap for anything measuring the page. */
+.env.fur .pocket::after {
+  content: ""; position: absolute; right: 16px; bottom: 14px; width: 104px; height: 100px;
+  box-sizing: border-box; border: 5px solid #fff; border-radius: 14px; background: #fff;
+  background-image: var(--cast); background-size: cover; background-position: 50% 60%;
+  background-origin: content-box; background-clip: content-box;
+  transform: rotate(-4deg); box-shadow: 0 6px 10px -4px rgba(31, 37, 48, 0.45); z-index: 3;
+}
+main.bands .stage .hint { color: #1F2530; }
+main.bands .stage .hint::after { background: #1F2530; }
+
+/* Manila: a flat internal-mail envelope. No triangular flap and no pocket shape, so both are
+   overridden rather than recoloured: this stock is a different fold, not a different paper. */
+.env.manila .back { background: #E8D3A6; border-radius: 6px; background-image: none; filter: drop-shadow(0 12px 12px rgba(31, 37, 48, 0.3)); }
+.env.manila .pocket { filter: none; border-radius: 6px; }
+.env.manila .pocket .sides {
+  clip-path: none; border-radius: 6px; background-color: #E8D3A6;
+  /* The four punched holes, in the page's own colour so they read as holes rather than as dots. */
+  background-image:
+    radial-gradient(circle at 72px 104px, #35A9B8 8px, transparent 8.5px),
+    radial-gradient(circle at 72px 158px, #35A9B8 8px, transparent 8.5px),
+    radial-gradient(circle at 286px 104px, #35A9B8 8px, transparent 8.5px),
+    radial-gradient(circle at 286px 158px, #35A9B8 8px, transparent 8.5px);
+}
+.env.manila .pocket .edge { display: none; }
+.env.manila .flap { height: 64px; }
+/* The card waiting inside is a pass on a lanyard, and the lanyard's straps are wider than the
+   card. The clip is 40px wider than the envelope on each side so a rotated card has room to
+   turn, and the straps were showing in that margin, beside the envelope, before it opened. */
+.env.manila .clip { left: 0; right: 0; }
+.env.manila .flap .front { clip-path: none; background: #D9BE8A; border-radius: 6px 6px 14px 14px; border-bottom: 3px solid #BFA06A; box-sizing: border-box; }
+.env.manila .flap .backface { clip-path: none; background: #E8D3A6; background-image: none; border-radius: 6px 6px 14px 14px; }
+.env.manila .flap .rim { display: none; }
+
+/* The closure: two buttons wound with string, and the polaroid clipped beside them. It comes
+   through the seal because that is the one slot the envelope gives a design, and a mascot cannot
+   carry a frame and a paperclip. */
+.env.manila .seal {
+  top: 22px; left: 50%; margin-left: -30px; width: 60px; height: 120px;
+  background: none; border: 0; border-radius: 0; box-shadow: none; display: block; overflow: visible;
+}
+.env.manila .seal .tie { position: absolute; inset: 0; display: block; }
+.env.manila .seal .string { position: absolute; left: 0; top: 0; overflow: visible; }
+.env.manila .seal .button { position: absolute; left: 50%; border-radius: 50%; background: #6A3FA0; border: 3px solid #1F2530; box-sizing: border-box; z-index: 6; }
+.env.manila .seal .button.top { top: 8px; width: 30px; height: 30px; margin-left: -15px; display: flex; align-items: center; justify-content: center; }
+.env.manila .seal .button.bottom { top: 82px; width: 26px; height: 26px; margin-left: -13px; }
+.env.manila .seal .pupilled { width: 12px; height: 12px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+.env.manila .seal .pupilled i { width: 6px; height: 6px; border-radius: 50%; background: #1F2530; }
+.env.manila .seal .polaroid { position: absolute; left: 93px; top: 84px; width: 96px; height: 106px; z-index: 6; transform: rotate(5deg); }
+.env.manila .seal .polaroid .pic { position: absolute; left: 6px; top: 6px; width: 84px; height: 80px; background-size: cover; background-position: 50% 94%; }
+.env.manila .seal .polaroid { background: #fff; box-shadow: 0 8px 12px -6px rgba(31, 37, 48, 0.5); }
+.env.manila .seal .polaroid .paperclip { position: absolute; border: 3px solid #8A929C; border-radius: 7px; box-sizing: border-box; }
+.env.manila .seal .polaroid .paperclip.a { left: 30px; top: -14px; width: 14px; height: 36px; }
+.env.manila .seal .polaroid .paperclip.b { left: 34px; top: -8px; width: 8px; height: 24px; border-width: 2px; border-radius: 4px; }
+main.file .stage .hint { color: #1F2530; }
+main.file .stage .hint::after { background: #6A3FA0; }
 .env.still .flap .backface { opacity: 1; animation: none; }
 
 .rise .env .flap { z-index: 1; }

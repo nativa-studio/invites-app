@@ -1,6 +1,7 @@
 import type { Palette } from "@/lib/db/types";
 import { inkFor, paperFor, stripSet } from "@/lib/strip-set";
 import { monoShapes } from "@/components/art/mono";
+import { copy } from "@/lib/copy";
 import type { Stock as StockId } from "@/lib/layouts";
 
 // Drawn by Satori, which has no clip-path and turns CSS border triangles into blocks. The
@@ -78,6 +79,9 @@ export type CardInput = {
   set?: string | null;
   /** Falls back to the set the theme implies, the same as the invite does. */
   themeId?: string | null;
+  /** The square photograph of one character, for the designs that clip a polaroid to the card.
+   *  Absolute, like `artwork`, because Satori fetches it. */
+  portrait?: string | null;
   variant?: CardVariant;
 };
 
@@ -86,6 +90,9 @@ const H = 630;
 const PAPER = "#FDF6E4";
 const DISPLAY = "Lilita One";
 const HAND = "Patrick Hand SC";
+// The Monsters cards' words, read once so the card is one expression rather than six lookups.
+const { to: copyTo, floor: copyFloor, wasName: copyWas, wasFloor: copyWasFloor, wasName2: copyWas2, wasFloor2: copyWasFloor2 } = copy.monsters;
+const copyScarer = copy.sections.scarerWanted;
 
 function ground(p: Palette, children: React.ReactNode) {
   return (
@@ -357,11 +364,181 @@ export function envelopeCard(input: CardInput) {
   // The back is what the invite page itself opens, flap and seal, so between the chat and the
   // page a guest sees the envelope turned over and then opened. The two older drawings, the
   // cream letter and the half-open one, stay reachable with ?style= for comparing.
+  // The two Monsters designs do not draw an envelope at all, so they answer before the variants:
+  // there is no back and no half-open for a card that is a spotted panel or an internal memo.
+  if (input.stock === "fur") return furCard(input);
+  if (input.stock === "manila") return manilaCard(input);
   const variant: CardVariant = input.variant ?? "front";
   if (variant === "front") return front(input);
   if (variant === "opening") return opening(input);
   if (variant === "posted") return posted(input);
   return back(input);
+}
+
+
+// ---------------------------------------------------------------------------------------------
+// The two Monsters cards. Every value is lifted from
+// design_handoff_monster_layouts/reference/*-share-card.html.
+//
+// Satori draws these, so three of its limits shape the markup: no clip-path, no color-mix, and no
+// CSS grid. Spots are an SVG pattern rather than repeated radial gradients, the routing grid is
+// flex rows, and every colour is written out.
+// ---------------------------------------------------------------------------------------------
+
+const TITLE_FONT = "Luckiest Guy";
+
+/** The spotted paper, as one SVG the panel sits under. Two sizes of spot on two grids, the same
+ *  as the invite's, because a guest sees this in the chat a second before they see the page. */
+function spots(w: number, h: number, ground: string, spot: string) {
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ position: "absolute", left: 0, top: 0 }}>
+      <defs>
+        <pattern id="s1" width="92" height="92" patternUnits="userSpaceOnUse">
+          <circle cx="27.6" cy="36.8" r="14" fill={spot} />
+        </pattern>
+        <pattern id="s2" width="68" height="68" patternUnits="userSpaceOnUse">
+          <circle cx="47.6" cy="49" r="9" fill={spot} />
+        </pattern>
+      </defs>
+      <rect width={w} height={h} fill={ground} />
+      <rect width={w} height={h} fill="url(#s1)" />
+      <rect width={w} height={h} fill="url(#s2)" />
+    </svg>
+  );
+}
+
+function furCard({ addressee, title, artwork, age }: CardInput) {
+  const name = addressee?.trim() || title;
+  return (
+    <div style={{ width: W, height: H, display: "flex", position: "relative", background: "#F1DDBA", fontFamily: "Nunito", color: "#1F2530" }}>
+      {/* The spotted panel, with the seam of the envelope's flap across its top. */}
+      <div style={{ position: "absolute", left: 80, top: 55, width: 1040, height: 520, borderRadius: 20, overflow: "hidden", display: "flex", boxShadow: "0 30px 40px -24px rgba(31,37,48,0.5)" }}>
+        {spots(1040, 520, "#35A9B8", "#6A3FA0")}
+        <div style={{ position: "absolute", left: 0, top: 70, width: 1040, height: 4, background: "#237580" }} />
+      </div>
+
+      {/* The stamp: the eye, and the age under it. */}
+      <div style={{ position: "absolute", right: 120, top: 85, width: 132, height: 156, background: "#fff", padding: 9, display: "flex", transform: "rotate(2deg)", boxShadow: "0 6px 10px -4px rgba(31,37,48,0.4)" }}>
+        <div style={{ width: 114, height: 138, background: "#97C93D", border: "3px solid #1F2530", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6 }}>
+          <div style={{ width: 50, height: 50, borderRadius: 25, background: "#fff", border: "3px solid #1F2530", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 24, height: 24, borderRadius: 12, background: "#3F9E5A", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: 11, height: 11, borderRadius: 6, background: "#1F2530" }} />
+            </div>
+          </div>
+          {age && <div style={{ fontFamily: TITLE_FONT, fontSize: 44, lineHeight: 1 }}>{age}</div>}
+        </div>
+      </div>
+
+      {/* The postmark, struck across the stamp: two rings and four waves. */}
+      <div style={{ position: "absolute", right: 250, top: 96, display: "flex" }}>
+        <div style={{ width: 150, height: 150, border: "4px solid rgba(31,37,48,0.38)", borderRadius: 75, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 110, height: 110, border: "3px solid rgba(31,37,48,0.38)", borderRadius: 55 }} />
+        </div>
+        <div style={{ position: "absolute", left: 120, top: 34, display: "flex", flexDirection: "column", gap: 14 }}>
+          {[0, 1, 2, 3].map((i) => (
+            <svg key={i} viewBox="0 0 200 16" width="200" height="16">
+              <path d="M0 8 q 12.5 -8 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0" fill="none" stroke="rgba(31,37,48,.38)" strokeWidth="3" />
+            </svg>
+          ))}
+        </div>
+      </div>
+
+      {/* Who it is for, on a label stuck to the panel. */}
+      <div style={{ position: "absolute", left: 140, bottom: 110, display: "flex", background: "#FFF9EE", border: "4px solid #1F2530", borderRadius: 14, padding: "26px 48px 18px", transform: "rotate(-1.5deg)", boxShadow: "0 8px 0 #1F2530" }}>
+        <div style={{ fontFamily: TITLE_FONT, fontSize: 120, lineHeight: 1 }}>{name}</div>
+      </div>
+
+      {/* The pair, as a sticker. */}
+      {artwork && (
+        <div style={{ position: "absolute", right: 150, bottom: 90, width: 300, height: 290, background: "#fff", borderRadius: 30, padding: 12, display: "flex", transform: "rotate(-4deg)", boxShadow: "0 16px 22px -12px rgba(31,37,48,0.5)" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={artwork} alt="" width={276} height={266} style={{ width: 276, height: 266, borderRadius: 20, objectFit: "cover", objectPosition: "50% 60%" }} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** One row of the routing grid. Flex, not grid: Satori has no grid.
+ *
+ *  The heights carry their own rule with them. In the design the rows are content-box, so a 58px
+ *  row with a 3px rule above it stands 61px tall, and five of them are fifteen pixels of memo. */
+type Cell = { text: string; size: number; colour: string; struck?: boolean; head?: boolean };
+function memoRow(a: Cell, b: Cell, h: number, top?: boolean) {
+  const cell = (c: Cell, border: boolean) => (
+    <div style={{
+      display: "flex", width: 280, height: h, boxSizing: "border-box",
+      padding: c.head ? "10px 18px" : c.size > 40 ? "4px 18px" : "8px 18px",
+      borderRight: border ? "3px solid rgba(106,78,30,0.55)" : "0px solid rgba(0,0,0,0)",
+      fontFamily: c.head ? "Nunito" : HAND, fontSize: c.size, fontWeight: c.head ? 700 : 400,
+      letterSpacing: c.head ? "0.16em" : "normal", textTransform: c.head ? "uppercase" : "none",
+      color: c.colour, textDecoration: c.struck ? "line-through" : "none",
+    }}>{c.text}</div>
+  );
+  return (
+    <div style={{
+      display: "flex", width: 560, height: top ? h : h + 3,
+      borderTop: top ? "0px solid rgba(0,0,0,0)" : "3px solid rgba(106,78,30,0.55)",
+      background: top ? "rgba(106,78,30,0.14)" : "rgba(0,0,0,0)",
+    }}>
+      {cell(a, true)}{cell(b, false)}
+    </div>
+  );
+}
+
+const INK = "#1F2530";
+const GONE = "rgba(31,37,48,0.55)";
+
+function manilaCard({ addressee, title, portrait }: CardInput) {
+  const name = addressee?.trim() || title;
+  return (
+    <div style={{ width: W, height: H, display: "flex", position: "relative", background: "#35A9B8", fontFamily: "Nunito", color: "#1F2530" }}>
+      <div style={{ position: "absolute", left: 80, top: 45, width: 1040, height: 540, borderRadius: 12, background: "#E8D3A6", overflow: "hidden", display: "flex", boxShadow: "0 30px 40px -24px rgba(31,37,48,0.5)" }}>
+        <div style={{ position: "absolute", left: 0, top: 54, width: 1040, height: 4, background: "#BFA06A" }} />
+        {[160, 300, 440].map((t) => (
+          <div key={t} style={{ position: "absolute", left: 70, top: t, width: 30, height: 30, borderRadius: 15, background: "#35A9B8" }} />
+        ))}
+        {/* The routing grid: a memo that has been round the building, with the last two holders
+            crossed out and this guest written under them. */}
+        <div style={{ position: "absolute", left: 140, top: 96, width: 560, display: "flex", flexDirection: "column", borderLeft: "0px solid rgba(0,0,0,0)", borderRight: "3px solid rgba(106,78,30,0.55)", borderBottom: "3px solid rgba(106,78,30,0.55)" }}>
+          {memoRow({ text: copyTo, size: 20, colour: "#5E4418", head: true }, { text: copyFloor, size: 20, colour: "#5E4418", head: true }, 44, true)}
+          {memoRow({ text: copyWas, size: 34, colour: GONE, struck: true }, { text: copyWasFloor, size: 34, colour: GONE, struck: true }, 58)}
+          {memoRow({ text: copyWas2, size: 34, colour: GONE, struck: true }, { text: copyWasFloor2, size: 34, colour: GONE, struck: true }, 58)}
+          {/* The guest, written in under the two that were crossed out, and what the job is. */}
+          {memoRow({ text: name, size: 44, colour: "#4A2878" }, { text: partyOf(title), size: 34, colour: INK }, 58)}
+          {memoRow({ text: "", size: 34, colour: INK }, { text: "", size: 34, colour: INK }, 58)}
+          {memoRow({ text: "", size: 34, colour: INK }, { text: "", size: 34, colour: INK }, 58)}
+        </div>
+      </div>
+
+      {/* Two rules rather than one double rule: Satori has no double border, and a stamp is two
+          rings of ink whichever way it is drawn. 2px, a 1px gap and 2px again is the 5px the
+          design asks for. */}
+      <div style={{ position: "absolute", left: 740, top: 88, display: "flex", transform: "rotate(-8deg)", border: "2px solid #6A3FA0", borderRadius: 10, padding: 1 }}>
+        <div style={{ display: "flex", border: "2px solid #6A3FA0", borderRadius: 7, padding: "6px 20px", color: "#6A3FA0", fontFamily: HAND, fontSize: 40, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          {copyScarer}
+        </div>
+      </div>
+
+      {portrait && (
+        <div style={{ position: "absolute", right: 150, bottom: 60, display: "flex", transform: "rotate(5deg)" }}>
+          <div style={{ width: 250, height: 282, background: "#fff", padding: "14px 14px 46px", display: "flex", boxShadow: "0 16px 24px -12px rgba(31,37,48,0.55)" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={portrait} alt="" width={222} height={222} style={{ width: 222, height: 222, objectFit: "cover", objectPosition: "50% 94%" }} />
+          </div>
+          <div style={{ position: "absolute", left: 90, top: -34, width: 34, height: 92, border: "6px solid #8A929C", borderRadius: 17 }} />
+          <div style={{ position: "absolute", left: 98, top: -20, width: 18, height: 66, border: "5px solid #8A929C", borderRadius: 9 }} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** "Gabriel's party", from the event's own title. The grid's right-hand column is where the memo
+ *  says what the job is, and on an invitation the job is the party. */
+function partyOf(title: string): string {
+  const who = title.match(/^(.+?) is turning/i)?.[1]?.trim();
+  return who ? `${who}'s party` : title;
 }
 
 export const CARD_SIZE = { width: W, height: H };
