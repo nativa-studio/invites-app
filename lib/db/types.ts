@@ -48,7 +48,7 @@ export type PublicEvent = {
   theme_id: string;
   /** The three after the first two are recovered and reachable by ?layout= only, for Marcia to
    *  look at. Nothing offers them to a host until she says which ones stay. */
-  layout_id: "suite" | "lineup" | "peek" | "post" | "strip";
+  layout_id: "suite" | "lineup" | "peek" | "post" | "strip" | "bands" | "file";
   ink: string;
   /** Which set of doodles the illustrated strip draws. Null falls back to the theme, which is
    *  every event made before the picker existed. Added in 0035, so an older database sends
@@ -115,6 +115,10 @@ export type PublicEvent = {
    *  Optional and read as off when absent, the same way show_signoff is, so a database without
    *  migration 0041 draws an invite with no gifts block rather than a broken one. */
   show_gifts?: boolean | null;
+  /** The About this app block at the very end. Absent means on, the same reading show_signoff
+   *  has, so an event that predates migration 0046 keeps the block it has today. Off is for a
+   *  host who is not handing their guests an advertisement at the foot of their invitation. */
+  show_about?: boolean | null;
   wishlist?: WishlistItem[] | null;
   /** What the group gift is, so the block can name it before anybody has replied. Where to send
    *  the money stays behind get_gift, which takes a token and answers only after a yes. */

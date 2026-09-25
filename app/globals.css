@@ -17,10 +17,18 @@
   --app-off: #b3261e;
   --app-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  /* The invites. Per-event colours arrive as inline variables; these are the faces. */
-  --font-display: "Lilita One", "Arial Rounded MT Bold", sans-serif;
-  --font-hand: "Patrick Hand SC", cursive;
-  --font-body: "Nunito", "Helvetica Neue", Arial, sans-serif;
+  /* The invites. Per-event colours arrive as inline variables; the faces come from next/font,
+     which sets --font-display, --font-hand, --font-body and --font-title on <html> in
+     app/layout.tsx.
+
+     They used to be written out here as well, with a plain family name and a generic fallback,
+     and that copy won the cascade. What it cost is invisible until something measures the page:
+     next/font ships each face with a metric-matched fallback ("Lilita One Fallback" and the
+     rest, built with size-adjust), so text laid out before the web font arrives is the same
+     width as text laid out after it. Naming the family by hand threw that away, and the first
+     paint of every invite was laid out in Arial and then reflowed. The fidelity suite for the
+     Monsters designs measures text boxes to a pixel and reads whichever of the two it catches.
+  */
   color-scheme: light;
 }
 * { box-sizing: border-box; }

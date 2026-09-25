@@ -14,6 +14,9 @@ export function cardFonts() {
       { name: "Lilita One", data: readFileSync(path.join(DIR, "LilitaOne.ttf")), weight: 400, style: "normal" },
       { name: "Patrick Hand SC", data: readFileSync(path.join(DIR, "PatrickHandSC.ttf")), weight: 400, style: "normal" },
       { name: "Nunito", data: readFileSync(path.join(DIR, "Nunito-Bold.ttf")), weight: 700, style: "normal" },
+      // The Monsters share cards set the guest's name in it. Satori takes font files, not CSS, so
+      // a face used on a card has to be here as well as in app/layout.tsx.
+      { name: "Luckiest Guy", data: readFileSync(path.join(DIR, "LuckiestGuy.ttf")), weight: 400, style: "normal" },
     ];
   }
   return cache;

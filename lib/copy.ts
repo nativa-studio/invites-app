@@ -37,6 +37,17 @@ export const copy = {
     // On the group link the envelope has no name to carry, so it is addressed to whoever opened it.
     eyebrowBirthday: "Trainer wanted",
   },
+  // The words on the Monsters share cards. The routing grid is the joke on the manila one: an
+  // internal memo that has been round the building, two lines crossed out and the guest's name
+  // written under them.
+  monsters: {
+    to: "To",
+    floor: "Floor",
+    wasName: "Floor manager",
+    wasFloor: "Scare floor F",
+    wasName2: "Door 4",
+    wasFloor2: "Door vault",
+  },
   rsvp: {
     heading: "RSVP",
     question: (name: string) => `Can ${name} make it?`,
@@ -266,6 +277,9 @@ export const copy = {
     // decides to put in it, which may be a wish list, may be "no presents please", and may be
     // both.
     gifts: "Gifts",
+    // The Monsters designs' eyebrow, over the title on both covers and struck across the manila
+    // share card. It belongs to those two looks and is drawn by them alone.
+    scarerWanted: "Scarer wanted",
     // The two titles inside the gifts block, each opening what is under it. One word apiece:
     // they sit side by side, a tap apart, and "Some ideas" and "The group gift" carried three
     // syllables of throat-clearing between them for no gain.

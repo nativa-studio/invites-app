@@ -1,0 +1,238 @@
+/* `main.file`, never a bare `.file`, and every descendant rule under it. invite.css loads on
+   every invite page, so a bare class here would land on the suite, the strip and the bands. */
+
+/* Staff file. A pass on a lanyard, then one ruled sheet on a clipboard with the rest of the
+   invite filled in on it. Every number is lifted from
+   design_handoff_monster_layouts/reference/file-page.html and checked against spec/golden.json. */
+main.file {
+  overflow-x: clip;
+  min-height: 100vh;
+  background: #35A9B8;
+  color: #1F2530;
+  font-family: var(--font-body);
+  /* The design sets a line height where it wants one. globals.css puts 1.5 on body, which made
+     every heading and label on the sheet taller than the drawing. */
+  line-height: normal;
+  padding: 0 16px 56px;
+  /* The greeting is a white band the full width of the page and the lanyard starts behind it, so
+     the page itself is the column they sit in. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 30px, and the greeting's negative bottom margin is exactly that, so the lanyard starts
+     behind the white band rather than 30px below it. The two numbers are a pair: change one and
+     the pass slides. */
+  gap: 30px;
+
+  --ink: #1F2530;
+  --purple: #6A3FA0;
+  --deep: #4A2878;
+  --teal: #35A9B8;
+  --lime: #97C93D;
+  --cream: #FFF9EE;
+  --metal: #C9CED6;
+  --tealink: #1B6F7C;
+
+  /* The tokens the shared parts read. */
+  --paper: #FFF9EE;
+  --navy: #1F2530;
+  --red: #6A3FA0;
+  --sky: #35A9B8;
+  --yel: #97C93D;
+  --forest: #3F9E5A;
+  --crm: #FFF9EE;
+  --sky-ink: #1B6F7C;
+  --on-sky: #1F2530;
+  --shadow: 0 18px 30px -18px rgba(31, 37, 48, 0.55);
+  --flag-0: #97C93D;
+  --flag-1: #35A9B8;
+  --flag-2: #6A3FA0;
+  --flag-3: #F7E48A;
+  --flag-4: #C9EAEE;
+  --flag-edge: #1F2530;
+}
+
+/* The white band. It bleeds past the page's side padding, and its negative bottom margin eats
+   the 30px gap under it so the lanyard can start behind it rather than below it. */
+main.file .greet {
+  position: relative; z-index: 3; align-self: stretch; margin: 0 -16px -30px;
+  background: #fff; padding: 13px 20px 12px;
+  font-family: var(--font-hand); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center;
+}
+/* The white band is the open invite's header. While the envelope is still shut there is no
+   header to draw, so the greeting is a line of type on the page's own teal, exactly as the
+   design's second screen has it. :has(), because the greeting sits above the envelope and has to
+   know what the envelope is doing. */
+main.file:has(.env-root:not(.done)) .greet { margin: 28px 0 0; padding: 0; background: none; }
+
+main.file .file-body { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 34px; }
+
+/* The pass, and the V of lanyard it hangs from. The whole group carries the tilt, so the straps
+   and the pass lean together. */
+main.file .cover { display: flex; flex-direction: column; align-items: center; width: 100%; }
+main.file .pass-group { position: relative; display: flex; flex-direction: column; align-items: center; transform: rotate(-1.5deg); }
+main.file .lanyard { position: relative; width: 300px; height: 96px; margin-top: -40px; display: block; }
+main.file .lanyard .strap { position: absolute; left: 50%; bottom: 0; width: 14px; height: 150px; margin-left: -7px; background: #6A3FA0; transform-origin: 50% 100%; }
+main.file .lanyard .strap.l { transform: rotate(-26deg); }
+main.file .lanyard .strap.r { transform: rotate(26deg); }
+main.file .crimp { position: relative; z-index: 2; width: 16px; height: 16px; margin-top: -2px; background: #C9CED6; border: 2px solid #1F2530; border-radius: 3px; box-sizing: border-box; }
+main.file .ring { position: relative; z-index: 2; width: 20px; height: 20px; margin-top: -2px; border-radius: 50%; border: 3px solid #1F2530; box-sizing: border-box; }
+main.file .tab { position: relative; z-index: 2; width: 12px; height: 34px; margin-top: -3px; margin-bottom: -20px; background: #6A3FA0; border: 0 solid #1F2530; border-width: 0 2px 2px; box-sizing: border-box; }
+
+/* content-box on the pass and its photograph: in the design the 310 and the 190 are the card
+   and the picture, and the ink rules are drawn around them. globals.css puts border-box on
+   everything, which pulled both edges three pixels in. */
+main.file .pass { box-sizing: content-box; width: 310px; background: #FFF9EE; border: 3px solid #1F2530; border-radius: 18px; overflow: hidden; box-shadow: 0 18px 30px -18px rgba(31, 37, 48, 0.55); display: flex; flex-direction: column; align-items: center; }
+main.file .pass .top { width: 100%; box-sizing: border-box; background: #6A3FA0; color: #fff; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; border-bottom: 3px solid #1F2530; }
+main.file .pass .slot { width: 44px; height: 10px; border-radius: 5px; background: #FFF9EE; border: 2px solid #1F2530; box-sizing: content-box; }
+main.file .pass .eyebrow { font-family: var(--font-hand); font-size: 20px; letter-spacing: 0.16em; text-transform: uppercase; }
+main.file .pass .body { padding: 20px 20px 22px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+main.file .pass .photo { box-sizing: content-box; width: 190px; height: 190px; border: 3px solid #1F2530; border-radius: 12px; overflow: hidden; box-sizing: border-box; }
+main.file .pass .photo img { display: block; width: 184px; height: 184px; object-fit: cover; object-position: 50% 90%; }
+main.file .pass h1 { margin: 0; padding-top: 4px; font-family: var(--font-title); font-weight: 400; font-size: 38px; line-height: 1.05; letter-spacing: 0.01em; text-align: center; text-wrap: wrap; }
+main.file .pass .intro { margin: 0; font-size: 15px; line-height: 1.5; text-align: center; max-width: 260px; }
+/* content-box: the lime strip is 14px of colour with the rule above it, not 14px including the
+   rule. Three pixels, and every section on the clipboard below sits on them. */
+main.file .pass .foot { box-sizing: content-box; width: 100%; height: 14px; background: #97C93D; border-top: 3px solid #1F2530; }
+
+/* The clipboard. One board, one clip, one ruled sheet, and every part of the invite written on
+   that sheet with a dashed rule between them. */
+main.file .board { position: relative; width: 100%; box-sizing: border-box; background: #4A2878; border: 3px solid #1F2530; border-radius: 16px; padding: 36px 10px 12px; box-shadow: 0 18px 30px -18px rgba(31, 37, 48, 0.55); }
+main.file .board .clip { position: absolute; left: 50%; top: -16px; margin-left: -64px; width: 128px; height: 42px; background: #C9CED6; border: 3px solid #1F2530; border-radius: 10px 10px 14px 14px; box-sizing: border-box; display: flex; align-items: flex-start; justify-content: center; padding-top: 7px; }
+main.file .board .clip i { width: 26px; height: 10px; border-radius: 5px; background: #4A2878; border: 2px solid #1F2530; }
+/* `.ruled`, not `.sheet`: globals.css has a bare `.sheet` on it (the host app's bottom sheet,
+   display: grid with 16px of padding), and globals loads everywhere. It was taking 32px off the
+   width of every section on the board. */
+main.file .ruled { background-color: #FFF9EE; background-image: repeating-linear-gradient(transparent 0, transparent 31px, rgba(53, 169, 184, 0.28) 31px, rgba(53, 169, 184, 0.28) 32px); border-radius: 4px; }
+main.file .strip { border-top: 2px dashed rgba(31, 37, 48, 0.28); }
+/* A part that draws nothing draws no rule either. Bring a plate is the case: the board asks for
+   it on every invite and it answers with nothing until the guest has said yes, which left a
+   dashed line ruled across the sheet with no section under it. */
+main.file .strip:empty { display: none; }
+
+/* A section of the file. */
+main.file .part { padding: 22px 18px; display: flex; flex-direction: column; gap: 14px; }
+main.file .part .head { display: flex; align-items: baseline; gap: 10px; }
+main.file .num { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #1B6F7C; }
+main.file .part .h { font-family: var(--font-hand); font-size: 27px; color: #4A2878; }
+main.file .part svg { color: #4A2878; }
+
+main.file .part .grid { display: grid; grid-template-columns: 40px 1fr; gap: 10px 12px; align-items: center; }
+main.file .part .grid .w { font-family: var(--font-hand); font-size: 21px; line-height: 1.25; }
+main.file .part .notes { display: flex; flex-direction: column; gap: 10px; }
+main.file .part .notes .line { display: flex; gap: 12px; align-items: center; font-family: var(--font-hand); font-size: 18px; line-height: 1.25; }
+/* content-box, because the design's 44px is the inside of the dashed box and the border sits
+   outside it: globals.css puts border-box on everything, which took the button to 44 overall. */
+main.file .stamp-btn { box-sizing: content-box; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 2px dashed #1F2530; border-radius: 4px; background: #fff; color: #1F2530; font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
+main.file .stamp-btn .box { width: 16px; height: 16px; border: 2px solid #1F2530; border-radius: 3px; box-sizing: border-box; }
+
+/* The order of the afternoon: time, picture, what it is. */
+main.file .part .stop { display: grid; grid-template-columns: 50px 40px 1fr; gap: 10px; align-items: start; }
+main.file .part .stop .t { font-family: var(--font-display); font-size: 17px; color: #6A3FA0; padding-top: 8px; }
+main.file .part .stop .n { font-family: var(--font-display); font-size: 19px; line-height: 1.1; padding-top: 6px; }
+main.file .part .stop .b { font-size: 14px; line-height: 1.45; opacity: 0.8; }
+main.file .part .stop svg { color: #4A2878; }
+
+/* The info booth as post-its, two to a row, each with a darker strip of adhesive along its top. */
+main.file .stickies { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 14px; padding: 4px 2px 6px; }
+main.file .sticky { padding: 20px 12px 16px; min-height: 124px; box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; color: #1F2530; box-shadow: 0 10px 12px -10px rgba(31, 37, 48, 0.55), 0 1px 0 rgba(31, 37, 48, 0.08); }
+main.file .sticky .w { font-family: var(--font-hand); font-size: 18px; line-height: 1.25; }
+main.file .sticky svg { color: #1F2530; }
+main.file .sticky.c0 { background: linear-gradient(rgba(31, 37, 48, 0.07) 0, rgba(31, 37, 48, 0.07) 14px, transparent 14px) #E3F1BF; transform: rotate(-2.5deg); }
+main.file .sticky.c1 { background: linear-gradient(rgba(31, 37, 48, 0.07) 0, rgba(31, 37, 48, 0.07) 14px, transparent 14px) #C9EAEE; transform: rotate(1.8deg); }
+main.file .sticky.c2 { background: linear-gradient(rgba(31, 37, 48, 0.07) 0, rgba(31, 37, 48, 0.07) 14px, transparent 14px) #E6DCF3; transform: rotate(1.2deg); }
+main.file .sticky.c3 { background: linear-gradient(rgba(31, 37, 48, 0.07) 0, rgba(31, 37, 48, 0.07) 14px, transparent 14px) #F6E9C8; transform: rotate(-1.6deg); }
+
+main.file .part.after { padding: 22px 10px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+main.file .part.after .cell { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+main.file .part.after .n { font-family: var(--font-hand); font-size: 23px; color: #4A2878; }
+main.file .part.after .b { font-size: 14px; min-height: 44px; }
+main.file .part.after a.b { display: flex; align-items: center; justify-content: center; color: inherit; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+main.file .part.signoff { padding: 26px 18px 30px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+main.file .sticky.big { width: 250px; box-sizing: border-box; min-height: 210px; padding: 34px 22px 22px; background-color: #F7E48A; background-image: linear-gradient(rgba(31, 37, 48, 0.07) 0, rgba(31, 37, 48, 0.07) 18px, transparent 18px); box-shadow: 0 14px 16px -12px rgba(31, 37, 48, 0.55), 0 1px 0 rgba(31, 37, 48, 0.08); transform: rotate(-3deg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+main.file .sticky.big .msg { margin: 0; font-family: var(--font-hand); font-size: 26px; line-height: 1.25; text-align: center; }
+main.file .sticky.big .from { margin: 0; font-family: var(--font-hand); font-size: 17px; line-height: 1.3; text-align: center; color: #4A2878; }
+
+/* The reply, filled in on the sheet.
+   The number and the form's own RSVP heading have to sit on one line, and the heading belongs to
+   the shared form, so the section is a two-column grid and the form is display:contents: its
+   children become the grid's children and everything but the heading spans both columns. */
+main.file .part.reply { padding: 22px 18px 24px; background: rgba(151, 201, 61, 0.16); display: grid; grid-template-columns: auto 1fr; gap: 12px 10px; align-items: baseline; }
+main.file .part.reply > * { grid-column: 1 / -1; }
+main.file .part.reply > .num { grid-column: 1; grid-row: 1; }
+main.file .part.reply .pcard.reply { display: contents; }
+main.file .part.reply .pcard.reply > * { grid-column: 1 / -1; }
+/* justify-content as well as text-align: the shared heading is a flex row (it holds the bolts
+   the suite draws either side of the word), so centring it is a flex property, not a text one. */
+main.file .part.reply .pcard.reply > .rsvp-h { grid-column: 2; grid-row: 1; justify-content: flex-start; font-family: var(--font-display); font-size: 30px; color: #6A3FA0; text-align: start; letter-spacing: normal; }
+main.file .part.reply .pcard.reply > .rsvp-h svg { display: none; }
+main.file .rsvp-q { font-family: var(--font-hand); font-size: 22px; line-height: 1.3; text-align: start; }
+main.file .rsvp-q u { border-bottom: 2px solid #1B6F7C; padding: 0 6px; color: #1B6F7C; text-decoration: none; }
+main.file .pcard.reply .nudge { margin: 0; font-size: 15px; line-height: 1.5; text-align: start; max-width: none; opacity: 1; }
+
+/* Yes and no as tick boxes: a rule under each, a box before the words, and the one that is
+   chosen tinted rather than filled. The box is a pseudo-element because the words come from the
+   shared form and there is nothing to wrap them in. */
+main.file .pbtn.primary,
+main.file .pbtn:not(.primary):not(.small) {
+  display: flex; align-items: center; justify-content: flex-start; gap: 14px;
+  min-height: 58px; width: 100%; max-width: none; padding: 0 16px; margin: 0;
+  border: 0; border-bottom: 3px solid #1F2530; border-radius: 3px;
+  color: #1F2530; font-family: var(--font-hand); font-size: 24px; text-align: left; text-decoration: none;
+  box-shadow: none;
+}
+main.file .pbtn.primary::before,
+main.file .pbtn:not(.primary):not(.small)::before {
+  content: ""; flex: 0 0 26px; height: 26px; border-radius: 5px; border: 3px solid #1F2530; box-sizing: border-box;
+}
+main.file .pbtn.primary { background: rgba(151, 201, 61, 0.45); }
+main.file .pbtn.primary::before { background: #FFF9EE; }
+main.file .pbtn:not(.primary):not(.small) { background: transparent; }
+main.file .pbtn:not(.primary):not(.small)::before { background: #fff; }
+
+/* The reply-by line, struck on like a rubber stamp. */
+main.file .pcard.reply .replyby {
+  justify-self: end; margin-top: 4px; padding: 5px 12px; transform: rotate(-4deg);
+  border: 3px double #6A3FA0; border-radius: 6px; color: #6A3FA0;
+  font-family: var(--font-hand); font-size: 17px; line-height: normal; letter-spacing: 0.06em; text-transform: uppercase;
+  opacity: 1; text-align: start;
+}
+
+/* Add to calendar. `.invite .hold` never reaches this page, so every property is written out. */
+main.file .hold { width: 100%; max-width: none; margin: 8px 0 0; padding: 0; border: 0; display: flex; flex-direction: column; align-items: stretch; gap: 4px; text-align: start; }
+main.file .hold .q { margin: 0; font-family: var(--font-hand); font-size: 20px; color: #1F2530; }
+main.file .hold .row { display: flex; gap: 18px; width: auto; }
+main.file .hold .row .pbtn {
+  min-height: 44px; width: auto; max-width: none; padding: 0; margin: 0;
+  display: flex; align-items: center; justify-content: flex-start;
+  background: none; border: 0; border-radius: 0; box-shadow: none;
+  font-family: var(--font-body); font-weight: 700; font-size: 15px; color: #1F2530;
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px;
+}
+main.file .hold .row .pbtn::before { content: none; }
+main.file .hold .note { margin: 0; font-size: 12.5px; line-height: 1.45; max-width: none; opacity: 1; text-align: start; }
+
+@media (prefers-reduced-motion: reduce) {
+  main.file * { animation: none !important; transition: none !important; }
+}
+
+/* Bring a plate, once the guest has said yes.
+ *
+ * Not in the reference either: the design was drawn for a guest who has not replied. The rule it
+ * is built on decides it, the same way it decides every other part: everything below the pass is
+ * written on one ruled sheet. The shared board arrives as `.pcard.tilt-r.plate` with tape at each
+ * top corner, so on this page it was a second sheet taped over the clipboard. It becomes a section
+ * of the file instead: the card, the tilt and the tape go, and it takes the padding, the gap and
+ * the heading every other section on the sheet has. It carries no number, for the same reason the
+ * questions and the sign-off carry none: it is not part of the file, it is what a guest does after
+ * reading it.
+ */
+main.file .pcard.plate {
+  width: 100%; max-width: none;
+  background: none; border: 0; border-radius: 0; box-shadow: none; transform: none;
+  padding: 22px 18px; gap: 14px; align-items: stretch;
+}
+main.file .pcard.plate .tape { display: none; }
+main.file .pcard.plate .label { font-family: var(--font-hand); font-size: 27px; line-height: 1.2; letter-spacing: normal; text-transform: none; text-align: start; color: #4A2878; }
+main.file .pcard.plate .para { text-align: start; max-width: none; font-size: 15px; line-height: 1.5; }

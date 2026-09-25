@@ -17,3 +17,7 @@ __pycache__/
 
 # Transpiled component renders from the check harness
 /.rendercheck/
+
+# Playwright run output (the fidelity suite writes its diffs into
+# design_handoff_monster_layouts/verify/out, which is kept)
+/test-results/

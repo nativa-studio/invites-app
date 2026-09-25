@@ -1,0 +1,260 @@
+/* `main.bands`, never a bare `.bands`, and every descendant rule under it.
+   invite.css is loaded on every invite page, so a bare class here would land on the suite, the
+   strip and the lineup as well. CLAUDE.md records the two times that has already happened. */
+
+/* Fur bands. No cards, no page margins: one full-bleed colour band per part, each with a
+   scalloped fur edge along its top drawn in its own colour, so the bands look like they overlap.
+
+   Every number in this file is lifted from design_handoff_monster_layouts/reference/bands-page.html
+   and checked against spec/golden.json. There is no round-number logic behind any of them. */
+main.bands {
+  /* The cover's picture is wider than the padded column and the fur edges sit outside their
+     bands, so the page would scroll sideways without this. Clip rather than hidden: hidden makes
+     this a scroll container and breaks the sticky pieces. */
+  overflow-x: clip;
+  min-height: 100vh;
+  background: #F1DDBA;
+  color: #1F2530;
+  font-family: var(--font-body);
+  /* The design sets a line height on the parts that need one and lets the rest sit on the
+     font's own. globals.css puts 1.5 on body, which is right for the app and wrong here: it made
+     every heading, button and label taller than the drawing. */
+  line-height: normal;
+
+  --ink: #1F2530;
+  --lime: #97C93D;
+  --purple: #6A3FA0;
+  --teal: #35A9B8;
+  --cream: #FFF9EE;
+  --iris: #3F9E5A;
+  --sand: #F3E4C6;
+  --leaf: #C6EB85;
+
+  /* The tokens the shared parts read, so the reply, the plate board and the celebration draw in
+     this design's colours rather than in whatever the last layout left behind. */
+  --paper: #F1DDBA;
+  --navy: #1F2530;
+  --red: #6A3FA0;
+  --sky: #35A9B8;
+  --yel: #97C93D;
+  --forest: #3F9E5A;
+  --crm: #FFF9EE;
+  --sky-ink: #1F2530;
+  --on-sky: #1F2530;
+  --shadow: 0 6px 0 #1F2530;
+  --flag-0: #97C93D;
+  --flag-1: #35A9B8;
+  --flag-2: #6A3FA0;
+  --flag-3: #F3E4C6;
+  --flag-4: #C6EB85;
+  --flag-edge: #1F2530;
+}
+
+main.bands .greet {
+  margin: 0;
+  padding-top: 28px;
+  font-family: var(--font-hand);
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* The envelope's body. Gap zero: the bands are meant to touch, and the fur edge of each one is
+   drawn over the band above it. */
+main.bands .bands-body { width: 100%; display: flex; flex-direction: column; gap: 0; }
+
+/* The cover. The only part with no band behind it: it sits on the page's own paper, which is why
+   the characters can fade into it. */
+main.bands .cover { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 26px 22px 0; }
+main.bands .cover .eyebrow { margin: 0; font-family: var(--font-hand); font-size: 20px; letter-spacing: 0.12em; text-transform: uppercase; color: #3B1F63; }
+main.bands .cover h1 { margin: 0; padding-top: 6px; font-family: var(--font-title); font-weight: 400; font-size: 56px; line-height: 1; letter-spacing: 0.01em; text-align: center; }
+main.bands .cover .intro { margin: 0; font-size: 16px; line-height: 1.5; text-align: center; max-width: 300px; }
+/* Full page width inside a padded column, by cancelling the padding rather than by naming 390:
+   at 360 a fixed width would sit off centre and hang over the left edge. */
+main.bands .cover .cast { align-self: stretch; display: flex; justify-content: center; margin: -14px -22px 18px; }
+main.bands .cover .cast img {
+  display: block; width: 340px; height: auto;
+  /* Both edges fade into the paper instead of ending on a line, and so does the foot, so the
+     characters stand on the page rather than in a frame. */
+  mask-image:
+    linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%),
+    linear-gradient(transparent 0, #000 8%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%),
+    linear-gradient(transparent 0, #000 8%);
+  -webkit-mask-composite: source-in;
+}
+
+/* Every band after the cover. --band is its own colour, which the fur edge is cut from. */
+main.bands .band { position: relative; }
+main.bands .band::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -13px; height: 14px;
+  background: radial-gradient(circle at 10px 14px, var(--band) 10px, transparent 10.5px) 0 0 / 20px 14px repeat-x;
+}
+/* text-wrap is spelled out because globals.css balances every h1, h2 and h3, and a balanced
+   heading breaks in a different place: "The order of the afternoon" came out as two short lines
+   rather than as the drawing's long one and a short one. */
+main.bands .band h2 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 34px; line-height: 1; text-wrap: wrap; }
+/* `.lines`, not `.rows`: globals.css has a bare `.rows` on it (the host app's list rows) and
+   globals loads everywhere. */
+main.bands .band .lines { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 310px; }
+main.bands .band .lines.wide { gap: 14px; max-width: 320px; }
+/* `.item`, not `.row`: the shared Add to calendar block has a `.row` of its own inside this same
+   band, and a rule on `.band .row` reached into it and set its type. */
+main.bands .band .lines .item { display: flex; gap: 12px; align-items: center; font-size: 17px; line-height: 1.4; }
+main.bands .band .lines .item svg { flex: 0 0 40px; }
+
+main.bands .band.details { --band: #97C93D; background: #97C93D; padding: 42px 24px 58px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+/* Open in Maps reads inline after the place. This design has no cards to put a button on, and a
+   pill in the middle of a colour band was the loudest thing on the page. */
+main.bands .band.details .where { display: flex; flex-wrap: wrap; align-items: center; column-gap: 12px; }
+main.bands .band.details .where a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; color: #1F2530; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+main.bands .band.updates { --band: #FFF9EE; background: #FFF9EE; padding: 42px 24px 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+main.bands .band.updates .lines .item { font-size: 16px; line-height: 1.45; }
+
+main.bands .band.day { --band: #FFF9EE; background: #FFF9EE; padding: 42px 24px 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+main.bands .band.day h2 { text-align: center; }
+main.bands .band.day .stops { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 330px; }
+/* No boxes and no rule down the side: the time, the picture and the words are three columns and
+   the white of the band is the spacing. */
+main.bands .band.day .stop { display: grid; grid-template-columns: 56px 44px 1fr; gap: 10px; align-items: center; }
+main.bands .band.day .t { font-family: var(--font-display); font-size: 18px; text-align: center; }
+main.bands .band.day .n { font-family: var(--font-display); font-size: 19px; line-height: 1.1; }
+main.bands .band.day .b { font-size: 14px; line-height: 1.4; margin-top: 2px; }
+
+main.bands .band.know {
+  --band: #35A9B8;
+  background-color: #35A9B8;
+  /* Two sizes of purple spot on two grids, so the pattern never lines up with itself. */
+  background-image:
+    radial-gradient(circle at 70% 25%, rgba(106, 63, 160, 0.38) 0, rgba(106, 63, 160, 0.38) 16px, transparent 17px),
+    radial-gradient(circle at 25% 70%, rgba(106, 63, 160, 0.38) 0, rgba(106, 63, 160, 0.38) 11px, transparent 12px);
+  background-size: 140px 120px, 100px 110px;
+  padding: 42px 24px 40px; display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+main.bands .band.know .lines .item { font-size: 16px; line-height: 1.45; }
+
+main.bands .band.gifts { --band: #FFF9EE; background: #FFF9EE; padding: 42px 24px 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+main.bands .band.gifts .inner { width: 100%; max-width: 320px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+main.bands .band.after { --band: #97C93D; background: #97C93D; padding: 40px 18px 34px; }
+main.bands .band.after .cells { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+main.bands .band.after .cell { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+main.bands .band.after .n { font-family: var(--font-display); font-size: 22px; }
+main.bands .band.after .b { font-size: 14px; min-height: 44px; }
+main.bands .band.after a.b { display: flex; align-items: center; justify-content: center; color: inherit; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+main.bands .band.signoff { --band: #1F2530; background: #1F2530; color: #F3E4C6; padding: 50px 24px 30px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+main.bands .band.signoff .msg { margin: 0; font-family: var(--font-hand); font-size: 26px; line-height: 1.3; text-align: center; max-width: 290px; }
+main.bands .band.signoff .from { margin: 0; font-family: var(--font-hand); font-size: 17px; text-align: center; color: #C6EB85; }
+
+/* The eye. Three rings and no text, and the one piece of furniture this design has in place of
+   cards. Sized from the markup, because it appears at three sizes. */
+main.bands .eye { display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #fff; border: 4px solid #1F2530; box-sizing: border-box; flex: none; }
+main.bands .eye .iris { border-radius: 50%; background: #3F9E5A; display: flex; align-items: center; justify-content: center; }
+main.bands .eye .pupil { border-radius: 50%; background: #1F2530; }
+/* On the seal the envelope has already drawn the white and the ring, so the eye is the iris. */
+main.bands .eye.bare { background: #3F9E5A; border: 0; }
+main.bands .band.signoff .eye { background: #F3E4C6; border: 0; }
+/* Half over the seam, watching the reply. */
+main.bands .band.reply .eye { position: absolute; left: 50%; top: -38px; margin-left: -38px; }
+
+/* The reply band.
+   The RSVP itself is the shared form, not a copy of it: `reply` arrives as one node and every
+   class below belongs to it. The band is the flex column the reference draws, and the card that
+   usually wraps the form has its clothes taken off, so its children sit in that column. */
+main.bands .band.reply { --band: #6A3FA0; background: #6A3FA0; color: #fff; padding: 64px 24px 40px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+main.bands .band.reply .pcard.reply {
+  width: 100%; max-width: none; padding: 0; margin: 0;
+  background: none; border: 0; border-radius: 0; box-shadow: none; transform: none;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+main.bands .rsvp-h { font-family: var(--font-display); font-size: 40px; line-height: 1; letter-spacing: normal; text-align: start; color: #fff; }
+/* The bolts either side of RSVP belong to the Pokémon suite. */
+main.bands .rsvp-h svg { display: none; }
+main.bands .rsvp-q { font-family: var(--font-hand); font-size: 23px; line-height: 1.3; text-align: center; color: #fff; }
+main.bands .rsvp-q u { border-bottom: 2px solid #97C93D; padding: 0 6px; color: #C6EB85; text-decoration: none; }
+main.bands .pcard.reply .nudge { margin: 0; font-size: 15px; line-height: 1.5; text-align: center; max-width: 300px; color: #fff; opacity: 1; }
+main.bands .pcard.reply .replyby { font-size: 13px; line-height: 1.45; text-align: center; color: #fff; opacity: 1; border: 0; padding: 0; }
+
+/* Yes and no: the same fur-trimmed shape, one lime with dark spots, one teal with purple ones.
+   The radius is two different radii, so the top is rounder than the foot and the whole thing
+   reads as something soft rather than as a pill. */
+main.bands .pbtn.primary,
+main.bands .pbtn:not(.primary):not(.small) {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  min-height: 64px; width: 100%; max-width: 320px; margin-top: 6px; padding: 0;
+  border-radius: 32px / 38px 38px 26px 26px;
+  border: 4px solid #1F2530;
+  color: #1F2530;
+  font-family: var(--font-display); font-size: 22px;
+  box-shadow: #1F2530 0 6px 0;
+  text-decoration: none;
+}
+main.bands .pbtn.primary {
+  background-color: #97C93D;
+  background-image:
+    radial-gradient(circle at 18% 35%, rgba(31, 37, 48, 0.14) 0, rgba(31, 37, 48, 0.14) 5px, transparent 6px),
+    radial-gradient(circle at 82% 60%, rgba(31, 37, 48, 0.14) 0, rgba(31, 37, 48, 0.14) 4px, transparent 5px);
+}
+main.bands .pbtn:not(.primary):not(.small) {
+  background-color: #35A9B8;
+  background-image:
+    radial-gradient(circle at 16% 60%, rgba(106, 63, 160, 0.45) 0, rgba(106, 63, 160, 0.45) 6px, transparent 7px),
+    radial-gradient(circle at 86% 35%, rgba(106, 63, 160, 0.45) 0, rgba(106, 63, 160, 0.45) 5px, transparent 6px);
+}
+
+/* Add to calendar. The rules that draw this elsewhere are `.invite .hold`, and this page is not
+   `.invite`, so none of them reach it: every property is written out. */
+main.bands .hold {
+  width: 100%; max-width: none; margin: 14px 0 0; padding-top: 18px;
+  border-top: 2px dotted rgba(255, 255, 255, 0.5);
+  display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+}
+main.bands .hold .q { margin: 0; font-family: var(--font-hand); font-size: 20px; color: #fff; }
+main.bands .hold .row { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; gap: 4px 8px; width: 100%; }
+main.bands .hold .row .pbtn {
+  min-height: 44px; width: auto; max-width: none; padding: 0; margin: 0;
+  display: flex; align-items: center;
+  background: none; border: 0; border-radius: 0; box-shadow: none;
+  font-family: var(--font-display); font-size: 15px; color: #fff;
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px;
+}
+main.bands .hold .note { margin: 0; font-size: 12.5px; line-height: 1.45; max-width: 290px; color: #fff; opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  main.bands * { animation: none !important; transition: none !important; }
+}
+
+/* Bring a plate, once the guest has said yes.
+ *
+ * This state is not in the reference: the design was drawn for somebody who has not replied yet,
+ * so there is no picture of the board to measure against. What there is, is the rule the whole
+ * layout is built on, and it applies here like everywhere else: this design has no cards. The
+ * shared board arrives as `.pcard.tilt-r.plate` with a strip of tape at each top corner, which is
+ * the suite's furniture, and on a page made of full-bleed bands it read as a sheet of paper stuck
+ * over the invite. So it becomes a band: the paper, the border, the hard shadow, the tilt and the
+ * tape all go, and it takes the cream of the order of the afternoon and the same fur edge every
+ * other band has. Nothing else about the board is touched.
+ */
+main.bands .pcard.plate {
+  --band: #FFF9EE;
+  width: 100%; max-width: none;
+  background: #FFF9EE; border: 0; border-radius: 0; box-shadow: none; transform: none;
+  padding: 42px 24px 40px; gap: 16px;
+}
+main.bands .pcard.plate .tape { display: none; }
+/* The heading reads as a band heading, which is the display face at 34, not the hand at 22 the
+   suite's cards use. */
+main.bands .pcard.plate .label { font-family: var(--font-display); font-size: 34px; line-height: 1; letter-spacing: normal; text-transform: none; color: var(--ink); }
+main.bands .pcard.plate .para { font-size: 17px; line-height: 1.4; max-width: 320px; }
+/* The same fur edge every band has, drawn in this band's own colour. Written out rather than
+   folded into the `.band::before` rule above, because the shared board is not a `.band` and
+   giving it that class would mean changing a component three layouts draw. */
+main.bands .pcard.plate::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -13px; height: 14px;
+  background: radial-gradient(circle at 10px 14px, var(--band) 10px, transparent 10.5px) 0 0 / 20px 14px repeat-x;
+}
