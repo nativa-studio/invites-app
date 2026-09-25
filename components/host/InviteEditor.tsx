@@ -59,6 +59,15 @@ export function InviteEditor({ e }: { e: EventRow }) {
           is seven rows of switches and handles that a host opens on purpose and then shuts. */}
       <div className="actions">
         <button type="button" className="btn small" onClick={() => setParts(true)}>{copy.host.partsOpen}</button>
+        {/* The one thing the frame below cannot be. It is the guest's invite already, and every
+            tap on it works, but it is a phone drawn inside a phone and its envelope is open
+            before you get there, because sitting through the opening after every save is a toll.
+            So: the same page, full size, with the envelope still shut, in a tab of its own.
+            Marcia: "put back the preview mode so I can see the full size, guest experience with
+            envelope moving." One link, not a mode: there is nothing to switch back from. */}
+        <a className="btn small" href={`/app/preview/${e.id}?full=1`} target="_blank" rel="noreferrer">
+          {copy.host.previewFull}
+        </a>
       </div>
       <div className="screen phone">
         <iframe key={src} src={src} title="Your invite" />

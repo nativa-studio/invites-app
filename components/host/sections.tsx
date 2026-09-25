@@ -109,7 +109,11 @@ export const SECTIONS: Section[] = [
   {
     id: "gifts",
     title: "Gifts",
-    blurb: "A block of its own for gifts: what you want to say, a wish list, and the group gift if one is running. Guests can cross an idea off the list to say they have that one covered, except the first, which is the general one. Cross one off yourself and they will see what to do.",
+    // No blurb. Every other part of the invite gets a line saying what it is for, and this one
+    // had grown into a paragraph explaining the crossing out as well, on a drawer whose first
+    // field is already the words a host writes about gifts. Marcia asked for it gone. The wish
+    // list's own line below it says the part about crossing off, where a host is looking when it
+    // matters.
     show: { column: "show_gifts", label: copy.host.giftsBlock },
     fields: ["gift_note", "group_gift_enabled", "gift_description", "group_gift_note", "gift_target"],
     render: (e) => (

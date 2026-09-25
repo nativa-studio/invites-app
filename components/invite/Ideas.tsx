@@ -90,9 +90,13 @@ export function Ideas({ list }: { list: WishlistItem[] }) {
   }
 }
 
-// ", " between, " and " before the last. The same shape sentenceList gives, written out here
-// because the labels can carry links and buttons, and a joined string cannot.
+// A space between them and nothing else. No "and" before the last, and now no commas either.
+//
+// It began as the shape sentenceList gives, which is right for a sentence: three or four things
+// with an "and" before the last reads as English. Eleven presents is not a sentence. The "and"
+// went first, and then the commas, because Marcia writes these with an emoji on the end of each
+// one: "remove the comma, I am using emoji so all will be fine." The pictures do the separating,
+// and a comma after each one was punctuation between pictures.
 function joiner(i: number, n: number): string {
-  if (i >= n - 1) return "";
-  return i === n - 2 ? " and " : ", ";
+  return i >= n - 1 ? "" : " ";
 }
