@@ -90,9 +90,13 @@ export function Ideas({ list }: { list: WishlistItem[] }) {
   }
 }
 
-// ", " between, " and " before the last. The same shape sentenceList gives, written out here
-// because the labels can carry links and buttons, and a joined string cannot.
+// A comma between every one of them, including the last. Marcia asked for the "and" to go.
+//
+// It is the shape sentenceList gives and the shape the plate card uses, and it is right for a
+// sentence: three or four things with an "and" before the last reads as English. This is not that
+// any more. Eleven presents with an "and" three quarters of the way down reads as the sentence
+// finishing early and then carrying on, and the last idea arrives looking like an afterthought
+// rather than another item. Commas all the way make it what it is, a list.
 function joiner(i: number, n: number): string {
-  if (i >= n - 1) return "";
-  return i === n - 2 ? " and " : ", ";
+  return i >= n - 1 ? "" : ", ";
 }
