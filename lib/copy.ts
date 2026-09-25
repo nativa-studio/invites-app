@@ -341,12 +341,12 @@ export const copy = {
     plateEveryone: "It's a bring a plate afternoon, so please bring something for the table.",
   },
   host: {
-    blockOff: "Not on the invite. Guests only see the line in the info booth. Tap to put the block back.",
+    blockOff: "Not on the invite. Guests only see the line in the info booth. The pencil puts the block back.",
     // The gifts block in the editor, in its two states. Worded apart from the plate's because the
     // consequence is different: switching the plate block off leaves a line in the info booth,
     // and switching gifts off leaves a line only if the host wrote one.
-    giftsOff: "Not on the invite. Tap to turn the gifts block on.",
-    previewGifts: "Guests see this. Tap to change what it says or add to the wish list.",
+    giftsOff: "Not on the invite. The pencil turns the gifts block on.",
+    previewGifts: "Guests see this. The pencil is where you write it and add to the wish list.",
     giftsEmpty: "Nothing written about gifts yet. Tap to add a line, a wish list, or both.",
     // The host's own sentence about the group gift. The hint has to say what happens when it is
     // empty, or a host leaves it blank expecting silence and gets the app's line instead.
@@ -355,14 +355,10 @@ export const copy = {
     previewPlate: "Guests claim a dish here once they have said yes.",
     previewGift: "Guests read how to chip in here once they have answered. The bank details come from whoever is organising it.",
     previewReply: "Tap to change what this asks, including the reply by date. To answer it the way a guest does, switch to Preview.",
-    modeLabel: "How to look at your invite",
-    modeEdit: "Change it",
-    modeGuest: "Preview",
-    modeEditHint: "Tap any part of the invite to change it.",
-    modeGuestHint: "Your guests' invite, working. Open the envelope, press yes, answer the questions, read the thank you. Nothing you do here is saved and nobody is counted.",
-    modeAgain: "Start again",
-    tryAsGuest: "Preview",
-    backToEditing: "Change it",
+    // The only words about editing on the invite itself, and nobody sees them: it is the name a
+    // screen reader reads out for the pencil, since a picture of a pencil has none.
+    editThis: (what: string) => `Change ${what.toLowerCase()}`,
+    inviteHint: "This is your guests' invite, working. Press yes, open the blocks, try the buttons: nothing here is saved and nobody is counted. The pencil on a part is where you change it.",
     tryWho: "you",
     partyTypeHeading: "Kind of party",
     partyTypeBlurb: "It decides which designs are offered first, and it set the reply's questions when you started. Changing it now only changes what is offered: every setting you have touched stays as you left it.",

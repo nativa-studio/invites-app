@@ -82,7 +82,9 @@ export function TryReply({ e, who, googleLink, icsLink, plate, gift }: {
   }
 
   return (
-    <form className="pcard tilt-l reply" onSubmit={send}>
+    // data-section, so the reply carries a pencil like every other part of the invite on the
+    // host's screen. It is harmless on a guest's, which draws Rsvp rather than this.
+    <form className="pcard tilt-l reply" data-section="reply" onSubmit={send}>
       <div className="rsvp-h"><Bolt size={24} /> {copy.rsvp.heading} <Bolt size={24} /></div>
       <div className="rsvp-q">Can <u>{who}</u> make it?</div>
       <div className="para nudge">{copy.rsvp.nudge}</div>
