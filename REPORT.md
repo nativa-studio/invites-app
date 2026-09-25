@@ -108,8 +108,20 @@ Evidence is in `design_handoff_monster_layouts/verify/out/`.
       Staff file renumbers: the details 01, the afternoon 02, the reply 03, the info booth 04.
       `manual-<layout>-reorder-day-above-reply.png`.
 
-- [x] **Yes.** Pressed yes, with three dishes on the board.
-      `manual-<layout>-yes-thankyou-and-plate.png`. What I found and what I did is deviation B.
+- [x] **Yes.** Pressed yes, with three dishes on the board. The whole page is
+      `manual-<layout>-yes-thankyou-and-plate.png`, and the two things the gate asks about are
+      cropped out of it: `manual-<layout>-yes-thankyou-closeup.png` and
+      `manual-<layout>-yes-plate-closeup.png`.
+
+      The thank you draws in each layout's clothes with nothing done to it: in Fur bands it is the
+      purple band with the eye above it, in Staff file it is section 02 on the ruled sheet, tinted
+      lime, no card and no tilt. The board did not, and that is deviation B.
+
+      Judged by eye, the only thing left that reads as borrowed is the Add to calendar pair on the
+      Staff file's thank you: two rounded pills, centred, on a sheet where everything else is left
+      aligned and drawn as tick boxes or stamps. They are the shape the golden holds for the
+      unanswered reply, which is measured and passes, so I have not touched them. Say the word and
+      they can become tick-box rows too.
 
 - [x] **CSS scope.** `grep -nE "^\s*\.[a-z]" app/bands.css app/file.css` returns nothing. Every
       rule starts `main.bands` or `main.file`, the two `@media (prefers-reduced-motion)` blocks
@@ -131,7 +143,7 @@ Four. Each one needs a yes or a no from you.
 | Where | Golden says | Built | Why it cannot match | Screenshot |
 | --- | --- | --- | --- | --- |
 | **A. Pencil count**, the host's editing view | Seven pencils: cover, details, reply, day, know, after, signoff | Nine: those seven, plus Bring a plate and Gifts | Those two parts draw nothing on a guest's page until the guest says yes, or while the block is switched off. The editor draws a faded stand-in for each so the switch that brings them back stays reachable, because the only thing that opens that drawer is the pencil on that card. It is the rule at the top of `CLAUDE.md`, written after a switch saved, said it saved, and changed nothing. Removing them would match the number and lose the switches. | `manual-bands-pencils.png`, `manual-file-pencils.png` |
-| **B. The plate board, after yes** | Nothing. The design was drawn for a guest who has not replied, so there is no picture of the board to measure | Fur bands: a cream band with the same fur edge every other band has, heading in Lilita One. Staff file: a section of the ruled sheet, dashed rule above, heading in the hand face like every other section | The shared board arrives as a tilted card with a strip of tape at each top corner, which is the suite layout's furniture. On a page made of full-bleed bands it read as a sheet of paper stuck over the invite, and on the clipboard it read as a second sheet taped over the first. The gate says "no tape, no tilt, readable", so leaving it was not an option, and there is no reference to copy, so the colours are the layout's own and the choice is mine | `manual-bands-yes-thankyou-and-plate.png`, `manual-file-yes-thankyou-and-plate.png` |
+| **B. The plate board, after yes** | Nothing. The design was drawn for a guest who has not replied, so there is no picture of the board to measure | Fur bands: a cream band with the same fur edge every other band has, heading in Lilita One. Staff file: a section of the ruled sheet, dashed rule above, heading in the hand face like every other section | The shared board arrives as a tilted card with a strip of tape at each top corner, which is the suite layout's furniture. On a page made of full-bleed bands it read as a sheet of paper stuck over the invite, and on the clipboard it read as a second sheet taped over the first. The gate says "no tape, no tilt, readable", so leaving it was not an option, and there is no reference to copy, so the colours are the layout's own and the choice is mine | `manual-bands-yes-plate-closeup.png`, `manual-file-yes-plate-closeup.png` |
 | **C. Files touched outside README section 10** | Section 10 is the complete list, and anything else is a deviation | Seven more files, all listed with a reason in section 5 | Three are faults the build found in shared code, three are the test set-up, one is a type for the new column. None of them are design | none, see section 5 |
 | **D. Luckiest Guy** | Section 8 asks for it and says to say so | Added in `app/layout.tsx` as `--font-title` and `lib/fonts/LuckiestGuy.ttf` for the share cards | Not a deviation so much as the thing section 8 told me to declare. It is a new typeface in the app, used only for the event title on these two layouts and the name on the fur share card | `manual-bands-1-guest-token.png` |
 
