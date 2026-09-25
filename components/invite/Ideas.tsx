@@ -90,13 +90,13 @@ export function Ideas({ list }: { list: WishlistItem[] }) {
   }
 }
 
-// A comma between every one of them, including the last. Marcia asked for the "and" to go.
+// A space between them and nothing else. No "and" before the last, and now no commas either.
 //
-// It is the shape sentenceList gives and the shape the plate card uses, and it is right for a
-// sentence: three or four things with an "and" before the last reads as English. This is not that
-// any more. Eleven presents with an "and" three quarters of the way down reads as the sentence
-// finishing early and then carrying on, and the last idea arrives looking like an afterthought
-// rather than another item. Commas all the way make it what it is, a list.
+// It began as the shape sentenceList gives, which is right for a sentence: three or four things
+// with an "and" before the last reads as English. Eleven presents is not a sentence. The "and"
+// went first, and then the commas, because Marcia writes these with an emoji on the end of each
+// one: "remove the comma, I am using emoji so all will be fine." The pictures do the separating,
+// and a comma after each one was punctuation between pictures.
 function joiner(i: number, n: number): string {
-  return i >= n - 1 ? "" : ", ";
+  return i >= n - 1 ? "" : " ";
 }

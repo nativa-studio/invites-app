@@ -266,10 +266,14 @@ export const copy = {
     // decides to put in it, which may be a wish list, may be "no presents please", and may be
     // both.
     gifts: "Gifts",
-    // The two titles inside the gifts block, each opening what is under it. One word apiece now:
-    // they sit one above the other, a tap apart, and "Some ideas" and "The group gift" carried
-    // three syllables of throat-clearing between them for no gain. Marcia's call.
-    wishlist: "Ideas",
+    // The two titles inside the gifts block, each opening what is under it. One word apiece:
+    // they sit side by side, a tap apart, and "Some ideas" and "The group gift" carried three
+    // syllables of throat-clearing between them for no gain.
+    //
+    // Hints rather than Ideas, which is Marcia's word and her note's word: "we've left some
+    // hints (but no need to follow)". A hint is smaller than an idea, and this is a list a guest
+    // is meant to be able to walk past.
+    wishlist: "Hints",
     groupGift: "Group gift",
     wishlistLink: "Have a look",
     // Under the reply, before anybody has answered. The same words as the thank-you card uses,
