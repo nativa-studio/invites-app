@@ -5,6 +5,7 @@ import { looksLikeAPerson } from "@/lib/guest/is-a-person";
 import { getInvite, getInviteCard, markOpened } from "@/lib/guest/invite";
 import { getPlate } from "@/lib/guest/plate";
 import { getGift } from "@/lib/guest/gift";
+import { getWishes } from "@/lib/guest/wishes";
 import { isCurious } from "@/lib/guest/about";
 import { getSiteUrl } from "@/lib/site-url";
 import { cardUrl, shareMetadata } from "@/lib/share-meta";
@@ -39,14 +40,31 @@ export default async function Page({ params, searchParams }: Params) {
   // anything calling itself a bot, is not somebody reading their invitation. Same test the
   // calendar tap uses. Not awaited: a guest is here for their invite, not for our bookkeeping.
   if (looksLikeAPerson(await headers())) void markOpened(token);
-  // Only fetched for a guest who is coming, since that is the only one who sees it. A host who
-  // has never switched bring a plate on gets null back and no card.
-  const [plate, gift, curious] = await Promise.all([
+  // The plate is only for a guest who is coming, since that is the only one who sees it. A host
+  // who has never switched bring a plate on gets null back and no card.
+  //
+  // The gift is for everybody holding their own link, answered or not. It used to wait for a
+  // reply, back when chipping in was a card shoved under the RSVP and asking for money in the
+  // middle of deciding whether to come was the wrong question. It is a quiet line inside the
+  // gifts block now, behind a button.
+  //
+  // Migration 0044 opened get_gift to a guest who has not answered. This line did not move with
+  // it, so the database was handing out the block and the page was throwing it away: a pending
+  // guest opened Group gift and read "How to chip in comes with your reply", which is the
+  // sentence that shows when there is no gift here, and their tap on Chip in could not happen
+  // because there was no button to tap. The gate moved and its twin stayed put, which is the
+  // fault CLAUDE.md opens with.
+  //
+  // The wish list's crossings out come the same way. The labels are already on the invite, inside
+  // the event's own payload; this is only which ideas have been taken and which of them by this
+  // guest, which is the part that can change while they are looking at it.
+  const [plate, gift, wishes, curious] = await Promise.all([
     invite.guest.status === "yes" ? getPlate(token) : null,
-    invite.guest.status === "pending" ? null : getGift(token),
+    getGift(token),
+    getWishes(token),
     isCurious(token),
   ]);
   // ?layout= lets a host hold their own phone and flick through the designs before choosing one
   // in Settings. It changes nothing: the saved layout is whatever Settings says.
-  return <InvitePage invite={invite} token={token} plate={plate} gift={gift} curious={curious} layout={asLayout(layout)} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
+  return <InvitePage invite={invite} token={token} plate={plate} gift={gift} wishes={wishes} curious={curious} layout={asLayout(layout)} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
 }

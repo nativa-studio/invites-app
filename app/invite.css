@@ -602,6 +602,32 @@
 .gifts .ideas { max-width: 290px; }
 /* A link keeps its word underlined. Nothing else in the sentence is one, so that is enough. */
 .gifts .ideas a { color: var(--sky-ink); text-underline-offset: 3px; text-decoration-thickness: 2px; }
+/* An idea a guest can cross off. It has to be a button, because it does something; it must not
+   look like one, because the sentence is reading matter and a row of buttons in the middle of it
+   would be the loudest thing on the card. So: the word, exactly as it is set around it, with a
+   line through it once somebody has that one covered. Nothing announces the tap. Marcia asked for
+   it that way, and one or two crossed off by hand is the only instruction there will be. */
+/* crossable, not pick: globals.css has a bare .pick on it (a list of options, display: grid),
+   and globals loads on every page. This element is an inline word inside a sentence. Nothing was
+   visibly wrong, because the rule below is the more specific of the two and wins every property
+   it names, but the element was carrying a stranger's declarations and the next one added there
+   would have landed here. Third time in this repo, and the first two were visible: see CLAUDE.md
+   on .peek and .strip. */
+.gifts .ideas .crossable { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0;
+  text-align: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  /* Asked for inline and measured as inline-block, because a button is an atomic inline box and
+     the browser blockifies it whatever this says. The consequence, kept here so nobody spends the
+     afternoon on it again: a label cannot break across two lines. It wraps inside its own box and
+     leaves a gap on the line above instead. Measured on the real list at 390: the widest idea is
+     247px in a 293px column, so every one of them sits on a line of its own and nothing
+     overflows. A label longer than the column is the case to look at. */
+  display: inline; }
+.gifts .ideas .crossable:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px; border-radius: 3px; }
+/* Crossed off, whoever did it: a guest on their own, a guest on somebody else's, or the host from
+   the drawer. One look for all three, because which of them it was is nobody's business on an
+   invitation. Struck and faded rather than struck alone, so it reads as settled rather than as a
+   mistake in the typing. */
+.gifts .ideas .gone { text-decoration: line-through; text-decoration-thickness: 2px; opacity: 0.45; }
 .gifts .rule { width: 46px; height: 10px; border-radius: 3px; }
 /* Ideas and Group gift, side by side, one open at a time.
    Two titles on a row read as a choice rather than a list, which is what they are. The panel is

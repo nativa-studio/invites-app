@@ -20,7 +20,7 @@ import { saysNoAllergy } from "@/lib/allergies";
 export type Happening = {
   at: string;
   kind: "yes" | "no" | "joined" | "calendar" | "token" | "sent" | "opened" | "reminded" | "groupOpen"
-    | "tapIdeas" | "tapGroupGift" | "tapChipIn" | "chippedIn";
+    | "tapIdeas" | "tapGroupGift" | "tapChipIn" | "chippedIn" | "wishClaimed";
   who: string;
   /** The group they are labelled with, for the tag beside the line. Null for anybody who has not
    *  been put in one, which shows nothing rather than the words "no group": the tag is there to
@@ -38,6 +38,10 @@ export type Happening = {
    *  the second one says it more loudly. Absent on rows written before migration 0043, which
    *  cannot know, and which therefore read as they always did. */
   times?: number;
+  /** The idea that was crossed off, and nothing else ever. The only line in the feed that names a
+   *  thing as well as a person, because a host reading "Sarah is getting something" has been told
+   *  nothing at all. */
+  what?: string;
 };
 
 /** One line of what a guest wrote. `warn` is the allergy line and nothing else: it is the one
@@ -63,6 +67,9 @@ const GIFT_KINDS: Record<string, Happening["kind"] | undefined> = {
   tap_group_gift: "tapGroupGift",
   tap_chip_in: "tapChipIn",
   chipped_in: "chippedIn",
+  // Not a tap on the block but a change to what is in it, which is why this one carries the
+  // label it was written with rather than only a name.
+  wish_claimed: "wishClaimed",
 };
 
 // One group per guest in the app, even though the column holds a list: the picker on a guest's
@@ -114,6 +121,9 @@ export const loadActivity = cache(async (eventId: string, guests: GuestRow[]): P
     out.push({
       at: row.at, kind, who, group: groupOf(g),
       ...(said.length ? { said } : {}),
+      // The label as it read when they crossed it off. Kept on the row rather than looked up, so
+      // a host renaming an idea afterwards does not rewrite what happened.
+      ...(kind === "wishClaimed" && row.detail ? { what: row.detail } : {}),
       ...(row.tally && row.tally > 1 ? { times: row.tally } : {}),
     });
   }

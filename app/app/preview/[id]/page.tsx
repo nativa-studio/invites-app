@@ -15,7 +15,7 @@ import { PreviewPlate } from "@/components/invite/PreviewExtras";
 import { GiftsCard } from "@/components/invite/GiftsCard";
 import { ReplyProvider } from "@/components/invite/ReplyState";
 import { TryReply } from "@/components/invite/TryReply";
-import { previewGift, previewPlate } from "@/lib/db/preview-extras";
+import { previewGift, previewPlate, previewWishes } from "@/lib/db/preview-extras";
 import { loadEvent } from "@/lib/db/host";
 
 // The host's own look at their invite. Reads the event row straight from the table, so it works
@@ -76,11 +76,14 @@ export default async function Preview({
   // PreviewExtras rather than the guest's board, and a query nobody reads is a query not worth
   // making.
   const row = event as EventRow;
-  const [plate, gift] = await Promise.all([
-    // Both through the same functions a guest's invite goes through, so what this shows cannot
-    // disagree with what they get. See lib/db/preview-extras.ts.
+  const [plate, gift, wishes] = await Promise.all([
+    // All three through the same functions a guest's invite goes through, so what this shows
+    // cannot disagree with what they get. See lib/db/preview-extras.ts.
     asGuest ? previewPlate(id) : null,
     previewGift(id),
+    // Both views, like the gift. A host looking at their own list has to see the crossings out,
+    // since crossing one off is the thing they are about to do from the drawer behind this card.
+    previewWishes(id),
   ]);
   // The Layout tab previews what you are about to save, not what is saved. Anything it hands over
   // in the query string wins over the stored row, so a switch you have just flicked shows here
@@ -161,7 +164,7 @@ export default async function Preview({
           answers to no reply, but it still gets the gift: chipping in no longer waits for an
           answer, so there is nothing about it left for the editor to hold back. Pretend on both,
           which is what keeps a host trying their own invite off their own guest list. */}
-      <ReplyProvider initial={{ token: token ?? "", status: "pending", plate: null, gift, pretend: true }}>
+      <ReplyProvider initial={{ token: token ?? "", status: "pending", plate: null, gift, wishes, pretend: true }}>
         <InviteBody
           e={e}
           greeting={greeting}

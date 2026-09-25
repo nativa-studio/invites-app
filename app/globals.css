@@ -769,5 +769,8 @@ a.tile:hover { border-color: var(--app-ink); }
 .wish-row { display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 4px 0; }
 .wish-row .what { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .wish-row .what b { font-weight: 600; overflow-wrap: anywhere; }
+/* Crossed off: the same line through the word the guest sees, so a host can tell at a glance
+   which ideas are still going without reading a column of labels saying so. */
+.wish-row .what b.gone { text-decoration: line-through; opacity: 0.55; }
 .wish-row .what .sub { font-size: 13px; color: var(--app-mute); overflow-wrap: anywhere; }
 .wish-row .what .sub.link { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

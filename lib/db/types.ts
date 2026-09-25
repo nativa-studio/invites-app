@@ -124,8 +124,13 @@ export type PublicEvent = {
   group_gift_note?: string | null;
 };
 
-/** One thing on the wish list. The host writes these; guests only read them. */
-export type WishlistItem = { label: string; note?: string | null; url?: string | null };
+/** One thing on the wish list. The host writes the words; a guest can cross it off.
+ *
+ *  The id is here so a tap has something to name. Whether it is crossed off is not: that changes
+ *  while somebody is looking at the page, and it is the one part of the list a second guest can
+ *  change under the first. It arrives through wish_state instead, on ReplyState, so every door
+ *  into the invite reads it from the same place. */
+export type WishlistItem = { id?: string; label: string; note?: string | null; url?: string | null };
 
 export type GuestStatus = "pending" | "yes" | "no";
 
@@ -216,5 +221,5 @@ export type EventRow = PublicEvent & {
   gift_target?: number | null;
   /** The wish list with its ids and sort, for the editor. The guest's copy is on PublicEvent and
    *  has neither, because there is nothing for a guest to do to a row. */
-  wishlist?: { id: string; label: string; note: string | null; url: string | null; sort: number }[] | null;
+  wishlist?: { id: string; label: string; note: string | null; url: string | null; sort: number; claimed: boolean }[] | null;
 };
