@@ -1,8 +1,8 @@
-import React from "react";
 import { copy } from "@/lib/copy";
 import type { PublicEvent } from "@/lib/db/types";
 import { ChipInSlot } from "./ChipIn";
 import { GiftParts } from "./GiftParts";
+import { Ideas } from "./Ideas";
 
 // What the gifts block says, once, for every layout that draws one.
 //
@@ -47,21 +47,11 @@ export function GiftsContent({ e, editing }: {
           {
             key: "ideas",
             label: copy.sections.wishlist,
-            panel: list.length > 0 ? (
-              /* A sentence, not a list of things to study. Same shape as What's covered on the
-                 plate card, and for the same reason: a guest reads this once, to know roughly
-                 what would be welcome, and it should take one line of reading and no decisions. */
-              <p className="para ideas">
-                {list.map((w, i) => (
-                  <React.Fragment key={`${w.label}-${i}`}>
-                    {w.url
-                      ? <a href={w.url} target="_blank" rel="noreferrer">{w.label}</a>
-                      : w.label}
-                    {joiner(i, list.length)}
-                  </React.Fragment>
-                ))}
-              </p>
-            ) : null,
+            /* A sentence, not a list of things to study. Same shape as What's covered on the
+               plate card, and for the same reason: a guest reads this once, to know roughly what
+               would be welcome, and it should take one line of reading and no decisions. Ideas
+               draws it, because a guest can now cross one off and that needs a browser. */
+            panel: list.length > 0 ? <Ideas list={list} /> : null,
           },
           {
             key: "group",
@@ -93,11 +83,4 @@ export function GiftsContent({ e, editing }: {
 
     </>
   );
-}
-
-// ", " between, " and " before the last. The same shape sentenceList gives, written out here
-// because the labels can carry links and a joined string cannot.
-function joiner(i: number, n: number): string {
-  if (i >= n - 1) return "";
-  return i === n - 2 ? " and " : ", ";
 }

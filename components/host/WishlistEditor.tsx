@@ -5,7 +5,7 @@ import type { HostWishlistItem } from "@/lib/db/wishlist";
 import { Reorder } from "./Reorder";
 import { Sheet } from "./Sheet";
 import {
-  addWishlistItem, editWishlistItem, removeWishlistItem, setWishlistOrder,
+  addWishlistItem, editWishlistItem, removeWishlistItem, setWishClaimed, setWishlistOrder,
 } from "@/app/app/events/[id]/actions";
 
 // The wish list, as the host writes it.
@@ -70,12 +70,34 @@ export function WishlistEditor({ eventId, items }: { eventId: string; items: Hos
         >
           {(id) => {
             const item = byId.get(id)!;
+            // Position in the list as it is drawn, which is the order the server stores and the
+            // guest reads. Taken from ids rather than from the row's sort so that a drag still
+            // settling shows the host what they have just done.
+            const i = ids.indexOf(id);
+            // The first idea is the general one, the sentence about the kind of thing he likes
+            // rather than a thing anybody can buy, so nobody crosses it off: not a guest, whose
+            // tap the database refuses, and not the host, who has no button for it here. A link
+            // rules it out too, for the reason in Ideas.tsx: the word can open a shop or cross
+            // itself out, not both.
+            //
+            // Put back stays on a first idea that is already crossed off, which happens when a
+            // host drags a crossed one to the top. Without it the only way to undo would be to
+            // drag it back down.
+            const crossable = !item.url && (i > 0 || item.claimed);
             return (
               <div className="wish-row">
                 <span className="what">
-                  <b>{item.label}</b>
+                  <b className={item.claimed ? "gone" : undefined}>{item.label}</b>
                   {item.url && <span className="sub link">{item.url}</span>}
                 </span>
+                {crossable && (
+                  <button
+                    type="button" className="as-link small" disabled={pending}
+                    onClick={() => start(() => { void setWishClaimed(eventId, item.id, !item.claimed); })}
+                  >
+                    {item.claimed ? copy.host.wishBack : copy.host.wishCross}
+                  </button>
+                )}
                 <button type="button" className="as-link small" onClick={() => open(item)}>{copy.host.wishEdit}</button>
               </div>
             );

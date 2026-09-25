@@ -1,7 +1,8 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import type { Plate } from "@/lib/guest/plate";
 import type { Gift } from "@/lib/guest/gift";
+import type { WishState } from "@/lib/guest/wishes";
 
 // Where the guest's answer lives, so that more than one part of the invite can read it.
 //
@@ -17,14 +18,27 @@ export type Reply = {
   status: "pending" | "yes" | "no";
   plate: Plate | null;
   gift: Gift | null;
+  /** Which ideas have been crossed off, and which of them by you. Null is a page with no list to
+   *  speak of; an empty array is a list with nothing crossed off yet, and the two draw
+   *  differently, so they are not folded together. */
+  wishes: WishState[] | null;
   /** The host trying their own invite. Everything works and nothing is written. */
   pretend?: boolean;
 };
 
-const Ctx = createContext<{ reply: Reply; report: (r: Reply) => void } | null>(null);
+const Ctx = createContext<{ reply: Reply; report: (r: Partial<Reply>) => void } | null>(null);
 
+// Reported in parts, not replaced.
+//
+// It took whole values until the wish list arrived. The reply knows the answer and the two boards
+// that come back with it, and knows nothing about which ideas have been crossed off; the list
+// knows that and nothing about the answer. Handing over a whole value meant whichever spoke last
+// wiped what the other had said, and crossing an idea off unset the guest's own reply until the
+// page was reloaded. Merging is what the two of them actually mean: this part changed, the rest
+// stands.
 export function ReplyProvider({ initial, children }: { initial: Reply; children: React.ReactNode }) {
-  const [reply, report] = useState<Reply>(initial);
+  const [reply, setReply] = useState<Reply>(initial);
+  const report = useCallback((patch: Partial<Reply>) => setReply((v) => ({ ...v, ...patch })), []);
   return <Ctx.Provider value={{ reply, report }}>{children}</Ctx.Provider>;
 }
 

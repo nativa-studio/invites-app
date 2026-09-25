@@ -550,6 +550,26 @@ export async function removeWishlistItem(eventId: string, itemId: string) {
   await revalidateEvent(eventId);
 }
 
+// Crossing an idea off, or putting it back, from the host's side.
+//
+// Marcia's reason for wanting it: "I will create some records and I'll cross it myself so people
+// can kind of understand." Nothing on the invite says a guest may cross one off, so one or two
+// already struck through is the whole of the teaching.
+//
+// It writes the row straight, rather than going through the guest function, because a host acts
+// under their own session on their own tables and the policy on this one already says so. No
+// activity row either: the trail is for what other people did.
+//
+// A host can put back an idea a guest crossed off. They own the list, and a guest who has since
+// dropped out cannot put it back themselves.
+export async function setWishClaimed(eventId: string, itemId: string, on: boolean) {
+  const supabase = await createClient();
+  await supabase.from("wishlist_items")
+    .update({ claimed_at: on ? new Date().toISOString() : null, claimed_by_guest_id: null })
+    .eq("id", itemId).eq("event_id", eventId);
+  await revalidateEvent(eventId);
+}
+
 export async function setWishlistOrder(eventId: string, ids: string[]) {
   const supabase = await createClient();
   await Promise.all(ids.map((id, i) =>

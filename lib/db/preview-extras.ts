@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Gift } from "@/lib/guest/gift";
 import type { Plate } from "@/lib/guest/plate";
+import type { WishState } from "@/lib/guest/wishes";
 
 // The plate board and the gift block, for the host's preview.
 //
@@ -29,3 +30,6 @@ const previewRpc = async <T>(name: string, eventId: string): Promise<T | null> =
 
 export const previewPlate = (eventId: string) => previewRpc<Plate>("preview_plate", eventId);
 export const previewGift = (eventId: string) => previewRpc<Gift>("preview_gift", eventId);
+/** Which ideas are crossed off, for the host's own preview. Nothing is ever theirs to put back:
+ *  the host crosses one off from the list in the gifts drawer, not from the invite. */
+export const previewWishes = (eventId: string) => previewRpc<WishState[]>("preview_wish_state", eventId);

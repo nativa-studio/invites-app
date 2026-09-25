@@ -1,6 +1,7 @@
 "use server";
 import { chipIn, getGift, unchip, type Gift, noteGiftTap } from "@/lib/guest/gift";
 import { isValidToken } from "@/lib/tokens";
+import { claimWish, type WishState } from "@/lib/guest/wishes";
 import { copy } from "@/lib/copy";
 
 export type GiftState = { gift: Gift | null; error?: string };
@@ -38,4 +39,19 @@ export async function giftAction(_prev: GiftState, fd: FormData): Promise<GiftSt
 // state the caller would have to hold.
 export async function tapAction(token: string, what: "ideas" | "group" | "chip"): Promise<void> {
   await noteGiftTap(token, what);
+}
+
+// Crossing an idea off the list, or putting it back.
+//
+// It lives beside the gift actions because the wish list is part of the gifts block, and it
+// answers the same way the plate does: with the state of the list rather than a yes to the tap.
+// Two guests on the same invite is the normal case, not the exception, and the second one to
+// reach for the scooter has to be told rather than believed.
+export async function wishAction(token: string, item: string, on: boolean): Promise<WishState[] | null> {
+  if (!isValidToken(token)) return null;
+  try {
+    return await claimWish(token, item, on);
+  } catch {
+    return null;
+  }
 }

@@ -7,11 +7,12 @@ import { ReplyProvider } from "./ReplyState";
 import { Rsvp } from "./Rsvp";
 import type { Plate } from "@/lib/guest/plate";
 import type { Gift } from "@/lib/guest/gift";
+import type { WishState } from "@/lib/guest/wishes";
 
 // A personal link. The layout itself lives in InviteBody, which the group link and the host's
 // preview use too, so the three can never drift apart. All this adds is who the guest is: their
 // name on the envelope, their greeting, and their own reply form.
-export function InvitePage({ invite, token, plate, gift, curious, skipAnimation, layout }: { invite: Invite; token: string; plate?: Plate | null; gift?: Gift | null; curious?: boolean; skipAnimation?: boolean; layout?: Invite["event"]["layout_id"] }) {
+export function InvitePage({ invite, token, plate, gift, wishes, curious, skipAnimation, layout }: { invite: Invite; token: string; plate?: Plate | null; gift?: Gift | null; wishes?: WishState[] | null; curious?: boolean; skipAnimation?: boolean; layout?: Invite["event"]["layout_id"] }) {
   const { event: e, guest } = invite;
   // The envelope plays every time, replied or not.
   //
@@ -27,7 +28,7 @@ export function InvitePage({ invite, token, plate, gift, curious, skipAnimation,
   return (
     // The answer, in one place, so the reply card and the plate part further down the page agree
     // about it without either owning the other.
-    <ReplyProvider initial={{ token, status: guest.status, plate: plate ?? null, gift: gift ?? null }}>
+    <ReplyProvider initial={{ token, status: guest.status, plate: plate ?? null, gift: gift ?? null, wishes: wishes ?? null }}>
     <InviteBody
       e={e}
       greeting={copy.greeting(firstName(guest.name))}

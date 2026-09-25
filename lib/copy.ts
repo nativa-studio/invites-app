@@ -443,7 +443,7 @@ export const copy = {
     ovNoneYet: "Nothing yet",
     // The wish list, as the host writes it.
     wishHeading: "Wish list",
-    wishBlurb: "Things they would like. Guests read this, nobody claims anything, so two people can still buy the same thing. First is the one you would most like.",
+    wishBlurb: "Things they would like. A guest can cross one off to say they have it covered, and nothing on the invite tells them so: cross one off here and the rest works itself out. The first idea is the general one and stays as it is.",
     wishAdd: "Add an idea",
     wishEdit: "Edit",
     // What the button at the foot of the edit sheet says. Not "Edit": that is the name of the
@@ -452,6 +452,9 @@ export const copy = {
     // other sheet in the host app names the action, and this one now does too.
     wishSave: "Save",
     wishRemove: "Remove",
+    // On a row, and the only two words on this screen about crossing off. The invite says none.
+    wishCross: "Cross off",
+    wishBack: "Put back",
     wishNone: "Nothing on the list yet. The block still shows whatever you write about gifts.",
     wishWhat: "What is it?",
     wishWhatPlaceholder: "A balance bike",
@@ -459,7 +462,10 @@ export const copy = {
     wishNotePlaceholder: "Size 4, any colour but red",
     wishNoteHint: "A size, a colour, anything that saves somebody guessing.",
     wishLink: "A link (optional)",
-    wishLinkHint: "Where to see it. Guests get a Have a look button rather than the address.",
+    // Two things, both true, and the second is why this had to change: the invite has drawn the
+    // idea itself as the link for a while now, not a Have a look button beside it, and one word
+    // cannot both open a shop and cross itself out.
+    wishLinkHint: "Where to see it. The idea becomes a link on the invite, so that one cannot be crossed off.",
     giftsBlock: "Give gifts their own block",
     giftsBlockHint: "A block of its own on the invite for what you want to say about gifts, the wish list, and the group gift if one is running. Off, gifts stay as one line in the info booth.",
     ovInvite: "The invite",
@@ -546,6 +552,10 @@ export const copy = {
       // Said rather than done: no money moves through the app, and a host reading this should
       // not think it has.
       chippedIn: (who: string) => `${who} says they've chipped in`,
+      // An idea crossed off. The one line in the feed that names a thing as well as a person,
+      // because the thing is the point: it is what tells a host to stop wondering about the
+      // scooter. Present tense, since it is about the party rather than about the tap.
+      wishClaimed: (who: string, what?: string) => `${who} is getting ${what ?? "one of the ideas"}`,
     },
     // Under a reply in the activity, in the guest's own words where they wrote any. The prefixes
     // match the guest list so the same fact reads the same way in both places.

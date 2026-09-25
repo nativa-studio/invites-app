@@ -158,7 +158,12 @@ export function Overview({
                 <li key={`${h.at}-${i}`} className={h.kind}>
                   <i className="dot" aria-hidden="true" />
                   <span className="what">
-                    {copy.host.did[h.kind](h.who)}
+                    {/* One kind takes two words, since a present crossed off is only worth a
+                        line if the line says which present. Split here rather than giving every
+                        other sentence a second argument it would ignore. */}
+                    {h.kind === "wishClaimed"
+                      ? copy.host.did.wishClaimed(h.who, h.what)
+                      : copy.host.did[h.kind](h.who)}
                     {/* The group tag stays. It is what tells two Sarahs apart, and on a
                         group-link open it is the only thing on the line that says which link was
                         opened, since the row belongs to nobody. */}

@@ -109,7 +109,7 @@ export const SECTIONS: Section[] = [
   {
     id: "gifts",
     title: "Gifts",
-    blurb: "A block of its own for gifts: what you want to say, a wish list, and the group gift if one is running. The wish list is a list of ideas, not a registry, so nothing is claimed and two people can still buy the same thing.",
+    blurb: "A block of its own for gifts: what you want to say, a wish list, and the group gift if one is running. Guests can cross an idea off the list to say they have that one covered, except the first, which is the general one. Cross one off yourself and they will see what to do.",
     show: { column: "show_gifts", label: copy.host.giftsBlock },
     fields: ["gift_note", "group_gift_enabled", "gift_description", "group_gift_note", "gift_target"],
     render: (e) => (

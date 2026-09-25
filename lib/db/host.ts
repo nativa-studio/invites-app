@@ -17,20 +17,24 @@ export const loadEvent = cache(async (id: string): Promise<EventRow> => {
     .from("events")
     // The wish list rides along too, with its ids, because the invite editor edits by pointing at
     // a card and the gifts card is drawn from these rows. The guest's copy comes through
-    // event_public_json instead and carries no ids: there is nothing for a guest to do to a row.
-    .select("*, gift:group_gift(description, target), wishlist:wishlist_items(id, label, note, url, sort)")
+    // event_public_json instead, with the ids and none of the rest: a guest can cross one off,
+    // which needs a name for the row, and can do nothing else to it.
+    .select("*, gift:group_gift(description, target), wishlist:wishlist_items(id, label, note, url, sort, claimed_at)")
     .eq("id", id)
     .maybeSingle();
   if (!data) notFound();
   const g = (data as { gift?: { description: string | null; target: number | null } | { description: string | null; target: number | null }[] | null }).gift;
   const gift = Array.isArray(g) ? g[0] : g;
-  const wl = (data as { wishlist?: { sort: number }[] | null }).wishlist ?? [];
+  const wl = (data as { wishlist?: { sort: number; claimed_at: string | null }[] | null }).wishlist ?? [];
   return {
     ...data,
     gift_description: gift?.description ?? null,
     gift_target: gift?.target ?? null,
     // PostgREST does not order an embedded table, so it is sorted here rather than trusted.
-    wishlist: [...wl].sort((a, b) => a.sort - b.sort),
+    // claimed_at is a timestamp on the row and a yes or no everywhere above it: the editor draws
+    // a line through the word and nothing on that screen wants to know when.
+    wishlist: [...wl].sort((a, b) => a.sort - b.sort)
+      .map(({ claimed_at, ...i }) => ({ ...i, claimed: claimed_at !== null })),
   } as EventRow;
 });
 
