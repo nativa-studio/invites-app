@@ -3,6 +3,7 @@ import React from "react";
 import type { WishlistItem } from "@/lib/db/types";
 import { wishAction } from "@/app/i/[token]/gift-actions";
 import { useReply } from "./ReplyState";
+import { copy } from "@/lib/copy";
 
 // The wish list, as a sentence, with a line through the ones somebody has already got.
 //
@@ -52,15 +53,27 @@ export function Ideas({ list }: { list: WishlistItem[] }) {
     if (fresh) report({ wishes: fresh });
   }
 
+  // Whether anything on this list can actually be tapped, which decides the label below it.
+  // Worked out the same way `word` decides, rather than assumed from the length: a list whose
+  // every item after the first carries a link has nothing to claim, and a label over it would be
+  // pointing at words that only open a shop.
+  const tappable = list.some((w, i) => i > 0 && !w.url && Boolean(w.id) && by.has(w.id!) && live && Boolean(report));
+
   return (
-    <p className="para ideas">
-      {list.map((w, i) => (
-        <React.Fragment key={`${w.label}-${i}`}>
-          {word(w, i)}
-          {joiner(i, list.length)}
-        </React.Fragment>
-      ))}
-    </p>
+    <>
+      <p className="para ideas">
+        {list.map((w, i) => (
+          <React.Fragment key={`${w.label}-${i}`}>
+            {word(w, i)}
+            {joiner(i, list.length)}
+          </React.Fragment>
+        ))}
+      </p>
+      {/* Under the list, never over it. The first idea is the general one and is deliberately not
+          tappable, so a label above would sit directly on the one row a tap does nothing to,
+          which is how somebody decides the whole thing is broken. */}
+      {tappable && <p className="small tap-claim">{copy.sections.tapToClaim}</p>}
+    </>
   );
 
   function word(w: WishlistItem, i: number) {

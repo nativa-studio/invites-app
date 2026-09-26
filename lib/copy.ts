@@ -293,6 +293,18 @@ export const copy = {
     wishlist: "Hints",
     groupGift: "Group gift",
     wishlistLink: "Have a look",
+    // Under the hints, and only where a tap does something.
+    //
+    // The list began with nothing said about it at all, on Marcia's instruction: "really subtle,
+    // I don't want to impose anything, so you don't say anything." She crossed two off herself so
+    // the rest would explain itself, and it does, but a guest seeing two struck-through presents
+    // still has to guess that the line is something they can cause.
+    //
+    // Three words, and a label rather than a sentence. A sentence addressed to a guest is an
+    // instruction on a card whose whole argument is that nothing here is required of them. A sign
+    // on the thing is just a sign on the thing, and beside two already crossed off it says the
+    // whole mechanic without asking anybody for anything.
+    tapToClaim: "Tap to claim",
     // Under the reply, before anybody has answered. The same words as the thank-you card uses,
     // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
     // grounds that an instruction sitting under Yes and No reads as a third thing to press. She
