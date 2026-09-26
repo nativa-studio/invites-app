@@ -175,6 +175,9 @@ export const copy = {
     blockWhat: (what: string) => `Everyone is going in together on one present: ${what}.`,
     blockNoWhat: "Everyone is going in together on one present.",
     blockHow: "How to chip in comes with your reply.",
+    // The group link shows where the money goes, because that is the same for everybody, but the
+    // tick is a note against one guest and on that page there is not one yet.
+    tickWithReply: "Once you have replied you can tick it off, so the organiser knows.",
     // The organiser has not filled in their side yet, so there is nothing to ask anybody to do.
     afterYes: "How to chip in opens up once you have replied.",
     sorting: (who: string) => `${who} is sorting out the details. They'll be here soon.`,

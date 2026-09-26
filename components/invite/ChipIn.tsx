@@ -107,7 +107,12 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
           there: a small one reads as nobody is doing this, a big one as everybody has and you
           have not. Who has chipped in is on the organiser's own page, where it is somebody's job
           rather than somebody's business. */}
-      {g.chipped_in ? (
+      {/* No tick without a guest to tick. The group link shows this block so that what to send and
+          where is the same whichever door somebody came through, but who has chipped in is a note
+          against one guest's row, and nobody on this page has one until they answer. */}
+      {!token ? (
+        <p className="small">{copy.gift.tickWithReply}</p>
+      ) : g.chipped_in ? (
         <form {...(pretend
           ? { onSubmit: (ev: React.FormEvent<HTMLFormElement>) => { ev.preventDefault(); setLocal((v) => ({ ...v, chipped_in: false, chipped_count: Math.max(0, v.chipped_count - 1) })); } }
           : { action: act })}>

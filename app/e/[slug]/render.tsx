@@ -11,6 +11,7 @@ import { GroupRsvp } from "@/components/invite/GroupRsvp";
 import { InviteBody, asLayout } from "@/components/invite/InviteBody";
 import { ReplyProvider } from "@/components/invite/ReplyState";
 import { getWishesBySlug } from "@/lib/guest/wishes";
+import { getGiftBySlug } from "@/lib/guest/gift";
 
 // The group link, drawn once. There are two ways to it now, the plain one and one per group, and
 // they differ only in what the reply is labelled with, so they share everything else.
@@ -39,11 +40,15 @@ export async function renderGroupLink({ slug, group, layout }: { slug: string; g
   // put back, but the list has to read the same through this door as through a personal link:
   // a guest who came by the group link and saw the scooter still going would buy it.
   const wishes = await getWishesBySlug(slug);
+  // And the group gift. Without it this page said how to chip in comes with your reply, while a
+  // guest holding their own link was reading the bank details, which is one invite saying two
+  // things. Nothing here belongs to anybody: see getGiftBySlug.
+  const gift = await getGiftBySlug(slug);
   // The group link wears the same layout the host picked for the invite.
   // Nobody has a token until they answer, and nobody has answered, so the provider starts empty.
   // The reply is the only thing that ever fills it, which is what makes the plate part appear.
   return (
-    <ReplyProvider initial={{ token: "", status: "pending", plate: null, gift: null, wishes }}>
+    <ReplyProvider initial={{ token: "", status: "pending", plate: null, gift, wishes }}>
       <InviteBody
         e={e}
         greeting={copy.greetingGroup}
