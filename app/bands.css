@@ -267,3 +267,11 @@ main.bands .pcard.plate::before {
  * tile paints across its whole scene instead so the cover stands on the page rather than on a
  * cream panel with the suite's blue either side of it. */
 main.bands.thumb { position: absolute; inset: 0; min-height: 0; background: none; }
+
+/* Here the shadow goes under the envelope, not under the invite.
+   Every other design's tile casts the cover onto the envelope, because the cover is a card or a
+   pass with an outline. This one's cover is the page itself, and its characters are a picture
+   masked at its edges so it fades into the paper: a drop-shadow follows that mask rather than the
+   monsters, and draws a pale rectangle behind them. So the envelope lifts off the page instead,
+   which separates the two without putting a box around a thing that is meant not to have one. */
+main.bands.thumb .ithumb-envbox { filter: drop-shadow(0 10px 14px rgba(31, 37, 48, 0.34)); }

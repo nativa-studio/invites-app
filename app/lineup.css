@@ -150,3 +150,6 @@
    layout's own rules hang off. */
 main.lineup.thumb { position: absolute; inset: 0; min-height: 0; background: none; }
 main.lineup.thumb .page { padding-top: 0; }
+
+/* The cover lifts off the envelope behind it, the same as the other designs' tiles. */
+main.lineup.thumb .ithumb-cardbox { filter: drop-shadow(0 12px 16px rgba(31, 37, 48, 0.38)); }

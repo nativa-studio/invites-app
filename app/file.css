@@ -241,3 +241,7 @@ main.file .pcard.plate .para { text-align: start; max-width: none; font-size: 15
  * page's full height and its paper come off, because the tile holds one cover and paints the
  * paper across its whole scene. */
 main.file.thumb { position: absolute; inset: 0; min-height: 0; background: none; }
+
+/* The pass lifts off the envelope behind it. Both are its own colours and they meet without an
+   edge between them, so the one in front casts. */
+main.file.thumb .ithumb-cardbox { filter: drop-shadow(0 12px 16px rgba(31, 37, 48, 0.38)); }

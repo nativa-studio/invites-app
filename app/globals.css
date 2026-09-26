@@ -190,6 +190,10 @@ p { margin: 0; }
    with a card on it, which is what that design is. The likeness this replaced hid the same
    problem behind a 520px minimum height on a card that has none. */
 .ithumb-cardbox.middle { top: 50%; bottom: auto; transform: translateY(-50%); }
+/* Which of the two lifts off the other is the design's own business, so each stylesheet says it
+   for itself: see the `.thumb` rules at the foot of app/file.css, app/strip.css, app/lineup.css
+   and app/bands.css. A card with an edge and a shadow of its own, which is Photo cards, already
+   says it and is left alone. */
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .evt-when { font-size: 12.5px; color: var(--app-mute); }
