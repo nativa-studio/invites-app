@@ -9,9 +9,10 @@ import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
 import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink } from "./Cards";
 import { Mono, monoNote, hasMono } from "@/components/art/mono";
-import { stripSet, inkFor, paperFor } from "@/lib/strip-set";
+import { inkFor, paperFor } from "@/lib/strip-set";
 import { Envelope } from "./Envelope";
 import { StripCover } from "./StripCover";
+import { sealFor } from "./envelope-parts";
 
 // The illustrated strip: one ink on paper, straight down the page, no envelope and no cards.
 //
@@ -43,7 +44,6 @@ export function StripInvite({
   gifts?: React.ReactNode;
   skipAnimation?: boolean;
 }) {
-  const set = stripSet(e.strip_set, e.theme_id);
   const ink = inkFor(e.ink);
   const paper = paperFor(e.ink);
   const maps = mapsLink(e);
@@ -180,7 +180,7 @@ export function StripInvite({
           openLabel={copy.envelope.open}
           skipAnimation={skipAnimation}
           bodyClassName="strip-body"
-          seal={<Mono name={set.trio[1]} size={26} />}
+          seal={sealFor("strip", e)}
           /* When uploads land, an uploaded invite replaces the doodles and the title, and
              everything below stays exactly as it is. */
           cover={<StripCover event={e} />}

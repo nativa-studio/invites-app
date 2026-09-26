@@ -11,6 +11,8 @@ import { Mono, monoNote, hasMono } from "@/components/art/mono";
 import { mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
 import { BandsCover } from "./BandsCover";
+import { Eye } from "./BandsEye";
+import { sealFor } from "./envelope-parts";
 import { GiftsContent, hasGifts } from "./GiftsContent";
 
 // Fur bands: no cards, no page margins, one full-bleed colour band per part.
@@ -179,7 +181,7 @@ export function BandsInvite({
         openLabel={copy.envelope.open}
         skipAnimation={skipAnimation}
         bodyClassName="bands-body"
-        seal={<Eye size={24} bare />}
+        seal={sealFor("bands", e)}
         cover={<BandsCover event={e} />}
       >
         {parts.map((node, i) => <React.Fragment key={i}>{node}</React.Fragment>)}
@@ -189,29 +191,6 @@ export function BandsInvite({
   );
 }
 
-// The eye. Three rings: white, then the iris, then the pupil, and nothing about it is text.
-//
-// It is the one piece of furniture this design has instead of cards, and it appears three times
-// at three sizes: half over the top edge of the reply band, small at the top of the sign-off, and
-// on the envelope's seal. `bare` is the seal's, which sits inside a seal that already has the
-// white disc and the ring.
-function Eye({ size, bare }: { size: number; bare?: boolean }) {
-  // Bare is the seal's: there the envelope already draws the white disc and the ink ring, so the
-  // eye is the iris itself rather than an eye with a white of its own.
-  const iris = bare ? size : Math.round(size * 0.5);
-  const pupil = Math.round(size * (bare ? 0.46 : 0.21));
-  return bare ? (
-    <span className="eye bare" aria-hidden="true" style={{ width: iris, height: iris }}>
-      <span className="pupil" style={{ width: pupil, height: pupil }} />
-    </span>
-  ) : (
-    <span className="eye" aria-hidden="true" style={{ width: size, height: size }}>
-      <span className="iris" style={{ width: iris, height: iris }}>
-        <span className="pupil" style={{ width: pupil, height: pupil }} />
-      </span>
-    </span>
-  );
-}
 
 /** The first letter down, and nothing else touched. "From 2pm" after a date reads as a new
  *  sentence; "from 2pm" reads as the rest of the one it is in. */

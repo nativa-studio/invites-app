@@ -1,12 +1,14 @@
 import "@/app/invite.css";
 import type { PublicEvent, Palette } from "@/lib/db/types";
 import { paletteFor, paletteVars } from "@/components/art/palette";
+import { Bolt } from "@/components/art/icons";
 import { CoverCard } from "@/components/invite/Cards";
 import { BandsCover } from "@/components/invite/BandsCover";
 import { FileCover } from "@/components/invite/FileCover";
 import { StripCover } from "@/components/invite/StripCover";
 import { LineupCover } from "@/components/invite/LineupCover";
 import { artworkFor, stockFor } from "@/lib/layouts";
+import { envelopeMascot, sealFor } from "@/components/invite/envelope-parts";
 import { mascotFor } from "@/lib/artwork";
 import { inkFor, paperFor } from "@/lib/strip-set";
 import Image from "next/image";
@@ -72,6 +74,8 @@ export function InviteThumb({
               <span className="back" />
               <span className="pocket"><span className="sides" /><span className="edge" /></span>
               <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
+              {/* The wax, with this event's own middle doodle on it, the same as the invite. */}
+              <span className="seal">{sealFor("strip", e)}</span>
             </span>
           </span>
           <span className="ithumb-cardbox middle">
@@ -94,15 +98,26 @@ export function InviteThumb({
   }
 
   const p = paletteFor(palette, themeId ?? "");
-  const mascot = mascotFor(artwork);
+  const mascot = envelopeMascot(layout, e);
+  const seal = sealFor(layout, e);
   const stock = stockFor(layout);
   // Whose cover is a page rather than a card, and so is shown from its head. See .ithumb-cardbox
   // in app/globals.css.
   const pageCover = layout === "bands" || layout === "file" || layout === "lineup";
   const beige = stock === "beige";
+  // The layout's own root element, around the whole scene rather than around the cover alone.
+  //
+  // It was around the cover, and the envelope sat outside it, which meant every rule a layout
+  // writes for its own envelope missed: the fur seal drew as an empty white disc because the
+  // eye's colours are declared under main.bands, and its sticker drew as an empty white frame
+  // because the picture comes from --cast, which that page sets on its own root. A tile is a
+  // window onto the page, so the page's root belongs in it.
+  const root = layout === "bands" || layout === "file" || layout === "lineup" ? layout : null;
+  const cast = layout === "bands" ? mascotFor(artwork) : null;
   return (
     <span className="ithumb" style={paletteVars(p)}>
       <span className={`ithumb-scene invite ${stock}${beige ? " beige" : ""}`}>
+        <Root name={root} cast={cast?.src ?? null}>
         <span className="ithumb-envbox">
           {/* The envelope of the animation, in the state a tap leaves it: flap swung up and back
               on its hinge, its lining showing. `still` is that state without the swing. */}
@@ -117,6 +132,11 @@ export function InviteThumb({
                 which is 1173px wide. That is what put a giant Pikachu across the corner of every
                 tile. */}
             {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="120px" />}
+            {/* The seal, which this tile did not draw at all until Marcia held the real manila
+                envelope up against it: a tie with two buttons and an eye on the invite, a plain
+                beige band in the tile. Both come from the same module now, so a design cannot
+                have one mark on its invite and another, or none, on its tile. */}
+            <span className="seal">{seal ?? <Bolt size={30} />}</span>
           </span>
         </span>
         <span className={`ithumb-cardbox${pageCover ? " page" : ""}`}>
@@ -126,13 +146,27 @@ export function InviteThumb({
               it at all and Staff file opens on a pass hanging from a lanyard, so the gallery
               drew three different designs as one picture and a host could not see what they
               were choosing. */}
-          {layout === "bands" ? <main className="bands thumb"><BandsCover event={e} /></main>
-            : layout === "file" ? <main className="file thumb"><FileCover event={e} /></main>
-            : layout === "lineup" ? <main className="lineup thumb"><div className="page"><LineupCover event={e} /></div></main>
+          {layout === "bands" ? <BandsCover event={e} />
+            : layout === "file" ? <FileCover event={e} />
+            : layout === "lineup" ? <div className="page"><LineupCover event={e} /></div>
             : <CoverCard e={e} />}
         </span>
+        </Root>
       </span>
     </span>
+  );
+}
+
+/** The layout's root element around the tile's whole scene, or nothing at all for the suite,
+ *  whose rules hang off a class the scene already carries. `--cast` is the sticker on the fur
+ *  envelope, which that page sets on its own root and which is therefore this element's to set
+ *  here too. */
+function Root({ name, cast, children }: { name: string | null; cast: string | null; children: React.ReactNode }) {
+  if (!name) return <>{children}</>;
+  return (
+    <main className={`${name} thumb`} style={cast ? ({ "--cast": `url(${cast})` } as React.CSSProperties) : undefined}>
+      {children}
+    </main>
   );
 }
 

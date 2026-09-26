@@ -148,5 +148,5 @@
 /* The cover on its own, in the Design gallery's tile and on the card for every event still saved
    on this design. Same rule as app/bands.css has, and the page div inside it is the wrapper the
    layout's own rules hang off. */
-main.lineup.thumb { min-height: 0; background: none; }
+main.lineup.thumb { position: absolute; inset: 0; min-height: 0; background: none; }
 main.lineup.thumb .page { padding-top: 0; }

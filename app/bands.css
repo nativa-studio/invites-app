@@ -266,4 +266,4 @@ main.bands .pcard.plate::before {
  * 580px cover to the top of a 730px scene until it was clipped, and the paper colour, which the
  * tile paints across its whole scene instead so the cover stands on the page rather than on a
  * cream panel with the suite's blue either side of it. */
-main.bands.thumb { min-height: 0; background: none; }
+main.bands.thumb { position: absolute; inset: 0; min-height: 0; background: none; }

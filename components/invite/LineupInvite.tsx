@@ -6,9 +6,9 @@ import { GiftsContent, hasGifts } from "./GiftsContent";
 import { formatTime } from "@/lib/format";
 import { askLine, askPhoneSuffix, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
-import { mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
 import { LineupCover } from "./LineupCover";
+import { envelopeMascot } from "./envelope-parts";
 import { Bolt, Bubble, Camera } from "@/components/art/icons";
 
 // Colours lifted from the artwork, used for the dots beside each good-to-know line.
@@ -49,7 +49,7 @@ export function LineupInvite({
           stock="beige"
           openLabel={copy.envelope.open}
           skipAnimation={skipAnimation}
-          mascot={mascotFor(e.invite_image_path)}
+          mascot={envelopeMascot("lineup", e)}
           bodyClassName="suite lineup-body"
           cover={<LineupCover event={e} />}
         >

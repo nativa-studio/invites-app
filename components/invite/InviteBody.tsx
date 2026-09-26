@@ -4,7 +4,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 
 import { paletteFor, paletteVars } from "@/components/art/palette";
-import { mascotFor } from "@/lib/artwork";
+import { envelopeMascot } from "./envelope-parts";
 import { artworkFor } from "@/lib/layouts";
 import { orderedParts, type InvitePart } from "@/lib/invite-parts";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, UpdatesCard } from "./Cards";
@@ -205,7 +205,7 @@ export function InviteBody({
             cover={<CoverCard e={e} />}
           openLabel={copy.envelope.open}
           skipAnimation={skipAnimation}
-          mascot={mascotFor(e.invite_image_path)}
+          mascot={envelopeMascot(id, e)}
         >
           {below}
           {/* Inside the envelope, and last of everything in it. Outside, it sat under a sealed
