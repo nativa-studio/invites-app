@@ -157,6 +157,12 @@ p { margin: 0; }
    than inherited because the lineup class brings a whole page's worth of rules with it. The card
    and the envelope both cast shadows, and a shadow on white is a shadow on nothing. */
 .ithumb-scene.beige { background-color: #FDF6E4; background-image: none; }
+/* And the two Monsters designs' pages, the same way and for the same reason: the tile holds one
+   cover, and the paper behind it is half of what the design looks like. Written out here rather
+   than inherited, because bringing in main.bands or main.file would bring a whole page of rules
+   with it. Keep in step with the root rule of app/bands.css and app/file.css. */
+.ithumb-scene.fur { background-color: #F1DDBA; background-image: none; }
+.ithumb-scene.manila { background-color: #35A9B8; background-image: none; }
 /* The tile is a window onto that page, so it has the page's corner rather than a hard rectangle,
    and nothing leans out of it. Everything in the scene is inside its box, the standing flap
    included, so there is nothing for this to cut. */

@@ -10,6 +10,7 @@ import { mapsLink } from "./Cards";
 import { Mono, monoNote, hasMono } from "@/components/art/mono";
 import { portraitFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
+import { FileCover } from "./FileCover";
 import { GiftsContent, hasGifts } from "./GiftsContent";
 
 // Staff file: a staff pass on a lanyard, and the rest of the invite filled in on a clipboard.
@@ -194,33 +195,7 @@ export function FileInvite({
         skipAnimation={skipAnimation}
         bodyClassName="file-body"
         seal={<Closure face={face?.src ?? null} />}
-        cover={
-          <div className="cover" data-section="cover">
-            <div className="pass-group">
-              <span className="lanyard" aria-hidden="true"><i className="strap l" /><i className="strap r" /></span>
-              <span className="crimp" aria-hidden="true" />
-              <span className="ring" aria-hidden="true" />
-              <span className="tab" aria-hidden="true" />
-              <div className="pass">
-                <div className="top">
-                  <span className="slot" aria-hidden="true" />
-                  <span className="eyebrow">{copy.sections.scarerWanted}</span>
-                </div>
-                <div className="body">
-                  {face && (
-                    <div className="photo">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={face.src} alt="" width={face.w} height={face.h} />
-                    </div>
-                  )}
-                  <h1>{e.title}</h1>
-                  {e.intro && <p className="intro">{e.intro}</p>}
-                </div>
-                <span className="foot" aria-hidden="true" />
-              </div>
-            </div>
-          </div>
-        }
+        cover={<FileCover event={e} />}
       >
         <div className="board">
           <span className="clip" aria-hidden="true"><i /></span>

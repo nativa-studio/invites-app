@@ -23,9 +23,14 @@ export type LayoutOption = {
 // A host is never stopped from having the one they want. The type only decides what is offered
 // first, and the Design tab says how many were left out and offers to show them.
 export const LAYOUTS: LayoutOption[] = [
+  // Named for what it looks like, like every other design here. It was called "Pokemon", after
+  // the artwork the first event on it happened to use, which was fine while artwork was not a
+  // choice and wrong the moment it became one: a host picking the monsters got a monster invite
+  // with Pokemon written under it. The id is untouched, so nothing saved has to move.
   {
     id: "suite",
-    name: "Pokémon",
+    name: "Photo cards",
+    line: "Your picture up top, the rest on cards",
     suits: ["kids_party", "birthday", "gathering", "baby_shower"],
   },
   // Retired at Marcia's word. Still drawn for any event already saved on it, and still reachable

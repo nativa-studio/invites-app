@@ -8,8 +8,9 @@ import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
 import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink } from "./Cards";
 import { Mono, monoNote, hasMono } from "@/components/art/mono";
-import { coverFor, mascotFor } from "@/lib/artwork";
+import { mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
+import { BandsCover } from "./BandsCover";
 import { GiftsContent, hasGifts } from "./GiftsContent";
 
 // Fur bands: no cards, no page margins, one full-bleed colour band per part.
@@ -43,7 +44,6 @@ export function BandsInvite({
   const notes = orderedNotes(e);
   const contacts = askContacts(e);
   const photos = photoLine(e);
-  const cast = coverFor(e.invite_image_path);
   // The sticker on the envelope, handed to the stylesheet rather than drawn as an element. It is
   // the same picture as the cover, and an <img> for it inside the envelope would be a second
   // element with the same filename: anything looking for that picture on the page finds
@@ -180,25 +180,7 @@ export function BandsInvite({
         skipAnimation={skipAnimation}
         bodyClassName="bands-body"
         seal={<Eye size={24} bare />}
-        cover={
-          /* One element around the whole cover, so it is one thing to point a pencil at: the
-             drawer behind it holds the title and the line under it, and marking only the title
-             left the picture and the eyebrow doing nothing. */
-          <div className="cover" data-section="cover">
-            <p className="eyebrow">{copy.sections.scarerWanted}</p>
-            <h1>{e.title}</h1>
-            {e.intro && <p className="intro">{e.intro}</p>}
-            {cast && (
-              <div className="cast">
-                {/* A plain img, not next/image: the picture is masked at both edges so it fades
-                    into the page rather than ending on a line, and it is one bundled file at a
-                    known size, so there is nothing for the optimiser to decide. */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={cast.src} alt="" width={cast.w} height={cast.h} />
-              </div>
-            )}
-          </div>
-        }
+        cover={<BandsCover event={e} />}
       >
         {parts.map((node, i) => <React.Fragment key={i}>{node}</React.Fragment>)}
         {after}

@@ -2,6 +2,8 @@ import "@/app/invite.css";
 import type { PublicEvent, Palette } from "@/lib/db/types";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { CoverCard } from "@/components/invite/Cards";
+import { BandsCover } from "@/components/invite/BandsCover";
+import { FileCover } from "@/components/invite/FileCover";
 import { stockFor } from "@/lib/layouts";
 import { mascotFor } from "@/lib/artwork";
 import { stripSet, inkFor, paperFor } from "@/lib/strip-set";
@@ -72,7 +74,8 @@ export function InviteThumb({
 
   const p = paletteFor(palette, themeId ?? "");
   const mascot = mascotFor(artwork);
-  const beige = stockFor(layout) === "beige";
+  const stock = stockFor(layout);
+  const beige = stock === "beige";
   // CoverCard reads a whole event row, and a thumbnail knows four things about one. The rest are
   // the values that make it draw the cover and nothing else: with the details and the sign-off
   // both on, their cards carry them, so the cover is the picture, the eyebrow, the title and the
@@ -85,11 +88,11 @@ export function InviteThumb({
 
   return (
     <span className="ithumb" style={paletteVars(p)}>
-      <span className={`ithumb-scene invite${beige ? " beige" : ""}`}>
+      <span className={`ithumb-scene invite ${stock}${beige ? " beige" : ""}`}>
         <span className="ithumb-envbox">
           {/* The envelope of the animation, in the state a tap leaves it: flap swung up and back
               on its hinge, its lining showing. `still` is that state without the swing. */}
-          <span className={`env still${beige ? " beige" : ""}`}>
+          <span className={`env still ${stock}${beige ? " beige" : ""}`}>
             <span className="back" />
             <span className="pocket"><span className="sides" /><span className="edge" /></span>
             <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
@@ -103,7 +106,15 @@ export function InviteThumb({
           </span>
         </span>
         <span className="ithumb-cardbox">
-          <CoverCard e={e} />
+          {/* Each design's own cover, not a card standing in for all of them. This used to be
+              CoverCard whatever the design was, with only the envelope's paper changing, which
+              was true enough while every design opened on that card. Fur bands has no cards in
+              it at all and Staff file opens on a pass hanging from a lanyard, so the gallery
+              drew three different designs as one picture and a host could not see what they
+              were choosing. */}
+          {layout === "bands" ? <main className="bands thumb"><BandsCover event={e} /></main>
+            : layout === "file" ? <main className="file thumb"><FileCover event={e} /></main>
+            : <CoverCard e={e} />}
         </span>
       </span>
     </span>

@@ -258,3 +258,12 @@ main.bands .pcard.plate::before {
   content: ""; position: absolute; left: 0; right: 0; top: -13px; height: 14px;
   background: radial-gradient(circle at 10px 14px, var(--band) 10px, transparent 10.5px) 0 0 / 20px 14px repeat-x;
 }
+
+/* The cover on its own, in the Design gallery's tile.
+ *
+ * `.thumb` is the tile's copy of this page, holding the cover and nothing else. Two of the page's
+ * rules have to come off for that: the 844px minimum height, which is a phone screen and pinned a
+ * 580px cover to the top of a 730px scene until it was clipped, and the paper colour, which the
+ * tile paints across its whole scene instead so the cover stands on the page rather than on a
+ * cream panel with the suite's blue either side of it. */
+main.bands.thumb { min-height: 0; background: none; }
