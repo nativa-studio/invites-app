@@ -62,3 +62,20 @@ export function mascotFor(artwork: string | null | undefined): Picture | null {
 export function portraitFor(artwork: string | null | undefined): Picture | null {
   return PORTRAITS[set(artwork)] ?? null;
 }
+
+/** The bundled sets, by the short name a link can ask for them by. */
+const SETS: Record<string, string> = { gabriel: GABRIEL, monsters: MONSTERS };
+
+/** `?art=` on an invite link, for looking only.
+ *
+ *  A layout is drawn with the artwork its event names, and the two Monsters layouts were designed
+ *  around pictures no event names yet, so opening one of them shows the design in somebody else's
+ *  clothes. This is the same escape hatch `?layout=` already is: it overrides the picture for one
+ *  view of one page, writes nothing, and an unknown name is ignored rather than drawing a gap.
+ *
+ *  It is deliberately not a picker. These sets are event artwork, Marcia's own pictures for one
+ *  private party, and public/artwork/README.md is clear that nothing in that folder is offered to
+ *  another host. A link somebody has to type themselves is not an offer. */
+export function asArtwork(v: string | undefined): string | undefined {
+  return v ? SETS[v] : undefined;
+}

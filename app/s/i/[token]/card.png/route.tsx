@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getInviteCard } from "@/lib/guest/invite";
 import { paletteFor } from "@/components/art/palette";
-import { mascotFor, portraitFor } from "@/lib/artwork";
+import { asArtwork, mascotFor, portraitFor } from "@/lib/artwork";
 import { CARD_SIZE, envelopeCard, type CardVariant } from "@/components/share/envelope-card";
 import { cardFonts } from "@/lib/fonts";
 import { getSiteUrl } from "@/lib/site-url";
@@ -24,14 +24,18 @@ export async function GET(request: Request, { params }: { params: Promise<{ toke
   // of a different one.
   const layout = q.get("layout") ? asLayoutId(q.get("layout")) : card.layout_id;
   const stock = stockFor(layout);
+  // And ?art= beside it, for the same reason: the page takes it, so the card has to, or a
+  // preview of a design comes with its own characters on the page and somebody else's on the
+  // card that goes out with it.
+  const art = asArtwork(q.get("art") ?? undefined) ?? card.invite_image_path;
   return new ImageResponse(
     envelopeCard({
       palette: paletteFor(card.palette, card.theme_id),
       addressee: card.addressee,
       title: card.share_title ?? card.title,
-      artwork: cardArtwork(site, card.invite_image_path, stock),
+      artwork: cardArtwork(site, art, stock),
       // The square photograph, for the design that clips a polaroid to the card.
-      portrait: cardPortrait(site, card.invite_image_path),
+      portrait: cardPortrait(site, art),
       age: card.title.match(/turning (\d+)/i)?.[1] ?? null,
       stock,
       ink: card.ink,

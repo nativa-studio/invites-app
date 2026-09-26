@@ -27,8 +27,20 @@ import { GiftsContent, hasGifts } from "./GiftsContent";
 // the sign-off carry none, because they are not sections of the file, they are what is stapled to
 // the back of it.
 
-/** The parts that are numbered on the sheet, in the order the host has them. */
-const UNNUMBERED = new Set<InvitePart>(["after", "signoff"]);
+/** The parts that carry no number.
+ *
+ *  Questions and the sign-off, because they are not sections of the file: they are what is
+ *  stapled to the back of it.
+ *
+ *  Bring a plate for a harder reason. Whether it draws is not known here: the board belongs to a
+ *  guest who has said yes, and that answer lives in a client component below this one, so on the
+ *  server every invite looks as though it has a plate. Counting it therefore took a number that
+ *  nothing on the sheet was wearing, and every numbered part after it was pushed up one. On an
+ *  invite with gifts switched on the sheet read 01, 02, 03, 05. The fixture the fidelity suite
+ *  measures has gifts switched off, so the missing number fell off the end where nothing could
+ *  see it. Numbering it is not the answer either: it would renumber the whole sheet the moment a
+ *  guest pressed yes. */
+const UNNUMBERED = new Set<InvitePart>(["plate", "after", "signoff"]);
 
 export function FileInvite({
   event: e, greeting, reply, after, plate, gifts, skipAnimation,
