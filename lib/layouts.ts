@@ -13,6 +13,17 @@ export type LayoutOption = {
    *  deleted row would make every event already on it read as unset. The Design tab would then
    *  post the default back over their choice the next time it saved. */
   hidden?: boolean;
+  /** The artwork this design is shown in, in the Design gallery.
+   *
+   *  A design is drawn around its characters, not merely decorated with them: Fur bands was drawn
+   *  with the monsters standing on its cover and Photo cards with the poster. The gallery is a
+   *  catalogue, so each one shows itself as it was designed, the way a wallpaper book shows each
+   *  paper in its own colourway rather than all of them in one.
+   *
+   *  It is only the catalogue. The invite a guest opens, and the preview behind it, draw in the
+   *  artwork the event has chosen. Absent means this design has none of its own, which is the
+   *  Illustrated strip: it carries no characters at all, by design. */
+  artwork?: string;
 };
 
 // `suits` is which kinds of party a design is right for, and it is a judgement rather than a
@@ -22,6 +33,12 @@ export type LayoutOption = {
 //
 // A host is never stopped from having the one they want. The type only decides what is offered
 // first, and the Design tab says how many were left out and offers to show them.
+// The two bundled sets, by the path an event stores. Named here rather than imported so this
+// list stays the one place a design's own artwork is decided; lib/artwork.ts owns the pictures
+// inside each set, and these two strings are the keys it reads.
+const PIKACHU = "/artwork/gabriel-lineup.png";
+const MONSTERS = "/artwork/monsters-pair.png";
+
 export const LAYOUTS: LayoutOption[] = [
   // Named for what it looks like, like every other design here. It was called "Pokemon", after
   // the artwork the first event on it happened to use, which was fine while artwork was not a
@@ -29,6 +46,7 @@ export const LAYOUTS: LayoutOption[] = [
   // with Pokemon written under it. The id is untouched, so nothing saved has to move.
   {
     id: "suite",
+    artwork: PIKACHU,
     name: "Photo cards",
     line: "Your picture up top, the rest on cards",
     suits: ["kids_party", "birthday", "gathering", "baby_shower"],
@@ -39,6 +57,7 @@ export const LAYOUTS: LayoutOption[] = [
   // on two designs out of three and silently did nothing on the third.
   {
     id: "lineup",
+    artwork: PIKACHU,
     name: "The lineup",
     line: "One page, artwork along the bottom",
     suits: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
@@ -52,12 +71,14 @@ export const LAYOUTS: LayoutOption[] = [
   // full-bleed colour with the characters standing on it, file is a staff pass and a clipboard.
   {
     id: "bands",
+    artwork: MONSTERS,
     name: "Fur bands",
     line: "Colour bands, the characters on top",
     suits: ["kids_party", "birthday"],
   },
   {
     id: "file",
+    artwork: MONSTERS,
     name: "Staff file",
     line: "A staff pass and a clipboard",
     suits: ["kids_party", "birthday"],

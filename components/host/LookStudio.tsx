@@ -111,7 +111,12 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
               onClick={() => setOpen(d)}
             >
               <span className="design-art">
-                <InviteThumb layout={d.id} artwork={artPath} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
+                {/* The design's own artwork, not the event's. The gallery is a catalogue: each design
+                    was drawn around its characters and shows itself in them, so a host can tell
+                    the four apart at a glance. Drawn in one set they came out as one picture
+                    four times. The artwork the event has chosen is what the preview and the
+                    invite draw, and the Characters card below says which that is. */}
+                <InviteThumb layout={d.id} artwork={d.artwork ?? artPath} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
               </span>
               <span className="n">{d.name}</span>
               {d.line && <span className="b">{d.line}</span>}
