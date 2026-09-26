@@ -258,3 +258,20 @@ main.bands .pcard.plate::before {
   content: ""; position: absolute; left: 0; right: 0; top: -13px; height: 14px;
   background: radial-gradient(circle at 10px 14px, var(--band) 10px, transparent 10.5px) 0 0 / 20px 14px repeat-x;
 }
+
+/* The cover on its own, in the Design gallery's tile.
+ *
+ * `.thumb` is the tile's copy of this page, holding the cover and nothing else. Two of the page's
+ * rules have to come off for that: the 844px minimum height, which is a phone screen and pinned a
+ * 580px cover to the top of a 730px scene until it was clipped, and the paper colour, which the
+ * tile paints across its whole scene instead so the cover stands on the page rather than on a
+ * cream panel with the suite's blue either side of it. */
+main.bands.thumb { position: absolute; inset: 0; min-height: 0; background: none; }
+
+/* Here the shadow goes under the envelope, not under the invite.
+   Every other design's tile casts the cover onto the envelope, because the cover is a card or a
+   pass with an outline. This one's cover is the page itself, and its characters are a picture
+   masked at its edges so it fades into the paper: a drop-shadow follows that mask rather than the
+   monsters, and draws a pale rectangle behind them. So the envelope lifts off the page instead,
+   which separates the two without putting a box around a thing that is meant not to have one. */
+main.bands.thumb .ithumb-envbox { filter: drop-shadow(0 10px 14px rgba(31, 37, 48, 0.34)); }

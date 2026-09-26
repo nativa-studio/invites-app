@@ -4,8 +4,11 @@ import { LookStudio } from "@/components/host/LookStudio";
 import { asLayoutId } from "@/lib/layouts";
 import { PanelForm } from "@/components/host/PanelForm";
 
-// What the invite looks like: its shape, and which parts of it show at all. The pictures are no
-// longer a choice: there is one bundled set and every event gets it.
+// What the invite looks like: its shape, and which parts of it show at all.
+//
+// Not who stands on it. The characters belong to the design and are read from it, so there is
+// nothing here to save and, more to the point, nothing to save that could put one design's
+// characters on another. See artworkFor in lib/layouts.ts.
 export const LOOK_FIELDS = ["type", "layout_id", "strip_set", "ink", "show_details", "show_runsheet", "show_good_to_know", "show_after"] as const;
 
 export function LookPanel({ e }: { e: EventRow }) {
@@ -17,7 +20,6 @@ export function LookPanel({ e }: { e: EventRow }) {
           type: e.type,
           title: e.title,
           intro: e.intro,
-          artwork: e.invite_image_path,
           layout: asLayoutId(e.layout_id),
           palette: e.palette,
           themeId: e.theme_id,

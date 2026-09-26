@@ -37,6 +37,22 @@ export type GiftBoard = Gift & {
   waiting: { id: string; name: string; phone: string | null }[];
 };
 
+/** The same block, through the group link, which has no token.
+ *
+ *  Nobody in particular is reading it, so nothing in it is theirs: no tick, no amount, and the
+ *  organiser's own link is not offered. Everything else is what a guest with their own link sees,
+ *  because it is the same invite and it must not say two different things depending on which door
+ *  somebody came through. See migration 0047. */
+export async function getGiftBySlug(slug: string): Promise<Gift | null> {
+  // A database without migration 0047 has no function to call, which lands on the line the group
+  // link used to show on its own.
+  try {
+    return await callGuestRpc<Gift | null>("gift_slug", { p_slug: slug });
+  } catch {
+    return null;
+  }
+}
+
 export async function getGift(token: string): Promise<Gift | null> {
   if (!isValidToken(token)) return null;
   // A database without migration 0016 has no function to call, and an event whose host has not

@@ -10,6 +10,16 @@ nothing needs to live in the repo.
 Nothing in this folder belongs in the gallery of artwork sets the app offers to every host.
 Those must be original drawings.
 
+There is no picker, and there must not be one. A design is drawn around its characters rather
+than decorated with them, so the set belongs to the design and is read from `artworkFor` in
+`lib/layouts.ts`. Marcia, on 26 September 2026, after a picker had existed for an afternoon: "I
+do not want an option where the pikachu can be pulled in the monsters design. They are fixed
+images per design, they should never change."
+
+So nothing an event stores decides which characters it draws, and `events.invite_image_path` is
+no longer read by anything. Leave it that way: an option here is not a feature, it is a Monsters
+invite with a Pokemon poster on it.
+
 ## gabriel-peek/
 
 The seven characters cut out of Marcia's second wallpaper file, one PNG each, for the peek

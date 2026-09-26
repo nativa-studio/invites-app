@@ -7,7 +7,14 @@
 // survive. Once uploads are wired, these come from Storage and their sizes from the conversion
 // step, and nothing in the layouts has to change.
 
-export type Picture = { src: string; w: number; h: number };
+export type Picture = {
+  src: string; w: number; h: number;
+  /** Which part of a tall picture a square frame should hold, when the stylesheet's own default
+   *  lands in the wrong place. A set's problem rather than a layout's: the Monsters portrait is a
+   *  character standing, and Gabriel's is a poster with a face across the foot of it, so one
+   *  number in a stylesheet cannot serve both. Absent means the stylesheet decides. */
+  pos?: string;
+};
 
 const GABRIEL = "/artwork/gabriel-lineup.png";
 // The second bundled set, for the Monsters designs. Two pictures rather than one: the pair stand
@@ -16,16 +23,36 @@ const GABRIEL = "/artwork/gabriel-lineup.png";
 // pictures for a private party, the same standing as the Pikachu set: bundled for the pilot only.
 const MONSTERS = "/artwork/monsters-pair.png";
 
+// Four pictures make a set, one per place a design puts characters, and a design should never
+// show the same picture as the design beside it in the gallery. That is the rule these four maps
+// are for, and it is easy to break by accident: a role with no picture of its own borrows from
+// another role, quietly, and two designs come out wearing one photograph.
+//
+//                | poster (Photo cards) | band (Fur bands) | square (Staff file) | sticker
+//   Pikachu      | gabriel-cover        | gabriel-lineup   | pikachu-head        | gabriel-lineup
+//   Monsters     | monsters-mike        | monsters-pair    | monsters-mike       | monsters-pair
+//
+// The two repeats left are both in the Monsters set, which has two pictures for four places. It
+// needs one more: a tall one of the pair, or of Sulley on his own, for the poster. Until it
+// arrives the poster borrows the square, which at least differs from the design next to it.
+
 /** The poster at the top of the cover card. Marcia's own, shown whole and cropped by the frame. */
 const COVERS: Record<string, Picture> = {
   [GABRIEL]: { src: "/artwork/gabriel-cover.jpg", w: 1012, h: 1934 },
-  [MONSTERS]: { src: MONSTERS, w: 680, h: 650 },
+  // Mike standing, not the pair. The pair is what Fur bands stands on its cover, so with the pair
+  // here the two designs sat side by side in the gallery showing one photograph twice.
+  [MONSTERS]: { src: "/artwork/monsters-mike.jpg", w: 606, h: 1280 },
 };
 
 /** A square photograph of one character, for a pass or a polaroid. Only the sets that have one:
  *  the lineup band is a row of characters and cropping it square gives half of two of them. */
 const PORTRAITS: Record<string, Picture> = {
   [MONSTERS]: { src: "/artwork/monsters-mike.jpg", w: 606, h: 1280 },
+  // This set's own head, cut out, from the peek cast. It was the poster held at its foot for a
+  // moment, which put the same photograph on the Staff file pass and on the Photo cards cover.
+  // A set with a picture for every place does not have to borrow, and this one has eight of its
+  // characters cut out already.
+  [GABRIEL]: { src: "/artwork/gabriel-peek/pikachu-head.png", w: 340, h: 420 },
 };
 
 /** The band the lineup stands along the bottom of its cover. */
@@ -40,9 +67,9 @@ const MASCOTS: Record<string, Picture> = {
   [MONSTERS]: { src: MONSTERS, w: 680, h: 650 },
 };
 
-// There is one bundled set, so an event that has not named one gets it rather than getting
-// nothing. Asking a host to pick artwork from a list of one only ever produced invites with the
-// pictures missing. When uploads land, an event names its own set and this fallback goes.
+// What arrives here is a design's own set, from artworkFor in lib/layouts.ts, so it is never
+// absent and never an event's. A design with no characters names one no map answers to, and
+// every lookup below comes back null, which is what those layouts are built to draw.
 const set = (artwork: string | null | undefined) => artwork || GABRIEL;
 
 export function coverFor(artwork: string | null | undefined): Picture | null {
@@ -62,3 +89,4 @@ export function mascotFor(artwork: string | null | undefined): Picture | null {
 export function portraitFor(artwork: string | null | undefined): Picture | null {
   return PORTRAITS[set(artwork)] ?? null;
 }
+

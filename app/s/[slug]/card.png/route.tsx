@@ -5,7 +5,7 @@ import { mascotFor } from "@/lib/artwork";
 import { CARD_SIZE, envelopeCard, type CardVariant } from "@/components/share/envelope-card";
 import { cardFonts } from "@/lib/fonts";
 import { getSiteUrl } from "@/lib/site-url";
-import { stockFor, type Stock } from "@/lib/layouts";
+import { artworkFor, stockFor, type Stock } from "@/lib/layouts";
 
 // The picture a chat app shows under the group link: a sealed envelope, addressed to nobody
 // in particular because anyone may open this one.
@@ -17,11 +17,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
   const asked = new URL(request.url).searchParams.get("style");
   const variant = (["front", "back", "posted", "opening", "sealed"] as const).find((v) => v === asked) as CardVariant | undefined;
   const stock = stockFor(e.layout_id);
+  // The design's own characters, read from the one place that answers that. See lib/layouts.ts.
+  const art = artworkFor(e.layout_id);
   return new ImageResponse(
     envelopeCard({
       palette: paletteFor(e.palette, e.theme_id),
       title: e.share_title ?? e.title,
-      artwork: cardArtwork(site, e.invite_image_path, stock),
+      artwork: cardArtwork(site, art, stock),
       age: e.title.match(/turning (\d+)/i)?.[1] ?? null,
       stock,
       ink: e.ink,

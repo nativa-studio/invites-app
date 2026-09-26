@@ -157,6 +157,12 @@ p { margin: 0; }
    than inherited because the lineup class brings a whole page's worth of rules with it. The card
    and the envelope both cast shadows, and a shadow on white is a shadow on nothing. */
 .ithumb-scene.beige { background-color: #FDF6E4; background-image: none; }
+/* And the two Monsters designs' pages, the same way and for the same reason: the tile holds one
+   cover, and the paper behind it is half of what the design looks like. Written out here rather
+   than inherited, because bringing in main.bands or main.file would bring a whole page of rules
+   with it. Keep in step with the root rule of app/bands.css and app/file.css. */
+.ithumb-scene.fur { background-color: #F1DDBA; background-image: none; }
+.ithumb-scene.manila { background-color: #35A9B8; background-image: none; }
 /* The tile is a window onto that page, so it has the page's corner rather than a hard rectangle,
    and nothing leans out of it. Everything in the scene is inside its box, the standing flap
    included, so there is nothing for this to cut. */
@@ -172,6 +178,22 @@ p { margin: 0; }
    and left the envelope sitting on its own with nothing coming out of it. Held at the foot, the
    two always meet. */
 .ithumb-cardbox { position: absolute; left: 0; bottom: 20px; width: 390px; z-index: 2; }
+/* A design whose cover is a whole page rather than a card hangs from its head instead, and the
+   tile becomes a window onto the top of it. Held at the foot like a card, a tall cover ran off
+   the top of the scene and the tile showed its last inch: Fur bands with a portrait picture on it
+   is 900px tall, and all a host could see was the line under a title they could not read. The top
+   is what a guest sees first, so the top is what the tile shows. */
+.ithumb-cardbox.page { top: 34px; bottom: auto; max-height: 660px; overflow: hidden; }
+/* And a cover that is neither a page nor a tall card. The Illustrated strip's is a small boxed
+   cover, about 250px of a 730px scene, so hung from the foot like the others it sat level with
+   the envelope and left the top two thirds of the tile empty. Centred, the paper reads as paper
+   with a card on it, which is what that design is. The likeness this replaced hid the same
+   problem behind a 520px minimum height on a card that has none. */
+.ithumb-cardbox.middle { top: 50%; bottom: auto; transform: translateY(-50%); }
+/* Which of the two lifts off the other is the design's own business, so each stylesheet says it
+   for itself: see the `.thumb` rules at the foot of app/file.css, app/strip.css, app/lineup.css
+   and app/bands.css. A card with an edge and a shadow of its own, which is Photo cards, already
+   says it and is left alone. */
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .evt-when { font-size: 12.5px; color: var(--app-mute); }
@@ -325,6 +347,11 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .set.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
 .set .trio { display: flex; gap: 3px; align-items: flex-end; }
 .set .n { font-size: 12.5px; font-weight: 600; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+/* A set picked by a picture rather than by three symbols. The two sets are different shapes, a
+   wide band and a square pair, so the box is fixed and the picture is fitted inside it whole:
+   cover would crop the band to one character's shoulder and tell a host nothing. */
+.set .cast { display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 68px; }
+.set .cast img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
 /* A grid, not a wrapping row. Seven 44px circles in the 332px this card gives them wrapped six
    and one, and the one left on its own reads as a mistake rather than as a palette. Four and
    three is the same information, laid out on purpose. Measured. */

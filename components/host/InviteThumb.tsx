@@ -1,11 +1,16 @@
 import "@/app/invite.css";
 import type { PublicEvent, Palette } from "@/lib/db/types";
 import { paletteFor, paletteVars } from "@/components/art/palette";
+import { Bolt } from "@/components/art/icons";
 import { CoverCard } from "@/components/invite/Cards";
-import { stockFor } from "@/lib/layouts";
+import { BandsCover } from "@/components/invite/BandsCover";
+import { FileCover } from "@/components/invite/FileCover";
+import { StripCover } from "@/components/invite/StripCover";
+import { LineupCover } from "@/components/invite/LineupCover";
+import { artworkFor, stockFor } from "@/lib/layouts";
+import { envelopeMascot, sealFor } from "@/components/invite/envelope-parts";
 import { mascotFor } from "@/lib/artwork";
-import { stripSet, inkFor, paperFor } from "@/lib/strip-set";
-import { Mono } from "@/components/art/mono";
+import { inkFor, paperFor } from "@/lib/strip-set";
 import Image from "next/image";
 
 // One invite, small: its own cover card standing in front of its own envelope, open.
@@ -25,9 +30,8 @@ const W = 400;
 const H = 470;
 
 export function InviteThumb({
-  artwork, title, intro, palette, themeId, layout, ink, set: chosenSet,
+  title, intro, palette, themeId, layout, ink, set: chosenSet,
 }: {
-  artwork: string | null;
   title: string;
   intro?: string | null;
   palette?: Palette | null;
@@ -46,8 +50,22 @@ export function InviteThumb({
   //
   // Same rule as the rest of this file: every piece here is the real one, at the real size, so
   // there is nothing for the tile to be wrong about. A drawing of an envelope would be.
+  // The design's own characters, from the one place that answers that, so a tile cannot show a
+  // set the invite behind it would never draw. See artworkFor in lib/layouts.ts.
+  const artwork = artworkFor(layout);
+  // CoverCard and every layout's own cover read a whole event row, and a thumbnail knows a
+  // handful of things about one. The rest are the values that make a cover draw itself and
+  // nothing else: with the details and the sign-off both on, their own sections carry them, so
+  // the cover is the picture, the eyebrow, the title and the line under it, which is exactly what
+  // it is on the invite.
+  const e = {
+    title, intro: intro ?? null, invite_image_path: artwork,
+    strip_set: chosenSet, theme_id: themeId ?? null,
+    show_details: true, show_signoff: true, host_line: null,
+    date: null, start_time: null, end_time: null, time_note: null, venue: null,
+  } as unknown as PublicEvent;
+
   if (layout === "strip") {
-    const set = stripSet(chosenSet, themeId);
     return (
       <span className="ithumb" style={{ "--ink": inkFor(ink), "--paper": paperFor(ink) } as React.CSSProperties}>
         <span className="ithumb-scene strip-scene">
@@ -56,14 +74,23 @@ export function InviteThumb({
               <span className="back" />
               <span className="pocket"><span className="sides" /><span className="edge" /></span>
               <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
+              {/* The wax, with this event's own middle doodle on it, the same as the invite. */}
+              <span className="seal">{sealFor("strip", e)}</span>
             </span>
           </span>
-          <span className="ithumb-cardbox">
-            <span className="strip-card">
-              <span className="trio">{set.trio.map((n, i) => <Mono key={i} name={n} size={74} />)}</span>
-              <span className="t">{title}</span>
-              {intro && <span className="b">{intro}</span>}
-            </span>
+          <span className="ithumb-cardbox middle">
+            {/* The real cover, not a likeness of it. This was a span holding the three doodles
+                and the title at sizes of its own, which is the kind of copy that drifts the
+                first time either changes. */}
+            {/* The two colours travel as an inline style, exactly as StripInvite sets them on
+                its own main. They have to: app/strip.css declares a default ink and paper on
+                main.strip, and a stylesheet's own declaration beats a custom property inherited
+                from an ancestor, so the pair set on .ithumb above never reached the cover. The
+                tile drew a charcoal strip on cream paper while the invite behind it was navy on
+                pale blue, which is the one thing a tile must never do. */}
+            <main className="strip thumb" style={{ "--ink": inkFor(ink), "--paper": paperFor(ink) } as React.CSSProperties}>
+              <StripCover event={e} />
+            </main>
           </span>
         </span>
       </span>
@@ -71,25 +98,30 @@ export function InviteThumb({
   }
 
   const p = paletteFor(palette, themeId ?? "");
-  const mascot = mascotFor(artwork);
-  const beige = stockFor(layout) === "beige";
-  // CoverCard reads a whole event row, and a thumbnail knows four things about one. The rest are
-  // the values that make it draw the cover and nothing else: with the details and the sign-off
-  // both on, their cards carry them, so the cover is the picture, the eyebrow, the title and the
-  // line under it, which is exactly what it is on the invite.
-  const e = {
-    title, intro: intro ?? null, invite_image_path: artwork,
-    show_details: true, show_signoff: true, host_line: null,
-    date: null, start_time: null, end_time: null, time_note: null, venue: null,
-  } as unknown as PublicEvent;
-
+  const mascot = envelopeMascot(layout, e);
+  const seal = sealFor(layout, e);
+  const stock = stockFor(layout);
+  // Whose cover is a page rather than a card, and so is shown from its head. See .ithumb-cardbox
+  // in app/globals.css.
+  const pageCover = layout === "bands" || layout === "file" || layout === "lineup";
+  const beige = stock === "beige";
+  // The layout's own root element, around the whole scene rather than around the cover alone.
+  //
+  // It was around the cover, and the envelope sat outside it, which meant every rule a layout
+  // writes for its own envelope missed: the fur seal drew as an empty white disc because the
+  // eye's colours are declared under main.bands, and its sticker drew as an empty white frame
+  // because the picture comes from --cast, which that page sets on its own root. A tile is a
+  // window onto the page, so the page's root belongs in it.
+  const root = layout === "bands" || layout === "file" || layout === "lineup" ? layout : null;
+  const cast = layout === "bands" ? mascotFor(artwork) : null;
   return (
     <span className="ithumb" style={paletteVars(p)}>
-      <span className={`ithumb-scene invite${beige ? " beige" : ""}`}>
+      <span className={`ithumb-scene invite ${stock}${beige ? " beige" : ""}`}>
+        <Root name={root} cast={cast?.src ?? null}>
         <span className="ithumb-envbox">
           {/* The envelope of the animation, in the state a tap leaves it: flap swung up and back
               on its hinge, its lining showing. `still` is that state without the swing. */}
-          <span className={`env still${beige ? " beige" : ""}`}>
+          <span className={`env still ${stock}${beige ? " beige" : ""}`}>
             <span className="back" />
             <span className="pocket"><span className="sides" /><span className="edge" /></span>
             <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
@@ -100,13 +132,41 @@ export function InviteThumb({
                 which is 1173px wide. That is what put a giant Pikachu across the corner of every
                 tile. */}
             {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="120px" />}
+            {/* The seal, which this tile did not draw at all until Marcia held the real manila
+                envelope up against it: a tie with two buttons and an eye on the invite, a plain
+                beige band in the tile. Both come from the same module now, so a design cannot
+                have one mark on its invite and another, or none, on its tile. */}
+            <span className="seal">{seal ?? <Bolt size={30} />}</span>
           </span>
         </span>
-        <span className="ithumb-cardbox">
-          <CoverCard e={e} />
+        <span className={`ithumb-cardbox${pageCover ? " page" : ""}`}>
+          {/* Each design's own cover, not a card standing in for all of them. This used to be
+              CoverCard whatever the design was, with only the envelope's paper changing, which
+              was true enough while every design opened on that card. Fur bands has no cards in
+              it at all and Staff file opens on a pass hanging from a lanyard, so the gallery
+              drew three different designs as one picture and a host could not see what they
+              were choosing. */}
+          {layout === "bands" ? <BandsCover event={e} />
+            : layout === "file" ? <FileCover event={e} />
+            : layout === "lineup" ? <div className="page"><LineupCover event={e} /></div>
+            : <CoverCard e={e} />}
         </span>
+        </Root>
       </span>
     </span>
+  );
+}
+
+/** The layout's root element around the tile's whole scene, or nothing at all for the suite,
+ *  whose rules hang off a class the scene already carries. `--cast` is the sticker on the fur
+ *  envelope, which that page sets on its own root and which is therefore this element's to set
+ *  here too. */
+function Root({ name, cast, children }: { name: string | null; cast: string | null; children: React.ReactNode }) {
+  if (!name) return <>{children}</>;
+  return (
+    <main className={`${name} thumb`} style={cast ? ({ "--cast": `url(${cast})` } as React.CSSProperties) : undefined}>
+      {children}
+    </main>
   );
 }
 

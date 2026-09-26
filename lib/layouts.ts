@@ -1,8 +1,13 @@
 // The shapes an invite can take. One list, because two screens offer the same choice: the setup
 // flow, where a host picks a look before there is anything to preview, and the Layout tab, where
 // they change their mind against the real thing.
-/** `line` is what the tile says under the name. Optional: a design whose name already says what
- *  it is does not need a sentence repeating it. */
+/** `line` is what the tile says under the name, and nothing sets one any more.
+ *
+ *  Every place a design is offered now draws the design: the gallery tile and the New event tile
+ *  hold its real cover standing in front of its real envelope, and the sheet behind them runs the
+ *  whole invite. A sentence under a picture of the thing was describing what the reader could
+ *  already see, and four of them turned a row of invites into a row of captions. Left in the
+ *  type, because a design that one day cannot be told from another at tile size may want one. */
 export type LayoutOption = {
   id: string;
   name: string;
@@ -13,6 +18,18 @@ export type LayoutOption = {
    *  deleted row would make every event already on it read as unset. The Design tab would then
    *  post the default back over their choice the next time it saved. */
   hidden?: boolean;
+  /** The artwork this design draws, everywhere, always.
+   *
+   *  A design is drawn around its characters rather than decorated with them: Fur bands was drawn
+   *  with the monsters standing on its cover, Photo cards with the poster. So the characters are
+   *  a property of the design and not of the event, and they never mix. There is no setting for
+   *  this and there must not be one: the Pokemon set cannot be pulled into a Monsters design.
+   *
+   *  Absent means this design carries no characters at all, which is the Illustrated strip: one
+   *  ink on paper, drawn by hand, so a memorial or a housewarming is not left with an empty
+   *  frame. NONE says that out loud rather than leaving it to a falsy value, because every
+   *  accessor in lib/artwork.ts treats a missing set as the first one. */
+  artwork?: string;
 };
 
 // `suits` is which kinds of party a design is right for, and it is a judgement rather than a
@@ -22,10 +39,24 @@ export type LayoutOption = {
 //
 // A host is never stopped from having the one they want. The type only decides what is offered
 // first, and the Design tab says how many were left out and offers to show them.
+// The two bundled sets, by the path an event stores. Named here rather than imported so this
+// list stays the one place a design's own artwork is decided; lib/artwork.ts owns the pictures
+// inside each set, and these two strings are the keys it reads.
+const PIKACHU = "/artwork/gabriel-lineup.png";
+const MONSTERS = "/artwork/monsters-pair.png";
+/** A design with no characters. A name no set answers to, so every picture lookup comes back
+ *  null, which is what the layouts are built to draw. */
+const NONE = "none";
+
 export const LAYOUTS: LayoutOption[] = [
+  // Named for what it looks like, like every other design here. It was called "Pokemon", after
+  // the artwork the first event on it happened to use, which was fine while artwork was not a
+  // choice and wrong the moment it became one: a host picking the monsters got a monster invite
+  // with Pokemon written under it. The id is untouched, so nothing saved has to move.
   {
     id: "suite",
-    name: "Pokémon",
+    artwork: PIKACHU,
+    name: "Photo cards",
     suits: ["kids_party", "birthday", "gathering", "baby_shower"],
   },
   // Retired at Marcia's word. Still drawn for any event already saved on it, and still reachable
@@ -34,8 +65,8 @@ export const LAYOUTS: LayoutOption[] = [
   // on two designs out of three and silently did nothing on the third.
   {
     id: "lineup",
+    artwork: PIKACHU,
     name: "The lineup",
-    line: "One page, artwork along the bottom",
     suits: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
     hidden: true,
   },
@@ -47,20 +78,20 @@ export const LAYOUTS: LayoutOption[] = [
   // full-bleed colour with the characters standing on it, file is a staff pass and a clipboard.
   {
     id: "bands",
+    artwork: MONSTERS,
     name: "Fur bands",
-    line: "Colour bands, the characters on top",
     suits: ["kids_party", "birthday"],
   },
   {
     id: "file",
+    artwork: MONSTERS,
     name: "Staff file",
-    line: "A staff pass and a clipboard",
     suits: ["kids_party", "birthday"],
   },
   {
     id: "strip",
+    artwork: NONE,
     name: "Illustrated strip",
-    line: "One ink on paper, drawn by hand",
     suits: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
   },
 ];
@@ -76,6 +107,16 @@ export const LAYOUTS: LayoutOption[] = [
 export type Stock = "red" | "beige" | "ink" | "fur" | "manila";
 
 const STOCK: Record<string, Stock> = { suite: "red", lineup: "beige", strip: "ink", bands: "fur", file: "manila" };
+
+/** The artwork a design draws. One answer per design, and nothing anywhere can change it.
+ *
+ *  Every layout, every cover, every envelope and every share card reads its pictures through
+ *  this, so there is one place the question is answered. It used to be answered by the event's
+ *  own invite_image_path, which meant a host could put one design's characters on another's, and
+ *  a Pokemon poster turned up on a Monsters pass. */
+export function artworkFor(layout: string | null | undefined): string {
+  return LAYOUTS.find((l) => l.id === layout)?.artwork ?? LAYOUTS[0].artwork ?? NONE;
+}
 
 export function stockFor(layout: string | null | undefined): Stock {
   return STOCK[layout ?? ""] ?? "red";

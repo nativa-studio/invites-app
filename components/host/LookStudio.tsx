@@ -24,7 +24,6 @@ export type LookState = {
   sections: Sections;
   title: string;
   intro: string | null;
-  artwork: string | null;
   palette: Palette | null;
   themeId: string | null;
   ink: string | null;
@@ -106,7 +105,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
               onClick={() => setOpen(d)}
             >
               <span className="design-art">
-                <InviteThumb layout={d.id} artwork={saved.artwork} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
+                <InviteThumb layout={d.id} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
               </span>
               <span className="n">{d.name}</span>
               {d.line && <span className="b">{d.line}</span>}
@@ -121,6 +120,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
         )}
         {rest.length > 0 && showAll && <p className="hint">{copy.host.designRestHint}</p>}
       </section>
+
 
       {/* Only for the illustrated strip, because it is the only design these two do anything to.
           Shown under the gallery rather than inside the design sheet: a host picking Diwali is
