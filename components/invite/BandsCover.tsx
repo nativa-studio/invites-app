@@ -1,7 +1,7 @@
 import "@/app/bands.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
-import { coverFor } from "@/lib/artwork";
+import { bandFor } from "@/lib/artwork";
 
 // The Fur bands cover, in a file of its own.
 //
@@ -20,7 +20,15 @@ import { coverFor } from "@/lib/artwork";
  *  it holds the title and the line under it, and marking only the title left the picture and the
  *  eyebrow doing nothing. */
 export function BandsCover({ event: e }: { event: PublicEvent }) {
-  const cast = coverFor(e.invite_image_path);
+  // The band of characters standing, not the poster. This design's whole line is "the characters
+  // on top": they stand on the cover and again as the sticker on the envelope, which is the same
+  // picture read through mascotFor. coverFor is the suite's photo card, a poster held whole and
+  // cropped by a frame, and on a set whose poster is a face at the foot of a tall picture it drew
+  // Fur bands as a rectangle of sky with one ear in the corner.
+  //
+  // Nothing measured moves: for the Monsters set these two return the same picture, the pair, at
+  // the same size. It is the other set the two disagree about.
+  const cast = bandFor(e.invite_image_path);
   return (
     <div className="cover" data-section="cover">
       <p className="eyebrow">{copy.sections.scarerWanted}</p>
