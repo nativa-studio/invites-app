@@ -25,7 +25,7 @@ export function FileCover({ event: e }: { event: PublicEvent }) {
             {face && (
               <div className="photo">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={face.src} alt="" width={face.w} height={face.h} />
+                <img src={face.src} alt="" width={face.w} height={face.h} style={face.pos ? { objectPosition: face.pos } : undefined} />
               </div>
             )}
             <h1>{e.title}</h1>

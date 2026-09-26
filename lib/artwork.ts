@@ -7,7 +7,14 @@
 // survive. Once uploads are wired, these come from Storage and their sizes from the conversion
 // step, and nothing in the layouts has to change.
 
-export type Picture = { src: string; w: number; h: number };
+export type Picture = {
+  src: string; w: number; h: number;
+  /** Which part of a tall picture a square frame should hold, when the stylesheet's own default
+   *  lands in the wrong place. A set's problem rather than a layout's: the Monsters portrait is a
+   *  character standing, and Gabriel's is a poster with a face across the foot of it, so one
+   *  number in a stylesheet cannot serve both. Absent means the stylesheet decides. */
+  pos?: string;
+};
 
 const GABRIEL = "/artwork/gabriel-lineup.png";
 // The second bundled set, for the Monsters designs. Two pictures rather than one: the pair stand
@@ -26,6 +33,15 @@ const COVERS: Record<string, Picture> = {
  *  the lineup band is a row of characters and cropping it square gives half of two of them. */
 const PORTRAITS: Record<string, Picture> = {
   [MONSTERS]: { src: "/artwork/monsters-mike.jpg", w: 606, h: 1280 },
+  // The poster, held at its foot, which is where the face is. There is no separate square file:
+  // a square frame over `object-fit: cover` is a crop, so cutting a second copy of the same
+  // picture would be a second file to keep in step for nothing. 100% is the bottom of it, which
+  // lands on the ear, the eye and the cheek.
+  //
+  // Without this the Staff file's pass had no photograph at all on any event using this set, and
+  // the pass is most of what that design is. Marcia found it in the Design gallery, where the
+  // tile drew the pass empty, which is exactly what the invite was doing.
+  [GABRIEL]: { src: "/artwork/gabriel-cover.jpg", w: 1012, h: 1934, pos: "50% 100%" },
 };
 
 /** The band the lineup stands along the bottom of its cover. */
