@@ -3,7 +3,6 @@ import { useState } from "react";
 import { copy } from "@/lib/copy";
 import { designsFor, LAYOUTS, type LayoutOption } from "@/lib/layouts";
 import { STRIP_SETS, STRIP_INKS, stripSet, inkFor, paperFor } from "@/lib/strip-set";
-import { ARTWORK_SETS, artworkId } from "@/lib/artwork";
 import { Mono } from "@/components/art/mono";
 import { EVENT_TYPES } from "@/lib/event-types";
 import { InviteThumb } from "./InviteThumb";
@@ -25,7 +24,6 @@ export type LookState = {
   sections: Sections;
   title: string;
   intro: string | null;
-  artwork: string | null;
   palette: Palette | null;
   themeId: string | null;
   ink: string | null;
@@ -54,8 +52,6 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
   // Null in the column means "whatever the theme implies", so the picker opens on the set the
   // invite is actually drawn in rather than on nothing.
   const [set, setSet] = useState(stripSet(saved.stripSet, saved.themeId).id);
-  // Which characters stand on the invite. Held as the set's short name, saved as its path.
-  const [art, setArt] = useState(artworkId(saved.artwork));
   const [open, setOpen] = useState<LayoutOption | null>(null);
 
   const { fits, rest } = designsFor(type);
@@ -65,8 +61,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
   const changed = layout !== saved.layout || type !== saved.type || SECTION_LABELS.some(([k]) => sections[k] !== saved.sections[k]);
 
   const on = SECTION_LABELS.filter(([k]) => sections[k]).map(([k]) => k).join(",");
-  const artPath = ARTWORK_SETS.find((a) => a.id === art)?.path ?? saved.artwork;
-  const previewSrc = (id: string) => `/app/preview/${eventId}?layout=${id}&show=${on}&art=${art}`;
+  const previewSrc = (id: string) => `/app/preview/${eventId}?layout=${id}&show=${on}`;
 
   return (
     <>
@@ -76,7 +71,6 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
       <input type="hidden" name="layout_id" value={layout} />
       <input type="hidden" name="strip_set" value={set} />
       <input type="hidden" name="ink" value={ink} />
-      <input type="hidden" name="invite_image_path" value={artPath ?? ""} />
 
       <section className="card">
         <h2 className="h2">{copy.host.partyTypeHeading}</h2>
@@ -111,12 +105,7 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
               onClick={() => setOpen(d)}
             >
               <span className="design-art">
-                {/* The design's own artwork, not the event's. The gallery is a catalogue: each design
-                    was drawn around its characters and shows itself in them, so a host can tell
-                    the four apart at a glance. Drawn in one set they came out as one picture
-                    four times. The artwork the event has chosen is what the preview and the
-                    invite draw, and the Characters card below says which that is. */}
-                <InviteThumb layout={d.id} artwork={d.artwork ?? artPath} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
+                <InviteThumb layout={d.id} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
               </span>
               <span className="n">{d.name}</span>
               {d.line && <span className="b">{d.line}</span>}
@@ -132,36 +121,6 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
         {rest.length > 0 && showAll && <p className="hint">{copy.host.designRestHint}</p>}
       </section>
 
-      {/* Who stands on the invite. Under the gallery rather than inside a design's sheet, because
-          it is not a property of a design: every layout draws the same set its own way, and the
-          tiles above redraw as soon as it changes, which is the whole point of it being here.
-
-          This offers a host artwork, which public/artwork/README.md says these two sets are not
-          for. It is a deliberate exception, asked for by name, and lib/artwork.ts records why.
-          When the gallery of the product's own drawings lands, this list is what it replaces. */}
-      {ARTWORK_SETS.length > 1 && (
-        <section className="card">
-          <h2 className="h2">{copy.host.artHeading}</h2>
-          <p className="hint">{copy.host.artHint}</p>
-          <div className="sets">
-            {ARTWORK_SETS.map((a) => (
-              <button
-                key={a.id}
-                type="button"
-                className={`set ${art === a.id ? "on" : ""}`}
-                aria-pressed={art === a.id}
-                onClick={() => setArt(a.id)}
-              >
-                <span className="cast">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.picture.src} alt="" width={a.picture.w} height={a.picture.h} />
-                </span>
-                <span className="n">{copy.host.artNames[a.id] ?? a.id}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Only for the illustrated strip, because it is the only design these two do anything to.
           Shown under the gallery rather than inside the design sheet: a host picking Diwali is

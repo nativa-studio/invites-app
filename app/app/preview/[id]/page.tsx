@@ -6,7 +6,6 @@ import { firstName } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { EventRow, RunsheetStop, Update } from "@/lib/db/types";
 import { InviteBody, asLayout } from "@/components/invite/InviteBody";
-import { asArtwork } from "@/lib/artwork";
 import { eventForRender } from "@/lib/db/events";
 import { googleCalendarLink } from "@/lib/calendar";
 import { getSiteUrl, inviteLink } from "@/lib/site-url";
@@ -34,13 +33,13 @@ import { loadEvent } from "@/lib/db/host";
 // envelope, which a host does not want to sit through after every save.
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
-type Query = { layout?: string; art?: string; show?: string; edit?: string; full?: string };
+type Query = { layout?: string; show?: string; edit?: string; full?: string };
 
 export default async function Preview({
   params, searchParams,
 }: { params: Promise<{ id: string }>; searchParams: Promise<Query> }) {
   const { id } = await params;
-  const { layout, art, show, edit, full } = await searchParams;
+  const { layout, show, edit, full } = await searchParams;
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   // The host's own invite, with the pencils on. Without it this route is the invite and nothing
   // else, which is what the design sheet and the layout thumbnails show.
@@ -141,9 +140,6 @@ export default async function Preview({
           greeting={greeting}
           reply={reply}
           layout={asLayout(layout)}
-          // ?art= beside ?layout=, so the picker can show a design with the pictures it was
-          // drawn around rather than with whatever this event already has. Looking only.
-          artwork={asArtwork(art)}
           pretend
           // The host's own preview. It borrows a real guest's token for the greeting, so the
           // Google button goes straight to Google rather than through our counting redirect, and

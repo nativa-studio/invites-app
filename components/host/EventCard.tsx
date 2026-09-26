@@ -54,7 +54,7 @@ export function EventCard({ e }: { e: EventSummary }) {
           ? ({ "--ink": inkFor(e.ink), "--paper": paperFor(e.ink) } as React.CSSProperties)
           : paletteVars(p)}
       >
-        <InviteThumb artwork={e.invite_image_path} title={e.title} intro={e.intro} themeId={e.theme_id} palette={e.palette} layout={e.layout_id ?? undefined} ink={e.ink} />
+        <InviteThumb title={e.title} intro={e.intro} themeId={e.theme_id} palette={e.palette} layout={e.layout_id ?? undefined} ink={e.ink} />
       </span>
       <span className="evt-body">
         <span className="evt-title">{e.title}</span>

@@ -67,9 +67,9 @@ const MASCOTS: Record<string, Picture> = {
   [MONSTERS]: { src: MONSTERS, w: 680, h: 650 },
 };
 
-// There is one bundled set, so an event that has not named one gets it rather than getting
-// nothing. Asking a host to pick artwork from a list of one only ever produced invites with the
-// pictures missing. When uploads land, an event names its own set and this fallback goes.
+// What arrives here is a design's own set, from artworkFor in lib/layouts.ts, so it is never
+// absent and never an event's. A design with no characters names one no map answers to, and
+// every lookup below comes back null, which is what those layouts are built to draw.
 const set = (artwork: string | null | undefined) => artwork || GABRIEL;
 
 export function coverFor(artwork: string | null | undefined): Picture | null {
@@ -90,37 +90,3 @@ export function portraitFor(artwork: string | null | undefined): Picture | null 
   return PORTRAITS[set(artwork)] ?? null;
 }
 
-/** The bundled sets, by the short name a link and the picker ask for them by. */
-const SETS: Record<string, string> = { gabriel: GABRIEL, monsters: MONSTERS };
-
-/** The sets a host can pick between, in the order they are offered.
- *
- *  public/artwork/README.md says nothing in that folder belongs in a gallery offered to every
- *  host, and that rule still stands for anything shipped. This picker is a deliberate exception,
- *  asked for by name while Marcia builds the library: two sets of her own, on her own app, so a
- *  design can be looked at in the pictures it was drawn around rather than in the other one's.
- *  When the real gallery lands, with drawings the product owns, this list is what it replaces,
- *  and these two go back to being one event's artwork. */
-export const ARTWORK_SETS: { id: string; path: string; picture: Picture }[] = [
-  { id: "gabriel", path: GABRIEL, picture: { src: GABRIEL, w: 1173, h: 420 } },
-  { id: "monsters", path: MONSTERS, picture: { src: MONSTERS, w: 680, h: 650 } },
-];
-
-/** Which set an event's saved path is, for opening the picker on the right one. */
-export function artworkId(artwork: string | null | undefined): string {
-  return ARTWORK_SETS.find((a) => a.path === set(artwork))?.id ?? ARTWORK_SETS[0].id;
-}
-
-/** `?art=` on an invite link, for looking only.
- *
- *  A layout is drawn with the artwork its event names, and the two Monsters layouts were designed
- *  around pictures no event names yet, so opening one of them shows the design in somebody else's
- *  clothes. This is the same escape hatch `?layout=` already is: it overrides the picture for one
- *  view of one page, writes nothing, and an unknown name is ignored rather than drawing a gap.
- *
- *  It is deliberately not a picker. These sets are event artwork, Marcia's own pictures for one
- *  private party, and public/artwork/README.md is clear that nothing in that folder is offered to
- *  another host. A link somebody has to type themselves is not an offer. */
-export function asArtwork(v: string | undefined): string | undefined {
-  return v ? SETS[v] : undefined;
-}

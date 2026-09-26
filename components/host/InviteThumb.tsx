@@ -6,7 +6,7 @@ import { BandsCover } from "@/components/invite/BandsCover";
 import { FileCover } from "@/components/invite/FileCover";
 import { StripCover } from "@/components/invite/StripCover";
 import { LineupCover } from "@/components/invite/LineupCover";
-import { stockFor } from "@/lib/layouts";
+import { artworkFor, stockFor } from "@/lib/layouts";
 import { mascotFor } from "@/lib/artwork";
 import { inkFor, paperFor } from "@/lib/strip-set";
 import Image from "next/image";
@@ -28,9 +28,8 @@ const W = 400;
 const H = 470;
 
 export function InviteThumb({
-  artwork, title, intro, palette, themeId, layout, ink, set: chosenSet,
+  title, intro, palette, themeId, layout, ink, set: chosenSet,
 }: {
-  artwork: string | null;
   title: string;
   intro?: string | null;
   palette?: Palette | null;
@@ -49,6 +48,9 @@ export function InviteThumb({
   //
   // Same rule as the rest of this file: every piece here is the real one, at the real size, so
   // there is nothing for the tile to be wrong about. A drawing of an envelope would be.
+  // The design's own characters, from the one place that answers that, so a tile cannot show a
+  // set the invite behind it would never draw. See artworkFor in lib/layouts.ts.
+  const artwork = artworkFor(layout);
   // CoverCard and every layout's own cover read a whole event row, and a thumbnail knows a
   // handful of things about one. The rest are the values that make a cover draw itself and
   // nothing else: with the details and the sign-off both on, their own sections carry them, so

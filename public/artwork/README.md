@@ -10,13 +10,15 @@ nothing needs to live in the repo.
 Nothing in this folder belongs in the gallery of artwork sets the app offers to every host.
 Those must be original drawings.
 
-**One exception, on purpose.** The Look panel now has a Characters picker offering the two
-bundled sets, `gabriel-lineup.png` and `monsters-pair.png`. Marcia asked for it by name on
-26 September 2026, while she was building the design library: a design has to be lookable at in
-the pictures it was drawn around, and both of the Monsters designs were drawn around the second
-set. The rule above still stands for anything the product ships. When a gallery of the product's
-own drawings lands, `ARTWORK_SETS` in `lib/artwork.ts` is the list it replaces, and these two go
-back to being one event's artwork.
+There is no picker, and there must not be one. A design is drawn around its characters rather
+than decorated with them, so the set belongs to the design and is read from `artworkFor` in
+`lib/layouts.ts`. Marcia, on 26 September 2026, after a picker had existed for an afternoon: "I
+do not want an option where the pikachu can be pulled in the monsters design. They are fixed
+images per design, they should never change."
+
+So nothing an event stores decides which characters it draws, and `events.invite_image_path` is
+no longer read by anything. Leave it that way: an option here is not a feature, it is a Monsters
+invite with a Pokemon poster on it.
 
 ## gabriel-peek/
 

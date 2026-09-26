@@ -13,16 +13,17 @@ export type LayoutOption = {
    *  deleted row would make every event already on it read as unset. The Design tab would then
    *  post the default back over their choice the next time it saved. */
   hidden?: boolean;
-  /** The artwork this design is shown in, in the Design gallery.
+  /** The artwork this design draws, everywhere, always.
    *
-   *  A design is drawn around its characters, not merely decorated with them: Fur bands was drawn
-   *  with the monsters standing on its cover and Photo cards with the poster. The gallery is a
-   *  catalogue, so each one shows itself as it was designed, the way a wallpaper book shows each
-   *  paper in its own colourway rather than all of them in one.
+   *  A design is drawn around its characters rather than decorated with them: Fur bands was drawn
+   *  with the monsters standing on its cover, Photo cards with the poster. So the characters are
+   *  a property of the design and not of the event, and they never mix. There is no setting for
+   *  this and there must not be one: the Pokemon set cannot be pulled into a Monsters design.
    *
-   *  It is only the catalogue. The invite a guest opens, and the preview behind it, draw in the
-   *  artwork the event has chosen. Absent means this design has none of its own, which is the
-   *  Illustrated strip: it carries no characters at all, by design. */
+   *  Absent means this design carries no characters at all, which is the Illustrated strip: one
+   *  ink on paper, drawn by hand, so a memorial or a housewarming is not left with an empty
+   *  frame. NONE says that out loud rather than leaving it to a falsy value, because every
+   *  accessor in lib/artwork.ts treats a missing set as the first one. */
   artwork?: string;
 };
 
@@ -38,6 +39,9 @@ export type LayoutOption = {
 // inside each set, and these two strings are the keys it reads.
 const PIKACHU = "/artwork/gabriel-lineup.png";
 const MONSTERS = "/artwork/monsters-pair.png";
+/** A design with no characters. A name no set answers to, so every picture lookup comes back
+ *  null, which is what the layouts are built to draw. */
+const NONE = "none";
 
 export const LAYOUTS: LayoutOption[] = [
   // Named for what it looks like, like every other design here. It was called "Pokemon", after
@@ -85,6 +89,7 @@ export const LAYOUTS: LayoutOption[] = [
   },
   {
     id: "strip",
+    artwork: NONE,
     name: "Illustrated strip",
     line: "One ink on paper, drawn by hand",
     suits: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
@@ -102,6 +107,16 @@ export const LAYOUTS: LayoutOption[] = [
 export type Stock = "red" | "beige" | "ink" | "fur" | "manila";
 
 const STOCK: Record<string, Stock> = { suite: "red", lineup: "beige", strip: "ink", bands: "fur", file: "manila" };
+
+/** The artwork a design draws. One answer per design, and nothing anywhere can change it.
+ *
+ *  Every layout, every cover, every envelope and every share card reads its pictures through
+ *  this, so there is one place the question is answered. It used to be answered by the event's
+ *  own invite_image_path, which meant a host could put one design's characters on another's, and
+ *  a Pokemon poster turned up on a Monsters pass. */
+export function artworkFor(layout: string | null | undefined): string {
+  return LAYOUTS.find((l) => l.id === layout)?.artwork ?? LAYOUTS[0].artwork ?? NONE;
+}
 
 export function stockFor(layout: string | null | undefined): Stock {
   return STOCK[layout ?? ""] ?? "red";

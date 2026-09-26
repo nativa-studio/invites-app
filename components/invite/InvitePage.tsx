@@ -12,7 +12,7 @@ import type { WishState } from "@/lib/guest/wishes";
 // A personal link. The layout itself lives in InviteBody, which the group link and the host's
 // preview use too, so the three can never drift apart. All this adds is who the guest is: their
 // name on the envelope, their greeting, and their own reply form.
-export function InvitePage({ invite, token, plate, gift, wishes, curious, skipAnimation, layout, artwork }: { invite: Invite; token: string; plate?: Plate | null; gift?: Gift | null; wishes?: WishState[] | null; curious?: boolean; skipAnimation?: boolean; layout?: Invite["event"]["layout_id"]; artwork?: string }) {
+export function InvitePage({ invite, token, plate, gift, wishes, curious, skipAnimation, layout }: { invite: Invite; token: string; plate?: Plate | null; gift?: Gift | null; wishes?: WishState[] | null; curious?: boolean; skipAnimation?: boolean; layout?: Invite["event"]["layout_id"] }) {
   const { event: e, guest } = invite;
   // The envelope plays every time, replied or not.
   //
@@ -34,7 +34,6 @@ export function InvitePage({ invite, token, plate, gift, wishes, curious, skipAn
       greeting={copy.greeting(firstName(guest.name))}
       skipAnimation={skipAnimation}
       layout={layout}
-      artwork={artwork}
       token={token}
       answered={answered}
       calendar={{ google: googleCalendarPath(e, token), ics: `/i/${token}/invite.ics` }}

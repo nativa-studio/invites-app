@@ -76,7 +76,7 @@ export function Overview({
               : paletteVars(p)}
           >
             <InviteThumb
-              artwork={e.invite_image_path} title={e.title} intro={e.intro} themeId={e.theme_id}
+              title={e.title} intro={e.intro} themeId={e.theme_id}
               palette={e.palette} layout={e.layout_id ?? undefined} ink={e.ink}
             />
           </span>

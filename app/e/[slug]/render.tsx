@@ -9,7 +9,6 @@ import { copy } from "@/lib/copy";
 import { groupLinkOpened, looksLikeAPerson } from "@/lib/guest/group-open";
 import { GroupRsvp } from "@/components/invite/GroupRsvp";
 import { InviteBody, asLayout } from "@/components/invite/InviteBody";
-import { asArtwork } from "@/lib/artwork";
 import { ReplyProvider } from "@/components/invite/ReplyState";
 import { getWishesBySlug } from "@/lib/guest/wishes";
 
@@ -23,7 +22,7 @@ export async function groupLinkMetadata(slug: string): Promise<Metadata> {
   return shareMetadata(e, image);
 }
 
-export async function renderGroupLink({ slug, group, layout, art }: { slug: string; group?: string; layout?: string; art?: string }) {
+export async function renderGroupLink({ slug, group, layout }: { slug: string; group?: string; layout?: string }) {
   const e = await getEventBySlug(slug);
   if (!e) notFound();
   // Somebody looked. Here rather than in generateMetadata, which is the half of this route that
@@ -50,7 +49,6 @@ export async function renderGroupLink({ slug, group, layout, art }: { slug: stri
         greeting={copy.greetingGroup}
         reply={reply}
         layout={asLayout(layout)}
-        artwork={asArtwork(art)}
         // Nobody's diary is anybody's row here, so these point at the slug rather than a token
         // and nothing is stamped. A group link belongs to no guest, which is the whole reason
         // the routes are separate.

@@ -11,9 +11,8 @@ import { getSiteUrl } from "@/lib/site-url";
 import { cardUrl, shareMetadata } from "@/lib/share-meta";
 import { InvitePage } from "@/components/invite/InvitePage";
 import { asLayout } from "@/components/invite/InviteBody";
-import { asArtwork } from "@/lib/artwork";
 
-type Params = { params: Promise<{ token: string }>; searchParams: Promise<{ open?: string; envelope?: string; layout?: string; art?: string }> };
+type Params = { params: Promise<{ token: string }>; searchParams: Promise<{ open?: string; envelope?: string; layout?: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { token } = await params;
@@ -30,7 +29,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function Page({ params, searchParams }: Params) {
   const { token } = await params;
-  const { open, envelope, layout, art } = await searchParams;
+  const { open, envelope, layout } = await searchParams;
   const invite = await getInvite(token);
   if (!invite) notFound();
   // Marked here and nowhere else. generateMetadata above also reads the invite, and that is the
@@ -67,5 +66,5 @@ export default async function Page({ params, searchParams }: Params) {
   ]);
   // ?layout= lets a host hold their own phone and flick through the designs before choosing one
   // in Settings. It changes nothing: the saved layout is whatever Settings says.
-  return <InvitePage invite={invite} token={token} plate={plate} gift={gift} wishes={wishes} curious={curious} layout={asLayout(layout)} artwork={asArtwork(art)} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
+  return <InvitePage invite={invite} token={token} plate={plate} gift={gift} wishes={wishes} curious={curious} layout={asLayout(layout)} skipAnimation={open === "1" ? true : envelope === "1" ? false : undefined} />;
 }

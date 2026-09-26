@@ -1,11 +1,11 @@
 import { ImageResponse } from "next/og";
 import { getInviteCard } from "@/lib/guest/invite";
 import { paletteFor } from "@/components/art/palette";
-import { asArtwork, mascotFor, portraitFor } from "@/lib/artwork";
+import { mascotFor, portraitFor } from "@/lib/artwork";
 import { CARD_SIZE, envelopeCard, type CardVariant } from "@/components/share/envelope-card";
 import { cardFonts } from "@/lib/fonts";
 import { getSiteUrl } from "@/lib/site-url";
-import { asLayoutId, stockFor, type Stock } from "@/lib/layouts";
+import { artworkFor, asLayoutId, stockFor, type Stock } from "@/lib/layouts";
 
 // The picture under a personal link: the same envelope, addressed to the guest it belongs to.
 // Reads through a function that leaves no trace, because chat apps fetch this themselves and
@@ -24,10 +24,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ toke
   // of a different one.
   const layout = q.get("layout") ? asLayoutId(q.get("layout")) : card.layout_id;
   const stock = stockFor(layout);
-  // And ?art= beside it, for the same reason: the page takes it, so the card has to, or a
-  // preview of a design comes with its own characters on the page and somebody else's on the
-  // card that goes out with it.
-  const art = asArtwork(q.get("art") ?? undefined) ?? card.invite_image_path;
+  // The characters are the design's, the same one place the page reads them from, so a card
+  // cannot go out carrying a different set from the invite it is a picture of.
+  const art = artworkFor(layout);
   return new ImageResponse(
     envelopeCard({
       palette: paletteFor(card.palette, card.theme_id),

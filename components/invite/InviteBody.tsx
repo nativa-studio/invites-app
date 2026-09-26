@@ -5,6 +5,7 @@ import { copy } from "@/lib/copy";
 
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { mascotFor } from "@/lib/artwork";
+import { artworkFor } from "@/lib/layouts";
 import { orderedParts, type InvitePart } from "@/lib/invite-parts";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
@@ -27,7 +28,7 @@ import { PostInvite } from "./PostInvite";
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e: chosen, greeting, reply, layout, artwork, skipAnimation, token, curious, answered, pretend, plateCard, giftsCard, calendar,
+  e: chosen, greeting, reply, layout, skipAnimation, token, curious, answered, pretend, plateCard, giftsCard, calendar,
 }: {
   e: PublicEvent;
   greeting: string;
@@ -48,9 +49,6 @@ export function InviteBody({
    *  and find the switch. Left out everywhere else, where the block draws from the event. */
   giftsCard?: React.ReactNode;
   layout?: PublicEvent["layout_id"];
-  /** `?art=`, the twin of `layout` above: the picture set for this one view, overriding the one
-   *  the event names. Only the bundled sets, and only for looking. See lib/artwork.ts. */
-  artwork?: string;
   skipAnimation?: boolean;
   /** Add to calendar, under the reply, for a guest who has not answered yet. Each caller builds
    *  its own pair because each has a different thing to point at: a guest's own token, a group
@@ -58,9 +56,13 @@ export function InviteBody({
   calendar?: { google: string | null; ics: string | null } | null;
 }) {
   const id = layout ?? chosen.layout_id;
-  // Swapped here rather than in each layout, because every one of them reads the same field and
-  // the ones that draw two pieces of a set read it twice. One substitution, above all of them.
-  const e = artwork ? { ...chosen, invite_image_path: artwork } : chosen;
+  // The characters belong to the design, not to the event. Substituted here rather than in each
+  // layout, because every one of them reads this same field and the ones that draw two pieces of
+  // a set read it twice: one line, above all of them, and no design can draw another's.
+  //
+  // It was the event's own value, which meant a design's characters could be swapped for another
+  // design's. Marcia, plainly: they are fixed images per design, they should never change.
+  const e = { ...chosen, invite_image_path: artworkFor(id) };
   // Every layout draws a gifts block. It was three of five for a while, and that mattered a great
   // deal: the group gift's own card stands down because the block will say it, and so, since the
   // info booth stopped carrying a gifts line, does everything else. A layout with no block would
