@@ -11,6 +11,7 @@ import { mapsLink } from "./Cards";
 import { Mono, monoNote, hasMono } from "@/components/art/mono";
 import { stripSet, inkFor, paperFor } from "@/lib/strip-set";
 import { Envelope } from "./Envelope";
+import { StripCover } from "./StripCover";
 
 // The illustrated strip: one ink on paper, straight down the page, no envelope and no cards.
 //
@@ -180,21 +181,9 @@ export function StripInvite({
           skipAnimation={skipAnimation}
           bodyClassName="strip-body"
           seal={<Mono name={set.trio[1]} size={26} />}
-          cover={
-            /* Three doodles and the title, and no photograph: when uploads land, an uploaded
-               invite replaces these two and everything below stays exactly as it is.
-               One element around all three, because data-section is the handle the host's editor
-               edits by and the drawer behind it holds the title and the line under it. Marked on
-               the doodles alone, tapping the title did nothing, which is the one place on the
-               cover a host is most likely to tap. */
-            <div className="cover" data-section="cover">
-              <div className="trio">
-                {set.trio.map((n, i) => <Mono key={i} name={n} size={56} />)}
-              </div>
-              <h1>{e.title}</h1>
-              {e.intro && <p className="para">{e.intro}</p>}
-            </div>
-          }
+          /* When uploads land, an uploaded invite replaces the doodles and the title, and
+             everything below stays exactly as it is. */
+          cover={<StripCover event={e} />}
         >
           {parts.map((node, i) => (
             <React.Fragment key={i}>

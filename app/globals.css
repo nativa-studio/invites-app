@@ -178,6 +178,12 @@ p { margin: 0; }
    and left the envelope sitting on its own with nothing coming out of it. Held at the foot, the
    two always meet. */
 .ithumb-cardbox { position: absolute; left: 0; bottom: 20px; width: 390px; z-index: 2; }
+/* A design whose cover is a whole page rather than a card hangs from its head instead, and the
+   tile becomes a window onto the top of it. Held at the foot like a card, a tall cover ran off
+   the top of the scene and the tile showed its last inch: Fur bands with a portrait picture on it
+   is 900px tall, and all a host could see was the line under a title they could not read. The top
+   is what a guest sees first, so the top is what the tile shows. */
+.ithumb-cardbox.page { top: 34px; bottom: auto; max-height: 660px; overflow: hidden; }
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .evt-when { font-size: 12.5px; color: var(--app-mute); }

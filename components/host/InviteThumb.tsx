@@ -4,10 +4,11 @@ import { paletteFor, paletteVars } from "@/components/art/palette";
 import { CoverCard } from "@/components/invite/Cards";
 import { BandsCover } from "@/components/invite/BandsCover";
 import { FileCover } from "@/components/invite/FileCover";
+import { StripCover } from "@/components/invite/StripCover";
+import { LineupCover } from "@/components/invite/LineupCover";
 import { stockFor } from "@/lib/layouts";
 import { mascotFor } from "@/lib/artwork";
-import { stripSet, inkFor, paperFor } from "@/lib/strip-set";
-import { Mono } from "@/components/art/mono";
+import { inkFor, paperFor } from "@/lib/strip-set";
 import Image from "next/image";
 
 // One invite, small: its own cover card standing in front of its own envelope, open.
@@ -48,8 +49,19 @@ export function InviteThumb({
   //
   // Same rule as the rest of this file: every piece here is the real one, at the real size, so
   // there is nothing for the tile to be wrong about. A drawing of an envelope would be.
+  // CoverCard and every layout's own cover read a whole event row, and a thumbnail knows a
+  // handful of things about one. The rest are the values that make a cover draw itself and
+  // nothing else: with the details and the sign-off both on, their own sections carry them, so
+  // the cover is the picture, the eyebrow, the title and the line under it, which is exactly what
+  // it is on the invite.
+  const e = {
+    title, intro: intro ?? null, invite_image_path: artwork,
+    strip_set: chosenSet, theme_id: themeId ?? null,
+    show_details: true, show_signoff: true, host_line: null,
+    date: null, start_time: null, end_time: null, time_note: null, venue: null,
+  } as unknown as PublicEvent;
+
   if (layout === "strip") {
-    const set = stripSet(chosenSet, themeId);
     return (
       <span className="ithumb" style={{ "--ink": inkFor(ink), "--paper": paperFor(ink) } as React.CSSProperties}>
         <span className="ithumb-scene strip-scene">
@@ -60,12 +72,11 @@ export function InviteThumb({
               <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
             </span>
           </span>
-          <span className="ithumb-cardbox">
-            <span className="strip-card">
-              <span className="trio">{set.trio.map((n, i) => <Mono key={i} name={n} size={74} />)}</span>
-              <span className="t">{title}</span>
-              {intro && <span className="b">{intro}</span>}
-            </span>
+          <span className="ithumb-cardbox page">
+            {/* The real cover, not a likeness of it. This was a span holding the three doodles
+                and the title at sizes of its own, which is the kind of copy that drifts the
+                first time either changes. */}
+            <main className="strip thumb"><StripCover event={e} /></main>
           </span>
         </span>
       </span>
@@ -75,17 +86,10 @@ export function InviteThumb({
   const p = paletteFor(palette, themeId ?? "");
   const mascot = mascotFor(artwork);
   const stock = stockFor(layout);
+  // Whose cover is a page rather than a card, and so is shown from its head. See .ithumb-cardbox
+  // in app/globals.css.
+  const pageCover = layout === "bands" || layout === "file" || layout === "lineup";
   const beige = stock === "beige";
-  // CoverCard reads a whole event row, and a thumbnail knows four things about one. The rest are
-  // the values that make it draw the cover and nothing else: with the details and the sign-off
-  // both on, their cards carry them, so the cover is the picture, the eyebrow, the title and the
-  // line under it, which is exactly what it is on the invite.
-  const e = {
-    title, intro: intro ?? null, invite_image_path: artwork,
-    show_details: true, show_signoff: true, host_line: null,
-    date: null, start_time: null, end_time: null, time_note: null, venue: null,
-  } as unknown as PublicEvent;
-
   return (
     <span className="ithumb" style={paletteVars(p)}>
       <span className={`ithumb-scene invite ${stock}${beige ? " beige" : ""}`}>
@@ -105,7 +109,7 @@ export function InviteThumb({
             {mascot && <Image className="cast" src={mascot.src} alt="" width={mascot.w} height={mascot.h} sizes="120px" />}
           </span>
         </span>
-        <span className="ithumb-cardbox">
+        <span className={`ithumb-cardbox${pageCover ? " page" : ""}`}>
           {/* Each design's own cover, not a card standing in for all of them. This used to be
               CoverCard whatever the design was, with only the envelope's paper changing, which
               was true enough while every design opened on that card. Fur bands has no cards in
@@ -114,6 +118,7 @@ export function InviteThumb({
               were choosing. */}
           {layout === "bands" ? <main className="bands thumb"><BandsCover event={e} /></main>
             : layout === "file" ? <main className="file thumb"><FileCover event={e} /></main>
+            : layout === "lineup" ? <main className="lineup thumb"><div className="page"><LineupCover event={e} /></div></main>
             : <CoverCard e={e} />}
         </span>
       </span>

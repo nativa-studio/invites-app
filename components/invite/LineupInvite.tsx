@@ -1,14 +1,14 @@
-import Image from "next/image";
 import "@/app/lineup.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { orderedNotes } from "@/lib/good-to-know";
 import { GiftsContent, hasGifts } from "./GiftsContent";
-import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
+import { formatTime } from "@/lib/format";
 import { askLine, askPhoneSuffix, askSms, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink, WhenWhere } from "./Cards";
-import { bandFor, mascotFor } from "@/lib/artwork";
+import { mascotFor } from "@/lib/artwork";
 import { Envelope } from "./Envelope";
+import { LineupCover } from "./LineupCover";
 import { Bolt, Bubble, Camera } from "@/components/art/icons";
 
 // Colours lifted from the artwork, used for the dots beside each good-to-know line.
@@ -37,10 +37,8 @@ export function LineupInvite({
   gifts?: React.ReactNode;
   skipAnimation?: boolean;
 }) {
-  const age = e.title.match(/turning (\d+)/i)?.[1];
   const maps = mapsLink(e);
   const notes = orderedNotes(e);
-  const artwork = bandFor(e.invite_image_path);
 
   return (
     <main className="lineup">
@@ -53,27 +51,7 @@ export function LineupInvite({
           skipAnimation={skipAnimation}
           mascot={mascotFor(e.invite_image_path)}
           bodyClassName="suite lineup-body"
-          cover={
-            <header data-section="cover">
-          <p className="eyebrow">{age ? "Trainer wanted" : "You're invited"}</p>
-          <h1 className="title">{e.title}</h1>
-          {e.intro && <p className="sub pad">{e.intro}</p>}
-          {/* The details section repeats these, so the cover only carries them when it is off. */}
-          {!e.show_details && (
-            <p className="when">
-              {formatInviteDate(e.date)}
-              <br />
-              {formatTimeRange(e.start_time, e.end_time, e.time_note)}
-            </p>
-          )}
-          {/* Signed at the end now, the way a card is. Back on the cover only when the
-              sign-off is switched off, because then nowhere else would carry it. */}
-          {e.show_signoff === false && e.host_line && <p className="from">{e.host_line}</p>}
-          {artwork
-            ? <div className="art"><Image src={artwork.src} alt="" width={artwork.w} height={artwork.h} priority sizes="(max-width: 430px) 100vw, 430px" /></div>
-            : <div className="artless" />}
-            </header>
-          }
+          cover={<LineupCover event={e} />}
         >
         <div className="pad">
           {e.show_details && (

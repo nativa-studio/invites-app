@@ -144,3 +144,9 @@
    guest saw the pulsing dot and no words at all. It inherits a colour that works on the suite's
    blue page. */
 .lineup .stage .hint { color: var(--ink-soft); }
+
+/* The cover on its own, in the Design gallery's tile and on the card for every event still saved
+   on this design. Same rule as app/bands.css has, and the page div inside it is the wrapper the
+   layout's own rules hang off. */
+main.lineup.thumb { min-height: 0; background: none; }
+main.lineup.thumb .page { padding-top: 0; }
