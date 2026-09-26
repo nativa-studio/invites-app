@@ -4,9 +4,12 @@ import { LookStudio } from "@/components/host/LookStudio";
 import { asLayoutId } from "@/lib/layouts";
 import { PanelForm } from "@/components/host/PanelForm";
 
-// What the invite looks like: its shape, and which parts of it show at all. The pictures are no
-// longer a choice: there is one bundled set and every event gets it.
-export const LOOK_FIELDS = ["type", "layout_id", "strip_set", "ink", "show_details", "show_runsheet", "show_good_to_know", "show_after"] as const;
+// What the invite looks like: its shape, who stands on it, and which parts of it show at all.
+//
+// invite_image_path is back in the manifest. It came out when there was one bundled set and a
+// picker of one only ever produced invites with the pictures missing. There are two now, so a
+// host chooses again, and a field the form does not list is a field saving quietly wipes.
+export const LOOK_FIELDS = ["type", "layout_id", "invite_image_path", "strip_set", "ink", "show_details", "show_runsheet", "show_good_to_know", "show_after"] as const;
 
 export function LookPanel({ e }: { e: EventRow }) {
   return (

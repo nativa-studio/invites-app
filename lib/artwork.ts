@@ -63,8 +63,26 @@ export function portraitFor(artwork: string | null | undefined): Picture | null 
   return PORTRAITS[set(artwork)] ?? null;
 }
 
-/** The bundled sets, by the short name a link can ask for them by. */
+/** The bundled sets, by the short name a link and the picker ask for them by. */
 const SETS: Record<string, string> = { gabriel: GABRIEL, monsters: MONSTERS };
+
+/** The sets a host can pick between, in the order they are offered.
+ *
+ *  public/artwork/README.md says nothing in that folder belongs in a gallery offered to every
+ *  host, and that rule still stands for anything shipped. This picker is a deliberate exception,
+ *  asked for by name while Marcia builds the library: two sets of her own, on her own app, so a
+ *  design can be looked at in the pictures it was drawn around rather than in the other one's.
+ *  When the real gallery lands, with drawings the product owns, this list is what it replaces,
+ *  and these two go back to being one event's artwork. */
+export const ARTWORK_SETS: { id: string; path: string; picture: Picture }[] = [
+  { id: "gabriel", path: GABRIEL, picture: { src: GABRIEL, w: 1173, h: 420 } },
+  { id: "monsters", path: MONSTERS, picture: { src: MONSTERS, w: 680, h: 650 } },
+];
+
+/** Which set an event's saved path is, for opening the picker on the right one. */
+export function artworkId(artwork: string | null | undefined): string {
+  return ARTWORK_SETS.find((a) => a.path === set(artwork))?.id ?? ARTWORK_SETS[0].id;
+}
 
 /** `?art=` on an invite link, for looking only.
  *

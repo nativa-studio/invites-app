@@ -400,6 +400,12 @@ export const copy = {
     // part of what a guest gets that a working frame in a host screen cannot show.
     previewFull: "Preview",
     // The illustrated strip's own two choices, shown only when it is the design in use.
+    artHeading: "Characters",
+    artHint: "Who stands on the invite. Every design draws them its own way, so the pictures above change with this.",
+    // Named for the characters, not for what they are from. There is already a design called
+    // Pokemon, and a set of pictures called the same thing beside it would be two different
+    // choices wearing one word.
+    artNames: { gabriel: "Pikachu and friends", monsters: "Mike and Sulley" } as Record<string, string>,
     stripHeading: "Pictures and ink",
     stripHint: "The three drawings at the top of the invite, and the one colour everything is drawn in.",
     stripSetLabel: "Pictures",

@@ -10,6 +10,14 @@ nothing needs to live in the repo.
 Nothing in this folder belongs in the gallery of artwork sets the app offers to every host.
 Those must be original drawings.
 
+**One exception, on purpose.** The Look panel now has a Characters picker offering the two
+bundled sets, `gabriel-lineup.png` and `monsters-pair.png`. Marcia asked for it by name on
+26 September 2026, while she was building the design library: a design has to be lookable at in
+the pictures it was drawn around, and both of the Monsters designs were drawn around the second
+set. The rule above still stands for anything the product ships. When a gallery of the product's
+own drawings lands, `ARTWORK_SETS` in `lib/artwork.ts` is the list it replaces, and these two go
+back to being one event's artwork.
+
 ## gabriel-peek/
 
 The seven characters cut out of Marcia's second wallpaper file, one PNG each, for the peek

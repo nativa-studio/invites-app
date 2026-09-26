@@ -325,6 +325,11 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 .set.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
 .set .trio { display: flex; gap: 3px; align-items: flex-end; }
 .set .n { font-size: 12.5px; font-weight: 600; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+/* A set picked by a picture rather than by three symbols. The two sets are different shapes, a
+   wide band and a square pair, so the box is fixed and the picture is fitted inside it whole:
+   cover would crop the band to one character's shoulder and tell a host nothing. */
+.set .cast { display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 68px; }
+.set .cast img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
 /* A grid, not a wrapping row. Seven 44px circles in the 332px this card gives them wrapped six
    and one, and the one left on its own reads as a mistake rather than as a palette. Four and
    three is the same information, laid out on purpose. Measured. */
