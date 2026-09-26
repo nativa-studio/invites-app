@@ -1,8 +1,13 @@
 // The shapes an invite can take. One list, because two screens offer the same choice: the setup
 // flow, where a host picks a look before there is anything to preview, and the Layout tab, where
 // they change their mind against the real thing.
-/** `line` is what the tile says under the name. Optional: a design whose name already says what
- *  it is does not need a sentence repeating it. */
+/** `line` is what the tile says under the name, and nothing sets one any more.
+ *
+ *  Every place a design is offered now draws the design: the gallery tile and the New event tile
+ *  hold its real cover standing in front of its real envelope, and the sheet behind them runs the
+ *  whole invite. A sentence under a picture of the thing was describing what the reader could
+ *  already see, and four of them turned a row of invites into a row of captions. Left in the
+ *  type, because a design that one day cannot be told from another at tile size may want one. */
 export type LayoutOption = {
   id: string;
   name: string;
@@ -52,7 +57,6 @@ export const LAYOUTS: LayoutOption[] = [
     id: "suite",
     artwork: PIKACHU,
     name: "Photo cards",
-    line: "Your picture up top, the rest on cards",
     suits: ["kids_party", "birthday", "gathering", "baby_shower"],
   },
   // Retired at Marcia's word. Still drawn for any event already saved on it, and still reachable
@@ -63,7 +67,6 @@ export const LAYOUTS: LayoutOption[] = [
     id: "lineup",
     artwork: PIKACHU,
     name: "The lineup",
-    line: "One page, artwork along the bottom",
     suits: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
     hidden: true,
   },
@@ -77,21 +80,18 @@ export const LAYOUTS: LayoutOption[] = [
     id: "bands",
     artwork: MONSTERS,
     name: "Fur bands",
-    line: "Colour bands, the characters on top",
     suits: ["kids_party", "birthday"],
   },
   {
     id: "file",
     artwork: MONSTERS,
     name: "Staff file",
-    line: "A staff pass and a clipboard",
     suits: ["kids_party", "birthday"],
   },
   {
     id: "strip",
     artwork: NONE,
     name: "Illustrated strip",
-    line: "One ink on paper, drawn by hand",
     suits: ["kids_party", "birthday", "gathering", "baby_shower", "memorial"],
   },
 ];
