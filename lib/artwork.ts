@@ -23,25 +23,36 @@ const GABRIEL = "/artwork/gabriel-lineup.png";
 // pictures for a private party, the same standing as the Pikachu set: bundled for the pilot only.
 const MONSTERS = "/artwork/monsters-pair.png";
 
+// Four pictures make a set, one per place a design puts characters, and a design should never
+// show the same picture as the design beside it in the gallery. That is the rule these four maps
+// are for, and it is easy to break by accident: a role with no picture of its own borrows from
+// another role, quietly, and two designs come out wearing one photograph.
+//
+//                | poster (Photo cards) | band (Fur bands) | square (Staff file) | sticker
+//   Pikachu      | gabriel-cover        | gabriel-lineup   | pikachu-head        | gabriel-lineup
+//   Monsters     | monsters-mike        | monsters-pair    | monsters-mike       | monsters-pair
+//
+// The two repeats left are both in the Monsters set, which has two pictures for four places. It
+// needs one more: a tall one of the pair, or of Sulley on his own, for the poster. Until it
+// arrives the poster borrows the square, which at least differs from the design next to it.
+
 /** The poster at the top of the cover card. Marcia's own, shown whole and cropped by the frame. */
 const COVERS: Record<string, Picture> = {
   [GABRIEL]: { src: "/artwork/gabriel-cover.jpg", w: 1012, h: 1934 },
-  [MONSTERS]: { src: MONSTERS, w: 680, h: 650 },
+  // Mike standing, not the pair. The pair is what Fur bands stands on its cover, so with the pair
+  // here the two designs sat side by side in the gallery showing one photograph twice.
+  [MONSTERS]: { src: "/artwork/monsters-mike.jpg", w: 606, h: 1280 },
 };
 
 /** A square photograph of one character, for a pass or a polaroid. Only the sets that have one:
  *  the lineup band is a row of characters and cropping it square gives half of two of them. */
 const PORTRAITS: Record<string, Picture> = {
   [MONSTERS]: { src: "/artwork/monsters-mike.jpg", w: 606, h: 1280 },
-  // The poster, held at its foot, which is where the face is. There is no separate square file:
-  // a square frame over `object-fit: cover` is a crop, so cutting a second copy of the same
-  // picture would be a second file to keep in step for nothing. 100% is the bottom of it, which
-  // lands on the ear, the eye and the cheek.
-  //
-  // Without this the Staff file's pass had no photograph at all on any event using this set, and
-  // the pass is most of what that design is. Marcia found it in the Design gallery, where the
-  // tile drew the pass empty, which is exactly what the invite was doing.
-  [GABRIEL]: { src: "/artwork/gabriel-cover.jpg", w: 1012, h: 1934, pos: "50% 100%" },
+  // This set's own head, cut out, from the peek cast. It was the poster held at its foot for a
+  // moment, which put the same photograph on the Staff file pass and on the Photo cards cover.
+  // A set with a picture for every place does not have to borrow, and this one has eight of its
+  // characters cut out already.
+  [GABRIEL]: { src: "/artwork/gabriel-peek/pikachu-head.png", w: 340, h: 420 },
 };
 
 /** The band the lineup stands along the bottom of its cover. */
