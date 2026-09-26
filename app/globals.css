@@ -184,6 +184,12 @@ p { margin: 0; }
    is 900px tall, and all a host could see was the line under a title they could not read. The top
    is what a guest sees first, so the top is what the tile shows. */
 .ithumb-cardbox.page { top: 34px; bottom: auto; max-height: 660px; overflow: hidden; }
+/* And a cover that is neither a page nor a tall card. The Illustrated strip's is a small boxed
+   cover, about 250px of a 730px scene, so hung from the foot like the others it sat level with
+   the envelope and left the top two thirds of the tile empty. Centred, the paper reads as paper
+   with a card on it, which is what that design is. The likeness this replaced hid the same
+   problem behind a 520px minimum height on a card that has none. */
+.ithumb-cardbox.middle { top: 50%; bottom: auto; transform: translateY(-50%); }
 .evt-body { display: grid; gap: 3px; padding: 10px 11px 11px; min-width: 0; }
 .evt-title { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .evt-when { font-size: 12.5px; color: var(--app-mute); }

@@ -72,11 +72,19 @@ export function InviteThumb({
               <span className="flap"><span className="face front" /><span className="face backface" /><span className="rim" /></span>
             </span>
           </span>
-          <span className="ithumb-cardbox page">
+          <span className="ithumb-cardbox middle">
             {/* The real cover, not a likeness of it. This was a span holding the three doodles
                 and the title at sizes of its own, which is the kind of copy that drifts the
                 first time either changes. */}
-            <main className="strip thumb"><StripCover event={e} /></main>
+            {/* The two colours travel as an inline style, exactly as StripInvite sets them on
+                its own main. They have to: app/strip.css declares a default ink and paper on
+                main.strip, and a stylesheet's own declaration beats a custom property inherited
+                from an ancestor, so the pair set on .ithumb above never reached the cover. The
+                tile drew a charcoal strip on cream paper while the invite behind it was navy on
+                pale blue, which is the one thing a tile must never do. */}
+            <main className="strip thumb" style={{ "--ink": inkFor(ink), "--paper": paperFor(ink) } as React.CSSProperties}>
+              <StripCover event={e} />
+            </main>
           </span>
         </span>
       </span>
