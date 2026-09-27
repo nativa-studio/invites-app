@@ -746,6 +746,13 @@ main.file .stage .hint::after { background: #6A3FA0; }
    invitation. Struck and faded rather than struck alone, so it reads as settled rather than as a
    mistake in the typing. */
 .gifts .ideas .gone { text-decoration: line-through; text-decoration-thickness: 2px; opacity: 0.45; }
+/* The label under the hints. Quiet: it is a sign on the list rather than a line addressed to
+   anybody, and it sits under rather than over because the first idea is deliberately not
+   tappable. Letter-spaced and small caps so it reads as a caption and not as one more present. */
+.gifts .tap-claim {
+  margin-top: 10px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0.55; text-align: center;
+}
 .gifts .rule { width: 46px; height: 10px; border-radius: 3px; }
 /* Ideas and Group gift, side by side, one open at a time.
    Two titles on a row read as a choice rather than a list, which is what they are. The panel is
