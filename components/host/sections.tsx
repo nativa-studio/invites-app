@@ -47,7 +47,7 @@ export const SECTIONS: Section[] = [
     fields: ["date", "start_time", "end_time", "time_note", "venue", "address", "parking", "accessibility_venue", "access_info", "host_phone", "show_details"],
     render: (e) => (
       <>
-        <div className="counts">
+        <div className="when">
           <Field id="date" label="Date" value={e.date} type="date" />
           <Field id="start_time" label="Start" value={e.start_time} type="time" />
           <Field id="end_time" label="End" value={e.end_time} type="time" />
