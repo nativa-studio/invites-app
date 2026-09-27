@@ -922,6 +922,97 @@ export const copy = {
     // says somebody did it rather than inventing a name or leaving the sentence without a subject.
     someone: "Somebody",
   },
+  // The stand in party, for the one screen that offers a design before there is an event to draw
+  // it on: step two of New event. A tile there used to be a little drawing of each layout's
+  // shape, which showed that they differed and not how, so a host picked a look by reading its
+  // name. Now the tile is the invite and tapping it runs the real thing, and both need words.
+  //
+  // One party per kind of event, because the sample has to be plausible for the thing being
+  // planned: a memorial cannot be shown a pool party with cake at four. Nobody here is real.
+  // The date is worked out at render time, so the sample is never in the past.
+  sample: {
+    // True of any house, so every sample shares it and the info booth has something in it.
+    goodToKnow: "Street parking is easy out the front. One step up at the door, and there is a loo on the ground floor.",
+    // Said on the step itself, under the tiles, so a host knows whose words they are reading.
+    note: "A stand in party, so you can see each design working. Tap one to watch its envelope open. Your own words go on next, and the design can change whenever you like.",
+    parties: {
+      kids_party: {
+        title: "Leo is turning 6",
+        hostLine: "With love from Leo's mum and dad",
+        intro: "A pool party. Come for a swim, a light spread and cake.",
+        venue: "Our place",
+        address: "12 Bayview Street, Manly",
+        start: "14:00",
+        end: "17:00",
+        bring: "Swimmers, a towel and a hat",
+        stops: [
+          { time: "14:00", title: "Arrive", note: "Come when you can. Swimmers on under clothes saves a lot of time.", icon: "gate" },
+          { time: "14:15", title: "In the pool", note: "Grown ups in or poolside, whichever you like.", icon: "ring" },
+          { time: "16:00", title: "Cake", note: "Candles, a song, and cake for everyone.", icon: "cake" },
+        ],
+      },
+      birthday: {
+        title: "Ruth is turning 40",
+        hostLine: "From Ruth",
+        intro: "A long afternoon in the back garden. Something on the barbecue, something cold, and no speeches.",
+        venue: "Our place",
+        address: "12 Bayview Street, Manly",
+        start: "15:00",
+        end: "20:00",
+        bring: null,
+        stops: [
+          { time: "15:00", title: "Arrive", note: "Straight through to the garden.", icon: "gate" },
+          { time: "16:00", title: "On the barbecue", note: "Enough for everyone, and plenty without meat in it.", icon: "bbq" },
+          { time: "18:00", title: "Cake", note: "Forty candles, one go.", icon: "cake" },
+        ],
+      },
+      gathering: {
+        title: "Sunday lunch at ours",
+        hostLine: "From Anna and Tom",
+        intro: "A long table and a slow afternoon. Come hungry and stay as long as you like.",
+        venue: "Our place",
+        address: "12 Bayview Street, Manly",
+        start: "12:00",
+        end: "16:00",
+        bring: "Something for the table, if you feel like it",
+        stops: [
+          { time: "12:00", title: "Doors open", note: "Come through the side gate.", icon: "gate" },
+          { time: "13:00", title: "Lunch", note: "One long table, everything in the middle.", icon: "plate" },
+          { time: "15:30", title: "Coffee", note: "And whatever is left of the cake.", icon: "cake" },
+        ],
+      },
+      baby_shower: {
+        title: "A morning for Priya and the baby",
+        hostLine: "From Priya's sisters",
+        intro: "Morning tea in the garden before everything changes. No games, we promise.",
+        venue: "The garden at Priya's",
+        address: "40 Kate Street, Indooroopilly",
+        start: "10:30",
+        end: "13:00",
+        bring: null,
+        stops: [
+          { time: "10:30", title: "Arrive", note: "Tea is on, come through to the back.", icon: "gate" },
+          { time: "11:00", title: "Morning tea", note: "Scones, fruit and something cold.", icon: "plate" },
+          { time: "12:00", title: "Presents", note: "Quietly, and only if you brought one.", icon: "gift" },
+        ],
+      },
+      memorial: {
+        title: "Remembering Joan Whitfield",
+        hostLine: "From the Whitfield family",
+        intro: "A gathering to remember Joan, with tea, sandwiches and as many stories as you have.",
+        venue: "The garden room",
+        address: "18 Sherwood Road, Toowong",
+        start: "14:00",
+        end: "16:30",
+        bring: null,
+        stops: [
+          { time: "14:00", title: "Doors open", note: "Come in whenever suits. There is no order to this.", icon: "gate" },
+          { time: "14:30", title: "A few words", note: "Anyone who would like to say something can.", icon: "clock" },
+          { time: "15:30", title: "Tea", note: "Tea, sandwiches, and time to talk.", icon: "plate" },
+        ],
+      },
+    },
+  },
   templates: {
     text: "Hi {name}! You're invited to {title}{date}. Everything is here, and you can reply with one tap: {link}",
     reminder: "Hi {name}, just checking you saw this one. {title}{date}. Can you make it? {link}",

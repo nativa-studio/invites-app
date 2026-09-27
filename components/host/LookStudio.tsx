@@ -1,12 +1,11 @@
 "use client";
 import { useState } from "react";
 import { copy } from "@/lib/copy";
-import { designsFor, LAYOUTS, type LayoutOption } from "@/lib/layouts";
+import { LAYOUTS } from "@/lib/layouts";
 import { STRIP_SETS, STRIP_INKS, stripSet, inkFor, paperFor } from "@/lib/strip-set";
 import { Mono } from "@/components/art/mono";
 import { EVENT_TYPES } from "@/lib/event-types";
-import { InviteThumb } from "./InviteThumb";
-import { Sheet } from "./Sheet";
+import { DesignGallery } from "./DesignGallery";
 import type { Palette } from "@/lib/db/types";
 
 type Sections = { details: boolean; day: boolean; know: boolean; after: boolean };
@@ -47,17 +46,12 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
   const [type, setType] = useState(saved.type);
   const [layout, setLayout] = useState(saved.layout);
   const [sections, setSections] = useState(saved.sections);
-  const [showAll, setShowAll] = useState(false);
   const [ink, setInk] = useState(saved.ink ?? "charcoal");
   // Null in the column means "whatever the theme implies", so the picker opens on the set the
   // invite is actually drawn in rather than on nothing.
   const [set, setSet] = useState(stripSet(saved.stripSet, saved.themeId).id);
-  const [open, setOpen] = useState<LayoutOption | null>(null);
 
-  const { fits, rest } = designsFor(type);
-  const offered = showAll ? [...fits, ...rest] : fits;
   const savedName = LAYOUTS.find((l) => l.id === saved.layout)?.name ?? saved.layout;
-  const chosenName = LAYOUTS.find((l) => l.id === layout)?.name ?? layout;
   const changed = layout !== saved.layout || type !== saved.type || SECTION_LABELS.some(([k]) => sections[k] !== saved.sections[k]);
 
   const on = SECTION_LABELS.filter(([k]) => sections[k]).map(([k]) => k).join(",");
@@ -96,29 +90,16 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
           <h2 className="h2">{copy.host.designHeading}</h2>
           <span className="hint">{changed ? copy.host.designUnsaved(savedName) : copy.host.designSaved(savedName)}</span>
         </div>
-        <div className="designs">
-          {offered.map((d) => (
-            <button
-              key={d.id}
-              type="button"
-              className={`design ${layout === d.id ? "on" : ""}`}
-              onClick={() => setOpen(d)}
-            >
-              <span className="design-art">
-                <InviteThumb layout={d.id} title={saved.title} intro={saved.intro} palette={saved.palette} themeId={saved.themeId} ink={ink} set={set} />
-              </span>
-              <span className="n">{d.name}</span>
-              {d.line && <span className="b">{d.line}</span>}
-              {layout === d.id && <span className="tag">{copy.host.designChosen}</span>}
-            </button>
-          ))}
-        </div>
-        {rest.length > 0 && !showAll && (
-          <button type="button" className="btn small" onClick={() => setShowAll(true)}>
-            {copy.host.designShowRest(rest.length)}
-          </button>
-        )}
-        {rest.length > 0 && showAll && <p className="hint">{copy.host.designRestHint}</p>}
+        {/* The tiles and the sheet behind them, the same ones step two of New event draws. See
+            components/host/DesignGallery.tsx. */}
+        <DesignGallery
+          type={type}
+          layout={layout}
+          onPick={setLayout}
+          thumb={{ title: saved.title, intro: saved.intro, palette: saved.palette, themeId: saved.themeId, ink, set }}
+          previewSrc={previewSrc}
+          fullSrc={(id) => `${previewSrc(id)}&full=1`}
+        />
       </section>
 
 
@@ -185,53 +166,6 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
         ))}
         <span className="hint">{copy.host.sectionsHint}</span>
       </section>
-
-      {open && (
-        <DesignSheet
-          design={open}
-          src={previewSrc(open.id)}
-          chosen={layout === open.id}
-          chosenName={chosenName}
-          onUse={() => { setLayout(open.id); setOpen(null); }}
-          onClose={() => setOpen(null)}
-        />
-      )}
     </>
-  );
-}
-
-// One design, at the size a guest sees it, with the opening on a button.
-//
-// The frame is keyed by a counter rather than reloaded, because the envelope opens once per mount
-// and then the card is out of it. Bumping the key mounts a fresh one, which is the only honest way
-// to watch it again.
-function DesignSheet({ design, src, chosen, chosenName, onUse, onClose }: {
-  design: LayoutOption;
-  src: string;
-  chosen: boolean;
-  chosenName: string;
-  onUse: () => void;
-  onClose: () => void;
-}) {
-  const [run, setRun] = useState(0);
-  return (
-    <Sheet title={design.name} blurb={design.line} onClose={onClose}>
-      <div className="sheet-body">
-        <div className="screen phone">
-          <iframe key={run} src={src} title={copy.host.designFrameTitle(design.name)} loading="lazy" />
-        </div>
-        <div className="actions">
-          <button type="button" className="btn small" onClick={() => setRun(run + 1)}>{copy.host.designPlay}</button>
-          <a className="btn small" href={`${src}&full=1`} target="_blank" rel="noreferrer">{copy.host.openFull}</a>
-        </div>
-        <p className="hint">{copy.host.designPlayHint}</p>
-        <div className="sheet-foot">
-          {chosen
-            ? <span className="hint">{copy.host.designAlready}</span>
-            : <span className="hint">{copy.host.designInstead(chosenName)}</span>}
-          <button type="button" className="btn primary" onClick={onUse} disabled={chosen}>{copy.host.designUse}</button>
-        </div>
-      </div>
-    </Sheet>
   );
 }
