@@ -60,3 +60,33 @@ export function orderedParts(saved: readonly string[] | null | undefined): Invit
   });
   return out;
 }
+
+/** The heading a part carries, which is the host's word where they have written one.
+ *
+ *  Every layout draws its own headings, and several of them draw different words for the same
+ *  part: the strip's "The day" is the lineup's "The order of the afternoon". So the layout's own
+ *  word is the fallback rather than a single default written here, and the only thing this adds
+ *  is the host's override on top of whatever that design would have said.
+ *
+ *  This is the one place section_titles is read. Six layouts draw these headings, and a rename
+ *  honoured in five of them is exactly the fault CLAUDE.md opens with, so there is one function
+ *  and every layout calls it.
+ */
+export function partTitle(
+  e: { section_titles?: Record<string, string> | null },
+  part: InvitePart,
+  fallback: string,
+): string {
+  const own = e.section_titles?.[part];
+  return typeof own === "string" && own.trim() ? own.trim() : fallback;
+}
+
+/** How long a heading may be. Long enough for "Everything you need to know", short enough that it
+ *  cannot push a one-line heading onto three lines on a phone. Enforced on the way in, so no
+ *  layout has to cope with a paragraph where a title goes. */
+export const PART_TITLE_MAX = 40;
+
+/** The parts whose heading a host may write. The reply is not one: its heading is the question
+ *  with the guest's own name in it ("Can Mia make it?"), built per guest rather than stored, and
+ *  the sign-off has no heading at all. */
+export const NAMEABLE_PARTS: readonly InvitePart[] = ["updates", "details", "day", "know", "plate", "gifts", "after"];

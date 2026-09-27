@@ -2,6 +2,7 @@ import Image from "next/image";
 import "@/app/peek.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
+import { partTitle } from "@/lib/invite-parts";
 import { goodToKnow } from "@/lib/good-to-know";
 import { GiftsContent, hasGifts } from "./GiftsContent";
 import { formatInviteDate, formatTime, formatTimeRange, hostName } from "@/lib/format";
@@ -85,7 +86,7 @@ export function PeekInvite({ event: e, greeting, reply, gifts }: {
         {e.show_details && (
         <section className="s sky" data-section="details">
           <Peeker who={cast.details} side="left" />
-          <p className="label">{copy.sections.details}</p>
+          <p className="label">{partTitle(e, "details", copy.sections.details)}</p>
           <WhenWhere e={e} />
           {maps && <div className="mid"><a className="maps" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a></div>}
         </section>
@@ -99,7 +100,7 @@ export function PeekInvite({ event: e, greeting, reply, gifts }: {
         {e.show_runsheet && e.runsheet.length > 0 && (
           <section className="s sand" data-section="day">
             <Peeker who={cast.day} side="right" />
-            <p className="label">{copy.sections.afternoon}</p>
+            <p className="label">{partTitle(e, "day", copy.sections.afternoon)}</p>
             <div className="stops">
               {e.runsheet.map((s, i) => (
                 <div className="stop" key={i}>
@@ -117,7 +118,7 @@ export function PeekInvite({ event: e, greeting, reply, gifts }: {
         {e.show_good_to_know && notes.length > 0 && (
           <section className="s blush" data-section="know">
             <Peeker who={cast.know} side="left" />
-            <p className="label">{copy.sections.goodToKnow}</p>
+            <p className="label">{partTitle(e, "know", copy.sections.goodToKnow)}</p>
             <div className="notes">
               {notes.map(({ text }, i) => (
                 <p className="note-line" key={i}>
@@ -135,7 +136,7 @@ export function PeekInvite({ event: e, greeting, reply, gifts }: {
             of the five layouts at once. */}
         {gifts ?? (e.show_gifts && hasGifts(e) ? (
           <section className="s blush gifts" data-section="gifts">
-            <p className="label">{copy.sections.gifts}</p>
+            <p className="label">{partTitle(e, "gifts", copy.sections.gifts)}</p>
             <GiftsContent e={e} />
           </section>
         ) : null)}
@@ -145,7 +146,7 @@ export function PeekInvite({ event: e, greeting, reply, gifts }: {
             nothing. Every other look has one. */}
         {e.show_after && (
           <section className="s blush" data-section="after">
-            <p className="label">{copy.sections.askHeading}</p>
+            <p className="label">{partTitle(e, "after", copy.sections.askHeading)}</p>
             <div className="mid">
               {e.host_phone
                 ? <a className="maps" href={`sms:${e.host_phone.replace(/[^\d+]/g, "")}`}>{copy.sections.askBody(host)}</a>

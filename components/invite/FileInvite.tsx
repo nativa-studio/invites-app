@@ -3,7 +3,7 @@ import "@/app/file.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { orderedNotes } from "@/lib/good-to-know";
-import { orderedParts, PART_NAMES, type InvitePart } from "@/lib/invite-parts";
+import { PART_NAMES, orderedParts, partTitle, type InvitePart } from "@/lib/invite-parts";
 import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
 import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink } from "./Cards";
@@ -78,7 +78,7 @@ export function FileInvite({
   const draw: Record<InvitePart, React.ReactNode> = {
     updates: e.updates.length > 0 ? (
       <section data-section="updates" className="part">
-        {head("updates", copy.sections.updates)}
+        {head("updates", partTitle(e, "updates", copy.sections.updates))}
         <div className="notes">
           {e.updates.map((u, i) => (
             <div className="line" key={i}><Mono name="bubble" size={30} /><div>{u.body}</div></div>
@@ -89,7 +89,7 @@ export function FileInvite({
 
     details: e.show_details ? (
       <section data-section="details" className="part">
-        {head("details", copy.sections.details)}
+        {head("details", partTitle(e, "details", copy.sections.details))}
         <div className="grid">
           {when && <><Mono name="clock" size={36} /><div className="w">{when}</div></>}
           {(e.venue || e.address) && <><Mono name="map" size={36} /><div className="w">{e.venue || e.address}</div></>}
@@ -116,7 +116,7 @@ export function FileInvite({
 
     day: e.show_runsheet && e.runsheet.length > 0 ? (
       <section data-section="day" className="part">
-        {head("day", PART_NAMES.day)}
+        {head("day", partTitle(e, "day", PART_NAMES.day))}
         {e.runsheet.map((s, i) => (
           <div className="stop" key={i}>
             <div className="t">{formatTime(s.time)}</div>
@@ -132,7 +132,7 @@ export function FileInvite({
 
     know: e.show_good_to_know && notes.length > 0 ? (
       <section data-section="know" className="part">
-        {head("know", copy.sections.goodToKnow)}
+        {head("know", partTitle(e, "know", copy.sections.goodToKnow))}
         {/* Post-its, two to a row. The colour and the tilt follow the note's place in the list,
             so a fifth note starts the four again rather than running out of colours. */}
         <div className="stickies">
@@ -150,7 +150,7 @@ export function FileInvite({
 
     gifts: gifts ?? (e.show_gifts && hasGifts(e) ? (
       <section data-section="gifts" className="part">
-        {head("gifts", copy.sections.gifts)}
+        {head("gifts", partTitle(e, "gifts", copy.sections.gifts))}
         <GiftsContent e={e} />
       </section>
     ) : null),
@@ -159,7 +159,7 @@ export function FileInvite({
       <section data-section="after" className="part after">
         <div className="cell">
           <Mono name="bubble" size={44} />
-          <span className="n">{copy.sections.askHeading}</span>
+          <span className="n">{partTitle(e, "after", copy.sections.askHeading)}</span>
           {contacts.map((c) => (c.sms
             ? <a className="b" key={c.key} href={c.sms}>{c.label}</a>
             : <span className="b" key={c.key}>{c.label}</span>))}

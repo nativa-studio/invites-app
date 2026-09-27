@@ -3,10 +3,11 @@ import { Choice, Field, Switch } from "@/components/host/fields";
 import { copy } from "@/lib/copy";
 import { askLine, signoffMessage } from "@/lib/ask-line";
 import { hostName } from "@/lib/format";
-import { KnowEditor, KNOW_FIELDS } from "@/components/host/KnowEditor";
+import { KnowEditor } from "@/components/host/KnowEditor";
 import { WishlistEditor } from "@/components/host/WishlistEditor";
 import { GroupGiftFields } from "@/components/host/GroupGiftFields";
-import { PLATE_MODES } from "@/lib/good-to-know";
+import { KNOW_FIELDS, PLATE_MODES } from "@/lib/good-to-know";
+import { NAMEABLE_PARTS, type InvitePart } from "@/lib/invite-parts";
 
 // What each part of the invite is, and what a host can change about it. The ids match the
 // data-section names the invite carries, so tapping a card on the preview finds its entry here.
@@ -235,4 +236,32 @@ export function ShowSwitch({ section, e }: { section: Section; e: EventRow }) {
   if (!section.show) return null;
   const value = (e as unknown as Record<string, unknown>)[section.show.column];
   return <Switch id={section.show.column} label={section.show.label} value={value !== false} />;
+}
+
+/** Whether this part's heading is the host's to write. The section ids and the invite part ids
+ *  are the same list, which is what lets a drawer know which part it is editing. */
+export function nameablePart(section: Section): InvitePart | null {
+  const part = NAMEABLE_PARTS.find((p) => p === section.id);
+  return part ?? null;
+}
+
+/** The host's own word for this part's heading.
+ *
+ *  Under the on or off switch and above the wording, which is the order the questions come in: is
+ *  this part here, what is it called, what does it say.
+ *
+ *  It sends the part alongside the word, because the whole map lives in one column and a drawer
+ *  may only ever touch its own key. See SECTION_TITLE in the settings action. */
+export function HeadingField({ part, e }: { part: InvitePart; e: EventRow }) {
+  return (
+    <>
+      <input type="hidden" name="section_part" value={part} />
+      <Field
+        id="section_title"
+        label={copy.host.headingLabel}
+        value={e.section_titles?.[part] ?? ""}
+        hint={copy.host.headingHint}
+      />
+    </>
+  );
 }

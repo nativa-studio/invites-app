@@ -4,7 +4,7 @@ import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { GiftsContent, hasGifts } from "./GiftsContent";
 import { orderedNotes } from "@/lib/good-to-know";
-import { orderedParts, type InvitePart } from "@/lib/invite-parts";
+import { orderedParts, partTitle, type InvitePart } from "@/lib/invite-parts";
 import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
 import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink } from "./Cards";
@@ -54,7 +54,7 @@ export function StripInvite({
   const draw: Record<InvitePart, React.ReactNode> = {
     updates: e.updates.length > 0 ? (
       <section data-section="updates">
-        <p className="label">{copy.sections.updates}</p>
+        <p className="label">{partTitle(e, "updates", copy.sections.updates)}</p>
         <div className="lines">
           {e.updates.map((u, i) => (
             <div className="line" key={i}><Mono name="bubble" size={40} /><div>{u.body}</div></div>
@@ -65,7 +65,7 @@ export function StripInvite({
 
     details: e.show_details ? (
       <section data-section="details">
-        <p className="label">{copy.sections.details}</p>
+        <p className="label">{partTitle(e, "details", copy.sections.details)}</p>
         <p className="para">
           {formatInviteDate(e.date)}<br />
           {formatTimeRange(e.start_time, e.end_time, e.time_note)}
@@ -80,7 +80,7 @@ export function StripInvite({
 
     day: e.show_runsheet && e.runsheet.length > 0 ? (
       <section data-section="day">
-        <p className="label">{copy.sections.day}</p>
+        <p className="label">{partTitle(e, "day", copy.sections.day)}</p>
         <div className="stops">
           {e.runsheet.map((s, i) => (
             <div className="stop" key={i}>
@@ -101,7 +101,7 @@ export function StripInvite({
 
     know: e.show_good_to_know && notes.length > 0 ? (
       <section data-section="know">
-        <p className="label">{copy.sections.goodToKnow}</p>
+        <p className="label">{partTitle(e, "know", copy.sections.goodToKnow)}</p>
         <div className="lines">
           {notes.map((l, i) => (
             <div className="line" key={i}><Mono name={monoNote(l.kind, l.text)} size={40} /><div>{l.text}</div></div>
@@ -125,7 +125,7 @@ export function StripInvite({
     // What it says comes from GiftsContent, the same as every other layout.
     gifts: gifts ?? (e.show_gifts && hasGifts(e) ? (
       <section data-section="gifts" className="gifts">
-        <p className="label">{copy.sections.gifts}</p>
+        <p className="label">{partTitle(e, "gifts", copy.sections.gifts)}</p>
         <GiftsContent e={e} />
       </section>
     ) : null),
@@ -135,7 +135,7 @@ export function StripInvite({
         <div className={photos ? "after" : "after one"}>
           <div>
             <Mono name="bubble" size={48} />
-            <div className="n">{copy.sections.askHeading}</div>
+            <div className="n">{partTitle(e, "after", copy.sections.askHeading)}</div>
             {contacts.map((c) => (
               c.sms
                 ? <a className="b" key={c.key} href={c.sms}>{c.label}</a>

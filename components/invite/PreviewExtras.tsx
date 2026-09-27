@@ -10,12 +10,12 @@ import { copy } from "@/lib/copy";
 // data-section is the whole point of them. Without a card on the editing side there was nothing
 // to tap, so the one way to change what these say was to remember which tab they lived on. The
 // names match the entries in sections.tsx, the same as every other card.
-export function PreviewPlate({ note, mode, off }: { note: string | null; mode: string; off?: boolean }) {
+export function PreviewPlate({ note, mode, off, title }: { note: string | null; mode: string; off?: boolean; title?: string }) {
   return (
     <div className={`pcard tilt-r plate${off ? " off" : ""}`} data-section="plate">
       <div className="tape tl" />
       <div className="tape tr" />
-      <div className="label red">{copy.plate.heading}</div>
+      <div className="label red">{title || copy.plate.heading}</div>
       <p className="para">{note || (mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
       <div className="small">{off ? copy.host.blockOff : copy.host.previewPlate}</div>
     </div>

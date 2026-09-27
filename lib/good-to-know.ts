@@ -161,3 +161,22 @@ export function orderedKinds(saved: readonly string[] | null | undefined): NoteK
   });
   return out;
 }
+
+/** The columns the info booth's lines live in, which the editor writes and the section registry
+ *  declares.
+ *
+ *  Here rather than in KnowEditor.tsx, which is where it was. That file is "use client", so every
+ *  one of its exports is a client reference on the server, arrays included: a server screen that
+ *  imported this got a reference where a list should be and threw on the spread. Nothing reached
+ *  it yet, because the one file that reads it is pulled in by a client component, so this was a
+ *  trap set for the next server screen rather than a bug anybody had hit. It is the rule CLAUDE.md
+ *  states about counts() and HeadCount.tsx, one type of export further along: anything both sides
+ *  need lives in a module neither of them owns.
+ *
+ *  No gift_note and no group_gift_enabled. Both are edited on the gifts block's own drawer, and a
+ *  panel that declares a field it no longer draws saves empty over it: the fault the manifest
+ *  exists to prevent, arrived at from the other end. */
+export const KNOW_FIELDS = [
+  "siblings_welcome", "what_to_bring", "serve_text", "drinks_note",
+  "photos_note", "good_to_know",
+] as const;

@@ -20,7 +20,7 @@ import { Bolt } from "@/components/art/icons";
 // No allergy line. It said "Please keep in mind: 1 guest needs Dairy free" on the card where a
 // guest claims a dish, which is the room's food needs counted up and put in front of forty
 // people. Whoever is cooking needs that and has it, on the host's own potluck board.
-export function PlateCard({ token, plate, pretend }: { token: string; plate: Plate; pretend?: boolean }) {
+export function PlateCard({ token, plate, pretend, title }: { token: string; plate: Plate; pretend?: boolean; title?: string }) {
   const [state, act, pending] = useActionState<PlateState, FormData>(plateAction, { plate });
   // The host trying their own invite. Everything works and nothing is written, which is the same
   // rule the reply already follows there: a preview has no guest row and no token, and a host
@@ -87,7 +87,7 @@ export function PlateCard({ token, plate, pretend }: { token: string; plate: Pla
           crossed over each other in the middle, which is the gift card's and stays there. */}
       <div className="tape tl" />
       <div className="tape tr" />
-      <div className="label red">{copy.plate.heading}</div>
+      <div className="label red">{title || copy.plate.heading}</div>
       <p className="para">{board.host_note || (board.mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
 
       {board.items.length === 0 && <p className="small">{copy.plate.empty}</p>}

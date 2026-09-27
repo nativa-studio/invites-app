@@ -108,6 +108,11 @@ export type PublicEvent = {
   show_after: boolean;
   /** The order the parts below the cover appear in. Empty means the default. */
   section_order: string[];
+  /** The host's own word for a part's heading, keyed by the part's id. A key only exists where a
+   *  host has typed one, so an absent key and an empty map both mean the app's own word. Optional
+   *  because a database without migration 0048 does not send the column. See partTitle in
+   *  lib/invite-parts.ts, which is the one place this is read. */
+  section_titles?: Record<string, string> | null;
   runsheet: RunsheetStop[];
   updates: Update[];
   /** The gifts block: the host's note, a wish list, and the group gift if there is one.

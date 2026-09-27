@@ -8,19 +8,9 @@ import { EVENT_TYPES } from "@/lib/event-types";
 import { DesignGallery } from "./DesignGallery";
 import type { Palette } from "@/lib/db/types";
 
-type Sections = { details: boolean; day: boolean; know: boolean; after: boolean };
-
-const SECTION_LABELS: [keyof Sections, string, string][] = [
-  ["details", "show_details", "The details: when, where, what to wear"],
-  ["day", "show_runsheet", "The order of the afternoon"],
-  ["know", "show_good_to_know", "Info booth"],
-  ["after", "show_after", "Questions, and how to ask them"],
-];
-
 export type LookState = {
   type: string;
   layout: string;
-  sections: Sections;
   title: string;
   intro: string | null;
   palette: Palette | null;
@@ -45,17 +35,19 @@ export type LookState = {
 export function LookStudio({ eventId, saved }: { eventId: string; saved: LookState }) {
   const [type, setType] = useState(saved.type);
   const [layout, setLayout] = useState(saved.layout);
-  const [sections, setSections] = useState(saved.sections);
   const [ink, setInk] = useState(saved.ink ?? "charcoal");
   // Null in the column means "whatever the theme implies", so the picker opens on the set the
   // invite is actually drawn in rather than on nothing.
   const [set, setSet] = useState(stripSet(saved.stripSet, saved.themeId).id);
 
   const savedName = LAYOUTS.find((l) => l.id === saved.layout)?.name ?? saved.layout;
-  const changed = layout !== saved.layout || type !== saved.type || SECTION_LABELS.some(([k]) => sections[k] !== saved.sections[k]);
+  const changed = layout !== saved.layout || type !== saved.type;
 
-  const on = SECTION_LABELS.filter(([k]) => sections[k]).map(([k]) => k).join(",");
-  const previewSrc = (id: string) => `/app/preview/${eventId}?layout=${id}&show=${on}`;
+  // No `show` in the address any more. It carried the four switches that used to live on this
+  // screen so the sheet could preview them before they were saved; they live on the part each one
+  // controls now, and an absent `show` means the preview draws what is stored, which is what a
+  // host looking at a design wants to see.
+  const previewSrc = (id: string) => `/app/preview/${eventId}?layout=${id}`;
 
   return (
     <>
@@ -148,24 +140,6 @@ export function LookStudio({ eventId, saved }: { eventId: string; saved: LookSta
         </section>
       )}
 
-      <section className="card">
-        <h2 className="h2">{copy.host.sectionsHeading}</h2>
-        {SECTION_LABELS.map(([key, name, label]) => (
-          <div className="field" key={key}>
-            <label className="switch" htmlFor={name}>
-              <input
-                id={name}
-                name={name}
-                type="checkbox"
-                checked={sections[key]}
-                onChange={(e) => setSections({ ...sections, [key]: e.target.checked })}
-              />
-              <span>{label}</span>
-            </label>
-          </div>
-        ))}
-        <span className="hint">{copy.host.sectionsHint}</span>
-      </section>
     </>
   );
 }

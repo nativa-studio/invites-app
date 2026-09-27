@@ -416,6 +416,14 @@ export const copy = {
     tryWho: "you",
     partyTypeHeading: "Kind of party",
     partyTypeBlurb: "It decides which designs are offered first, and it set the reply's questions when you started. Changing it now only changes what is offered: every setting you have touched stays as you left it.",
+    // The host's own word for a part's heading, on that part's drawer.
+    //
+    // "Heading" rather than "Title", which on this product means the title of the event and is
+    // the first box of the New event form. Two things called Title, one of them the name of the
+    // party and one the word over a card on it, is a question a host should not have to work out
+    // from context.
+    headingLabel: "Heading",
+    headingHint: "Empty leaves the design's own word.",
     designHeading: "Design",
     designChosen: "Chosen",
     designSaved: (name: string) => `Guests see ${name}.`,
@@ -467,8 +475,6 @@ export const copy = {
     // Said on the Potluck tab, because the two lists are easy to confuse and the difference
     // matters: one is what you buy, the other is what guests carry.
     shopNotPotluck: "Guests never see this list. What they are bringing is on Potluck.",
-    sectionsHeading: "What the invite shows",
-    sectionsHint: "A section with nothing in it stays hidden anyway. These are for leaving one out on purpose.",
     savedTitle: "Saved.",
     savedBody: "Your guests' links show the change straight away.",
     savedWithout: (cols: string[]) => `${cols.length === 1 ? "One setting" : `${cols.length} settings`} did not save: the database does not have ${cols.length === 1 ? "a column" : "columns"} called ${cols.join(", ")} yet, so it needs the newest migration run against it. Everything else is saved.`,
@@ -877,7 +883,11 @@ export const copy = {
     // words about the software; "Planning" and "Invites out" are words about the party.
     statusNames: { draft: "Planning", live: "Invites out", thanks: "Thank yous", archived: "Closed" } as Record<string, string>,
     partsHeading: "Invite sections",
-    partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first.",
+    // The last line was the hint under "What the invite shows", which was a third list of these
+    // same switches and has gone. The sentence is worth keeping wherever the parts are listed: a
+    // host looking for a section that is not on the invite usually has an empty one rather than a
+    // switched-off one.
+    partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first. A section with nothing in it stays hidden anyway, so these are for leaving one out on purpose.",
     partSwitch: (name: string) => `${name}, on the invite`,
     partsRepaired: "A part was missing from the saved order and has been put back where it belongs.",
     messageReminder: "And if they haven't replied",

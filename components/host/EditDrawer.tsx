@@ -2,7 +2,7 @@
 import { useActionState, useEffect, useState } from "react";
 import { saveEvent, type SaveState } from "@/app/app/events/[id]/settings/actions";
 import type { EventRow } from "@/lib/db/types";
-import { ShowSwitch, type Section } from "./sections";
+import { HeadingField, nameablePart, ShowSwitch, type Section } from "./sections";
 import { Sheet } from "./Sheet";
 
 // The drawer that edits one part of something, wherever that something is shown.
@@ -24,7 +24,14 @@ export function EditDrawer({
 
   useEffect(() => { if (state.saved) onSaved(); }, [state.saved, onSaved]);
 
-  const fields = section.show ? [...section.fields, section.show.column] : section.fields;
+  const part = nameablePart(section);
+  const fields = [
+    ...section.fields,
+    ...(section.show ? [section.show.column] : []),
+    // The heading is not a column, it is one key of a map, and the action knows that. It is
+    // declared like any other field so the manifest still decides whether it may be written.
+    ...(part ? ["section_title"] : []),
+  ];
   const nothingToEdit = section.render(e) === null;
 
   return (
@@ -35,6 +42,8 @@ export function EditDrawer({
         {/* Whether this part appears at all comes first. It was under the wording, which put the
             question "is this even on?" below every answer that only matters once it is. */}
         <ShowSwitch section={section} e={e} />
+        {/* Then what it is called, then what it says. */}
+        {part && <HeadingField part={part} e={e} />}
         {section.render(e)}
         {state.error && <p className="notice" role="alert">{state.error}</p>}
         {fields.length > 0 ? (

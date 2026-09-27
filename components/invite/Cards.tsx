@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
+import { partTitle } from "@/lib/invite-parts";
 import { coverFor } from "@/lib/artwork";
 import { formatInviteDate, formatTimeRange, formatTime } from "@/lib/format";
 import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
@@ -72,7 +73,7 @@ export function DetailsCard({ e }: { e: PublicEvent }) {
   return (
     <div className="pcard white tilt-r" data-section="details">
       <div className="tape" />
-      <div className="label red">{copy.sections.details}</div>
+      <div className="label red">{partTitle(e, "details", copy.sections.details)}</div>
       <WhenWhere e={e} />
       {maps && <a className="pill-link" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a>}
     </div>
@@ -83,7 +84,7 @@ export function DayCard({ e }: { e: PublicEvent }) {
   if (!e.runsheet.length) return null;
   return (
     <div className="pcard cream tilt-l" data-section="day">
-      <div className="label sky">{copy.sections.afternoon}</div>
+      <div className="label sky">{partTitle(e, "day", copy.sections.afternoon)}</div>
       <div className="stops">
         {e.runsheet.map((s, i) => {
           const Icon = ICONS[s.icon ?? ""] ?? Cap;
@@ -128,7 +129,7 @@ export function KnowCard({ e }: { e: PublicEvent }) {
   return (
     <div className="pcard white tilt-r" data-section="know">
       <div className="tape sky" />
-      <div className="label red">{copy.sections.goodToKnow}</div>
+      <div className="label red">{partTitle(e, "know", copy.sections.goodToKnow)}</div>
       <div className="lines">
         {lines.map((l, i) => <div className="line" key={i}>{noteIcon(l.kind, l.text)}<div>{l.text}</div></div>)}
       </div>
@@ -157,7 +158,7 @@ export function AskCard({ e }: { e: PublicEvent }) {
       <div className={photos ? "two" : "two one"}>
         <div>
           <Bubble size={44} />
-          <span className="n">{copy.sections.askHeading}</span>
+          <span className="n">{partTitle(e, "after", copy.sections.askHeading)}</span>
           {contacts.map((c) => (
             c.sms
               ? <a className="b" key={c.key} href={c.sms}>{c.label}</a>
@@ -200,7 +201,7 @@ export function UpdatesCard({ e }: { e: PublicEvent }) {
   if (!e.updates.length) return null;
   return (
     <div className="pcard white" data-section="updates">
-      <div className="label sky">{copy.sections.updates}</div>
+      <div className="label sky">{partTitle(e, "updates", copy.sections.updates)}</div>
       <div className="lines">{e.updates.map((u, i) => <div className="line" key={i}><Bubble size={36} /><div>{u.body}</div></div>)}</div>
     </div>
   );
