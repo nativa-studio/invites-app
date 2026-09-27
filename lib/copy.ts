@@ -1,5 +1,12 @@
 // Every default string a person reads, in one place. Mirrors the wording table on docs/journeys.html.
 // Australian English. Never an em dash.
+/** A sentence ending, without doubling one the writer already put there. Anything that closes a
+ *  sentence counts, including the ellipsis and the closing bracket a host types after an aside. */
+function stopped(text: string): string {
+  const t = text.trim();
+  return /[.!?…:)]$/.test(t) ? t : `${t}.`;
+}
+
 export const copy = {
   brand: "Bunting",
   landing: {
@@ -172,7 +179,11 @@ export const copy = {
     // On the gifts block, before anybody has replied. It names the gift and says where the rest
     // of it lives, and deliberately does not carry the bank details: those are behind a token and
     // a yes, on the card further down.
-    blockWhat: (what: string) => `Everyone is going in together on one present: ${what}.`,
+    // The full stop only when the host has not written one. It was added unconditionally, so
+    // "A scooter." came out as "A scooter..". Nobody had seen it because the one real gift
+    // description in the app ends with an emoji, and a host writing a sentence is the normal
+    // case, not the exception.
+    blockWhat: (what: string) => `Everyone is going in together on one present: ${stopped(what)}`,
     blockNoWhat: "Everyone is going in together on one present.",
     blockHow: "How to chip in comes with your reply.",
     // The group link shows where the money goes, because that is the same for everybody, but the
@@ -198,7 +209,11 @@ export const copy = {
     reference: (ref: string) => `Put "${ref}" in the reference so your name is added to the card.`,
     // The button on the group gift, and the panel behind it. Shut to begin with: bank details
     // sitting open under a birthday invitation read like a bill.
-    chipIn: "Chip in",
+    // "How to chip in", not "Chip in". The button does not take anybody's money: it opens the
+    // PayID and the reference so they can send it themselves, from their own banking app. "Chip
+    // in" names the deed and this only shows you how, which matters on the one control in the
+    // block that a guest might think commits them to something.
+    chipIn: "How to chip in",
     copy: "Copy",
     copied: "Copied",
     // The clipboard is refused outside a secure context and in some in-app browsers. The details
