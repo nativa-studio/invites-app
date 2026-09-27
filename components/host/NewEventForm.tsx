@@ -25,7 +25,6 @@ export function NewEventForm() {
   const [type, setType] = useState("kids_party");
   const [layout, setLayout] = useState("suite");
   const [title, setTitle] = useState("");
-  const chosen = EVENT_TYPES.find((t) => t.id === type);
   const last = step === STEPS.length - 1;
 
   // What the tiles are drawn on. The type's own defaults for the two colour settings, so the
@@ -56,7 +55,12 @@ export function NewEventForm() {
       <p className="step-count">Step {step + 1} of {STEPS.length}</p>
       <h2 className="h1 step-heading">{STEPS[step]}</h2>
 
-      {/* Every step stays mounted and hidden, so going back does not empty the boxes. */}
+      {/* Every step stays mounted and hidden, so going back does not empty the boxes.
+
+          No placeholder text in any of the boxes below. They were somebody else's words, Gabriel's
+          party and its pool and its cake, sitting greyed out in a stranger's form: a host filling
+          this in for a different child reads them as something already written down about their
+          own event. A hint under a box says the same thing without pretending to be an answer. */}
       <div hidden={step !== 0}>
         <div className="tiles">
           {EVENT_TYPES.map((t) => (
@@ -83,23 +87,23 @@ export function NewEventForm() {
       <div hidden={step !== 2}>
         <div className="field">
           <label htmlFor="e-title">Title</label>
-          <input id="e-title" name="title" type="text" required autoComplete="off" value={title} onChange={(ev) => setTitle(ev.target.value)} placeholder={chosen?.id === "kids_party" ? "Gabriel is turning 4" : "Sunday lunch at ours"} />
+          <input id="e-title" name="title" type="text" required autoComplete="off" value={title} onChange={(ev) => setTitle(ev.target.value)} />
           <span className="hint">For a birthday, &quot;Name is turning N&quot; puts the age on the stamp.</span>
         </div>
         <div className="field">
           <label htmlFor="e-host">From</label>
-          <input id="e-host" name="host_line" type="text" autoComplete="off" placeholder="With love from Gabriel's mum and dad" />
+          <input id="e-host" name="host_line" type="text" autoComplete="off" />
         </div>
         <div className="field">
           <label htmlFor="e-intro">A line or two</label>
-          <textarea id="e-intro" name="intro" rows={3} placeholder="A pool party! Come for a swim, a light spread and cake." />
+          <textarea id="e-intro" name="intro" rows={3} />
         </div>
         <div className="counts">
           <div className="field"><label htmlFor="e-date">Date</label><input id="e-date" name="date" type="date" /></div>
           <div className="field"><label htmlFor="e-start">Start</label><input id="e-start" name="start_time" type="time" /></div>
           <div className="field"><label htmlFor="e-end">End (optional)</label><input id="e-end" name="end_time" type="time" /></div>
         </div>
-        <div className="field"><label htmlFor="e-venue">Where</label><input id="e-venue" name="venue" type="text" placeholder="Our place" autoComplete="off" /></div>
+        <div className="field"><label htmlFor="e-venue">Where</label><input id="e-venue" name="venue" type="text" autoComplete="off" /></div>
         <div className="field"><label htmlFor="e-address">Address</label><input id="e-address" name="address" type="text" autoComplete="off" /></div>
         <p className="hint">Only the title is needed now. Everything else can wait, and none of it is final.</p>
       </div>
