@@ -300,11 +300,12 @@ export const copy = {
     // the rest would explain itself, and it does, but a guest seeing two struck-through presents
     // still has to guess that the line is something they can cause.
     //
-    // Three words, and a label rather than a sentence. A sentence addressed to a guest is an
-    // instruction on a card whose whole argument is that nothing here is required of them. A sign
-    // on the thing is just a sign on the thing, and beside two already crossed off it says the
-    // whole mechanic without asking anybody for anything.
-    tapToClaim: "Tap to claim",
+    // A question first, so it asks rather than instructs. It began as the label "Tap to claim",
+    // three words and no verb aimed at anybody, which was right for a card whose whole argument
+    // is that nothing here is required. Marcia's version keeps that and reads warmer: the
+    // question lets somebody who is not bringing anything walk straight past it, and "cross it
+    // off" says what the tap does rather than naming a transaction.
+    tapToClaim: "Bringing one? Tap to cross it off.",
     // Under the reply, before anybody has answered. The same words as the thank-you card uses,
     // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
     // grounds that an instruction sitting under Yes and No reads as a third thing to press. She
