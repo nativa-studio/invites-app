@@ -1,5 +1,12 @@
 // Every default string a person reads, in one place. Mirrors the wording table on docs/journeys.html.
 // Australian English. Never an em dash.
+/** A sentence ending, without doubling one the writer already put there. Anything that closes a
+ *  sentence counts, including the ellipsis and the closing bracket a host types after an aside. */
+function stopped(text: string): string {
+  const t = text.trim();
+  return /[.!?…:)]$/.test(t) ? t : `${t}.`;
+}
+
 export const copy = {
   brand: "Bunting",
   landing: {
@@ -172,7 +179,11 @@ export const copy = {
     // On the gifts block, before anybody has replied. It names the gift and says where the rest
     // of it lives, and deliberately does not carry the bank details: those are behind a token and
     // a yes, on the card further down.
-    blockWhat: (what: string) => `Everyone is going in together on one present: ${what}.`,
+    // The full stop only when the host has not written one. It was added unconditionally, so
+    // "A scooter." came out as "A scooter..". Nobody had seen it because the one real gift
+    // description in the app ends with an emoji, and a host writing a sentence is the normal
+    // case, not the exception.
+    blockWhat: (what: string) => `Everyone is going in together on one present: ${stopped(what)}`,
     blockNoWhat: "Everyone is going in together on one present.",
     blockHow: "How to chip in comes with your reply.",
     // The group link shows where the money goes, because that is the same for everybody, but the
@@ -198,7 +209,11 @@ export const copy = {
     reference: (ref: string) => `Put "${ref}" in the reference so your name is added to the card.`,
     // The button on the group gift, and the panel behind it. Shut to begin with: bank details
     // sitting open under a birthday invitation read like a bill.
-    chipIn: "Chip in",
+    // "How to chip in", not "Chip in". The button does not take anybody's money: it opens the
+    // PayID and the reference so they can send it themselves, from their own banking app. "Chip
+    // in" names the deed and this only shows you how, which matters on the one control in the
+    // block that a guest might think commits them to something.
+    chipIn: "How to chip in",
     copy: "Copy",
     copied: "Copied",
     // The clipboard is refused outside a secure context and in some in-app browsers. The details
@@ -300,11 +315,17 @@ export const copy = {
     // the rest would explain itself, and it does, but a guest seeing two struck-through presents
     // still has to guess that the line is something they can cause.
     //
-    // Three words, and a label rather than a sentence. A sentence addressed to a guest is an
-    // instruction on a card whose whole argument is that nothing here is required of them. A sign
-    // on the thing is just a sign on the thing, and beside two already crossed off it says the
-    // whole mechanic without asking anybody for anything.
-    tapToClaim: "Tap to claim",
+    // A question first, so it asks rather than instructs. It began as the label "Tap to claim",
+    // three words and no verb aimed at anybody, which was right for a card whose whole argument
+    // is that nothing here is required. Marcia's version keeps that and reads warmer: the
+    // question lets somebody who is not bringing anything walk straight past it, and "cross it
+    // off" says what the tap does rather than naming a transaction.
+    //
+    // "Tap on it", not "Tap". The thing a guest taps is a word inside a run-on sentence of
+    // presents rather than a button, so a line that never says what to tap sends somebody looking
+    // for a control that is not there. All three of "Tap", "Tap it" and "Tap on it" fit on one
+    // line at 390, measured, so nothing about the layout decided this.
+    tapToClaim: "Bringing one? Tap on it to cross it off.",
     // Under the reply, before anybody has answered. The same words as the thank-you card uses,
     // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
     // grounds that an instruction sitting under Yes and No reads as a third thing to press. She

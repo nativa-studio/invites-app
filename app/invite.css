@@ -746,13 +746,26 @@ main.file .stage .hint::after { background: #6A3FA0; }
    invitation. Struck and faded rather than struck alone, so it reads as settled rather than as a
    mistake in the typing. */
 .gifts .ideas .gone { text-decoration: line-through; text-decoration-thickness: 2px; opacity: 0.45; }
-/* The label under the hints. Quiet: it is a sign on the list rather than a line addressed to
-   anybody, and it sits under rather than over because the first idea is deliberately not
-   tappable. Letter-spaced and small caps so it reads as a caption and not as one more present. */
-.gifts .tap-claim {
-  margin-top: 10px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
-  opacity: 0.55; text-align: center;
+/* The foot of each panel, and the two are matched on purpose.
+ *
+ * Hints and Group gift are two disclosures with one open at a time, so nobody ever sees both feet
+ * at once. What they see is one, then the other, and they were two different things: a 16px
+ * underlined button under the gift, a 13px line of small caps under the hints. Opening one after
+ * the other made the card feel like two cards.
+ *
+ * Same size, same weight, same grey, same space above. The one difference left is the underline,
+ * and it is the difference worth keeping: How to chip in is a button and opens the bank details,
+ * the hints line is a line and does nothing. Take the underline off and nothing is left saying
+ * the first one can be pressed.
+ *
+ * Sentence case, not the small caps the hints line started as. That suited three words and does
+ * not suit a question: "BRINGING ONE? TAP TO CROSS IT OFF." is shouting on a card whose whole
+ * point is that none of this is required. */
+.gifts .tap-claim, .gifts .chip-open .pbtn.quiet {
+  margin-top: 12px; font-size: 15px; line-height: 1.4; text-align: center;
+  color: color-mix(in srgb, var(--navy) 62%, var(--paper));
 }
+.gifts .tap-claim { opacity: 1; }
 .gifts .rule { width: 46px; height: 10px; border-radius: 3px; }
 /* Ideas and Group gift, side by side, one open at a time.
    Two titles on a row read as a choice rather than a list, which is what they are. The panel is
