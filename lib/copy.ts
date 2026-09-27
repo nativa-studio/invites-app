@@ -320,7 +320,12 @@ export const copy = {
     // is that nothing here is required. Marcia's version keeps that and reads warmer: the
     // question lets somebody who is not bringing anything walk straight past it, and "cross it
     // off" says what the tap does rather than naming a transaction.
-    tapToClaim: "Bringing one? Tap to cross it off.",
+    //
+    // "Tap on it", not "Tap". The thing a guest taps is a word inside a run-on sentence of
+    // presents rather than a button, so a line that never says what to tap sends somebody looking
+    // for a control that is not there. All three of "Tap", "Tap it" and "Tap on it" fit on one
+    // line at 390, measured, so nothing about the layout decided this.
+    tapToClaim: "Bringing one? Tap on it to cross it off.",
     // Under the reply, before anybody has answered. The same words as the thank-you card uses,
     // which is Marcia's call over my own: I argued for a question ("Still deciding?") on the
     // grounds that an instruction sitting under Yes and No reads as a third thing to press. She
