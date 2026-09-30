@@ -21,13 +21,6 @@ import { Reorder } from "./Reorder";
 // and this is where you fill them.
 
 
-// No gift_note and no group_gift_enabled. Both are edited on the gifts block's own drawer, and a
-// panel that declares a field it no longer draws saves empty over it: the fault the manifest
-// exists to prevent, arrived at from the other end.
-export const KNOW_FIELDS = [
-  "siblings_welcome", "what_to_bring", "serve_text", "drinks_note",
-  "photos_note", "good_to_know",
-] as const;
 
 export function KnowEditor({ e }: { e: EventRow }) {
   const [pending, start] = useTransition();

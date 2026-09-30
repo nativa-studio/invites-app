@@ -6,7 +6,7 @@ import { copy } from "@/lib/copy";
 import { paletteFor, paletteVars } from "@/components/art/palette";
 import { envelopeMascot } from "./envelope-parts";
 import { artworkFor } from "@/lib/layouts";
-import { orderedParts, type InvitePart } from "@/lib/invite-parts";
+import { orderedParts, partTitle, type InvitePart } from "@/lib/invite-parts";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
@@ -63,6 +63,10 @@ export function InviteBody({
   // It was the event's own value, which meant a design's characters could be swapped for another
   // design's. Marcia, plainly: they are fixed images per design, they should never change.
   const e = { ...chosen, invite_image_path: artworkFor(id) };
+  // The plate's heading, resolved once here for the same reason the artwork is: its card is drawn
+  // in three places, only one of which is handed the event, so a heading looked up inside each of
+  // them would be looked up twice and missed once. See partTitle in lib/invite-parts.ts.
+  const plateTitle = partTitle(e, "plate", copy.plate.heading);
   // Every layout draws a gifts block. It was three of five for a while, and that mattered a great
   // deal: the group gift's own card stands down because the block will say it, and so, since the
   // info booth stopped carrying a gifts line, does everything else. A layout with no block would
@@ -108,7 +112,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        plate={plateCard ?? <PlateSlot />}
+        plate={plateCard ?? <PlateSlot title={plateTitle} />}
         gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
@@ -121,7 +125,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        plate={plateCard ?? <PlateSlot />}
+        plate={plateCard ?? <PlateSlot title={plateTitle} />}
         gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
@@ -136,7 +140,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        plate={plateCard ?? <PlateSlot />}
+        plate={plateCard ?? <PlateSlot title={plateTitle} />}
         gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
@@ -149,7 +153,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        plate={plateCard ?? <PlateSlot />}
+        plate={plateCard ?? <PlateSlot title={plateTitle} />}
         gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
@@ -177,7 +181,7 @@ export function InviteBody({
     // Bring a plate, on its own rather than under the reply. It draws nothing until the guest
     // reading it has said yes, and nothing at all outside a reply provider, which is the editor
     // drawing the invite with nobody answering. There the editor passes its own card instead.
-    plate: plateCard ?? <PlateSlot />,
+    plate: plateCard ?? <PlateSlot title={plateTitle} />,
     gifts: giftsCard ?? (e.show_gifts ? <GiftsCard e={e} /> : null),
     after: e.show_after ? <AskCard e={e} /> : null,
     // Absent means on: a database without migration 0008 does not send the column, and the

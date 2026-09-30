@@ -6,6 +6,7 @@ import { copy } from "@/lib/copy";
 import { GIFT_OPTIONS, PHOTO_OPTIONS, PLATE_MODES, optionValues } from "@/lib/good-to-know";
 import { STRIP_SETS, STRIP_INKS } from "@/lib/strip-set";
 import { LAYOUT_IDS } from "@/lib/layouts";
+import { INVITE_PARTS, PART_TITLE_MAX } from "@/lib/invite-parts";
 
 export type SaveState = { saved?: boolean; error?: string; note?: string };
 
@@ -40,11 +41,22 @@ const CHOICES: Record<string, readonly string[]> = {
 // back still saying "Not on the invite".
 const SWITCHES = ["siblings_welcome", "ask_names", "ask_allergies", "ask_dietary", "ask_accessibility", "ask_emergency", "plate_enabled", "plate_block", "gift_block", "group_link_enabled", "save_the_date", "group_gift_enabled", "show_details", "show_gifts", "show_runsheet", "show_good_to_know", "show_after", "show_signoff"] as const;
 
+/** The one field that writes into a map rather than a column.
+ *
+ *  A drawer edits one part of the invite, so it sends that part's heading and the part it belongs
+ *  to, and only that key of section_titles is touched. It is declared as a field name like any
+ *  other so the manifest still governs it: a drawer that does not ask for it cannot write one.
+ *
+ *  Not nine field names, one per part. The parts are a list that grows, and nine names here would
+ *  be nine more chances for the fault this whole file is shaped around: a name on a form, missing
+ *  from a list in the action, saved nowhere, reported as saved. */
+const SECTION_TITLE = "section_title";
+
 // Everything the buckets above between them know how to write, plus the two that live on
 // group_gift. Nothing else can be saved, so nothing else should be declared.
 const HANDLED: ReadonlySet<string> = new Set<string>([
   ...TEXT, ...DATES, ...TIMES, ...Object.keys(CHOICES), ...SWITCHES,
-  "gift_description", "gift_target",
+  "gift_description", "gift_target", SECTION_TITLE,
 ]);
 
 // Every form says which fields it owns, in a hidden `_fields` input, and only those are written.
@@ -87,6 +99,20 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
   for (const k of TIMES) if (own.has(k)) { const v = String(fd.get(k) ?? "").trim(); patch[k] = /^\d{2}:\d{2}/.test(v) ? v : null; }
   for (const [k, allowed] of Object.entries(CHOICES)) if (own.has(k)) { const v = String(fd.get(k) ?? ""); if ((allowed as readonly string[]).includes(v)) patch[k] = v; }
   for (const k of SWITCHES) if (own.has(k)) patch[k] = fd.get(k) === "on";
+  // The host's own word for this part's heading. Read, merged, written: one key changes and the
+  // other parts' headings are left exactly as they were, which a plain update of the whole map
+  // would not do. Empty clears the key rather than storing "", so the invite goes back to the
+  // app's own word and a heading nobody has renamed costs nothing in the row.
+  if (own.has(SECTION_TITLE)) {
+    const part = String(fd.get("section_part") ?? "");
+    if ((INVITE_PARTS as readonly string[]).includes(part)) {
+      const typed = String(fd.get(SECTION_TITLE) ?? "").trim().slice(0, PART_TITLE_MAX);
+      const { data: row } = await supabase.from("events").select("section_titles").eq("id", id).maybeSingle();
+      const titles = { ...((row?.section_titles ?? {}) as Record<string, string>) };
+      if (typed) titles[part] = typed; else delete titles[part];
+      patch.section_titles = titles;
+    }
+  }
   if (own.has("title") && !patch.title) return { error: "The event needs a title." };
   if (own.has("host_phone")) patch.host_phone = patch.host_phone ? normalisePhone(String(patch.host_phone)) : null;
   if (own.has("ask_phone")) patch.ask_phone = patch.ask_phone ? normalisePhone(String(patch.ask_phone)) : null;

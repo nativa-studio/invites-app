@@ -4,12 +4,16 @@ import { LookStudio } from "@/components/host/LookStudio";
 import { asLayoutId } from "@/lib/layouts";
 import { PanelForm } from "@/components/host/PanelForm";
 
-// What the invite looks like: its shape, and which parts of it show at all.
+// What the invite looks like: its shape, and nothing else.
 //
 // Not who stands on it. The characters belong to the design and are read from it, so there is
 // nothing here to save and, more to the point, nothing to save that could put one design's
 // characters on another. See artworkFor in lib/layouts.ts.
-export const LOOK_FIELDS = ["type", "layout_id", "strip_set", "ink", "show_details", "show_runsheet", "show_good_to_know", "show_after"] as const;
+// The four show switches have gone from this panel. They were a third list of the same four
+// booleans, after the parts sheet and the drawer on each part, and the furthest of the three from
+// the thing it controls: a host reading "Info booth" in a column of checkboxes has to remember
+// which card that is, where the same switch inside that card's own drawer needs no remembering.
+export const LOOK_FIELDS = ["type", "layout_id", "strip_set", "ink"] as const;
 
 export function LookPanel({ e }: { e: EventRow }) {
   return (
@@ -25,12 +29,6 @@ export function LookPanel({ e }: { e: EventRow }) {
           themeId: e.theme_id,
           ink: e.ink,
           stripSet: e.strip_set ?? null,
-          sections: {
-            details: e.show_details !== false,
-            day: e.show_runsheet !== false,
-            know: e.show_good_to_know !== false,
-            after: e.show_after !== false,
-          },
         }}
       />
     </PanelForm>

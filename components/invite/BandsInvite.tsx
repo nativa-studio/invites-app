@@ -3,7 +3,7 @@ import "@/app/bands.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
 import { orderedNotes } from "@/lib/good-to-know";
-import { orderedParts, PART_NAMES, type InvitePart } from "@/lib/invite-parts";
+import { PART_NAMES, orderedParts, partTitle, type InvitePart } from "@/lib/invite-parts";
 import { formatInviteDate, formatTime, formatTimeRange } from "@/lib/format";
 import { askContacts, photoLine, signoffMessage } from "@/lib/ask-line";
 import { mapsLink } from "./Cards";
@@ -60,7 +60,7 @@ export function BandsInvite({
   const draw: Record<InvitePart, React.ReactNode> = {
     updates: e.updates.length > 0 ? (
       <section data-section="updates" className="band updates">
-        <h2>{copy.sections.updates}</h2>
+        <h2>{partTitle(e, "updates", copy.sections.updates)}</h2>
         <div className="lines wide">
           {e.updates.map((u, i) => (
             <div className="item" key={i}><Mono name="bubble" size={40} /><div>{u.body}</div></div>
@@ -71,7 +71,7 @@ export function BandsInvite({
 
     details: e.show_details ? (
       <section data-section="details" className="band details">
-        <h2>{copy.sections.details}</h2>
+        <h2>{partTitle(e, "details", copy.sections.details)}</h2>
         <div className="lines">
           {when && <div className="item"><Mono name="clock" size={40} /><div>{when}</div></div>}
           {(e.venue || e.address) && (
@@ -105,7 +105,7 @@ export function BandsInvite({
         {/* The long name, which is the one the design draws and the one the host sees against
             this part in their own list. copy.sections.day is the short one the suite uses on a
             card that has less room. Both are existing wording. */}
-        <h2>{PART_NAMES.day}</h2>
+        <h2>{partTitle(e, "day", PART_NAMES.day)}</h2>
         <div className="stops">
           {e.runsheet.map((s, i) => (
             <div className="stop" key={i}>
@@ -123,7 +123,7 @@ export function BandsInvite({
 
     know: e.show_good_to_know && notes.length > 0 ? (
       <section data-section="know" className="band know">
-        <h2>{copy.sections.goodToKnow}</h2>
+        <h2>{partTitle(e, "know", copy.sections.goodToKnow)}</h2>
         <div className="lines wide">
           {notes.map((l, i) => (
             <div className="item" key={i}><Mono name={monoNote(l.kind, l.text)} size={40} /><div>{l.text}</div></div>
@@ -136,7 +136,7 @@ export function BandsInvite({
 
     gifts: gifts ?? (e.show_gifts && hasGifts(e) ? (
       <section data-section="gifts" className="band gifts">
-        <h2>{copy.sections.gifts}</h2>
+        <h2>{partTitle(e, "gifts", copy.sections.gifts)}</h2>
         <div className="inner"><GiftsContent e={e} /></div>
       </section>
     ) : null),
@@ -146,7 +146,7 @@ export function BandsInvite({
         <div className="cells">
           <div className="cell">
             <Mono name="bubble" size={48} />
-            <span className="n">{copy.sections.askHeading}</span>
+            <span className="n">{partTitle(e, "after", copy.sections.askHeading)}</span>
             {contacts.map((c) => (c.sms
               ? <a className="b" key={c.key} href={c.sms}>{c.label}</a>
               : <span className="b" key={c.key}>{c.label}</span>))}

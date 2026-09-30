@@ -1,6 +1,7 @@
 import "@/app/lineup.css";
 import type { PublicEvent } from "@/lib/db/types";
 import { copy } from "@/lib/copy";
+import { partTitle } from "@/lib/invite-parts";
 import { orderedNotes } from "@/lib/good-to-know";
 import { GiftsContent, hasGifts } from "./GiftsContent";
 import { formatTime } from "@/lib/format";
@@ -56,7 +57,7 @@ export function LineupInvite({
         <div className="pad">
           {e.show_details && (
           <section data-section="details">
-            <p className="label">{copy.sections.details}</p>
+            <p className="label">{partTitle(e, "details", copy.sections.details)}</p>
             <WhenWhere e={e} />
             {maps && <div style={{ textAlign: "center" }}><a className="maps" href={maps} target="_blank" rel="noreferrer">{copy.sections.openInMaps}</a></div>}
           </section>
@@ -66,7 +67,7 @@ export function LineupInvite({
 
           {e.show_runsheet && e.runsheet.length > 0 && (
             <section data-section="day">
-              <p className="label">{copy.sections.afternoon}</p>
+              <p className="label">{partTitle(e, "day", copy.sections.afternoon)}</p>
               <div className="stops">
                 {e.runsheet.map((s, i) => (
                   <div className="stop" key={i}>
@@ -83,7 +84,7 @@ export function LineupInvite({
 
           {e.show_good_to_know && notes.length > 0 && (
             <section data-section="know">
-              <p className="label">{copy.sections.goodToKnow}</p>
+              <p className="label">{partTitle(e, "know", copy.sections.goodToKnow)}</p>
               <div className="notes">
                 {notes.map(({ text }, i) => (
                   <p className="note-line" key={i}>
@@ -102,7 +103,7 @@ export function LineupInvite({
               which would otherwise have taken gifts off this layout altogether. */}
           {gifts ?? (e.show_gifts && hasGifts(e) ? (
             <section data-section="gifts" className="gifts">
-              <p className="label">{copy.sections.gifts}</p>
+              <p className="label">{partTitle(e, "gifts", copy.sections.gifts)}</p>
               <GiftsContent e={e} />
             </section>
           ) : null)}
@@ -115,7 +116,7 @@ export function LineupInvite({
             <div className={photoLine(e) ? "after" : "after one"}>
               <div>
                 <Bubble size={44} />
-                <div className="n">{copy.sections.askHeading}</div>
+                <div className="n">{partTitle(e, "after", copy.sections.askHeading)}</div>
                 {askSms(e)
                   ? <a className="b" href={askSms(e)!}>{askLine(e)}{askPhoneSuffix(e) ? ` ${askPhoneSuffix(e)}` : ""}</a>
                   : <div className="b">{askLine(e)}</div>}

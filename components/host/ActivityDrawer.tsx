@@ -3,6 +3,7 @@ import { useState } from "react";
 import { copy } from "@/lib/copy";
 import { formatDateTime } from "@/lib/format";
 import type { Happening } from "@/lib/db/activity";
+import { happeningLine } from "@/lib/happening";
 import { Sheet } from "./Sheet";
 import { groupColour } from "@/lib/group-colours";
 
@@ -27,7 +28,7 @@ export function ActivityDrawer({ feed, groups }: { feed: Happening[]; groups: st
           ? <p className="hint">{copy.host.trackActivityNone}</p>
           // The newest one, on the page, so the button is worth pressing. A drawer with no clue
           // what is inside it is a drawer nobody opens.
-          : <p className="muted">{copy.host.did[feed[0].kind](feed[0].who)} · {formatDateTime(feed[0].at)}</p>}
+          : <p className="muted">{happeningLine(feed[0])} · {formatDateTime(feed[0].at)}</p>}
       </section>
 
       {open && (
@@ -36,7 +37,7 @@ export function ActivityDrawer({ feed, groups }: { feed: Happening[]; groups: st
             <ol className="feed">
               {feed.map((h, i) => (
                 <li key={`${h.at}-${i}`} className={h.kind}>
-                  <span className="n">{copy.host.did[h.kind](h.who)}</span>
+                  <span className="n">{happeningLine(h)}</span>
                   {/* What they wrote with the reply, under the reply. It used to live only on
                       the guest list, which meant reading "Sarah said yes" here and then going
                       somewhere else to find out she had told you about a nut allergy. The one

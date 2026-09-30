@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import "@/app/invite.css";
 import { copy } from "@/lib/copy";
+import { partTitle } from "@/lib/invite-parts";
 import { firstName } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { EventRow, RunsheetStop, Update } from "@/lib/db/types";
@@ -159,7 +160,7 @@ export default async function Preview({
           // saying yes, and a host has not. HostPlate draws the stand-in until they press yes on
           // their own invite, and the real board after it.
           plateCard={editing && row.plate_enabled
-            ? <HostPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} />
+            ? <HostPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} title={partTitle(row, "plate", copy.plate.heading)} />
             : undefined}
           // No envelope while editing. It is a lovely three seconds the first time and a toll to
           // pay after every save. A guest's own link is where it is watched, and the design sheet

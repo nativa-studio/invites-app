@@ -1,4 +1,5 @@
 import { copy } from "@/lib/copy";
+import { partTitle } from "@/lib/invite-parts";
 import type { PublicEvent } from "@/lib/db/types";
 import { Plate as PlateIcon } from "@/components/art/icons";
 
@@ -21,7 +22,7 @@ export function AnnouncePlate({ e, answered }: { e: PublicEvent; answered?: bool
     <div className="pcard tilt-r plate announce" data-section="plate">
       <div className="tape tl" />
       <div className="tape tr" />
-      <div className="label red">{copy.plate.heading}</div>
+      <div className="label red">{partTitle(e, "plate", copy.plate.heading)}</div>
       <PlateIcon size={36} />
       <p className="para">{e.plate_host_note || (e.plate_mode === "everyone" ? copy.plate.everyone : copy.plate.free)}</p>
       <p className="small">{copy.plate.afterYes}</p>

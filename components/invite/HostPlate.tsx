@@ -13,10 +13,10 @@ import { useReply } from "./ReplyState";
 // So: the stand-in until they press yes, the real board after. Press yes on your own invite and
 // the board appears and works, exactly as a guest's does, which is the whole point of there being
 // one screen rather than an editing one and a preview one.
-export function HostPlate({ note, mode, off }: { note: string | null; mode: string; off?: boolean }) {
+export function HostPlate({ note, mode, off, title }: { note: string | null; mode: string; off?: boolean; title?: string }) {
   const ctx = useReply();
   // Off means the block is switched off for guests. It still draws here, faded, because the
   // switch that turns it back on is behind this card's pencil and nothing else opens it.
-  if (!off && ctx?.reply.status === "yes") return <PlateSlot />;
-  return <PreviewPlate note={note} mode={mode} off={off} />;
+  if (!off && ctx?.reply.status === "yes") return <PlateSlot title={title} />;
+  return <PreviewPlate note={note} mode={mode} off={off} title={title} />;
 }

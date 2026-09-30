@@ -1,4 +1,5 @@
 import { copy } from "@/lib/copy";
+import { partTitle } from "@/lib/invite-parts";
 import type { PublicEvent } from "@/lib/db/types";
 import { Gift as GiftIcon } from "@/components/art/icons";
 import { GiftsContent, hasGifts } from "./GiftsContent";
@@ -38,7 +39,7 @@ export function GiftsCard({ e, off }: {
           aria-hidden, being decoration beside a label, so dropping the label would have left this
           card with nothing to announce itself by: a screen reader would meet an unnamed box. The
           span is what carries the name now, which is the literal truth of what happened here. */}
-      <span role="img" aria-label={copy.sections.gifts}><GiftIcon size={36} /></span>
+      <span role="img" aria-label={partTitle(e, "gifts", copy.sections.gifts)}><GiftIcon size={36} /></span>
 
       <GiftsContent e={e} editing={editing} />
 

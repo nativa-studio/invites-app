@@ -2,6 +2,7 @@ import Link from "next/link";
 import { copy } from "@/lib/copy";
 import { daysUntil, relativeTime } from "@/lib/format";
 import { counts } from "@/lib/heads";
+import { happeningLine } from "@/lib/happening";
 import type { GuestRow, PublicEvent } from "@/lib/db/types";
 import type { Happening } from "@/lib/db/activity";
 import { paletteFor, paletteVars } from "@/components/art/palette";
@@ -158,12 +159,10 @@ export function Overview({
                 <li key={`${h.at}-${i}`} className={h.kind}>
                   <i className="dot" aria-hidden="true" />
                   <span className="what">
-                    {/* One kind takes two words, since a present crossed off is only worth a
-                        line if the line says which present. Split here rather than giving every
-                        other sentence a second argument it would ignore. */}
-                    {h.kind === "wishClaimed"
-                      ? copy.host.did.wishClaimed(h.who, h.what)
-                      : copy.host.did[h.kind](h.who)}
+                    {/* The same sentence the full feed writes. It used to be built here, and
+                        the drawer built its own, which is how one of them came to name the
+                        present and the other not. See lib/happening.ts. */}
+                    {happeningLine(h)}
                     {/* The group tag stays. It is what tells two Sarahs apart, and on a
                         group-link open it is the only thing on the line that says which link was
                         opened, since the row belongs to nobody. */}

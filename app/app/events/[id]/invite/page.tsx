@@ -12,9 +12,14 @@ import { MessagesPanel } from "@/components/host/panels/MessagesPanel";
 // any one of those is doing the invite, and the old split meant choosing a colour and seeing
 // what it did to the cover were two taps and a screen apart.
 //
-// In this order because it is the order the decisions depend on each other: the template decides
-// what parts exist, the parts hold the words, and the message is the last thing, written once
-// there is something to send. Message stays last and stays whole rather than folding into Guests:
+// The invite first, because that is what a host has come to see. It used to open on the design
+// gallery, on the reasoning that the template decides what parts exist and so comes first. That
+// stopped being true when the design moved into the setup flow: a host arriving here from New
+// event has already chosen their look two screens ago, and what they want now is the invite they
+// just made, with a pencil on every part of it. The gallery sits under it, for changing your
+// mind.
+//
+// The message stays last and stays whole rather than folding into Guests:
 // it is the one part of the product whose result a host cannot see anywhere else, since the card
 // a chat app draws is built from the event and does not exist until a message has been sent.
 export default async function InviteTab({
@@ -30,8 +35,8 @@ export default async function InviteTab({
   return (
     <>
       {isNew === "1" && <p className="notice">{copy.host.newEventNext}</p>}
-      <LookPanel e={e} />
       <InviteEditor e={e} />
+      <LookPanel e={e} />
       <MessagesPanel e={e} site={site} sample={sample} />
     </>
   );

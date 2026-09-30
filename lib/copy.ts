@@ -416,6 +416,14 @@ export const copy = {
     tryWho: "you",
     partyTypeHeading: "Kind of party",
     partyTypeBlurb: "It decides which designs are offered first, and it set the reply's questions when you started. Changing it now only changes what is offered: every setting you have touched stays as you left it.",
+    // The host's own word for a part's heading, on that part's drawer.
+    //
+    // "Heading" rather than "Title", which on this product means the title of the event and is
+    // the first box of the New event form. Two things called Title, one of them the name of the
+    // party and one the word over a card on it, is a question a host should not have to work out
+    // from context.
+    headingLabel: "Heading",
+    headingHint: "Empty leaves the design's own word.",
     designHeading: "Design",
     designChosen: "Chosen",
     designSaved: (name: string) => `Guests see ${name}.`,
@@ -467,8 +475,6 @@ export const copy = {
     // Said on the Potluck tab, because the two lists are easy to confuse and the difference
     // matters: one is what you buy, the other is what guests carry.
     shopNotPotluck: "Guests never see this list. What they are bringing is on Potluck.",
-    sectionsHeading: "What the invite shows",
-    sectionsHint: "A section with nothing in it stays hidden anyway. These are for leaving one out on purpose.",
     savedTitle: "Saved.",
     savedBody: "Your guests' links show the change straight away.",
     savedWithout: (cols: string[]) => `${cols.length === 1 ? "One setting" : `${cols.length} settings`} did not save: the database does not have ${cols.length === 1 ? "a column" : "columns"} called ${cols.join(", ")} yet, so it needs the newest migration run against it. Everything else is saved.`,
@@ -877,7 +883,11 @@ export const copy = {
     // words about the software; "Planning" and "Invites out" are words about the party.
     statusNames: { draft: "Planning", live: "Invites out", thanks: "Thank yous", archived: "Closed" } as Record<string, string>,
     partsHeading: "Invite sections",
-    partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first.",
+    // The last line was the hint under "What the invite shows", which was a third list of these
+    // same switches and has gone. The sentence is worth keeping wherever the parts are listed: a
+    // host looking for a section that is not on the invite usually has an empty one rather than a
+    // switched-off one.
+    partsBlurb: "Tap a name to change its words. Move them into the order you want, or switch one off. The cover always comes first. A section with nothing in it stays hidden anyway, so these are for leaving one out on purpose.",
     partSwitch: (name: string) => `${name}, on the invite`,
     partsRepaired: "A part was missing from the saved order and has been put back where it belongs.",
     messageReminder: "And if they haven't replied",
@@ -921,6 +931,97 @@ export const copy = {
     // Who a line is about when it is about nobody. A group link belongs to no guest, so the feed
     // says somebody did it rather than inventing a name or leaving the sentence without a subject.
     someone: "Somebody",
+  },
+  // The stand in party, for the one screen that offers a design before there is an event to draw
+  // it on: step two of New event. A tile there used to be a little drawing of each layout's
+  // shape, which showed that they differed and not how, so a host picked a look by reading its
+  // name. Now the tile is the invite and tapping it runs the real thing, and both need words.
+  //
+  // One party per kind of event, because the sample has to be plausible for the thing being
+  // planned: a memorial cannot be shown a pool party with cake at four. Nobody here is real.
+  // The date is worked out at render time, so the sample is never in the past.
+  sample: {
+    // True of any house, so every sample shares it and the info booth has something in it.
+    goodToKnow: "Street parking is easy out the front. One step up at the door, and there is a loo on the ground floor.",
+    // Said on the step itself, under the tiles, so a host knows whose words they are reading.
+    note: "A stand in party, so you can see each design working. Tap one to watch its envelope open. Your own words go on next, and the design can change whenever you like.",
+    parties: {
+      kids_party: {
+        title: "Leo is turning 6",
+        hostLine: "With love from Leo's mum and dad",
+        intro: "A pool party. Come for a swim, a light spread and cake.",
+        venue: "Our place",
+        address: "12 Bayview Street, Manly",
+        start: "14:00",
+        end: "17:00",
+        bring: "Swimmers, a towel and a hat",
+        stops: [
+          { time: "14:00", title: "Arrive", note: "Come when you can. Swimmers on under clothes saves a lot of time.", icon: "gate" },
+          { time: "14:15", title: "In the pool", note: "Grown ups in or poolside, whichever you like.", icon: "ring" },
+          { time: "16:00", title: "Cake", note: "Candles, a song, and cake for everyone.", icon: "cake" },
+        ],
+      },
+      birthday: {
+        title: "Ruth is turning 40",
+        hostLine: "From Ruth",
+        intro: "A long afternoon in the back garden. Something on the barbecue, something cold, and no speeches.",
+        venue: "Our place",
+        address: "12 Bayview Street, Manly",
+        start: "15:00",
+        end: "20:00",
+        bring: null,
+        stops: [
+          { time: "15:00", title: "Arrive", note: "Straight through to the garden.", icon: "gate" },
+          { time: "16:00", title: "On the barbecue", note: "Enough for everyone, and plenty without meat in it.", icon: "bbq" },
+          { time: "18:00", title: "Cake", note: "Forty candles, one go.", icon: "cake" },
+        ],
+      },
+      gathering: {
+        title: "Sunday lunch at ours",
+        hostLine: "From Anna and Tom",
+        intro: "A long table and a slow afternoon. Come hungry and stay as long as you like.",
+        venue: "Our place",
+        address: "12 Bayview Street, Manly",
+        start: "12:00",
+        end: "16:00",
+        bring: "Something for the table, if you feel like it",
+        stops: [
+          { time: "12:00", title: "Doors open", note: "Come through the side gate.", icon: "gate" },
+          { time: "13:00", title: "Lunch", note: "One long table, everything in the middle.", icon: "plate" },
+          { time: "15:30", title: "Coffee", note: "And whatever is left of the cake.", icon: "cake" },
+        ],
+      },
+      baby_shower: {
+        title: "A morning for Priya and the baby",
+        hostLine: "From Priya's sisters",
+        intro: "Morning tea in the garden before everything changes. No games, we promise.",
+        venue: "The garden at Priya's",
+        address: "40 Kate Street, Indooroopilly",
+        start: "10:30",
+        end: "13:00",
+        bring: null,
+        stops: [
+          { time: "10:30", title: "Arrive", note: "Tea is on, come through to the back.", icon: "gate" },
+          { time: "11:00", title: "Morning tea", note: "Scones, fruit and something cold.", icon: "plate" },
+          { time: "12:00", title: "Presents", note: "Quietly, and only if you brought one.", icon: "gift" },
+        ],
+      },
+      memorial: {
+        title: "Remembering Joan Whitfield",
+        hostLine: "From the Whitfield family",
+        intro: "A gathering to remember Joan, with tea, sandwiches and as many stories as you have.",
+        venue: "The garden room",
+        address: "18 Sherwood Road, Toowong",
+        start: "14:00",
+        end: "16:30",
+        bring: null,
+        stops: [
+          { time: "14:00", title: "Doors open", note: "Come in whenever suits. There is no order to this.", icon: "gate" },
+          { time: "14:30", title: "A few words", note: "Anyone who would like to say something can.", icon: "clock" },
+          { time: "15:30", title: "Tea", note: "Tea, sandwiches, and time to talk.", icon: "plate" },
+        ],
+      },
+    },
   },
   templates: {
     text: "Hi {name}! You're invited to {title}{date}. Everything is here, and you can reply with one tap: {link}",
