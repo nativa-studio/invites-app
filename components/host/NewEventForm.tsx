@@ -98,7 +98,7 @@ export function NewEventForm() {
           <label htmlFor="e-intro">A line or two</label>
           <textarea id="e-intro" name="intro" rows={3} />
         </div>
-        <div className="when">
+        <div className="when-row">
           <div className="field"><label htmlFor="e-date">Date</label><input id="e-date" name="date" type="date" /></div>
           <div className="field"><label htmlFor="e-start">Start</label><input id="e-start" name="start_time" type="time" /></div>
           <div className="field"><label htmlFor="e-end">End (optional)</label><input id="e-end" name="end_time" type="time" /></div>
