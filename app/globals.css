@@ -261,9 +261,14 @@ p { margin: 0; }
    This row is where the min-width note above was measured, off a photograph of the phone, because
    no browser here reproduces it. The grid was never the problem: its columns fell exactly where
    they should. The controls standing in them did not. */
-.when { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.when > * { min-width: 0; }
-.when > :first-child { grid-column: 1 / -1; }
+/* Named for the row and not for the idea. `.when` was the first name, and the activity feed
+   already had a `<span class="when">` holding each line's timestamp: the two never collided,
+   because .rows.trail .when is more specific and redeclares every property that matters, but it
+   held only by luck. A bare class in a stylesheet every screen loads is the shape that has gone
+   wrong twice here already, and it is not worth keeping a third time on a coincidence. */
+.when-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.when-row > * { min-width: 0; }
+.when-row > :first-child { grid-column: 1 / -1; }
 /* Three numbers that belong to one sentence, so they share a row rather than leaving the last
    one stranded beside a gap. The 140px minimum that suits the four tracking counts would drop
    "people" onto its own line under kids and adults. */
