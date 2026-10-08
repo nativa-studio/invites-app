@@ -53,10 +53,11 @@ export default async function Settings({ params }: { params: Promise<{ id: strin
           value={on(Boolean(e.plate_enabled))}
           on={Boolean(e.plate_enabled)}
           blurb={copy.host.setPlateHint}
-          fields={["plate_enabled", "plate_mode", "plate_host_note"]}
+          fields={["plate_enabled", "plate_block", "plate_mode", "plate_host_note"]}
           onToggle={async (next) => { "use server"; await setEventSwitch(e.id, "plate_enabled", next); }}
         >
           <Switch id="plate_enabled" label={copy.host.ovPlateChip} value={e.plate_enabled} hint={copy.host.setPlateHint} />
+          <Switch id="plate_block" label={copy.host.plateBlock} value={e.plate_block !== false} hint={copy.host.plateBlockHint} />
         </SettingBox>
 
         <SettingBox

@@ -900,6 +900,11 @@ export const copy = {
     hostsCohostNote: "Only the person who made the event can invite somebody else or take people off.",
     hostsCopy: "Copy the link",
     hostsCancel: "Cancel",
+    // Named for what it decides, which is whether the plate says anything before somebody has
+    // replied. Not where: that is the section order's, and this switch moving the card was the
+    // fault it had.
+    plateBlock: "Say it before they reply",
+    plateBlockHint: "On, the Bring a plate card tells anybody still deciding what you are asking. Off, it stays quiet until somebody says yes. Either way it sits where you have put it in the invite, and either way they get the board to claim a dish once they have replied.",
     giftBlock: "Also give it a card in the invite",
     giftBlockHint: "A second card, above the reply, saying a group gift is happening. Only used while the gifts block is off: on, the block says it itself and this card would be the same news twice. Either way, everyone who answers gets how to chip in after their reply.",
     plateClaimed: "Being brought",

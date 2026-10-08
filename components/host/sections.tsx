@@ -95,9 +95,13 @@ export const SECTIONS: Section[] = [
     title: "Bring a plate",
     blurb: "Whether you are asking guests to bring something, and what the invite says about it. The list of dishes itself is on the Potluck tab, because that is a job rather than wording.",
     show: { column: "plate_enabled", label: copy.host.potluckSwitch },
-    fields: ["plate_mode", "plate_host_note"],
+    fields: ["plate_block", "plate_mode", "plate_host_note"],
     render: (e) => (
       <>
+        {/* Whether it gets a card at all, before what the card says. Off leaves the line in Good
+            to know, which is the announcement, and takes away the panel, which is where a guest
+            acts: a host collecting dishes by text wants the first and not the second. */}
+        <Switch id="plate_block" label={copy.host.plateBlock} value={e.plate_block !== false} hint={copy.host.plateBlockHint} />
         <Choice id="plate_mode" label={copy.host.potluckMode} value={e.plate_mode} options={PLATE_MODES} hint={copy.host.potluckModeHint} />
         <Field id="plate_host_note" label={copy.host.potluckNote} value={e.plate_host_note} rows={2} hint={copy.host.potluckNoteHint} />
       </>
