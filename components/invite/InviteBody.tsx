@@ -28,7 +28,7 @@ import { PostInvite } from "./PostInvite";
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e: chosen, greeting, reply, layout, skipAnimation, token, curious, answered, pretend, plateCard, giftsCard, calendar,
+  e: chosen, greeting, reply, layout, skipAnimation, token, curious, pretend, plateCard, giftsCard, calendar,
 }: {
   e: PublicEvent;
   greeting: string;
@@ -36,8 +36,6 @@ export function InviteBody({
   /** For the About this app line at the foot. Null on the group link before anybody has replied,
    *  where there is no guest row yet to record a thumbs up against. */
   token?: string | null;
-  /** Whether this guest has replied. The announcements come off once they have. */
-  answered?: boolean;
   curious?: boolean;
   /** The host trying their own invite. Everything works and nothing is written, the same rule the
    *  reply and the plate board already follow there. */
@@ -67,20 +65,17 @@ export function InviteBody({
   // in three places, only one of which is handed the event, so a heading looked up inside each of
   // them would be looked up twice and missed once. See partTitle in lib/invite-parts.ts.
   const plateTitle = partTitle(e, "plate", copy.plate.heading);
+  // What the plate's slot shows before anybody has replied. Null unless the host has switched it
+  // on, and never on the same page as the board: PlateSlot draws one or the other.
+  const plateAnnounce = <AnnouncePlate e={e} />;
   // Every layout draws a gifts block. It was three of five for a while, and that mattered a great
   // deal: the group gift's own card stands down because the block will say it, and so, since the
   // info booth stopped carrying a gifts line, does everything else. A layout with no block would
   // have had gifts vanish from the invite altogether rather than move.
-  // The plate announcement sits immediately before the reply: the last thing a guest reads before
-  // deciding, which is where news about what the day will involve belongs. Computed once, because
-  // the lineup layout takes its own reply and would otherwise quietly not have them.
+  // The reply, and the calendar buttons under it. Nothing above it: the plate's announcement used
+  // to sit here, and sitting here was its fault. See Announce.tsx.
   const announced = (
     <>
-      {/* Wrapped, because `answered` is what the server knew when it drew the page and a guest
-          answers after that. See UntilAnswered. */}
-      <UntilAnswered>
-        <AnnouncePlate e={e} answered={answered} />
-      </UntilAnswered>
       {reply}
       {/* Under the reply, never over it.
       
@@ -112,7 +107,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        plate={plateCard ?? <PlateSlot title={plateTitle} />}
+        plate={plateCard ?? <PlateSlot title={plateTitle} announce={plateAnnounce} />}
         gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
@@ -125,7 +120,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        plate={plateCard ?? <PlateSlot title={plateTitle} />}
+        plate={plateCard ?? <PlateSlot title={plateTitle} announce={plateAnnounce} />}
         gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
@@ -140,7 +135,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        plate={plateCard ?? <PlateSlot title={plateTitle} />}
+        plate={plateCard ?? <PlateSlot title={plateTitle} announce={plateAnnounce} />}
         gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
@@ -153,7 +148,7 @@ export function InviteBody({
         greeting={greeting}
         reply={announced}
         after={about}
-        plate={plateCard ?? <PlateSlot title={plateTitle} />}
+        plate={plateCard ?? <PlateSlot title={plateTitle} announce={plateAnnounce} />}
         gifts={giftsCard}
         skipAnimation={skipAnimation}
       />
@@ -181,7 +176,7 @@ export function InviteBody({
     // Bring a plate, on its own rather than under the reply. It draws nothing until the guest
     // reading it has said yes, and nothing at all outside a reply provider, which is the editor
     // drawing the invite with nobody answering. There the editor passes its own card instead.
-    plate: plateCard ?? <PlateSlot title={plateTitle} />,
+    plate: plateCard ?? <PlateSlot title={plateTitle} announce={plateAnnounce} />,
     gifts: giftsCard ?? (e.show_gifts ? <GiftsCard e={e} /> : null),
     after: e.show_after ? <AskCard e={e} /> : null,
     // Absent means on: a database without migration 0008 does not send the column, and the

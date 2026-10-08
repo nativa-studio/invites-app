@@ -11,13 +11,22 @@ import { Plate as PlateIcon } from "@/components/art/icons";
 // wrong moment. The card they act on comes after their reply and is never optional, because
 // without it the feature does not exist.
 //
-// Off by default. The info booth already carries a line about both, so a card of its own is a
-// host choosing to make a point of it rather than something every invite needs.
-export function AnnouncePlate({ e, answered }: { e: PublicEvent; answered?: boolean }) {
-  // Gone once they have answered. Its whole job is telling somebody who is still deciding what
-  // the day involves, and its last line promises the list opens up when they reply, which is a
-  // strange thing to read next to the list.
-  if (!e.plate_enabled || e.plate_block !== true || answered) return null;
+// It draws in the plate's own slot, wherever the host has ordered that, and not above the reply.
+//
+// It used to be hardcoded immediately before the RSVP, so switching it on moved Bring a plate
+// from the place the host had put it to a place they had not chosen, and the only way to find
+// that out was to switch it on. Marcia: "I do want it to display, I have turned it on but I have
+// to keep turning it off because it's showing in the wrong place, and I only see it's in the
+// wrong place after I turn it on", with a screenshot of the switched-off card sitting exactly
+// where she wanted it.
+//
+// So the switch decides whether the plate says anything before somebody replies, and nothing
+// else. Where it says it belongs to the section order, the same as every other part.
+export function AnnouncePlate({ e }: { e: PublicEvent }) {
+  // Whether they have answered is not asked here any more. PlateSlot draws the board once
+  // somebody has said yes and this before they have, so the two can never both be on the page
+  // and neither has to know about the other.
+  if (!e.plate_enabled || e.plate_block !== true) return null;
   return (
     <div className="pcard tilt-r plate announce" data-section="plate">
       <div className="tape tl" />

@@ -39,11 +39,6 @@ export function KnowEditor({ e }: { e: EventRow }) {
         return <Field id="serve_text" label={NOTE_NAMES.serve} value={e.serve_text} hint='e.g. "Afternoon tea, and cake at 4ish"' />;
       case "drinks":
         return <Field id="drinks_note" label={NOTE_NAMES.drinks} value={e.drinks_note ?? null} rows={2} hint={copy.host.drinksNoteFree} />;
-      case "plate":
-        // Settings live on the Potluck tab, with the board they belong to. This row is here so
-        // the line can be moved up and down the invite with the others, and so a host looking
-        // for it is told where it went rather than finding a second copy of it.
-        return <p className="hint">{copy.host.plateElsewhere}</p>;
       case "photos":
         return <Field id="photos_note" label={NOTE_NAMES.photos} value={e.photos_note ?? null} rows={2} hint={copy.host.photosNoteFree} />;
       case "other":

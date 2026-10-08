@@ -24,7 +24,6 @@ export function InvitePage({ invite, token, plate, gift, wishes, curious, skipAn
   //
   // This replaced an Open it again line under the greeting, which did the same job from an
   // awkward place.
-  const answered = guest.status !== "pending";
   return (
     // The answer, in one place, so the reply card and the plate part further down the page agree
     // about it without either owning the other.
@@ -35,7 +34,6 @@ export function InvitePage({ invite, token, plate, gift, wishes, curious, skipAn
       skipAnimation={skipAnimation}
       layout={layout}
       token={token}
-      answered={answered}
       calendar={{ google: googleCalendarPath(e, token), ics: `/i/${token}/invite.ics` }}
       curious={curious}
       // The board goes to the reply rather than to the layout. Where it belongs depends on the

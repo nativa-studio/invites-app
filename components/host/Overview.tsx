@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { copy } from "@/lib/copy";
 import { daysUntil, relativeTime } from "@/lib/format";
-import { counts } from "@/lib/heads";
+import { counts, headsFor } from "@/lib/heads";
 import { happeningLine } from "@/lib/happening";
 import type { GuestRow, PublicEvent } from "@/lib/db/types";
 import type { Happening } from "@/lib/db/activity";
@@ -40,15 +40,13 @@ export function Overview({
   // what the host put in where they have not. The caption says so: a number that looks like a
   // fact is worse than no number.
   //
-  // The total is not kids plus adults. A guest who answered before the event started asking for a
-  // split has a party size and no breakdown, so their people belong in the total and in neither
-  // half. Same rule as lib/heads.ts, on purpose.
+  // Through headsFor, not a sum of its own. This was its own reducer, asking almost the same
+  // question as lib/heads.ts in almost the same code, and "same rule, on purpose" in a comment is
+  // not the same rule: when the ladder in heads.ts gained a rung, this one would not have.
   const onList = guests.filter((g) => g.status !== "no").reduce(
     (a, g) => {
-      const kids = g.status === "yes" ? g.children ?? 0 : g.expected_children ?? 0;
-      const adults = g.status === "yes" ? g.adults ?? 0 : g.expected_adults ?? 0;
-      const total = g.status === "yes" && !(splitParty && kids + adults > 0) ? g.party_size ?? 1 : kids + adults;
-      return { kids: a.kids + kids, adults: a.adults + adults, total: a.total + total };
+      const h = headsFor(g, splitParty);
+      return { kids: a.kids + h.kids, adults: a.adults + h.adults, total: a.total + h.total };
     },
     { kids: 0, adults: 0, total: 0 },
   );
@@ -91,7 +89,7 @@ export function Overview({
 
         <Link href={`${base}/guests?filter=yes`} className="tile">
           <span className="n"><b>{c.replied.total}</b> <span className="lab">{copy.host.ovComing}</span></span>
-          <span className="sub">{splitLine(c.replied.kids, c.replied.adults)}</span>
+          <span className="sub">{splitLine(c.replied.kids, c.replied.adults, c.replied.total)}</span>
         </Link>
 
         {/* Replies is a tile rather than a card of its own. It is one number with its working
@@ -114,7 +112,7 @@ export function Overview({
 
         <Link href={`${base}/guests`} className="tile">
           <span className="n"><b>{onList.total}</b> <span className="lab">{copy.host.ovOnList}</span></span>
-          <span className="sub">{splitLine(onList.kids, onList.adults)}</span>
+          <span className="sub">{splitLine(onList.kids, onList.adults, onList.total)}</span>
           <span className="faint">{copy.host.ovOnListHint}</span>
         </Link>
 
@@ -206,10 +204,17 @@ export function Overview({
   );
 }
 
-// "5 kids / 5 adults". The slash is the design's, and the line only appears when both halves
-// exist, which copy.host.split already decides.
-function splitLine(kids: number, adults: number): string {
-  return copy.host.split(kids, adults).replace(", ", " / ");
+// "5 kids / 5 adults", and "5 kids / 5 adults / 1 didn't say" where the headline is bigger than
+// the two halves. The slash is the design's, and the halves only appear when they exist, which
+// copy.host.split already decides.
+//
+// The tail is the fix for the thing that reads as an arithmetic error. A guest who said yes with
+// a party size and no breakdown is one person in the total and nobody in either half, which is
+// honest and looks like a mistake, so the line says it out loud instead.
+function splitLine(kids: number, adults: number, total: number): string {
+  const unsaid = total - kids - adults;
+  return [copy.host.split(kids, adults), unsaid > 0 ? copy.host.splitUnsaid(unsaid) : null]
+    .filter(Boolean).join(", ").replace(/, /g, " / ");
 }
 
 function Chip({ label, on }: { label: string; on: boolean | null }) {

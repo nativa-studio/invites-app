@@ -576,3 +576,60 @@ export async function setWishlistOrder(eventId: string, ids: string[]) {
     supabase.from("wishlist_items").update({ sort: i }).eq("id", id).eq("event_id", eventId)));
   await revalidateEvent(eventId);
 }
+
+// ---------- co-hosts ----------
+
+// The invite link: on, off, or a fresh one.
+//
+// Owner only, and the database says so rather than this file: set_join_code checks is_owner and
+// refuses otherwise, so a co-host who found the button could not use it. Handing somebody the
+// keys is the owner's to do, alongside deleting the event and removing people, which are the
+// other two things the brief reserves for them.
+export async function setJoinLink(eventId: string, on: boolean, roll = false) {
+  const supabase = await createClient();
+  await supabase.rpc("set_join_code", { p_event: eventId, p_on: on, p_roll: roll });
+  await revalidateEvent(eventId);
+}
+
+// Taking somebody off, or taking yourself off.
+//
+// One action for both because it is one row and one policy: event_members allows a delete when
+// you are the owner or when the row is your own. An owner leaving is not offered, here or on the
+// screen: it would leave an event nobody can delete or hand on, and the owner who wants out
+// deletes the event instead.
+export async function removeHost(eventId: string, profileId: string) {
+  const supabase = await createClient();
+  const { uid } = await hostClient();
+  const leaving = profileId === uid;
+  await supabase.from("event_members").delete().eq("event_id", eventId).eq("profile_id", profileId);
+  await revalidateEvent(eventId);
+  // Somebody who has just left cannot be shown the event they left.
+  if (leaving) redirect("/app");
+}
+
+// ---------- the settings board ----------
+
+// One switch on the Settings board, flicked where it is rather than inside a form.
+//
+// Its own list, not PART_SWITCH's: those are the parts of the invite, these are facts about the
+// event, and a column has to be named in one of them to be written at all. Same discipline as the
+// save action's manifest, for the same reason: a switch that sends a column nothing can write
+// says Saved and moves nothing.
+const SETTING_SWITCHES: ReadonlySet<string> = new Set([
+  "plate_enabled", "group_gift_enabled", "group_link_enabled",
+]);
+
+export async function setEventSwitch(eventId: string, column: string, on: boolean) {
+  if (!SETTING_SWITCHES.has(column)) return;
+  const { supabase } = await hostClient();
+  await supabase.from("events").update({ [column]: on }).eq("id", eventId);
+  revalidateEvent(eventId);
+}
+
+/** Kids counted apart from adults, or one number of people. A switch on the board, because it
+ *  reads as on or off to a host even though the column holds two words. */
+export async function setPartyMode(eventId: string, split: boolean) {
+  const { supabase } = await hostClient();
+  await supabase.from("events").update({ ask_party_mode: split ? "split" : "single" }).eq("id", eventId);
+  revalidateEvent(eventId);
+}

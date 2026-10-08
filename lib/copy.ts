@@ -158,7 +158,10 @@ export const copy = {
     // Taken, not who by. A guest deciding what to carry needs to know what is already covered;
     // a register of which neighbour brought what is the host's business and nobody else's.
     taken: "Someone's bringing this",
-    addHeading: "Bringing something else?",
+    // Marcia's wording. "Bringing something else?" asked a question the guest has to answer
+    // before they can see it is a thing they can do; this names the action, which is what the
+    // control under it does.
+    addHeading: "Add something else",
     addLabel: "What is it?",
     addPlaceholder: "Pavlova, garden salad, a bag of ice",
     addTags: "Is it free of anything? (optional)",
@@ -582,6 +585,18 @@ export const copy = {
       kids > 0 ? `${kids} ${kids === 1 ? "kid" : "kids"}` : null,
       adults > 0 ? `${adults} ${adults === 1 ? "adult" : "adults"}` : null,
     ].filter(Boolean).join(", "),
+    // The tail on a split line, for the people in the headline who are in neither half.
+    //
+    // That happens when somebody said yes with a party size and never said how it divides, which
+    // the app cannot invent and will not guess. Without this the tile showed 84 over "33 kids /
+    // 50 adults" and left a host checking the arithmetic of her own party, which is exactly the
+    // kind of silence that costs a round trip. Marcia found it: "that doesn't add up".
+    splitUnsaid: (n: number) => `${n} didn't say`,
+    // The long version, under the three numbers on Guests, where there is room for a sentence.
+    headsUnsaid: (n: number) =>
+      n === 1
+        ? "One of them said yes without saying whether they are a kid or an adult, so they are in the total and in neither half."
+        : `${n} of them said yes without saying whether they are kids or adults, so they are in the total and in neither half.`,
     trackWaiting: "Still to reply",
     trackNo: "Not coming",
     trackAsked: "Asked",
@@ -844,7 +859,6 @@ export const copy = {
     potluckModeHint: "It sets the default wording, and it is what the list says at the top when a guest opens it.",
     potluckNote: "What the invite says",
     potluckNoteHint: "Empty uses the wording for the setting above. Guests read this while they are deciding, so keep it to what is being asked.",
-    plateElsewhere: "On or off, how much you're asking and the wording are all on the Potluck tab, with the list. This row is here so you can move the line up and down the invite.",
     plateAsk: "Ask for something",
     plateAskBlurb: "It goes on the list with nobody against it, so a guest can claim it. Guests add their own the same way, already carrying it.",
     plateAddIt: "Put it on the list",
@@ -861,8 +875,36 @@ export const copy = {
     // The two groups the board splits into. Which dish somebody is bringing was on every row and
     // is gone: a host running a table needs to know what is still missing, and the names made
     // every item two lines tall for a fact they only want when something goes wrong.
-    plateBlock: "Also give it a card in the invite",
-    plateBlockHint: "On, guests get a card under their reply where they claim a dish. Off, the invite only mentions it at the info booth and you collect it yourself.",
+    // The settings board: a block per setting, each with its own switch and its own pencil.
+    setBoardHint: "Tap a switch to turn something on or off. Tap a pencil for the rest of what that setting can do.",
+    editThing: (what: string) => `Edit ${what.toLowerCase()}`,
+    switchThing: (what: string) => `Turn ${what.toLowerCase()} on or off`,
+    // Who is running this event.
+    hostsHeading: "Who can run this",
+    hostsBlurb: "Everybody here can add guests, send the invites and change the invitation. Only the person who made the event can delete it or take somebody off.",
+    hostsCount: (n: number) => (n === 1 ? "Just you" : n === 2 ? "You and one other" : `You and ${n - 1} others`),
+    hostsOwner: "Made the event",
+    hostsCohost: "Co-host",
+    hostsYou: ", you",
+    hostsNameless: "Signed in, no name yet",
+    hostsInvite: "Invite a co-host",
+    hostsInviteHint: "Send them this link. They sign in with Google and they are in. Anybody who has the link can join, so send it to the person and not to a group.",
+    hostsStart: "Make an invite link",
+    hostsNewLink: "New link",
+    hostsStop: "Stop the link",
+    hostsStopHint: "Stopping it does not remove anybody. New link makes the old one stop working.",
+    hostsRemove: "Take off",
+    hostsLeave: "Leave this event",
+    hostsSure: "Yes, do it",
+    hostsRemoving: "Doing it",
+    hostsCohostNote: "Only the person who made the event can invite somebody else or take people off.",
+    hostsCopy: "Copy the link",
+    hostsCancel: "Cancel",
+    // Named for what it decides, which is whether the plate says anything before somebody has
+    // replied. Not where: that is the section order's, and this switch moving the card was the
+    // fault it had.
+    plateBlock: "Say it before they reply",
+    plateBlockHint: "On, the Bring a plate card tells anybody still deciding what you are asking. Off, it stays quiet until somebody says yes. Either way it sits where you have put it in the invite, and either way they get the board to claim a dish once they have replied.",
     giftBlock: "Also give it a card in the invite",
     giftBlockHint: "A second card, above the reply, saying a group gift is happening. Only used while the gifts block is off: on, the block says it itself and this card would be the same news twice. Either way, everyone who answers gets how to chip in after their reply.",
     plateClaimed: "Being brought",
@@ -1022,6 +1064,14 @@ export const copy = {
         ],
       },
     },
+  },
+  // Taking up an invitation to co-host. Short: somebody who has been sent this link already knows
+  // what it is, from the person who sent it.
+  join: {
+    title: (what: string) => `You have been asked to help run ${what}`,
+    lede: "Sign in and you will be able to add guests, send the invites, see who has replied and change anything on the invite. Only the person who made the event can delete it or remove people.",
+    closedTitle: "That link is closed",
+    closedBody: "Ask whoever sent it to you for a new one.",
   },
   templates: {
     text: "Hi {name}! You're invited to {title}{date}. Everything is here, and you can reply with one tap: {link}",

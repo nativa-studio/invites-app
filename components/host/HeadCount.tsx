@@ -78,7 +78,16 @@ function Block({ title, hint, heads, split, noSplitHint }: {
         ) : null}
         <div className="count"><b>{heads.total}</b><span>{copy.host.headsAll}</span></div>
       </div>
-      <p className="hint">{hint}{!split && noSplitHint ? ` ${noSplitHint}` : ""}</p>
+      {/* The same sentence the Overview tiles carry, for the same reason: three numbers where
+          two of them do not come to the third reads as an arithmetic error, and the reason it is
+          not one has to be on the screen rather than in a comment. */}
+      <p className="hint">
+        {hint}
+        {!split && noSplitHint ? ` ${noSplitHint}` : ""}
+        {split && heads.total > heads.kids + heads.adults
+          ? ` ${copy.host.headsUnsaid(heads.total - heads.kids - heads.adults)}`
+          : ""}
+      </p>
     </section>
   );
 }
