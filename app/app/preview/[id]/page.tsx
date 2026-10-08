@@ -159,17 +159,8 @@ export default async function Preview({
           // The plate: the same problem for a different reason. A guest sees the board after
           // saying yes, and a host has not. HostPlate draws the stand-in until they press yes on
           // their own invite, and the real board after it.
-          //
-          // Not when the announcement is already on the page. With plate_block on, the invite
-          // carries a Bring a plate card above the reply for anybody still deciding, and this
-          // drew a second one below it saying the same sentence: two of the same card on one
-          // screen, which is what Marcia reported. The stand-in exists so a host with no board
-          // yet still has something to tap and reach the drawer, and the announcement is already
-          // something to tap, carrying the same data-section and the same pencil. So it is one or
-          // the other, never both. Press yes and the announcement stands down, the slot falls
-          // through to PlateSlot, and the real board draws.
-          plateCard={editing && row.plate_enabled && row.plate_block !== true
-            ? <HostPlate note={row.plate_host_note} mode={row.plate_mode} off={row.plate_block === false} title={partTitle(row, "plate", copy.plate.heading)} />
+          plateCard={editing && row.plate_enabled
+            ? <HostPlate note={row.plate_host_note} mode={row.plate_mode} title={partTitle(row, "plate", copy.plate.heading)} />
             : undefined}
           // No envelope while editing. It is a lovely three seconds the first time and a toll to
           // pay after every save. A guest's own link is where it is watched, and the design sheet

@@ -10,7 +10,6 @@ import { orderedParts, partTitle, type InvitePart } from "@/lib/invite-parts";
 import { AskCard, CoverCard, DayCard, DetailsCard, KnowCard, SignoffCard, UpdatesCard } from "./Cards";
 import { Envelope } from "./Envelope";
 import { AboutApp } from "./AboutApp";
-import { AnnouncePlate } from "./Announce";
 import { GiftsCard } from "./GiftsCard";
 import { UntilAnswered } from "./UntilAnswered";
 import { HoldTheDate } from "./CalendarButtons";
@@ -28,7 +27,7 @@ import { PostInvite } from "./PostInvite";
 // come through here, so what a host picks in Settings is exactly what a guest opens.
 // `layout` overrides the saved choice, which is how the picker shows each one.
 export function InviteBody({
-  e: chosen, greeting, reply, layout, skipAnimation, token, curious, answered, pretend, plateCard, giftsCard, calendar,
+  e: chosen, greeting, reply, layout, skipAnimation, token, curious, pretend, plateCard, giftsCard, calendar,
 }: {
   e: PublicEvent;
   greeting: string;
@@ -36,8 +35,6 @@ export function InviteBody({
   /** For the About this app line at the foot. Null on the group link before anybody has replied,
    *  where there is no guest row yet to record a thumbs up against. */
   token?: string | null;
-  /** Whether this guest has replied. The announcements come off once they have. */
-  answered?: boolean;
   curious?: boolean;
   /** The host trying their own invite. Everything works and nothing is written, the same rule the
    *  reply and the plate board already follow there. */
@@ -71,16 +68,10 @@ export function InviteBody({
   // deal: the group gift's own card stands down because the block will say it, and so, since the
   // info booth stopped carrying a gifts line, does everything else. A layout with no block would
   // have had gifts vanish from the invite altogether rather than move.
-  // The plate announcement sits immediately before the reply: the last thing a guest reads before
-  // deciding, which is where news about what the day will involve belongs. Computed once, because
-  // the lineup layout takes its own reply and would otherwise quietly not have them.
+  // The reply, and the calendar buttons under it. Nothing above it any more: see Announce.tsx for
+  // the card that used to sit here and why it does not.
   const announced = (
     <>
-      {/* Wrapped, because `answered` is what the server knew when it drew the page and a guest
-          answers after that. See UntilAnswered. */}
-      <UntilAnswered>
-        <AnnouncePlate e={e} answered={answered} />
-      </UntilAnswered>
       {reply}
       {/* Under the reply, never over it.
       
