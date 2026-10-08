@@ -250,6 +250,37 @@ p { margin: 0; }
 .field input:not([type="checkbox"]):not([type="radio"]):focus, .field textarea:focus, .field select:focus { border-color: var(--app-ink); }
 .field textarea { min-height: 84px; }
 
+/* The settings board: one block per setting, each with its own switch and its own pencil.
+ *
+ * Built to the shape of the party-type tiles, which is the thing Marcia pointed at: a picture,
+ * a name, the word it is set to. The switch sits bottom right and the pencil top right, so the
+ * two taps a block offers never land on each other, and the whole block is 132px tall whatever
+ * is in it, because a board of blocks that are not the same height reads as a list that has gone
+ * wrong rather than a set of things. */
+.board { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 18px; }
+.sbox { position: relative; display: flex; flex-direction: column; gap: 2px; min-height: 134px; padding: 13px; border: 1px solid var(--app-line-2); border-radius: 12px; background: var(--app-bg); text-align: left; }
+.sbox.on { border-color: var(--app-ink); box-shadow: inset 0 0 0 1px var(--app-ink); }
+.sbox-art { display: block; height: 34px; margin-bottom: 4px; color: var(--app-mute); }
+.sbox.on .sbox-art { color: var(--app-ink); }
+.sbox-art svg { width: 34px; height: 34px; }
+.sbox-name { font-size: 14.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+/* The value and the switch share the foot of the block, so a long value wraps beside the switch
+   rather than under it. It was absolutely positioned and sat on top of "Children and adults
+   separately", which is the kind of thing only a screenshot shows. */
+.sbox-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 6px; }
+.sbox-val { font-size: 12.5px; color: var(--app-mute); line-height: 1.35; min-width: 0; overflow-wrap: anywhere; }
+/* Top right, where every pencil on the invite is, so the gesture is already learned. 44px of
+   target around an 18px drawing, because this sits beside a switch. */
+.sbox-pen { position: absolute; top: 4px; right: 4px; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 999px; background: none; color: var(--app-mute); cursor: pointer; }
+.sbox-pen:hover { color: var(--app-ink); background: var(--app-sunk); }
+.sbox .sw { flex: 0 0 auto; min-height: 32px; }
+
+/* Who can run this: the people, inside that block's sheet. */
+.rows.hosts li { align-items: start; }
+.rows.hosts .n { font-weight: 600; }
+.invitelink { display: grid; gap: 6px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--app-line); }
+.invitelink code { overflow-wrap: anywhere; font-size: 13px; background: var(--app-sunk); border-radius: 8px; padding: 9px 11px; }
+
 /* Two by two on a phone, so four counts never leave one stranded on its own row. */
 .counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
 /* The day, then the two times under it.

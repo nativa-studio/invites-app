@@ -219,6 +219,11 @@ export type GuestRow = {
 };
 
 export type EventRow = PublicEvent & {
+  /** The co-host invite link, and whether it is open. Never on PublicEvent: a guest's payload has
+   *  no business carrying the key to the host side. Optional because a database without migration
+   *  0049 has neither column. */
+  join_code?: string | null;
+  join_code_enabled?: boolean | null;
   text_template: string | null;
   reminder_template: string | null;
   access_info: string | null;

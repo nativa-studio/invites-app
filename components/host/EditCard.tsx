@@ -50,7 +50,12 @@ export function EditCard({
   );
 }
 
-function EditSheet({
+/** The sheet an EditCard or a SettingBox opens: the fields, the manifest, and one Save.
+ *
+ *  Exported so the boxes on Settings open the same one. A second copy of this form is a second
+ *  place for the manifest to go wrong, and the manifest is the thing that stops a form saving
+ *  empty over a field it does not show. */
+export function EditSheet({
   eventId, title, blurb, fields, onClose, children,
 }: {
   eventId: string;

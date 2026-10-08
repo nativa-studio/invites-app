@@ -1,4 +1,5 @@
 import "server-only";
+import { createClient } from "@/lib/supabase/server";
 
 // Who is allowed to sign in while Bunting is being built.
 //
@@ -25,4 +26,26 @@ export function isAllowedHost(email: string | null | undefined): boolean {
   const allowed = list();
   if (allowed.length === 0) return true;
   return Boolean(email) && allowed.includes(String(email).trim().toLowerCase());
+}
+
+/** The list, or a hand on an event already.
+ *
+ *  A co-host is somebody a host handed their party to, which is a stronger vouching than being on
+ *  a list typed into an environment variable by whoever set the deployment up. Without this a
+ *  co-host gets in once, through the invite that let them past the door, and is turned away at
+ *  /app on every visit after, which is worse than never letting them in at all.
+ *
+ *  The list is still the front door for everybody who has never been invited to anything. This
+ *  only ever widens it, never narrows it, so a database that cannot answer leaves the list in
+ *  charge rather than locking the owner out of their own app.
+ *
+ *  The membership question is asked of the database rather than of the caller, because the answer
+ *  has to be the database's: it is the one place that knows who is on what, and a page that
+ *  decided for itself would be a second rule to keep in step. */
+export async function isAllowedNow(email: string | null | undefined): Promise<boolean> {
+  if (isAllowedHost(email)) return true;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("is_any_member");
+  if (error) return false;
+  return data === true;
 }

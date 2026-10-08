@@ -875,8 +875,31 @@ export const copy = {
     // The two groups the board splits into. Which dish somebody is bringing was on every row and
     // is gone: a host running a table needs to know what is still missing, and the names made
     // every item two lines tall for a fact they only want when something goes wrong.
-    plateBlock: "Also give it a card in the invite",
-    plateBlockHint: "On, guests get a card under their reply where they claim a dish. Off, the invite only mentions it at the info booth and you collect it yourself.",
+    // The settings board: a block per setting, each with its own switch and its own pencil.
+    setBoardHint: "Tap a switch to turn something on or off. Tap a pencil for the rest of what that setting can do.",
+    editThing: (what: string) => `Edit ${what.toLowerCase()}`,
+    switchThing: (what: string) => `Turn ${what.toLowerCase()} on or off`,
+    // Who is running this event.
+    hostsHeading: "Who can run this",
+    hostsBlurb: "Everybody here can add guests, send the invites and change the invitation. Only the person who made the event can delete it or take somebody off.",
+    hostsCount: (n: number) => (n === 1 ? "Just you" : n === 2 ? "You and one other" : `You and ${n - 1} others`),
+    hostsOwner: "Made the event",
+    hostsCohost: "Co-host",
+    hostsYou: ", you",
+    hostsNameless: "Signed in, no name yet",
+    hostsInvite: "Invite a co-host",
+    hostsInviteHint: "Send them this link. They sign in with Google and they are in. Anybody who has the link can join, so send it to the person and not to a group.",
+    hostsStart: "Make an invite link",
+    hostsNewLink: "New link",
+    hostsStop: "Stop the link",
+    hostsStopHint: "Stopping it does not remove anybody. New link makes the old one stop working.",
+    hostsRemove: "Take off",
+    hostsLeave: "Leave this event",
+    hostsSure: "Yes, do it",
+    hostsRemoving: "Doing it",
+    hostsCohostNote: "Only the person who made the event can invite somebody else or take people off.",
+    hostsCopy: "Copy the link",
+    hostsCancel: "Cancel",
     giftBlock: "Also give it a card in the invite",
     giftBlockHint: "A second card, above the reply, saying a group gift is happening. Only used while the gifts block is off: on, the block says it itself and this card would be the same news twice. Either way, everyone who answers gets how to chip in after their reply.",
     plateClaimed: "Being brought",
@@ -1036,6 +1059,14 @@ export const copy = {
         ],
       },
     },
+  },
+  // Taking up an invitation to co-host. Short: somebody who has been sent this link already knows
+  // what it is, from the person who sent it.
+  join: {
+    title: (what: string) => `You have been asked to help run ${what}`,
+    lede: "Sign in and you will be able to add guests, send the invites, see who has replied and change anything on the invite. Only the person who made the event can delete it or remove people.",
+    closedTitle: "That link is closed",
+    closedBody: "Ask whoever sent it to you for a new one.",
   },
   templates: {
     text: "Hi {name}! You're invited to {title}{date}. Everything is here, and you can reply with one tap: {link}",
