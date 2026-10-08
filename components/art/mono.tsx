@@ -128,7 +128,6 @@ export function monoNote(kind: NoteKind, text: string): MonoName {
   if (kind === "bring") return /sun|hat|sunscreen|burn|shade/i.test(text) ? "sun" : "towel";
   if (kind === "serve") return /bbq|barbecue|barbeque|sausage|grill|spit/i.test(text) ? "sausage" : /cake/i.test(text) ? "cake" : "sausage";
   if (kind === "drinks") return "cup";
-  if (kind === "plate") return "plate";
   if (kind === "photos") return "camera";
   if (/shower/i.test(text)) return "shower";
   return "bubble";

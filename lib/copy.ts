@@ -158,7 +158,10 @@ export const copy = {
     // Taken, not who by. A guest deciding what to carry needs to know what is already covered;
     // a register of which neighbour brought what is the host's business and nobody else's.
     taken: "Someone's bringing this",
-    addHeading: "Bringing something else?",
+    // Marcia's wording. "Bringing something else?" asked a question the guest has to answer
+    // before they can see it is a thing they can do; this names the action, which is what the
+    // control under it does.
+    addHeading: "Add something else",
     addLabel: "What is it?",
     addPlaceholder: "Pavlova, garden salad, a bag of ice",
     addTags: "Is it free of anything? (optional)",
@@ -856,7 +859,6 @@ export const copy = {
     potluckModeHint: "It sets the default wording, and it is what the list says at the top when a guest opens it.",
     potluckNote: "What the invite says",
     potluckNoteHint: "Empty uses the wording for the setting above. Guests read this while they are deciding, so keep it to what is being asked.",
-    plateElsewhere: "On or off, how much you're asking and the wording are all on the Potluck tab, with the list. This row is here so you can move the line up and down the invite.",
     plateAsk: "Ask for something",
     plateAskBlurb: "It goes on the list with nobody against it, so a guest can claim it. Guests add their own the same way, already carrying it.",
     plateAddIt: "Put it on the list",

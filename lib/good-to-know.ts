@@ -10,7 +10,16 @@ import type { PublicEvent } from "@/lib/db/types";
 // No "gifts". They have a block of their own now and are not a line here, so they are not a
 // line to order either. A stale "gifts" left in a host's saved know_order is dropped by
 // orderedNotes the way any unknown kind is, which is why nothing had to be backfilled.
-export const NOTE_KINDS = ["siblings", "bring", "serve", "drinks", "plate", "photos", "other"] as const;
+//
+// No "plate" either, and for the same reason, arrived at the same way. The board carries the
+// host's note at its own head, and this line printed that identical sentence a few centimetres
+// above it, so a guest who said yes read it twice. Marcia: "bring a plate is currently showing
+// twice before and after RSVP, please remove from the before RSVP block."
+//
+// Which leaves exactly one thing deciding whether a plate is mentioned before anybody replies:
+// plate_block, the switch whose whole job that is. It was never the only one, and a second
+// unswitchable mention sitting beside it is the shape of fault CLAUDE.md opens with.
+export const NOTE_KINDS = ["siblings", "bring", "serve", "drinks", "photos", "other"] as const;
 export type NoteKind = (typeof NOTE_KINDS)[number];
 export type Note = { kind: NoteKind; text: string };
 
@@ -31,13 +40,6 @@ export function goodToKnow(e: PublicEvent): Note[] {
   // guest reading about the barbecue is already thinking about what is in the esky. Free text and
   // no default: the line exists when the host has written one and not otherwise.
   if (e.drinks_note?.trim()) lines.push({ kind: "drinks", text: e.drinks_note.trim() });
-  // The invite's plate line and the board's own heading say different things on purpose. Here a
-  // guest is deciding whether to come, so the line is what is being asked of them. The board says
-  // claim something or add your own, and it is only on the page once they have said yes, which is
-  // the moment that sentence means anything.
-  if (e.plate_enabled) {
-    lines.push({ kind: "plate", text: e.plate_host_note || (e.plate_mode === "everyone" ? copy.lines.plateEveryone : copy.lines.plateFree) });
-  }
   // Gifts: every stance except quiet says something, and quiet is the point of having a stance
   // called quiet. Books and the wish list used to be offered in the editor and print nothing at
   // all, so a host picking one got silence and no way to tell it apart from a bug. A wish list
@@ -119,7 +121,6 @@ export const NOTE_NAMES: Record<NoteKind, string> = {
   bring: "What to bring or wear",
   serve: "What you'll serve",
   drinks: "Drinks",
-  plate: "Bring a plate",
   photos: "Photos",
   other: "Other notes",
 };
