@@ -582,6 +582,18 @@ export const copy = {
       kids > 0 ? `${kids} ${kids === 1 ? "kid" : "kids"}` : null,
       adults > 0 ? `${adults} ${adults === 1 ? "adult" : "adults"}` : null,
     ].filter(Boolean).join(", "),
+    // The tail on a split line, for the people in the headline who are in neither half.
+    //
+    // That happens when somebody said yes with a party size and never said how it divides, which
+    // the app cannot invent and will not guess. Without this the tile showed 84 over "33 kids /
+    // 50 adults" and left a host checking the arithmetic of her own party, which is exactly the
+    // kind of silence that costs a round trip. Marcia found it: "that doesn't add up".
+    splitUnsaid: (n: number) => `${n} didn't say`,
+    // The long version, under the three numbers on Guests, where there is room for a sentence.
+    headsUnsaid: (n: number) =>
+      n === 1
+        ? "One of them said yes without saying whether they are a kid or an adult, so they are in the total and in neither half."
+        : `${n} of them said yes without saying whether they are kids or adults, so they are in the total and in neither half.`,
     trackWaiting: "Still to reply",
     trackNo: "Not coming",
     trackAsked: "Asked",
