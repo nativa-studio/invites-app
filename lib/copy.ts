@@ -216,6 +216,9 @@ export const copy = {
     // PayID and the reference so they can send it themselves, from their own banking app. "Chip
     // in" names the deed and this only shows you how, which matters on the one control in the
     // block that a guest might think commits them to something.
+    // Who to ask, beside where to send it. Named, because "any questions" under a PayID reads as
+    // the app offering support, and the person who can answer is a guest at the same party.
+    askOrganiser: (who: string | null) => (who ? `Any questions, ask ${who} on` : "Any questions, ask the organiser on"),
     chipIn: "How to chip in",
     copy: "Copy",
     copied: "Copied",
@@ -240,6 +243,10 @@ export const copy = {
     setupBlurb: "What guests need in order to send you money. Nothing here is shown until you fill in where it goes.",
     payLabel: "Where to send it",
     payHint: "PayID, bank details, or a link to a gift fund. Guests read this exactly as you type it.",
+    // The organiser's own number, on their own page. Asked as a question about them rather than
+    // as a field, because the honest answer may be no.
+    phoneLabel: "A number people can reach you on",
+    phoneHint: "Shown on the invite beside how to chip in, so anybody can ask you a question. Clear the box if you would rather not.",
     refLabel: "What to put in the reference",
     refHint: "So you can tell who paid. A word is enough.",
     msgLabel: "A note for everyone",

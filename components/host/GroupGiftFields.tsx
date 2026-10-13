@@ -22,6 +22,8 @@ import { Field } from "./fields";
 // gift off. That is the same class of fault the field manifest exists to prevent.
 export function GroupGiftFields({ e }: { e: EventRow }) {
   const [on, setOn] = useState(Boolean(e.group_gift_enabled));
+  // "me" when the host is running it, a guest's id when somebody else is, empty when nobody is.
+  const organiser = e.gift_organiser_profile_id ? "me" : e.gift_organiser_guest_id ?? "";
   return (
     <>
       <div className="panel-split" />
@@ -41,6 +43,21 @@ export function GroupGiftFields({ e }: { e: EventRow }) {
             under what the present is, because it is the same thought said in the host's voice. */}
         <Field id="group_gift_note" label={copy.host.groupGiftLine} value={e.group_gift_note} rows={2} hint={copy.host.groupGiftLineHint} />
         <Field id="gift_target" label={copy.host.giftTarget} value={e.gift_target != null ? String(e.gift_target) : null} hint={copy.host.giftTargetHint} />
+        {/* Who runs it, here rather than only on the Plan tab. Gifts are edited by tapping the
+            card on the invite now, and handing the job to somebody is part of setting a group
+            gift up, not a separate errand on another screen. The Plan tab keeps its fuller
+            view: the money in, who has chipped in, and the message that sends them their link. */}
+        <div className="field">
+          <label htmlFor="gift_organiser">{copy.host.giftOrganiser}</label>
+          <select id="gift_organiser" name="gift_organiser" defaultValue={organiser}>
+            <option value="">{copy.host.giftOrganiserNone}</option>
+            <option value="me">{copy.host.giftOrganiserMe}</option>
+            {(e.gift_candidates ?? []).map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+          <span className="hint">
+            {(e.gift_candidates ?? []).length === 0 ? copy.host.giftPickFirst : copy.host.giftOrganiserHint}
+          </span>
+        </div>
       </div>
     </>
   );

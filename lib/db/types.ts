@@ -233,6 +233,11 @@ export type EventRow = PublicEvent & {
    *  not join it, and because a database without migration 0016 has no row to join. */
   gift_description?: string | null;
   gift_target?: number | null;
+  /** Who is running the group gift, and who could. Joined for the gifts drawer, which is reached
+   *  by tapping the card on the invite and so cannot read a list off another screen. */
+  gift_organiser_guest_id?: string | null;
+  gift_organiser_profile_id?: string | null;
+  gift_candidates?: { id: string; name: string }[];
   /** The wish list with its ids and sort, for the editor. The guest's copy is on PublicEvent and
    *  has neither, because there is nothing for a guest to do to a row. */
   wishlist?: { id: string; label: string; note: string | null; url: string | null; sort: number; claimed: boolean }[] | null;

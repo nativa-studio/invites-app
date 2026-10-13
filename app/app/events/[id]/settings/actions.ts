@@ -56,7 +56,7 @@ const SECTION_TITLE = "section_title";
 // group_gift. Nothing else can be saved, so nothing else should be declared.
 const HANDLED: ReadonlySet<string> = new Set<string>([
   ...TEXT, ...DATES, ...TIMES, ...Object.keys(CHOICES), ...SWITCHES,
-  "gift_description", "gift_target", SECTION_TITLE,
+  "gift_description", "gift_target", "gift_organiser", SECTION_TITLE,
 ]);
 
 // Every form says which fields it owns, in a hidden `_fields` input, and only those are written.
@@ -123,6 +123,14 @@ export async function saveEvent(_prev: SaveState, fd: FormData): Promise<SaveSta
   // never has to know which table a field sleeps in.
   const giftPatch: Record<string, unknown> = {};
   if (own.has("gift_description")) giftPatch.description = String(fd.get("gift_description") ?? "").trim() || null;
+  // Who is running it. "me" is whoever is signed in, a uuid is a guest, empty is nobody yet, and
+  // the two columns are mutually exclusive by construction rather than by hoping.
+  if (own.has("gift_organiser")) {
+    const v = String(fd.get("gift_organiser") ?? "").trim();
+    const guest = /^[0-9a-f-]{36}$/.test(v) ? v : null;
+    giftPatch.organiser_guest_id = guest;
+    giftPatch.organiser_profile_id = v === "me" ? String(claims.claims.sub) : null;
+  }
   if (own.has("gift_target")) {
     const raw = String(fd.get("gift_target") ?? "").replace(/[^0-9.]/g, "");
     giftPatch.target = raw === "" || Number.isNaN(Number(raw)) ? null : Number(raw);

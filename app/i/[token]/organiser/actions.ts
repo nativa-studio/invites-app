@@ -38,6 +38,7 @@ export async function organiserAction(_prev: BoardState, fd: FormData): Promise<
         suggested: money("suggested"),
         chip_in_by: text("chip_in_by"),
         surprise: fd.get("surprise") != null,
+        contact_phone: text("contact_phone"),
       }),
       saved: "save",
     };

@@ -19,17 +19,30 @@ export const loadEvent = cache(async (id: string): Promise<EventRow> => {
     // a card and the gifts card is drawn from these rows. The guest's copy comes through
     // event_public_json instead, with the ids and none of the rest: a guest can cross one off,
     // which needs a name for the row, and can do nothing else to it.
-    .select("*, gift:group_gift(description, target), wishlist:wishlist_items(id, label, note, url, sort, claimed_at)")
+    // The organiser too, and the guests who could be one. Same reason as the two above: the gifts
+    // drawer is reached by tapping the card on the invite, so everything that drawer offers has
+    // to arrive with the event rather than from a screen the host is not on.
+    .select("*, gift:group_gift(description, target, organiser_guest_id, organiser_profile_id), wishlist:wishlist_items(id, label, note, url, sort, claimed_at), people:guests(id, name, status)")
     .eq("id", id)
     .maybeSingle();
   if (!data) notFound();
-  const g = (data as { gift?: { description: string | null; target: number | null } | { description: string | null; target: number | null }[] | null }).gift;
+  type GiftBit = { description: string | null; target: number | null; organiser_guest_id: string | null; organiser_profile_id: string | null };
+  const g = (data as { gift?: GiftBit | GiftBit[] | null }).gift;
   const gift = Array.isArray(g) ? g[0] : g;
   const wl = (data as { wishlist?: { sort: number; claimed_at: string | null }[] | null }).wishlist ?? [];
   return {
     ...data,
     gift_description: gift?.description ?? null,
     gift_target: gift?.target ?? null,
+    gift_organiser_guest_id: gift?.organiser_guest_id ?? null,
+    gift_organiser_profile_id: gift?.organiser_profile_id ?? null,
+    // Only the ones who said yes. Asking somebody who cannot come to collect money for a present
+    // is the kind of favour that is really an imposition, and the Plan tab's picker has always
+    // offered the same list.
+    gift_candidates: ((data as { people?: { id: string; name: string; status: string }[] | null }).people ?? [])
+      .filter((p) => p.status === "yes")
+      .map((p) => ({ id: p.id, name: p.name }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
     // PostgREST does not order an embedded table, so it is sorted here rather than trusted.
     // claimed_at is a timestamp on the row and a yes or no everywhere above it: the editor draws
     // a line through the word and nothing on that screen wants to know when.

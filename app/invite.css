@@ -245,6 +245,12 @@
 .gifts .latest { background: color-mix(in srgb, var(--yel) 30%, var(--paper)); }
 .gifts .pay { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15.5px; line-height: 1.45; }
 .gifts .done { margin: 0; font-family: var(--font-display); font-size: 17px; }
+/* Who to ask, under the bank details. The number is the link, so it reads as a phone number and
+   taps as one, and it takes the card's own ink rather than the browser's blue: a default link
+   colour inside a hand-drawn invitation is the one thing on the card that came from somewhere
+   else. Underlined, because that is what is left saying it can be tapped once the colour goes. */
+.gifts .ask-org { margin: 0; }
+.gifts .ask-org a { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .gifts .chipin { display: grid; gap: 12px; width: 100%; }
 /* Chipping in, inside the group gift. Shut behind a button, because bank details sitting open
    under a birthday invitation read like a bill, and because most people opening this have come

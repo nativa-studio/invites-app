@@ -116,7 +116,7 @@ export const SECTIONS: Section[] = [
     // list's own line below it says the part about crossing off, where a host is looking when it
     // matters.
     show: { column: "show_gifts", label: copy.host.giftsBlock },
-    fields: ["gift_note", "group_gift_enabled", "gift_description", "group_gift_note", "gift_target"],
+    fields: ["gift_note", "group_gift_enabled", "gift_description", "group_gift_note", "gift_target", "gift_organiser"],
     render: (e) => (
       <>
         <Field id="gift_note" label={copy.sections.gifts} value={e.gift_note} rows={3} hint={copy.host.giftNoteFree} />
