@@ -1,11 +1,18 @@
 # Setting up an event: a draft flow
 
-Status: a draft for Marcia to mark up. Nothing here is built. Written 14 October 2026.
+Status: a draft for Marcia to mark up. Nothing here is built. Started 14 October 2026, revised the
+same day after her notes on step one.
 
 This is the open source version of Bunting: anybody arrives, signs in, and sets up their own
-event. What the product is for, in one line: **recording who is coming, how many of them, whether
-they are kids or adults, and what they cannot eat, plus the two things a party organises
-together, a potluck and a group gift.**
+event.
+
+**What it is for, in one line.** Recording who is coming, how many of them, whether they are kids
+or adults, and what they cannot eat, plus the two things a party organises together, a potluck and
+a group gift.
+
+**Who it is for.** Somebody who has already made their invitation somewhere else, or who is not
+making one at all and just wants to text people a link. The decoration is not the product. The
+reply is. So the app has to be usable with no picture in it, and good with one.
 
 ## What is actually wrong today
 
@@ -42,6 +49,20 @@ So:
 2. A screen that offers a setting renders that component. It never writes its own.
 3. No screen offers a setting that is not its business (see the split below).
 
+## The second principle, which came out of step one
+
+**A preset sets dials you can still see.**
+
+Every step in the flow offers a couple of named starting points, and underneath them the actual
+settings those starting points moved. Tap "Plain" and you can see that the picture is off, the
+doodles are off and the envelope is off. Nothing is decided behind your back.
+
+This is what was wrong with "What kind of event". It reads as a question about the feel of the
+party, and it quietly sets fifteen switches a host never sees: how people are counted, whether
+names are asked, dietary, allergies, accessibility, siblings, the gift stance, the potluck, the
+reply button wording, and the look. Useful work, invisibly done, under a label that does not say
+so.
+
 ## The six panels
 
 These are the whole of what an event is. They are the spine of both the setup flow and the
@@ -49,28 +70,61 @@ Settings board, which is what makes the two the same thing rather than two thing
 
 | Panel | What it holds |
 | --- | --- |
-| **The event** | Kind of event, title, date, start, end, where, address |
-| **The reply** | One number of people or kids and adults apart, names, dietary, allergies, accessibility, a question of your own |
+| **The event** | Title, date, start, end, where, address |
+| **The reply** | How the numbers are counted, names, dietary, allergies, accessibility, a question of your own |
 | **Bring a plate** | On or off, how much you are asking for, the note |
-| **Group gift** | On or off, what the present is, who is organising it, a target |
-| **The invite** | The words: the line under the title, who it is from, the info booth, questions, the sign-off |
-| **Who can see and run it** | The group link, co-hosts |
+| **Group gift** | On or off, and everything else about it (see the list at the foot) |
+| **The invite** | The look, and the words |
+| **Who can run it** | Co-hosts |
+
+## The look is three dials, not a gallery
+
+The gallery goes. In its place, three settings:
+
+| Dial | Answers |
+| --- | --- |
+| **Picture** | None, or your own |
+| **Colour** | One ink from five, and the line doodles on or off |
+| **Envelope** | Opens, or does not |
+
+And two named starting points, which are the ones Marcia asked for:
+
+- **Plain.** No picture, no doodles, no envelope. One ink, charcoal, on paper. The details, the
+  reply, done. This works for a memorial, a work thing, a school thing and a fourth birthday, and
+  it is the one that makes sense if all somebody wants is to text a link.
+- **A bit of colour.** One ink of your choosing, the line doodles on, the envelope opens. This is
+  the Illustrated strip exactly as it stands today.
+
+Plus, whenever a host has one: **your own invitation**, uploaded, as the cover, with the envelope
+opening onto it.
+
+**Why that is one design and not three.** The Illustrated strip already carries one ink chosen
+from five and a set of doodles chosen by theme. Plain is the strip with the doodles and the
+envelope turned off. So this is one design with three dials, not a row of designs to keep in step,
+which is the same rule as everything else in this document.
+
+**What is not built.** The upload is not built. `look_mode` sits in the database with a default of
+`artwork` and the only app code that mentions it is one line of migration JSON; there is no file
+input anywhere in the app. The envelope has no switch either: every design opens one. So of the
+three dials, colour exists, and picture and envelope are new.
 
 ## Setting up: five steps and a finish
 
-Each step is one panel. Nothing is saved until the end except the title, which is all that is
-needed to make the event exist.
+Each step is one panel, with its presets on top and its dials underneath. Nothing is saved until
+the end except the title, which is all that is needed to make the event exist.
 
-1. **What kind of event** Kids' party, birthday, get together, baby shower, memorial. It sets
-   sensible answers for every step below, so a host who taps through gets a working event.
+1. **How it should look** Plain, or a bit of colour, or your own picture. First, because it is the
+   part people enjoy, and because it is the only step where somebody is choosing rather than
+   typing.
 2. **When and where** Title, date, time, place.
 3. **What you need to know from people** The reply panel. This is the product, so it is a step
-   rather than a setting somebody has to go looking for: kids and adults apart or one number,
-   dietary needs, allergies, accessibility, one question of your own.
-4. **Anything you are sharing** Potluck on or off. Group gift on or off, and who is running it.
-   Both default from step 1 and both are one tap to skip.
-5. **Your invite** The words. The look is no longer a step: the open source version ships one
-   template (see below), so there is nothing to choose.
+   rather than a setting somebody has to go looking for: how the numbers are counted, dietary,
+   allergies, accessibility, one question of your own. The old event-type question lives here now,
+   as the preset row: Kids' party, Grown ups, Memorial, or Just the reply. Each one fills in the
+   switches below, where they can be seen and changed.
+4. **Anything you are sharing** Potluck on or off. Group gift on or off. Both one tap to skip.
+5. **Your invite** The words: the line under the title, who it is from, the info booth, the
+   sign-off.
 
 **Then the finish screen**, which is not a step but the first screen of running the event: "Your
 invite is ready. Add the people you are inviting." with the button on it.
@@ -102,26 +156,43 @@ the first time, laid out on a board after that.
 That takes the potluck from three editors to two windows on one, and the group gift from three to
 two.
 
-## The open source version: one template
+## What goes, in the open source version
 
-Only the illustrated strip, which is drawn by hand here: one ink on a tint of it, five inks, six
-sets of doodles. Everything else in the gallery is somebody else's artwork and cannot ship.
+- **The gallery.** Photo cards, Fur bands, Staff file and the lineup are all somebody else's
+  artwork and cannot ship. They are hidden, not deleted: a hidden design still draws for an event
+  already saved on it, so gabriel-4 keeps its look and its guests see no change, but it could not
+  be chosen again.
+- **The group link.** Marcia's call, 14 October: we do not need it. One link per guest is the
+  model. That removes `/e/[slug]`, the "Who's this from?" flow, the group-link switch and the
+  per-group links.
+- **"What kind of event" as a question of its own.** It survives as the preset row inside step 3,
+  which is where its work actually lands.
 
-What that costs: Marcia's own event is on Photo cards. A hidden design still draws for an event
-already on it, so gabriel-4 keeps its look and its guests see no change, but it could not be
-chosen again. The two Monsters designs and the lineup go the same way.
+## Marcia's list, noted 14 October, not built yet
 
-The upload route is untouched: a host who has their own artwork can still put a photo or a
-finished invite on the cover. That is their artwork, not ours to ship, and it is the honest answer
-to "can I have a picture on it".
+1. **The group gift drawer holds everything.** Tapping the group gift card and then the pencil
+   should open one window with every bit of organising a group gift in it: on or off, what the
+   present is, who is organising it, the target, how to chip in, the contact number, the
+   suggested amount, the date to chip in by, the message, whether it is a surprise, and the latest
+   update. Nothing about the gift anywhere else.
+2. **Remove the group link.** See above.
+3. **"Kids and adults" becomes "RSVP count"**, with a question rather than a label: how do you
+   want to count the numbers? Four answers, where there are two today:
+   - children and adults separately
+   - just kids
+   - just adults
+   - everyone in one number
 
-## Open questions for Marcia
+   The two new ones are a data change: `ask_party_mode` is `single` or `split` today, and this
+   makes it four.
 
-1. **Does the invite tab keep the on-or-off switch?** The same component either way, so it cannot
+## Open questions
+
+1. **Three tiles or two at step one?** Written above as three: Plain, A bit of colour, Your own
+   picture. Marcia described two, Plain and custom, with the picture inside custom. Three shows
+   the upload rather than burying it; two is a shorter screen.
+2. **Does the invite tab keep the on-or-off switch?** The same component either way, so it cannot
    drift. Keeping it means tapping a card can turn that part off without leaving the invite.
-   Removing it means one place for switches and a line on the card pointing at Settings.
-2. **Is the five-step flow the right length?** It can be four by folding "what you are sharing"
-   into the reply step, or six by adding guests at the end.
 3. **Should the Plan tab lose the setup fields entirely**, or keep them as windows the way the
    invite does?
 4. **Is Settings still a separate tab**, or does the board move onto the Overview, which already
