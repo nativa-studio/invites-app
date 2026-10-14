@@ -18,6 +18,9 @@ export type Gift = {
   chip_in_by: string | null;
   pay_details: string | null;
   pay_reference: string | null;
+  /** A number to ask the organiser a question on. Theirs to give: typed on their own page, blank
+   *  until they do, and never the phone the host holds for them unless they agree to it. */
+  contact_phone: string | null;
   latest_update: string | null;
   /** False until the organiser has said where the money goes. Nothing to ask anybody to do yet. */
   ready: boolean;
@@ -32,6 +35,9 @@ export type Gift = {
 export type GiftBoard = Gift & {
   target: number | null;
   surprise: boolean;
+  /** What the host has for them, to open the contact box with rather than make them type a phone
+   *  number on a phone. Only ever their own number, and only ever on their own page. */
+  my_phone: string | null;
   total: number;
   contributors: { name: string; amount: number | null; at: string }[];
   waiting: { id: string; name: string; phone: string | null }[];
@@ -87,6 +93,7 @@ export const saveGift = (token: string, v: {
   suggested: number | null;
   chip_in_by: string | null;
   surprise: boolean;
+  contact_phone: string | null;
 }) =>
   callGuestRpc<GiftBoard>("gift_save", {
     p_token: token,
@@ -96,6 +103,7 @@ export const saveGift = (token: string, v: {
     p_suggested: v.suggested,
     p_chip_in_by: v.chip_in_by,
     p_surprise: v.surprise,
+    p_contact_phone: v.contact_phone,
   });
 
 export const postGiftUpdate = (token: string, text: string) =>

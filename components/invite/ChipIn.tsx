@@ -2,7 +2,7 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { copy } from "@/lib/copy";
-import { formatMoney, formatShortDate } from "@/lib/format";
+import { formatMobile, formatMoney, formatShortDate } from "@/lib/format";
 import type { Gift } from "@/lib/guest/gift";
 import { giftAction, tapAction, type GiftState } from "@/app/i/[token]/gift-actions";
 import { useReply } from "./ReplyState";
@@ -96,6 +96,19 @@ function ChipIn({ token, gift, pretend }: { token: string; gift: Gift; pretend?:
           <Copy what={g.pay_details ?? ""} />
         </div>
         {g.pay_reference && <p className="small">{copy.gift.reference(g.pay_reference)}</p>}
+        {/* Who to ask, under where to send it, because that is the moment the question comes up:
+            somebody looking at a PayID wondering whether it is too late, or whether anyone has
+            already got that one. The number is the link, so a tap rings it and the digits are
+            still there to read for anybody who would rather text or type them in.
+
+            Only ever here when the organiser has given a number on their own page. The phone the
+            host holds for them is not published on their behalf. */}
+        {g.contact_phone && (
+          <p className="small ask-org">
+            {copy.gift.askOrganiser(g.organiser)}{" "}
+            <a href={`tel:${g.contact_phone.replace(/[^0-9+]/g, "")}`}>{formatMobile(g.contact_phone)}</a>
+          </p>
+        )}
       </div>
 
       {g.latest_update && (

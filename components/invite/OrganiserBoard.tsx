@@ -52,6 +52,16 @@ export function OrganiserBoard({ token, board, link, eventTitle }: {
           <input id="pay_reference" name="pay_reference" type="text" autoComplete="off" defaultValue={b.pay_reference ?? ""} />
           <span className="hint">{copy.organiser.refHint}</span>
         </div>
+        {/* Under where the money goes, because it is the other half of the same question: send it
+            here, and ask me here. Opens with the number the host already holds for them, so
+            agreeing to it is one tap and changing it is still allowed. Empty is a real answer:
+            the block then says nothing about contacting anybody. */}
+        <div className="q">
+          <label htmlFor="contact_phone">{copy.organiser.phoneLabel}</label>
+          <input id="contact_phone" name="contact_phone" type="tel" inputMode="tel" autoComplete="tel"
+            defaultValue={b.contact_phone ?? b.my_phone ?? ""} />
+          <span className="hint">{copy.organiser.phoneHint}</span>
+        </div>
         <div className="q">
           <label htmlFor="message">{copy.organiser.msgLabel}</label>
           <textarea id="message" name="message" rows={3} defaultValue={b.message ?? ""} />
