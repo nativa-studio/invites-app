@@ -38,7 +38,7 @@ export function GroupGiftFields({ e }: { e: EventRow }) {
         <span className="hint">{copy.host.giftAlongside}</span>
       </div>
       <div hidden={!on}>
-        <Field id="gift_description" label={copy.host.giftWhat} value={e.gift_description ?? null} hint={copy.host.giftWhatHint} />
+        <Field id="gift_description" label={copy.host.giftWhat} value={e.gift_description ?? null} rows={2} hint={copy.host.giftWhatHint} />
         {/* The wording that replaces the sentence the invite would write for itself. Directly
             under what the present is, because it is the same thought said in the host's voice. */}
         <Field id="group_gift_note" label={copy.host.groupGiftLine} value={e.group_gift_note} rows={2} hint={copy.host.groupGiftLineHint} />

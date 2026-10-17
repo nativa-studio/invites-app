@@ -248,7 +248,15 @@ p { margin: 0; }
    other field on the screen. Harmless on the boxes that already fit. */
 .field input:not([type="checkbox"]):not([type="radio"]), .field textarea, .field select { min-height: 42px; border: 1px solid var(--app-line-2); border-radius: 8px; padding: 9px 11px; background: var(--app-bg); width: 100%; min-width: 0; font-family: var(--app-font); }
 .field input:not([type="checkbox"]):not([type="radio"]):focus, .field textarea:focus, .field select:focus { border-color: var(--app-ink); }
-.field textarea { min-height: 84px; }
+/* Grows with what is typed, so the box is never shorter than the words in it.
+   min-height stays the floor: an empty box is still three lines tall, which is what says
+   "a sentence or two goes here" before anybody has typed anything.
+
+   field-sizing landed in Safari 26.2 and Chrome 123. Where it is not supported nothing changes
+   from how this behaved before, which is a box that scrolls inside itself. That is a poor
+   fourth line, but it is a fine first three, and the fault Marcia hit was horizontal: her text
+   was in an input, which scrolls sideways and shows nothing at all past the right edge. */
+.field textarea { min-height: 84px; field-sizing: content; }
 
 /* The settings board: one block per setting, each with its own switch and its own pencil.
  *

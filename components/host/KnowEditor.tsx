@@ -34,9 +34,9 @@ export function KnowEditor({ e }: { e: EventRow }) {
       case "siblings":
         return <Switch id="siblings_welcome" label={NOTE_NAMES.siblings} value={e.siblings_welcome} hint="On, the invite says brothers and sisters are welcome. Off, it says nothing either way." />;
       case "bring":
-        return <Field id="what_to_bring" label={NOTE_NAMES.bring} value={e.what_to_bring} hint='e.g. "Swimmers, a towel and a hat"' />;
+        return <Field id="what_to_bring" label={NOTE_NAMES.bring} value={e.what_to_bring} rows={2} hint='e.g. "Swimmers, a towel and a hat"' />;
       case "serve":
-        return <Field id="serve_text" label={NOTE_NAMES.serve} value={e.serve_text} hint='e.g. "Afternoon tea, and cake at 4ish"' />;
+        return <Field id="serve_text" label={NOTE_NAMES.serve} value={e.serve_text} rows={2} hint='e.g. "Afternoon tea, and cake at 4ish"' />;
       case "drinks":
         return <Field id="drinks_note" label={NOTE_NAMES.drinks} value={e.drinks_note ?? null} rows={2} hint={copy.host.drinksNoteFree} />;
       case "photos":

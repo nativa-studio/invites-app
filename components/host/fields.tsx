@@ -4,6 +4,14 @@
 const s = (v: unknown) => (v == null ? "" : String(v));
 const t = (v: unknown) => s(v).slice(0, 5);
 
+// `rows` is not decoration. Without it this renders an <input>, which scrolls sideways: past the
+// right edge the text is simply not on the screen, and a host typing a sentence cannot see what
+// they are writing. Marcia hit this on "What is it?" in the group gift drawer, 17 October, with
+// a scooter and a skateboard in it and both of them invisible.
+//
+// So: anything that holds a sentence gets rows. A name, a label, a time, a number or an address
+// does not, because those are one short thing and a growing box around them reads as an invitation
+// to write more than there is to write.
 export function Field({ id, label, value, hint, type = "text", rows }: { id: string; label: string; value: unknown; hint?: string; type?: string; rows?: number }) {
   return (
     <div className="field">

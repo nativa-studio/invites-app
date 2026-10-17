@@ -53,11 +53,11 @@ export const SECTIONS: Section[] = [
           <Field id="start_time" label="Start" value={e.start_time} type="time" />
           <Field id="end_time" label="End" value={e.end_time} type="time" />
         </div>
-        <Field id="time_note" label="Time, in your words (optional)" value={e.time_note} hint='Replaces the times, e.g. "From 2pm, come when you can"' />
+        <Field id="time_note" label="Time, in your words (optional)" value={e.time_note} rows={2} hint='Replaces the times, e.g. "From 2pm, come when you can"' />
         <Field id="venue" label="Venue" value={e.venue} hint="e.g. Our place, or the park's name" />
         <Field id="address" label="Address" value={e.address} hint="Used for Open in Maps and the calendar file" />
-        <Field id="parking" label="Parking" value={e.parking} hint="e.g. Street parking, or the car park off Ashford Road" />
-        <Field id="accessibility_venue" label="Getting around the place" value={e.accessibility_venue} hint="Steps, ramps, whether a pram fits" />
+        <Field id="parking" label="Parking" value={e.parking} rows={2} hint="e.g. Street parking, or the car park off Ashford Road" />
+        <Field id="accessibility_venue" label="Getting around the place" value={e.accessibility_venue} rows={2} hint="Steps, ramps, whether a pram fits" />
         {/* Only the guests who have said yes see this, so it holds the gate code rather than the
             street. It lives with the address because that is the question it answers. */}
         <Field id="access_info" label="How to get in (yes guests only)" value={e.access_info} rows={2} hint="Gate codes, which door, where the key is. Nobody sees this until they have said yes." />
@@ -84,7 +84,7 @@ export const SECTIONS: Section[] = [
         <Switch id="ask_dietary" label="Other food needs" value={e.ask_dietary} />
         <Switch id="ask_accessibility" label="Access needs (free text)" value={e.ask_accessibility} />
         <Switch id="ask_emergency" label="Emergency contact (drop-off parties)" value={e.ask_emergency} />
-        <Field id="custom_question" label="One extra question (optional)" value={e.custom_question} />
+        <Field id="custom_question" label="One extra question (optional)" value={e.custom_question} rows={2} />
         <Field id="yes_label" label="The yes button" value={e.yes_label} hint={`Leave it empty for \u201c${copy.rsvp.yes}\u201d`} />
         <Field id="no_label" label="The no button" value={e.no_label} hint={`Leave it empty for \u201c${copy.rsvp.no}\u201d`} />
       </>
