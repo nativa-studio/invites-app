@@ -171,12 +171,35 @@ two.
 ## Marcia's list, noted 14 October, not built yet
 
 1. **The group gift drawer holds everything.** Tapping the group gift card and then the pencil
-   should open one window with every bit of organising a group gift in it: on or off, what the
-   present is, who is organising it, the target, how to chip in, the contact number, the
-   suggested amount, the date to chip in by, the message, whether it is a surprise, and the latest
-   update. Nothing about the gift anywhere else.
-2. **Remove the group link.** See above.
-3. **"Kids and adults" becomes "RSVP count"**, with a question rather than a label: how do you
+   should open one window with every bit of organising a group gift in it. Nothing about the gift
+   offered anywhere else.
+
+2. **The group gift becomes display only, and someone else can run it.** Marcia, 17 October: she
+   wants to be able to hand the gift to somebody else, and that person should not have to manage
+   anything in the app. So the app stops being a ledger and becomes a notice:
+
+   - what the present is, and the ideas
+   - **Being organised by**, a line she types herself, in her own words. Her example: "his
+     godmother. Please text her if you'd like to participate."
+   - a number
+   - a button that opens the guest's messages app with a line already in it, so chipping in is
+     one tap and then a conversation between two people
+
+   What that removes: the organiser's own page at `/i/[token]/organiser`, which exists so an
+   organiser can fill in bank details and see who has paid, and is exactly the managing she does
+   not want anybody to have to do. Probably also the chip-in tick and the contributions table,
+   since the tick exists for an organiser who no longer has a page to read it on.
+
+   One thing to decide: whether the PayID box stays as an optional field for a host who is
+   running the gift themselves. It is the one piece here worth keeping, because a PayID read off
+   one screen and typed into a banking app is where a digit gets dropped, and a dropped digit is
+   somebody else's money.
+
+   One thing that needs a new column: the organiser is a guest row or a profile row today, and
+   the invite shows their first name. "His godmother" is neither a name nor necessarily on the
+   guest list, so this is a line of text she types, not a person she picks.
+3. **Remove the group link.** See above.
+4. **"Kids and adults" becomes "RSVP count"**, with a question rather than a label: how do you
    want to count the numbers? Four answers, where there are two today:
    - children and adults separately
    - just kids
