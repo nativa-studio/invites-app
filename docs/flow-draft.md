@@ -186,14 +186,22 @@ two.
      one tap and then a conversation between two people
 
    What that removes: the organiser's own page at `/i/[token]/organiser`, which exists so an
-   organiser can fill in bank details and see who has paid, and is exactly the managing she does
-   not want anybody to have to do. Probably also the chip-in tick and the contributions table,
-   since the tick exists for an organiser who no longer has a page to read it on.
+   organiser can sign in, fill in bank details and see who has paid, and is exactly the managing
+   she does not want anybody to have to do. The host fills those fields in instead, in the one
+   drawer, which is where the rest of the event is set up anyway.
 
-   One thing to decide: whether the PayID box stays as an optional field for a host who is
-   running the gift themselves. It is the one piece here worth keeping, because a PayID read off
-   one screen and typed into a banking app is where a digit gets dropped, and a dropped digit is
-   somebody else's money.
+   **How to chip in stays.** Marcia's word, 17 October: keep the PayID box and its copy button.
+   So the drawer holds both routes and the invite draws whichever has been filled in. A PayID and
+   no number gets the box. A number and an organiser line gets the text button. Both gets both.
+   There is nothing to choose and no mode to be in: a host fills in what is true for their party.
+
+   That is also why the copy button matters more than ever here. A PayID read off one screen and
+   typed into a banking app is where a digit gets dropped, and a dropped digit is somebody else's
+   money.
+
+   The chip-in tick stays as it is unless Marcia says otherwise. It no longer has an organiser's
+   page to be read on, but the host can see it, and it costs a guest one tap they do not have to
+   take.
 
    One thing that needs a new column: the organiser is a guest row or a profile row today, and
    the invite shows their first name. "His godmother" is neither a name nor necessarily on the
